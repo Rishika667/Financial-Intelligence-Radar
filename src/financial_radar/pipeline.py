@@ -1,5 +1,6 @@
 """The single local production flow: SEC -> raw -> normalize -> SQLite -> signals/events/peers."""
 import json
+import time
 from pathlib import Path
 
 from .core import SECClient, free_cash_flow
@@ -25,7 +26,7 @@ from .signals_phase2 import (
 from .events import extract_events
 from .peers import load_peer_groups, peer_context_for_company
 
-FORMS = {"10-K", "10-Q", "8-K", "20-F", "6-K", "10-K/A", "10-Q/A"}
+FORMS = {"10-K", "10-Q", "8-K", "20-F", "6-K", "10-K/A", "10-Q/A", "8-K/A"}
 
 
 def load_universe(path="config/universe.json"):
@@ -41,6 +42,8 @@ def filing_index(submissions, cik):
         form = r.get("form", [None] * len(accession_numbers))[i]
         if form in FORMS:
             doc = r.get("primaryDocument", [""] * len(accession_numbers))[i]
+            if not doc:
+                continue
             out[accession.replace("-", "")] = {
                 "accessionNumber": accession,
                 "form": form,
@@ -106,8 +109,17 @@ def evaluate(company, items):
     ni, pni = pair("net_income")
     ocf, pocf = pair("operating_cash_flow")
     debt_cur, pdebt = pair("debt")
-    cash, pcash = pair("cash_and_equivalents")
-    cl, pcl = pair("current_liabilities")
+    
+    # Debt is INSTANT, so we need to fetch the latest INSTANT observations
+    def pair_instant(m):
+        x = _latest(items, m, "INSTANT")
+        return (x[0], x[1]) if len(x) > 1 else (None, None)
+        
+    debt_cur, pdebt = pair_instant("debt")
+    cash, pcash = pair_instant("cash_and_equivalents")
+    cl, pcl = pair_instant("current_liabilities")
+    
+    # shares can be QUARTER
     shares, pshares = pair("share_count")
     cap, pcap = pair("capex")
 
@@ -187,8 +199,8 @@ def ingest_company(client, c, company):
     peer_ctx = compute_peer_context(ticker, obs)
     save_peer_context(c, ticker, peer_ctx)
 
-    # Extract events from 8-K filing descriptions (from submissions metadata)
-    events_found = _extract_events_from_submissions(ticker, filings, c)
+    # Extract events from 8-K filings
+    events_found = _extract_events_from_submissions(ticker, filings, c, client)
 
     return {
         "observations": len(obs),
@@ -198,23 +210,36 @@ def ingest_company(client, c, company):
     }
 
 
-def _extract_events_from_submissions(ticker, filings, c):
-    """Extract events from filing metadata descriptions.
-
-    Note: Full 8-K text extraction requires downloading filing documents.
-    For the MVP, we extract events from available filing metadata.
-    The extract_events function can be called separately with full text
-    for deeper extraction.
-    """
+def _extract_events_from_submissions(ticker, filings, c, client):
+    """Extract events from actual 8-K filing texts by retrieving them from SEC EDGAR."""
     count = 0
-    for acc, filing in filings.items():
-        if filing.get("form") in ("8-K",):
-            # Use form type and accession as minimal event signal
-            description = f"{filing.get('form', '')} filing"
-            events = extract_events(ticker, filing, description)
-            if events:
-                save_events(c, events)
-                count += len(events)
+    # Process only the 5 most recent 8-Ks to respect SEC pacing/volume
+    recent_8ks = sorted(
+        [f for f in filings.values() if f.get("form") in ("8-K", "8-K/A")],
+        key=lambda x: x.get("filingDate", ""),
+        reverse=True
+    )[:5]
+    
+    for filing in recent_8ks:
+        url = filing.get("source_url")
+        if url:
+            try:
+                pause = client.delay - (time.monotonic() - client.last)
+                if pause > 0:
+                    time.sleep(pause)
+                r = client.s.get(url, timeout=30)
+                client.last = time.monotonic()
+                r.raise_for_status()
+                
+                # Fetching actual document text
+                text = r.text
+                
+                events = extract_events(ticker, filing, text)
+                if events:
+                    save_events(c, events)
+                    count += len(events)
+            except Exception:
+                pass
     return count
 
 

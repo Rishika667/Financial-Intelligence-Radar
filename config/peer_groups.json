@@ -1,0 +1,42 @@
+{
+  "version": "2026.1",
+  "methodology": "Explicit, analyst-reviewed, versioned peer groups based on sector, business model and scale. Context only; no rank.",
+  "groups": [
+    {
+      "id": "software",
+      "members": [
+        "MSFT",
+        "ORCL"
+      ]
+    },
+    {
+      "id": "banks",
+      "members": [
+        "JPM",
+        "BAC"
+      ]
+    },
+    {
+      "id": "pharma",
+      "members": [
+        "JNJ",
+        "PFE"
+      ]
+    },
+    {
+      "id": "energy",
+      "members": [
+        "XOM",
+        "CVX"
+      ]
+    },
+    {
+      "id": "retail",
+      "members": [
+        "WMT",
+        "COST",
+        "HD"
+      ]
+    }
+  ]
+}

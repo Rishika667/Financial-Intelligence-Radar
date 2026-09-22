@@ -1,0 +1,149 @@
+{
+  "version": "2026.1",
+  "companies": [
+    {
+      "ticker": "AAPL",
+      "cik": "0000320193",
+      "sector": "Technology",
+      "active": true
+    },
+    {
+      "ticker": "MSFT",
+      "cik": "0000789019",
+      "sector": "Technology",
+      "active": true
+    },
+    {
+      "ticker": "NVDA",
+      "cik": "0001045810",
+      "sector": "Technology",
+      "active": true
+    },
+    {
+      "ticker": "ORCL",
+      "cik": "0001341439",
+      "sector": "Technology",
+      "active": true
+    },
+    {
+      "ticker": "WMT",
+      "cik": "0000104169",
+      "sector": "Staples",
+      "active": true
+    },
+    {
+      "ticker": "COST",
+      "cik": "0000909832",
+      "sector": "Staples",
+      "active": true
+    },
+    {
+      "ticker": "KO",
+      "cik": "0000021344",
+      "sector": "Staples",
+      "active": true
+    },
+    {
+      "ticker": "JPM",
+      "cik": "0000019617",
+      "sector": "Financials",
+      "active": true
+    },
+    {
+      "ticker": "BAC",
+      "cik": "0000070858",
+      "sector": "Financials",
+      "active": true
+    },
+    {
+      "ticker": "GS",
+      "cik": "0000886982",
+      "sector": "Financials",
+      "active": true
+    },
+    {
+      "ticker": "JNJ",
+      "cik": "0000200406",
+      "sector": "Health Care",
+      "active": true
+    },
+    {
+      "ticker": "PFE",
+      "cik": "0000078003",
+      "sector": "Health Care",
+      "active": true
+    },
+    {
+      "ticker": "UNH",
+      "cik": "0000731766",
+      "sector": "Health Care",
+      "active": true
+    },
+    {
+      "ticker": "XOM",
+      "cik": "0000034088",
+      "sector": "Energy",
+      "active": true
+    },
+    {
+      "ticker": "CVX",
+      "cik": "0000093410",
+      "sector": "Energy",
+      "active": true
+    },
+    {
+      "ticker": "CAT",
+      "cik": "0000018230",
+      "sector": "Industrials",
+      "active": true
+    },
+    {
+      "ticker": "GE",
+      "cik": "0000040545",
+      "sector": "Industrials",
+      "active": true
+    },
+    {
+      "ticker": "HD",
+      "cik": "0000354950",
+      "sector": "Consumer",
+      "active": true
+    },
+    {
+      "ticker": "MCD",
+      "cik": "0000063908",
+      "sector": "Consumer",
+      "active": true
+    },
+    {
+      "ticker": "AMZN",
+      "cik": "0001018724",
+      "sector": "Consumer",
+      "active": true
+    },
+    {
+      "ticker": "V",
+      "cik": "0001403161",
+      "sector": "Financials",
+      "active": true
+    },
+    {
+      "ticker": "T",
+      "cik": "0000732717",
+      "sector": "Communication",
+      "active": true
+    },
+    {
+      "ticker": "DIS",
+      "cik": "0001744489",
+      "sector": "Communication",
+      "active": true
+    },
+    {
+      "ticker": "PG",
+      "cik": "0000080424",
+      "sector": "Staples",
+      "active": true
+    }
+  ]
+}

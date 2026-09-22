@@ -1,0 +1,1 @@
+Phase 2 adds configured 24 issuer watchlist, versioned peers, conservative accepted-concept normalization, SQLite watchlist/observation persistence, focused document event taxonomy, and six deterministic signals. Unknown XBRL concepts remain NOT_REPORTED rather than guessed. Peer context is descriptive only. Event snippets are triage evidence, not semantic certainty.

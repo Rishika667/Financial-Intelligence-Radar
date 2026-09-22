@@ -64,7 +64,8 @@ def test_all_event_types():
 
 
 def test_event_snippet_has_context():
-    text = "x" * 200 + "completed an acquisition" + "y" * 300
+    # Use spaces for padding so word boundaries (\b) evaluate correctly
+    text = " " * 200 + "completed an acquisition" + " " * 300
     events = extract_events("ABC", _filing(), text)
     snippet = events[0]["description"]
     assert "acquisition" in snippet

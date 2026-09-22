@@ -15,6 +15,9 @@ portfolio,research=st.tabs(["Portfolio Intelligence","Research Mode"])
 with portfolio:
  st.subheader("Where should an analyst investigate?")
  selected=st.multiselect("Monitored companies",[x["ticker"] for x in universe],default=sorted(existing))
+ if st.button("Save watchlist"):
+  from financial_radar.store import save_watchlist
+  save_watchlist(db,[{**x,"active":x["ticker"] in selected} for x in universe]); st.success("Watchlist saved locally.")
  signals=rows(db,"SELECT * FROM signals WHERE company IN (%s) ORDER BY severity DESC"%(",".join("?"*len(selected)) if selected else "''"),selected) if selected else []
  st.dataframe(pd.DataFrame(signals) if signals else pd.DataFrame(columns=["company","signal_id","severity","confidence","explanation","evidence"]))
  events=rows(db,"SELECT * FROM events WHERE company IN (%s) ORDER BY filed DESC"%(",".join("?"*len(selected)) if selected else "''"),selected) if selected else []

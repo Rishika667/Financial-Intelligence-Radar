@@ -1,4 +1,6 @@
 # Architecture
-SEC public data → rate-limited client → raw JSON preservation → normalization → canonical observations → validated period calculations → deterministic signals → Streamlit research workflow.
+Implemented local flow: SEC submissions/companyfacts → rate-limited raw JSON → conservative accepted-concept normalization → SQLite observations/watchlist → period-safe comparable selection → deterministic signals → Streamlit portfolio/research views.
 
-Observations retain period type, quality, comparability, derivation lineage, and provenance. Provenance preserves accession, SEC URL, form, concept, raw value, filing date, retrieval timestamp and mapping version. The free core uses Python and local files/SQLite.
+The Streamlit app reads the same SQLite tables populated by the pipeline; it does not use production demo financial data. Provenance stored with each observation includes accession, SEC source URL, form, concept, raw value, filing date, retrieval timestamp and mapping version. Filing-event text extraction is deliberately conservative and requires callers to supply the SEC filing document text.
+
+Partially implemented: ingestion is callable through pipeline functions but the UI intentionally does not request SEC data automatically; an operator invokes ingestion with a compliant contact User-Agent. Peer helper is available but not yet rendered in the UI. Restatement/perimeter flags require filing-document review before comparison.

@@ -1,2 +1,4 @@
 # Test cases
-The included test suite covers valid and invalid YTD-to-quarter derivation, FCF sign handling, receivables and inventory divergence, margin compression, cash conversion, suppression for missing input, multi-signal clustering, and SEC contact-header validation. Golden data should be expanded before production deployment.
+Executable tests cover period/FCF basics (Phase 1), all Phase 2 rule classes, SQLite watchlist and observation persistence, leverage directionality, and event classification. Tests remain unexecuted in this environment because neither python nor py is installed. Network-free fixtures are used; no SEC request occurs in unit tests.
+
+Controls still required before production: formal SEC response fixtures for amendments/restatements, irregular fiscal calendars, complete golden rows for each rule, and Streamlit browser smoke testing.

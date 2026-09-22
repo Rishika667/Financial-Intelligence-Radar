@@ -1,7 +1,7 @@
 from .models import Signal,DataQuality
 from .core import pct_change
 def ok(*x):return all(a and a.value is not None and a.comparable and a.quality in (DataQuality.REPORTED,DataQuality.DERIVED,DataQuality.AMENDED) for a in x)
-def suppressed(id,*x):return Signal(id,x[0].company,"","LOW","Suppressed: unreliable or incomparable evidence",x,suppressed_reason="data quality/comparability")
+def suppressed(id,*x):return Signal(id,x[0].company,"","LOW","Suppressed: unreliable or incomparable evidence",tuple(x),suppressed_reason="data quality/comparability")
 def decline(id,current,prior,floor,label):
  if not ok(current,prior):return suppressed(id,current,prior)
  d=current.value-prior.value
@@ -17,4 +17,7 @@ def ratio_drop(id,a,b,oa,ob,floor,label):
  return Signal(id,a.company,"HIGH" if old-now>=2*floor else "MODERATE","HIGH",f"{label} declined from {old:.2f}x to {now:.2f}x.",(a,b,oa,ob)) if old-now>=floor else None
 def cash_conversion(a,b,oa,ob):return ratio_drop("EARNINGS_CASH_CONVERSION_DETERIORATION",a,b,oa,ob,.2,"OCF/earnings conversion")
 def liquidity(a,b,oa,ob):return ratio_drop("LIQUIDITY_COMPRESSION",a,b,oa,ob,.1,"Cash/current-liabilities")
-def leverage(a,b,oa,ob):return ratio_drop("LEVERAGE_INTEREST_BURDEN",oa,ob,a,b,.5,"Debt/operating-income")
+def leverage(debt,ebit,old_debt,old_ebit):
+ if not ok(debt,ebit,old_debt,old_ebit) or ebit.value<=0 or old_ebit.value<=0:return suppressed("LEVERAGE_INTEREST_BURDEN",debt,ebit)
+ now,old=debt.value/ebit.value,old_debt.value/old_ebit.value
+ return Signal("LEVERAGE_INTEREST_BURDEN",debt.company,"HIGH" if now-old>=1 else "MODERATE","HIGH",f"Debt/operating-income increased from {old:.2f}x to {now:.2f}x.",(debt,ebit,old_debt,old_ebit)) if now-old>=.5 else None

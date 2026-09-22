@@ -1,0 +1,2 @@
+# Product specification
+Financial Intelligence Radar is a zero-cost public-disclosure workflow for portfolio analysts. It identifies material changes and links each alert to SEC evidence; it does not provide investment recommendations. Initial filing scope is 10-K, 10-Q and 8-K using SEC submissions and companyfacts for a curated diversified US watchlist. Signals are suppressed when inputs are missing, invalid, or incomparable.

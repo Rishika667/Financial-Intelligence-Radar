@@ -1,0 +1,27 @@
+import json, time
+from pathlib import Path
+import requests
+from .models import DataQuality, Observation
+
+def pct_change(current, prior): return None if current is None or prior is None or prior == 0 else (current-prior)/abs(prior)
+
+def derive_standalone_quarter(ytd, prior_ytd):
+    valid=ytd.value is not None and prior_ytd.value is not None and ytd.metric==prior_ytd.metric and ytd.period_type==prior_ytd.period_type=="YTD" and ytd.period_end>prior_ytd.period_end and ytd.comparable and prior_ytd.comparable
+    if not valid: return Observation(ytd.company,ytd.metric,None,ytd.unit,ytd.period_end,"QUARTER",DataQuality.CALCULATION_INVALID,comparable=False,comparability_reason="Invalid YTD contexts")
+    return Observation(ytd.company,ytd.metric,ytd.value-prior_ytd.value,ytd.unit,ytd.period_end,"QUARTER",DataQuality.DERIVED,ytd.provenance+prior_ytd.provenance)
+
+def free_cash_flow(ocf,capex):
+    if ocf.value is None or capex.value is None or not ocf.comparable or not capex.comparable: return Observation(ocf.company,"free_cash_flow",None,ocf.unit,ocf.period_end,ocf.period_type,DataQuality.CALCULATION_INVALID,comparable=False)
+    return Observation(ocf.company,"free_cash_flow",ocf.value-abs(capex.value),ocf.unit,ocf.period_end,ocf.period_type,DataQuality.DERIVED,ocf.provenance+capex.provenance)
+
+class SECClient:
+    def __init__(self,user_agent,raw_dir="data/raw",min_interval_seconds=.2):
+        if "@" not in user_agent: raise ValueError("SEC User-Agent must identify operator and contact email")
+        self.s=requests.Session(); self.s.headers.update({"User-Agent":user_agent,"Accept-Encoding":"gzip, deflate"}); self.raw=Path(raw_dir); self.delay=min_interval_seconds; self.last=0
+    def get_json(self,url,key):
+        pause=self.delay-(time.monotonic()-self.last)
+        if pause>0: time.sleep(pause)
+        r=self.s.get(url,timeout=30); self.last=time.monotonic(); r.raise_for_status(); payload=r.json()
+        target=self.raw/key; target.parent.mkdir(parents=True,exist_ok=True); target.write_text(json.dumps(payload,indent=2),encoding="utf-8"); return payload
+    def company_facts(self,cik): return self.get_json(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{int(cik):010d}.json",f"companyfacts/CIK{int(cik):010d}.json")
+    def submissions(self,cik): return self.get_json(f"https://data.sec.gov/submissions/CIK{int(cik):010d}.json",f"submissions/CIK{int(cik):010d}.json")

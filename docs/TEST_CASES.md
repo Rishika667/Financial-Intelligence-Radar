@@ -1,0 +1,2 @@
+# Test cases
+The included test suite covers valid and invalid YTD-to-quarter derivation, FCF sign handling, receivables and inventory divergence, margin compression, cash conversion, suppression for missing input, multi-signal clustering, and SEC contact-header validation. Golden data should be expanded before production deployment.

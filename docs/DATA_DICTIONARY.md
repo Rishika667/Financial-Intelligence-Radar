@@ -1,0 +1,2 @@
+# Data dictionary
+Canonical observations contain company, metric, nullable value, unit, period end/type, data quality, comparability, provenance and derivation lineage. The initial metric layer covers revenue, margins, cash flow, working capital, liquidity, debt, interest and shares. Data-quality states include REPORTED, DERIVED, NOT_REPORTED, MAPPING_UNRESOLVED, CALCULATION_INVALID, COMPARABILITY_SUPPRESSED, AMENDED and RESTATED. Missing values never become zero.

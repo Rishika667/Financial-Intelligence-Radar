@@ -4,15 +4,15 @@ import hashlib
 # Conservative taxonomy: only extract events matching these patterns.
 # Precision over recall — provenance matters more than coverage.
 PATTERNS = {
-    "acquisition": r"\b(acquisition|merger|acquired|business combination)\b",
-    "divestiture": r"\b(divestiture|dispose[ds]?|sold .{0,30}business)\b",
+    "acquisition": r"\b(acquisitions?|mergers?|acquired|business combinations?)\b",
+    "divestiture": r"\b(divestitures?|dispose[ds]?|sold .{0,30}business)\b",
     "debt": r"\b(refinanc|credit facility|notes due|debt issuance|term loan)\b",
     "equity": r"\b(equity offering|stock issuance|secondary offering)\b",
-    "buyback": r"\b(repurchase|buyback|share repurchase)\b",
+    "buyback": r"\b(repurchases?|buybacks?|share repurchases?)\b",
     "restructuring": r"\brestructur",
     "material_agreement": r"material definitive agreement",
-    "legal": r"\b(litigation|lawsuit|legal proceeding|settlement)\b",
-    "segment": r"\b(segment change|reportable segment|operating segment)\b",
+    "legal": r"\b(litigation|lawsuits?|legal proceedings?|settlements?)\b",
+    "segment": r"\b(segment change|reportable segments?|operating segments?)\b",
 }
 
 SNIPPET_BEFORE = 100

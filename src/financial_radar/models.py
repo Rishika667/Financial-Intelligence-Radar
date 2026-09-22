@@ -21,5 +21,6 @@ class Observation:
 class Signal:
     signal_id: str; company: str; severity: str; confidence: str; explanation: str; evidence: tuple[Observation, ...]
     version: str = "v1"; suppressed_reason: str | None = None
+    component_signal_ids: tuple[str, ...] = ()
     @property
     def actionable(self): return self.suppressed_reason is None

@@ -11,7 +11,7 @@ def _prov():
     )
 
 
-def o(metric, value, end, pt="YTD", quality=DataQuality.REPORTED):
+def o(metric, value, end, pt="QUARTER", quality=DataQuality.REPORTED):
     return Observation(
         "ABC", metric, value, "USD", end, pt, quality, (_prov(),)
     )
@@ -31,8 +31,8 @@ def test_pct_change_none_values():
 
 
 def test_standalone_quarter_valid():
-    ytd = o("revenue", 300, date(2025, 6, 30))
-    prior_ytd = o("revenue", 100, date(2025, 3, 31))
+    ytd = o("revenue", 300, date(2025, 6, 30), "YTD_6M")
+    prior_ytd = o("revenue", 100, date(2025, 3, 31), "QUARTER")
     sq = derive_standalone_quarter(ytd, prior_ytd)
     assert sq.value == 200
     assert sq.period_type == "QUARTER"
@@ -40,16 +40,16 @@ def test_standalone_quarter_valid():
 
 
 def test_standalone_quarter_missing_value():
-    ytd = o("revenue", None, date(2025, 6, 30))
-    prior_ytd = o("revenue", 100, date(2025, 3, 31))
+    ytd = o("revenue", None, date(2025, 6, 30), "YTD_6M")
+    prior_ytd = o("revenue", 100, date(2025, 3, 31), "QUARTER")
     sq = derive_standalone_quarter(ytd, prior_ytd)
     assert sq.value is None
     assert sq.quality == DataQuality.CALCULATION_INVALID
 
 
 def test_standalone_quarter_mismatched_metrics():
-    ytd = o("revenue", 300, date(2025, 6, 30))
-    prior_ytd = o("gross_profit", 100, date(2025, 3, 31))
+    ytd = o("revenue", 300, date(2025, 6, 30), "YTD_6M")
+    prior_ytd = o("gross_profit", 100, date(2025, 3, 31), "QUARTER")
     sq = derive_standalone_quarter(ytd, prior_ytd)
     assert sq.quality == DataQuality.CALCULATION_INVALID
     assert sq.comparable is False
@@ -60,7 +60,7 @@ def test_standalone_quarter_wrong_period_type():
         "ABC", "revenue", 300, "USD", date(2025, 6, 30),
         "ANNUAL", DataQuality.REPORTED, (_prov(),),
     )
-    prior_ytd = o("revenue", 100, date(2025, 3, 31))
+    prior_ytd = o("revenue", 100, date(2025, 3, 31), "QUARTER")
     sq = derive_standalone_quarter(ytd, prior_ytd)
     assert sq.quality == DataQuality.CALCULATION_INVALID
 

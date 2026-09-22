@@ -2,12 +2,12 @@ from datetime import date,datetime
 from financial_radar.models import Observation,Provenance,DataQuality
 from financial_radar.pipeline import evaluate
 from financial_radar.normalization import extract_companyfacts
-def o(metric,value,end,provenance=()):
- return Observation("ABC",metric,value,"USD",end,"QUARTER",DataQuality.REPORTED,provenance)
+def o(metric,value,end,provenance=(),period_type="QUARTER"):
+ return Observation("ABC",metric,value,"USD",end,period_type,DataQuality.REPORTED,provenance)
 def test_pipeline_signal_keeps_provenance():
  p=Provenance("0001","https://sec.example/f","2025-01-01" if False else date(2025,1,1),"10-Q","RevenueFromContractWithCustomerExcludingAssessedTax",datetime(2025,1,2),100)
  now=date(2025,6,30); old=date(2024,6,30)
- data=[o("revenue",100,now,(p,)),o("revenue",100,old,(p,)),o("accounts_receivable",150,now,(p,)),o("accounts_receivable",100,old,(p,))]
+ data=[o("revenue",100,now,(p,)),o("revenue",100,old,(p,)),o("accounts_receivable",150,now,(p,),"INSTANT"),o("accounts_receivable",100,old,(p,),"INSTANT")]
  signals=evaluate("ABC",data); hit=next(s for s in signals if s.signal_id=="RECEIVABLES_REVENUE_DIVERGENCE")
  assert hit.evidence[0].provenance[0].accession=="0001"
 def test_normalization_missing_is_not_zero():

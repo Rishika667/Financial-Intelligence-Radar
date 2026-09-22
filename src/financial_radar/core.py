@@ -8,14 +8,16 @@ def pct_change(current, prior):
     return None if current is None or prior is None or prior == 0 else (current - prior) / abs(prior)
 
 def derive_standalone_quarter(ytd, prior_ytd):
+    required_prior_type = {"YTD_6M": "QUARTER", "YTD_9M": "YTD_6M"}
     valid = (
-        ytd.value is not None 
-        and prior_ytd.value is not None 
-        and ytd.metric == prior_ytd.metric 
-        and ytd.period_type in ("YTD_6M", "YTD_9M")
-        and prior_ytd.period_type in ("QUARTER", "YTD_6M")
-        and ytd.period_end > prior_ytd.period_end 
-        and ytd.comparable 
+        ytd.value is not None
+        and prior_ytd.value is not None
+        and ytd.company == prior_ytd.company
+        and ytd.metric == prior_ytd.metric
+        and ytd.unit == prior_ytd.unit
+        and required_prior_type.get(ytd.period_type) == prior_ytd.period_type
+        and 80 <= (ytd.period_end - prior_ytd.period_end).days <= 100
+        and ytd.comparable
         and prior_ytd.comparable
     )
     if not valid:

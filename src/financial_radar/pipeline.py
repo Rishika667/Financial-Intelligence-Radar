@@ -57,16 +57,37 @@ def filing_index(submissions, cik):
 
 
 def _latest(items, metric, pt):
-    """Return observations for a metric/period_type sorted by period_end descending."""
+    """Return populated observations sorted by period end, including quality flags."""
     x = [
         o
         for o in items
         if o.metric == metric
         and o.period_type == pt
         and o.value is not None
-        and o.comparable
     ]
     return sorted(x, key=lambda o: o.period_end, reverse=True)
+
+
+def _comparable_pair(items, metric, pt):
+    """Select the latest observation and its prior-year counterpart.
+
+    The signal gate, rather than selection, owns comparability decisions so an
+    invalid prior can produce an explicit suppressed signal instead of being
+    silently replaced by an older period.
+    """
+    observations = _latest(items, metric, pt)
+    if not observations:
+        return None, None
+    current = observations[0]
+    prior = next(
+        (
+            candidate
+            for candidate in observations[1:]
+            if 350 <= (current.period_end - candidate.period_end).days <= 380
+        ),
+        None,
+    )
+    return current, prior
 
 
 def _ratio(a, b, name):
@@ -90,12 +111,11 @@ def evaluate(company, items):
     out = []
 
     def pair(m):
-        x = _latest(items, m, pt)
-        return (x[0], x[1]) if len(x) > 1 else (None, None)
+        return _comparable_pair(items, m, pt)
 
     rev, prevrev = pair("revenue")
-    ar, prevar = pair("accounts_receivable")
-    inv, previnv = pair("inventory")
+    ar, prevar = _comparable_pair(items, "accounts_receivable", "INSTANT")
+    inv, previnv = _comparable_pair(items, "inventory", "INSTANT")
 
     # Signal 1: Receivables-revenue divergence
     if rev and prevrev and ar and prevar:
@@ -112,8 +132,7 @@ def evaluate(company, items):
     
     # Debt is INSTANT, so we need to fetch the latest INSTANT observations
     def pair_instant(m):
-        x = _latest(items, m, "INSTANT")
-        return (x[0], x[1]) if len(x) > 1 else (None, None)
+        return _comparable_pair(items, m, "INSTANT")
         
     debt_cur, pdebt = pair_instant("debt")
     cash, pcash = pair_instant("cash_and_equivalents")

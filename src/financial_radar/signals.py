@@ -63,22 +63,41 @@ def margin_compression(current, prior, threshold=0.03):
         )
     return None
 
+def _comparison_window(signal):
+    period_ends = sorted({o.period_end for o in signal.evidence})
+    if len(period_ends) != 2:
+        return None
+    return period_ends[1], period_ends[0]
+
+
 def cluster(signals):
     groups = defaultdict(list)
     for s in signals:
-        # Priority 6: only cluster valid comparable signals
-        if s and s.actionable and s.confidence in ("HIGH", "MEDIUM"):
-            groups[s.company].append(s)
-            
+        # Cluster only valid signals evaluated over the same current/prior window.
+        window = _comparison_window(s) if s else None
+        if (
+            s
+            and s.actionable
+            and s.confidence in ("HIGH", "MEDIUM")
+            and window is not None
+        ):
+            groups[(s.company, window)].append(s)
+
     out = []
-    for c, v in groups.items():
-        # unique signal ids
-        unique_sigs = {s.signal_id for s in v}
-        if len(unique_sigs) >= 3:
-            evidence = tuple(o for s in v for o in s.evidence)
+    for (company, _window), component_signals in groups.items():
+        by_id = {s.signal_id: s for s in component_signals}
+        if len(by_id) >= 3:
+            components = tuple(by_id.values())
+            evidence = tuple(o for s in components for o in s.evidence)
+            confidence = (
+                "HIGH"
+                if all(s.confidence == "HIGH" for s in components)
+                else "MEDIUM"
+            )
             out.append(Signal(
-                "MULTI_FACTOR_DETERIORATION_CLUSTER", c, "HIGH", "HIGH",
-                f"{len(v)} distinct valid deterioration signals warrant review.",
-                evidence
+                "MULTI_FACTOR_DETERIORATION_CLUSTER", company, "HIGH", confidence,
+                f"{len(components)} distinct valid deterioration signals warrant review.",
+                evidence,
+                component_signal_ids=tuple(s.signal_id for s in components),
             ))
     return out

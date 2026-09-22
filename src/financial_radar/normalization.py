@@ -112,7 +112,7 @@ def extract_companyfacts(company, cik, payload, filings):
                     "end": end,
                     "pt": pt,
                     "quality": DataQuality.DERIVED,
-                    "prov_tuple": (c_debt["prov"], nc_debt["prov"]),
+                    "provenance": (c_debt["prov"], nc_debt["prov"]),
                     "filed": max(c_debt["filed"], nc_debt["filed"]),
                     "tag_idx": 0
                 }
@@ -127,7 +127,9 @@ def extract_companyfacts(company, cik, payload, filings):
             continue
             
         found_metrics.add(metric)
-        provs = f.get("prov_tuple", (f["prov"],))
+        provs = f.get("provenance")
+        if provs is None:
+            provs = (f["prov"],)
         o = Observation(company, metric, f["value"], f["unit"], f["end"], f["pt"], f["quality"], provs)
         obs_map[metric].append(o)
         out.append(o)

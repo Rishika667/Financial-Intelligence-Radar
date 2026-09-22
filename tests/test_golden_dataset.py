@@ -1,9 +1,10 @@
 from datetime import date, datetime
-from financial_radar.models import Observation, Provenance, DataQuality
+from financial_radar.models import Observation, Provenance, DataQuality, Signal
 from financial_radar.pipeline import evaluate
 from financial_radar.normalization import extract_companyfacts
 from financial_radar.core import derive_standalone_quarter
 from financial_radar.events import extract_events
+from financial_radar.signals import cluster
 
 def _prov(acc="0001", tag="Revenue", dt="2025-01-01", val=100, form="10-Q"):
     return Provenance(acc, "https://sec.example", date.fromisoformat(dt), form, tag, datetime.utcnow(), val)
@@ -35,22 +36,52 @@ def test_golden_standalone_q3_derivation():
     assert q3.period_type == "QUARTER"
 
 def test_golden_evaluate_consumes_derived_quarter():
-    """Signal evaluation actually consumes the derived quarter rather than the raw YTD value."""
-    # Suppose Q2 is derived to 200 (prior Q2 is 100).
-    q2_current = o("revenue", 200, "2025-06-30")
-    q2_prior = o("revenue", 100, "2024-06-30")
-    
-    ar_q2_current = o("accounts_receivable", 300, "2025-06-30", pt="INSTANT")
-    ar_q2_prior = o("accounts_receivable", 100, "2024-06-30", pt="INSTANT")
-    
-    signals = evaluate("ABC", [q2_current, q2_prior, ar_q2_current, ar_q2_prior])
+    """Production evaluation consumes a normalized, derived Q2 observation."""
+    payload = {
+        "facts": {
+            "us-gaap": {
+                "RevenueFromContractWithCustomerExcludingAssessedTax": {
+                    "units": {
+                        "USD": [
+                            {"accn": "prior", "filed": "2024-07-25", "form": "10-Q", "start": "2024-04-01", "end": "2024-06-30", "val": 80_000_000},
+                            {"accn": "q1", "filed": "2025-04-25", "form": "10-Q", "start": "2025-01-01", "end": "2025-03-31", "val": 100_000_000},
+                            {"accn": "h1", "filed": "2025-07-25", "form": "10-Q", "start": "2025-01-01", "end": "2025-06-30", "val": 300_000_000},
+                        ]
+                    }
+                },
+                "AccountsReceivableNetCurrent": {
+                    "units": {
+                        "USD": [
+                            {"accn": "prior", "filed": "2024-07-25", "form": "10-Q", "end": "2024-06-30", "val": 100_000_000},
+                            {"accn": "h1", "filed": "2025-07-25", "form": "10-Q", "end": "2025-06-30", "val": 300_000_000},
+                        ]
+                    }
+                },
+            }
+        }
+    }
+    filings = {
+        accession: {"source_url": f"https://sec.example/{accession}", "accessionNumber": accession}
+        for accession in ("prior", "q1", "h1")
+    }
+    observations = extract_companyfacts("ABC", "1", payload, filings)
+
+    derived_q2 = next(
+        x for x in observations
+        if x.metric == "revenue"
+        and x.period_end == date(2025, 6, 30)
+        and x.period_type == "QUARTER"
+    )
+    assert derived_q2.value == 200_000_000
+    assert derived_q2.quality == DataQuality.DERIVED
+
+    signals = evaluate("ABC", observations)
     div = next(s for s in signals if s.signal_id == "RECEIVABLES_REVENUE_DIVERGENCE")
-    
-    # Revenue grew 100% (100->200)
-    # AR grew 200% (100->300)
-    # Gap = 100%, threshold = 15%.
+
+    # Derived Q2 revenue grew 150%; AR grew 200%; the 50-point gap is material.
     assert div.severity == "HIGH"
-    assert "200" in div.explanation or "100%" in div.explanation
+    assert div.confidence == "MEDIUM"
+    assert derived_q2 in div.evidence
 
 # ---------------------------------------------------------
 # PRIORITY 2 & 3: XBRL NORMALIZATION, DEBT AGGREGATION, RESTATEMENTS
@@ -76,6 +107,8 @@ def test_golden_debt_aggregation():
     assert debt.value == 200
     assert debt.quality == DataQuality.DERIVED
     assert len(debt.provenance) == 2
+    assert {p.concept for p in debt.provenance} == {"DebtCurrent", "LongTermDebtNoncurrent"}
+    assert len([x for x in rows if x.metric == "debt" and x.value is not None]) == 1
 
 def test_golden_restatement_selection():
     """Restated value supersedes original."""
@@ -182,7 +215,7 @@ def test_golden_multi_factor_cluster():
     inv_c = o("inventory", 400_000_000, "2025-06-30", pt="INSTANT")
     inv_p = o("inventory", 100_000_000, "2024-06-30", pt="INSTANT")
     
-    gp_c = o("gross_profit", -50_000_000, "2025-06-30")
+    gp_c = o("gross_profit", 20_000_000, "2025-06-30")
     gp_p = o("gross_profit", 150_000_000, "2024-06-30")
     
     obs = [rev_c, rev_p, ar_c, ar_p, inv_c, inv_p, gp_c, gp_p]
@@ -191,7 +224,31 @@ def test_golden_multi_factor_cluster():
     cluster = next((s for s in signals if s.signal_id == "MULTI_FACTOR_DETERIORATION_CLUSTER"), None)
     assert cluster is not None
     assert cluster.severity == "HIGH"
+    assert set(cluster.component_signal_ids) == {
+        "RECEIVABLES_REVENUE_DIVERGENCE",
+        "INVENTORY_SALES_DIVERGENCE",
+        "GROSS_MARGIN_COMPRESSION",
+    }
     
+def test_golden_cluster_requires_same_comparison_window():
+    """Signals from different comparison windows cannot form a cluster."""
+    current_window = (
+        o("metric", 2, "2025-06-30"),
+        o("metric", 1, "2024-06-30"),
+    )
+    older_window = (
+        o("metric", 2, "2024-06-30"),
+        o("metric", 1, "2023-06-30"),
+    )
+    component_signals = [
+        Signal("SIGNAL_A", "ABC", "HIGH", "HIGH", "A", current_window),
+        Signal("SIGNAL_B", "ABC", "HIGH", "HIGH", "B", current_window),
+        Signal("SIGNAL_C", "ABC", "HIGH", "HIGH", "C", older_window),
+    ]
+
+    assert cluster(component_signals) == []
+
+
 def test_golden_cluster_ignores_suppressed():
     """Cluster ignores suppressed signals."""
     rev_c = o("revenue", 100, "2025-06-30")

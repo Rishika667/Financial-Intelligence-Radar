@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS signals(
 );
 CREATE TABLE IF NOT EXISTS events(
     id TEXT PRIMARY KEY, company TEXT, type TEXT, filed TEXT,
-    accession TEXT, source_url TEXT, description TEXT
+    accession TEXT, source_url TEXT, description TEXT,
+    form TEXT, extraction_version TEXT
 );
 CREATE TABLE IF NOT EXISTS peer_context(
     company TEXT, group_id TEXT, metric TEXT, company_value REAL,
@@ -36,6 +37,15 @@ def connect(path="data/radar.sqlite"):
     c = sqlite3.connect(path)
     c.row_factory = sqlite3.Row
     c.executescript(DDL)
+    # Safely migrate existing databases
+    try:
+        c.execute("ALTER TABLE events ADD COLUMN form TEXT")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        c.execute("ALTER TABLE events ADD COLUMN extraction_version TEXT")
+    except sqlite3.OperationalError:
+        pass
     return c
 
 
@@ -101,7 +111,7 @@ def save_signals(c, rows):
 def save_events(c, rows):
     for e in rows:
         c.execute(
-            "INSERT OR REPLACE INTO events VALUES(?,?,?,?,?,?,?)",
+            "INSERT OR REPLACE INTO events VALUES(?,?,?,?,?,?,?,?,?)",
             (
                 e["id"],
                 e["company"],
@@ -110,6 +120,8 @@ def save_events(c, rows):
                 e.get("accession"),
                 e.get("source_url"),
                 e["description"],
+                e.get("form"),
+                e.get("extraction_version"),
             ),
         )
     c.commit()

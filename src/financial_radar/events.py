@@ -45,8 +45,10 @@ def extract_events(company, filing, text):
                     "type": typ,
                     "filing_date": filing.get("filingDate"),
                     "accession": accession,
+                    "form": filing.get("form"),
                     "source_url": filing.get("source_url"),
                     "description": snippet,
+                    "extraction_version": "v1.0",
                 }
             )
     return out

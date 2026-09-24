@@ -29,7 +29,8 @@ def derive_standalone_quarter(ytd, prior_ytd):
     return Observation(
         ytd.company, ytd.metric, ytd.value - prior_ytd.value, ytd.unit,
         ytd.period_end, "QUARTER", DataQuality.DERIVED,
-        ytd.provenance + prior_ytd.provenance
+        ytd.provenance + prior_ytd.provenance,
+        derived_from=(f"{ytd.metric} {ytd.period_type}", f"{prior_ytd.metric} {prior_ytd.period_type}")
     )
 
 def free_cash_flow(ocf, capex):
@@ -51,7 +52,8 @@ def free_cash_flow(ocf, capex):
     return Observation(
         ocf.company, "free_cash_flow", ocf.value - abs(capex.value), ocf.unit,
         ocf.period_end, ocf.period_type, DataQuality.DERIVED,
-        ocf.provenance + capex.provenance
+        ocf.provenance + capex.provenance,
+        derived_from=("operating_cash_flow", "capex")
     )
 
 class SECClient:

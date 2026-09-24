@@ -94,16 +94,20 @@ def _comparable_pair(items, metric, pt):
 
 
 def _ratio(a, b, name):
-    """Compute a derived ratio observation."""
+    """Compute a derived ratio observation.
+
+    Uses unit="pure" for dimensionless ratios so the _ok() currency
+    compatibility gate correctly excludes them from monetary unit checks.
+    """
     from .models import Observation, DataQuality
 
     if b.value in (None, 0):
         return Observation(
-            a.company, name, None, "ratio", a.period_end, a.period_type,
+            a.company, name, None, "pure", a.period_end, a.period_type,
             DataQuality.CALCULATION_INVALID, comparable=False,
         )
     return Observation(
-        a.company, name, a.value / b.value, "ratio", a.period_end,
+        a.company, name, a.value / b.value, "pure", a.period_end,
         a.period_type, DataQuality.DERIVED, a.provenance + b.provenance,
     )
 

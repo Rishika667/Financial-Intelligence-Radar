@@ -450,3 +450,35 @@ def test_golden_signal_provenance_chain():
     assert hit.evidence[0].provenance[0].accession == "ACC001"
     assert hit.evidence[0].provenance[0].source_url == "https://sec.gov/filing"
     assert hit.version == "v1"
+
+
+def test_golden_signal_unit_mismatch():
+    """Signals reject incompatible units (e.g. USD vs EUR)."""
+    rev_c = o("revenue", 200_000_000, "2025-06-30")
+    rev_p = Observation(
+        "ABC", "revenue", 100_000_000, "EUR", date(2024, 6, 30),
+        "QUARTER", DataQuality.REPORTED, (_prov(),)
+    )
+    ar_c = o("accounts_receivable", 300_000_000, "2025-06-30", pt="INSTANT")
+    ar_p = o("accounts_receivable", 100_000_000, "2024-06-30", pt="INSTANT")
+
+    sigs = evaluate("ABC", [rev_c, rev_p, ar_c, ar_p])
+    hit = next((s for s in sigs if s.signal_id == "RECEIVABLES_REVENUE_DIVERGENCE"), None)
+    
+    assert hit is not None
+    assert hit.suppressed_reason == "data quality/comparability"
+
+
+def test_golden_derivation_unit_mismatch():
+    """Derivations like FCF reject incompatible units."""
+    from financial_radar.core import free_cash_flow
+    ocf = o("operating_cash_flow", 100_000_000, "2025-06-30")
+    capex = Observation(
+        "ABC", "capex", -50_000_000, "EUR", date(2025, 6, 30),
+        "QUARTER", DataQuality.REPORTED, (_prov(),)
+    )
+
+    fcf = free_cash_flow(ocf, capex)
+    assert fcf.value is None
+    assert fcf.quality == DataQuality.CALCULATION_INVALID
+    assert fcf.comparable is False

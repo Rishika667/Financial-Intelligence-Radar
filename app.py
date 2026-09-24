@@ -13,13 +13,20 @@ from financial_radar.core import SECClient
 st.set_page_config(page_title="Financial Intelligence Radar", layout="wide")
 st.title("Financial Intelligence Radar")
 st.caption(
-    "Public-disclosure intelligence for analyst attention — not investment advice."
+    "Public-disclosure intelligence for analyst triage / attention priority — not investment advice."
 )
 
 # ---------------------------------------------------------------------------
 # Persistent state
 # ---------------------------------------------------------------------------
 db = connect()
+try:
+    latest_event = rows(db, "SELECT MAX(filed) as latest FROM events")
+    if latest_event and latest_event[0]["latest"]:
+        st.caption(f"Data AS OF (most recent filing event): {latest_event[0]['latest']}")
+except Exception:
+    pass
+
 try:
     universe = load_universe()
 except FileNotFoundError:
@@ -117,9 +124,11 @@ with portfolio_tab:
         signals = rows(
             db,
             f"SELECT * FROM signals WHERE company IN ({placeholders}) "
-            f"AND suppressed IS NULL ORDER BY severity DESC",
+            f"AND suppressed IS NULL",
             active_tickers,
         )
+        severity_order = {"HIGH": 0, "MODERATE": 1, "LOW": 2}
+        signals.sort(key=lambda x: (severity_order.get(x["severity"], 9), x["signal_id"]))
     else:
         signals = []
 
@@ -135,6 +144,34 @@ with portfolio_tab:
             use_container_width=True,
             hide_index=True,
         )
+        
+        for s in signals:
+            with st.expander(f"Drill-down: {s['company']} - {s['signal_id']} (v{s['version']})"):
+                st.write(f"**Attention Priority Explanation:** {s['explanation']}")
+                try:
+                    ev_list = json.loads(s["evidence"])
+                    drill_rows = []
+                    for obs in ev_list:
+                        prov = obs.get("provenance", [])
+                        for p in prov:
+                            drill_rows.append({
+                                "metric": obs.get("metric"),
+                                "value": obs.get("value"),
+                                "unit": obs.get("unit"),
+                                "period_end": obs.get("period_end"),
+                                "quality": obs.get("quality"),
+                                "concept": p.get("concept"),
+                                "accession": p.get("accession"),
+                                "form": p.get("form"),
+                                "filing_date": p.get("filing_date"),
+                                "source_url": p.get("source_url")
+                            })
+                    if drill_rows:
+                        st.dataframe(pd.DataFrame(drill_rows), hide_index=True, column_config={"source_url": st.column_config.LinkColumn("SEC Source", display_text="View")})
+                    else:
+                        st.info("No detailed provenance found.")
+                except Exception as e:
+                    st.write("Evidence data could not be parsed.")
 
         with st.expander("Signal definitions", expanded=False):
             st.markdown("""
@@ -258,7 +295,7 @@ with portfolio_tab:
 with research_tab:
     ticker = st.selectbox(
         "Company",
-        active_tickers or [x["ticker"] for x in universe],
+        [x["ticker"] for x in universe],
     )
 
     if not ticker:
@@ -288,7 +325,7 @@ with research_tab:
 
     if metrics:
         df_obs = pd.DataFrame(metrics)
-        latest_period = df_obs["period_end"].max() if not df_obs.empty else None
+        latest_period = df_obs[df_obs["quality"] != "DataQuality.NOT_REPORTED"]["period_end"].max() if not df_obs[df_obs["quality"] != "DataQuality.NOT_REPORTED"].empty else None
         if latest_period:
             latest = df_obs[df_obs["period_end"] == latest_period]
             key_metrics = [

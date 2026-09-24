@@ -1,9 +1,9 @@
 # Signal specification
 Implemented rules: 
-- receivables–revenue divergence
-- inventory–sales divergence
+- receivables—revenue divergence
+- inventory—sales divergence
 - gross-margin compression
-- operating deleverage
+- operating margin deterioration
 - earnings/cash conversion (OCF to earnings)
 - free cash flow (FCF) deterioration
 - leverage/interest burden

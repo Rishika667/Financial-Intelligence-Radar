@@ -58,3 +58,48 @@ def test_normalization_missing_is_not_zero():
     assert revenue.value == 10
     assert inventory.value is None
     assert inventory.quality == DataQuality.NOT_REPORTED
+
+
+def test_pipeline_retrieval_failure_does_not_crash(caplog):
+    """Event extraction handles HTTP/retrieval failures safely without crashing."""
+    from financial_radar.pipeline import _extract_events_from_submissions
+    import logging
+
+    class MockClient:
+        delay = 0
+        last = 0
+        class s:
+            @staticmethod
+            def get(url, timeout):
+                raise ValueError("Simulated HTTP failure")
+
+    filings = {
+        "1": {"form": "8-K", "source_url": "http://sec.example/1", "accessionNumber": "1"}
+    }
+    
+    with caplog.at_level(logging.WARNING):
+        count = _extract_events_from_submissions("ABC", filings, None, MockClient())
+    
+    assert count == 0
+    assert "Event extraction failed for ABC filing 1: Simulated HTTP failure" in caplog.text
+
+
+def test_pipeline_malformed_filing_index():
+    """filing_index handles malformed SEC submission JSONs safely."""
+    from financial_radar.pipeline import filing_index
+    # Missing primaryDocument or form
+    submissions = {
+        "filings": {
+            "recent": {
+                "accessionNumber": ["111-222", "333-444"],
+                "form": ["10-K", None],
+                "primaryDocument": ["doc1.htm", ""],
+                "filingDate": ["2025-01-01", "2025-01-02"]
+            }
+        }
+    }
+    idx = filing_index(submissions, "1")
+    # Only the valid filing should be included
+    assert "111222" in idx
+    assert "333444" not in idx
+    assert idx["111222"]["form"] == "10-K"

@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from statistics import median
+from .models import DataQuality
 
 
 def load_peer_groups(path="config/peer_groups.json"):
@@ -19,6 +20,31 @@ def find_peer_group(ticker, peer_groups):
 
 def peer_context(company, metric, observations, members):
     """Compute peer context for a metric. Returns dict with peer median, range, and company position."""
+    
+    # 1. Identify the company's anchor observation (most recent comparable value)
+    own_obs = [
+        o for o in observations
+        if o.company == company
+        and o.metric == metric
+        and o.value is not None
+        and o.comparable
+        and o.quality in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED)
+    ]
+    
+    if not own_obs:
+        return {
+            "metric": metric,
+            "available": False,
+            "company_value": None,
+            "peer_median": None,
+            "peer_range": None,
+            "n_peers": 0,
+            "peer_group_version": None,
+        }
+        
+    anchor = sorted(own_obs, key=lambda x: x.period_end)[-1]
+    
+    # 2. Filter peers strictly against the anchor's context
     peer_values = [
         o.value
         for o in observations
@@ -26,21 +52,19 @@ def peer_context(company, metric, observations, members):
         and o.metric == metric
         and o.value is not None
         and o.comparable
+        and o.unit == anchor.unit
+        and o.period_type == anchor.period_type
+        and o.period_end == anchor.period_end
+        and o.quality in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED)
     ]
-    own = [
-        o.value
-        for o in observations
-        if o.company == company
-        and o.metric == metric
-        and o.value is not None
-    ]
-    has_peers = len(peer_values) >= 2 and bool(own)
+    
+    has_peers = len(peer_values) >= 2
     return {
         "metric": metric,
         "available": has_peers,
-        "company_value": own[-1] if own else None,
-        "peer_median": median(peer_values) if len(peer_values) >= 2 else None,
-        "peer_range": (min(peer_values), max(peer_values)) if peer_values else None,
+        "company_value": anchor.value,
+        "peer_median": median(peer_values) if has_peers else None,
+        "peer_range": (min(peer_values), max(peer_values)) if has_peers else None,
         "n_peers": len(peer_values),
         "peer_group_version": None,  # Set by caller
     }

@@ -8,7 +8,7 @@ def pct_change(current, prior):
     return None if current is None or prior is None or prior == 0 else (current - prior) / abs(prior)
 
 def derive_standalone_quarter(ytd, prior_ytd):
-    required_prior_type = {"YTD_6M": "QUARTER", "YTD_9M": "YTD_6M"}
+    required_prior_type = {"YTD_6M": "QUARTER", "YTD_9M": "YTD_6M", "ANNUAL": "YTD_9M"}
     valid = (
         ytd.value is not None
         and prior_ytd.value is not None

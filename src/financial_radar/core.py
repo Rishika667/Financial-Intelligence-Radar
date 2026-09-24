@@ -40,6 +40,8 @@ def free_cash_flow(ocf, capex):
         and capex.comparable
         and ocf.company == capex.company
         and ocf.unit == capex.unit
+        and ocf.period_end == capex.period_end
+        and ocf.period_type == capex.period_type
     )
     if not valid:
         return Observation(

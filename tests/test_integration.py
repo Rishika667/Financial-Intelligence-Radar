@@ -1,6 +1,6 @@
 import json
 from datetime import date, datetime
-from financial_radar.models import Observation, Provenance, DataQuality
+from financial_radar.models import Observation, Provenance, DataQuality, Signal
 from financial_radar.store import connect, save_watchlist, save_observations, save_signals, rows
 from financial_radar.signals import divergence, cluster
 from financial_radar.signals_phase2 import leverage
@@ -159,15 +159,13 @@ def test_mismatched_period_fcf():
 def test_persisted_cluster_component_lineage(tmp_path):
     c = connect(tmp_path / "prov.sqlite")
 
-    # Create 3 actionable signals
     p = _prov()
-    s1 = Observation("ABC", "a", 1, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,))
-    s2 = Observation("ABC", "b", 1, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,))
-    s3 = Observation("ABC", "c", 1, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,))
+    obs_c = Observation("ABC", "metric", 1, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,))
+    obs_p = Observation("ABC", "metric", 1, "USD", date(2024, 6, 30), "QUARTER", DataQuality.REPORTED, (p,))
     
-    sig1 = divergence("S1", s1, s2, s1, s2, -1)
-    sig2 = divergence("S2", s2, s3, s2, s3, -1)
-    sig3 = divergence("S3", s3, s1, s3, s1, -1)
+    sig1 = Signal("S1", "ABC", "HIGH", "HIGH", "exp", (obs_c, obs_p))
+    sig2 = Signal("S2", "ABC", "HIGH", "HIGH", "exp", (obs_c, obs_p))
+    sig3 = Signal("S3", "ABC", "HIGH", "HIGH", "exp", (obs_c, obs_p))
     
     clustered = cluster([sig1, sig2, sig3])
     assert len(clustered) == 1

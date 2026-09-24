@@ -1,5 +1,5 @@
 # Test cases
-CI runs Python 3.11 compilation and the local pytest suite. Deterministic tests cover signal directionality/controls, YTD validation, SQLite watchlist and observations, event extraction, normalizer missing-data handling, and evidence-chain provenance.
+CI runs Python 3.11 compilation and the local pytest suite. Deterministic tests cover signal directionality/controls, YTD validation, SQLite watchlist and observations, event extraction idempotence and metadata, normalizer missing-data handling, strict unit/currency compatibility in calculations and signals, dimensional suppression, amendment/later filing handling, retrieval failure recovery, and evidence-chain provenance.
 
 The real SEC smoke test is opt-in through RUN_SEC_SMOKE=1 and is skipped in CI. It uses AAPL only, with the existing rate-limited SEC client, and validates retrieval → raw persistence → normalizer. It requires network access and a compliant User-Agent.
 

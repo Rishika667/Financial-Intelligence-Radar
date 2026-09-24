@@ -1,5 +1,6 @@
 """The single local production flow: SEC -> raw -> normalize -> SQLite -> signals/events/peers."""
 import json
+import logging
 import time
 from pathlib import Path
 
@@ -25,6 +26,8 @@ from .signals_phase2 import (
 )
 from .events import extract_events
 from .peers import load_peer_groups, peer_context_for_company
+
+logger = logging.getLogger(__name__)
 
 FORMS = {"10-K", "10-Q", "8-K", "20-F", "6-K", "10-K/A", "10-Q/A", "8-K/A"}
 
@@ -128,16 +131,15 @@ def evaluate(company, items):
     op, pop = pair("operating_income")
     ni, pni = pair("net_income")
     ocf, pocf = pair("operating_cash_flow")
-    debt_cur, pdebt = pair("debt")
-    
-    # Debt is INSTANT, so we need to fetch the latest INSTANT observations
+
+    # Balance-sheet / instant metrics
     def pair_instant(m):
         return _comparable_pair(items, m, "INSTANT")
-        
+
     debt_cur, pdebt = pair_instant("debt")
     cash, pcash = pair_instant("cash_and_equivalents")
     cl, pcl = pair_instant("current_liabilities")
-    
+
     # shares can be QUARTER
     shares, pshares = pair("share_count")
     cap, pcap = pair("capex")
@@ -230,7 +232,10 @@ def ingest_company(client, c, company):
 
 
 def _extract_events_from_submissions(ticker, filings, c, client):
-    """Extract events from actual 8-K filing texts by retrieving them from SEC EDGAR."""
+    """Extract events from actual 8-K filing texts by retrieving from SEC EDGAR.
+
+    Retrieval failures are logged (observable) but do not break the pipeline.
+    """
     count = 0
     # Process only the 5 most recent 8-Ks to respect SEC pacing/volume
     recent_8ks = sorted(
@@ -238,7 +243,7 @@ def _extract_events_from_submissions(ticker, filings, c, client):
         key=lambda x: x.get("filingDate", ""),
         reverse=True
     )[:5]
-    
+
     for filing in recent_8ks:
         url = filing.get("source_url")
         if url:
@@ -249,16 +254,17 @@ def _extract_events_from_submissions(ticker, filings, c, client):
                 r = client.s.get(url, timeout=30)
                 client.last = time.monotonic()
                 r.raise_for_status()
-                
-                # Fetching actual document text
+
                 text = r.text
-                
                 events = extract_events(ticker, filing, text)
                 if events:
                     save_events(c, events)
                     count += len(events)
-            except Exception:
-                pass
+            except Exception as exc:
+                logger.warning(
+                    "Event extraction failed for %s filing %s: %s",
+                    ticker, filing.get("accessionNumber", "?"), exc
+                )
     return count
 
 

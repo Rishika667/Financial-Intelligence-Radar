@@ -40,6 +40,42 @@ def test_golden_standalone_q3_derivation():
     assert q3.period_type == "QUARTER"
 
 
+def test_golden_standalone_q4_derivation():
+    """Q4 derived from FY ANNUAL - 9M YTD."""
+    ytd_9m = o("revenue", 600, "2025-09-30", pt="YTD_9M")
+    fy = o("revenue", 1000, "2025-12-31", pt="ANNUAL")
+
+    q4 = derive_standalone_quarter(fy, ytd_9m)
+    assert q4.value == 400
+    assert q4.period_type == "QUARTER"
+
+
+def test_golden_skip_dimensional_facts():
+    """Dimensional facts (with segment/axis) must not be treated as consolidated totals."""
+    payload = {
+        "facts": {
+            "us-gaap": {
+                "Revenues": {
+                    "units": {
+                        "USD": [
+                            {"accn": "1", "filed": "2025-03-31", "form": "10-Q",
+                             "end": "2025-03-31", "start": "2025-01-01", "val": 50_000, "segment": "NorthAmerica"},
+                            {"accn": "1", "filed": "2025-03-31", "form": "10-Q",
+                             "end": "2025-03-31", "start": "2025-01-01", "val": 100_000}
+                        ]
+                    }
+                }
+            }
+        }
+    }
+    filings = {"1": {"source_url": "url", "accessionNumber": "1"}}
+    rows = extract_companyfacts("ABC", "1", payload, filings)
+    
+    rev = next(x for x in rows if x.metric == "revenue" and x.value is not None)
+    # The consolidated fact (100_000) should be picked, the dimensional (50_000) skipped
+    assert rev.value == 100_000
+
+
 def test_golden_evaluate_consumes_derived_quarter():
     """Production pipeline derives Q2, signal evaluation uses it.
 

@@ -195,6 +195,7 @@ def test_golden_restatement_selection():
     rev = next(x for x in rows if x.metric == "revenue" and x.value is not None)
     assert rev.value == 90_000_000
     assert rev.provenance[0].accession == "restated"
+    assert rev.provenance[1].accession == "orig"
 
 
 def test_golden_amendment_selection():
@@ -223,6 +224,8 @@ def test_golden_amendment_selection():
     rev = next(x for x in rows if x.metric == "revenue" and x.value is not None)
     assert rev.value == 95_000_000
     assert rev.quality == DataQuality.AMENDED
+    assert rev.provenance[0].accession == "amend"
+    assert rev.provenance[1].accession == "orig"
 
 
 def test_golden_missing_fact_not_zero():

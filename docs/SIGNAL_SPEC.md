@@ -1,2 +1,14 @@
 # Signal specification
-Implemented rules: receivables–revenue divergence, inventory–sales divergence (through the shared divergence rule), gross-margin compression, and multi-factor deterioration cluster. Rules require comparable reported/derived inputs, explain the measured gap, assign deterministic severity/confidence, and return a suppression reason when evidence is inadequate. Planned next rules: operating deleverage, earnings/cash conversion, FCF, leverage/interest, liquidity and dilution.
+Implemented rules: 
+- receivables–revenue divergence
+- inventory–sales divergence
+- gross-margin compression
+- operating deleverage
+- earnings/cash conversion (OCF to earnings)
+- free cash flow (FCF) deterioration
+- leverage/interest burden
+- liquidity compression
+- share count dilution
+- multi-factor deterioration cluster
+
+Rules require comparable reported/derived inputs with strictly matching units, explain the measured gap, assign deterministic severity/confidence, and return a suppression reason when evidence is inadequate (e.g. economically insignificant changes or incomparable units/periods).

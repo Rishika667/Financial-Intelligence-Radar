@@ -16,7 +16,7 @@ from .store import (
 )
 from .signals import divergence, margin_compression, cluster
 from .signals_phase2 import (
-    operating_deleverage,
+    operating_margin_deterioration,
     cash_conversion,
     fcf_deterioration,
     leverage,
@@ -165,10 +165,10 @@ def evaluate(company, items):
                 _ratio(pgp, prevrev, "gross_margin"),
             )
         )
-    # Signal 4: Operating deleverage
+    # Signal 4: Operating margin deterioration
     if op and rev and pop and prevrev:
         out.append(
-            operating_deleverage(
+            operating_margin_deterioration(
                 _ratio(op, rev, "operating_margin"),
                 _ratio(pop, prevrev, "operating_margin"),
             )

@@ -27,6 +27,13 @@ def suppressed(id, *x):
         suppressed_reason="data quality/comparability"
     )
 
+def misaligned(id, *x):
+    return Signal(
+        id, x[0].company, "UNKNOWN", "LOW",
+        "Cannot assess: misaligned periods", tuple(x),
+        suppressed_reason="misaligned periods"
+    )
+
 
 # ---------------------------------------------------------------------------
 # Materiality helpers — metric-type-aware
@@ -104,6 +111,12 @@ def ratio_drop(id, a, b, oa, ob, floor, label):
     """Ratio-based signal — no monetary materiality, only ratio floor."""
     if not ok(a, b, oa, ob) or b.value <= 0 or ob.value <= 0:
         return suppressed(id, a, b)
+    
+    if (a.company != b.company
+        or oa.company != ob.company
+        or a.period_end != b.period_end
+        or oa.period_end != ob.period_end):
+        return misaligned(id, a, b, oa, ob)
 
     now, old = a.value / b.value, oa.value / ob.value
     if old - now >= floor:
@@ -128,6 +141,12 @@ def leverage(debt, ebit, old_debt, old_ebit):
     """Leverage uses monetary inputs but the signal is ratio-based."""
     if not ok(debt, ebit, old_debt, old_ebit) or ebit.value <= 0 or old_ebit.value <= 0:
         return suppressed("LEVERAGE_INTEREST_BURDEN", debt, ebit)
+
+    if (debt.company != ebit.company
+        or old_debt.company != old_ebit.company
+        or debt.period_end != ebit.period_end
+        or old_debt.period_end != old_ebit.period_end):
+        return misaligned("LEVERAGE_INTEREST_BURDEN", debt, ebit, old_debt, old_ebit)
 
     now, old = debt.value / ebit.value, old_debt.value / old_ebit.value
     if now - old >= 0.5:

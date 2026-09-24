@@ -385,10 +385,13 @@ def test_golden_cluster_ignores_suppressed():
 # PRIORITY 4: EVENT EXTRACTION
 # ---------------------------------------------------------
 def test_golden_event_extraction():
-    """Events extracted from filing text with conservative matching."""
+    """Events extracted from filing text with conservative matching and full metadata."""
     text = "The company completed multiple business combinations and acquisitions."
-    events = extract_events("ABC", {"accessionNumber": "1", "filingDate": "2025-01-01"}, text)
-    assert any(e["type"] == "acquisition" for e in events)
+    events = extract_events("ABC", {"accessionNumber": "1", "filingDate": "2025-01-01", "form": "8-K"}, text)
+    acq_event = next(e for e in events if e["type"] == "acquisition")
+    assert acq_event is not None
+    assert acq_event["form"] == "8-K"
+    assert "extraction_version" in acq_event
 
 
 def test_golden_irrelevant_event_keyword():

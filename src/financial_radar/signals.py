@@ -40,6 +40,17 @@ def divergence(kind, balance, revenue, prior_balance, prior_revenue, threshold=0
             suppressed_reason="data quality/comparability"
         )
 
+    if (balance.company != revenue.company
+        or prior_balance.company != prior_revenue.company
+        or balance.period_end != revenue.period_end
+        or prior_balance.period_end != prior_revenue.period_end):
+        return Signal(
+            kind, balance.company, "UNKNOWN", "LOW",
+            "Cannot assess: misaligned periods",
+            (balance, revenue, prior_balance, prior_revenue),
+            suppressed_reason="misaligned periods"
+        )
+
     # Monetary materiality: at least one of the inputs must have a material change
     if (
         not _monetary_material(balance.value, prior_balance.value)

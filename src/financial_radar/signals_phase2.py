@@ -66,8 +66,8 @@ def decline(id, current, prior, floor, label):
     return None
 
 
-def operating_deleverage(c, p):
-    return decline("OPERATING_DELEVERAGE", c, p, 0.03, "Operating margin")
+def operating_margin_deterioration(c, p):
+    return decline("OPERATING_MARGIN_DETERIORATION", c, p, 0.03, "Operating margin")
 
 
 def fcf_deterioration(c, p):

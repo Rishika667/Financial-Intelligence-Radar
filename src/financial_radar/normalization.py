@@ -32,6 +32,10 @@ def extract_companyfacts(company, cik, payload, filings):
         for tag_idx, tag in enumerate(tags):
             for unit, items in payload.get("facts", {}).get("us-gaap", {}).get(tag, {}).get("units", {}).items():
                 for x in items:
+                    # Do not treat dimensional facts as consolidated totals
+                    if "segment" in x or "axis" in x or "member" in x:
+                        continue
+
                     acc = x.get("accn", "").replace("-", "")
                     filing = filings.get(acc, {})
                     if not filing:
@@ -174,6 +178,19 @@ def extract_companyfacts(company, cik, payload, filings):
                 )
                 if ytd6:
                     derived = derive_standalone_quarter(o, ytd6)
+                    if derived.value is not None:
+                        out.append(derived)
+            elif o.period_type == "ANNUAL":
+                # Q4 standalone = FY ANNUAL - 9M YTD
+                ytd9 = next(
+                    (c for c in obs_list
+                     if c.period_type == "YTD_9M"
+                     and c.unit == o.unit
+                     and 80 <= (o.period_end - c.period_end).days <= 100),
+                    None
+                )
+                if ytd9:
+                    derived = derive_standalone_quarter(o, ytd9)
                     if derived.value is not None:
                         out.append(derived)
 

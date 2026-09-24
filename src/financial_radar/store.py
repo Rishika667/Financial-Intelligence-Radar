@@ -124,6 +124,7 @@ def _serialize_evidence(evidence):
             "quality": o.quality.value if hasattr(o.quality, 'value') else str(o.quality),
             "comparable": o.comparable,
             "provenance": prov_list,
+            "derived_from": list(o.derived_from),
         })
     return out
 
@@ -202,3 +203,44 @@ def clear_peer_context(c, company):
 
 def rows(c, sql, args=()):
     return [dict(x) for x in c.execute(sql, args).fetchall()]
+
+def save_filings(c, cik, filings_dict):
+    for f in filings_dict.values():
+        c.execute(
+            "INSERT OR IGNORE INTO filings VALUES(?,?,?,?,?)",
+            (
+                f.get("accessionNumber"),
+                cik,
+                f.get("form"),
+                f.get("filingDate"),
+                f.get("source_url"),
+            )
+        )
+    c.commit()
+
+def load_observations_for_companies(c, companies):
+    from datetime import date, datetime
+    from .models import Observation, DataQuality, Provenance
+    out = []
+    if not companies:
+        return out
+    
+    placeholders = ",".join("?" * len(companies))
+    q = f"SELECT * FROM observations WHERE company IN ({placeholders})"
+    for r in c.execute(q, tuple(companies)):
+        p_raw = json.loads(r["provenance"])
+        provs = []
+        for p in p_raw:
+            provs.append(Provenance(
+                p["accession"], p["source_url"], 
+                date.fromisoformat(p["filing_date"]), 
+                p["form"], p["concept"], 
+                datetime.fromisoformat(p["retrieval_timestamp"]),
+                p.get("raw_value"), p.get("mapping_version", "v1")
+            ))
+        out.append(Observation(
+            r["company"], r["metric"], r["value"], r["unit"],
+            date.fromisoformat(r["period_end"]), r["period_type"],
+            DataQuality(r["quality"]), tuple(provs), (), bool(r["comparable"]), r["reason"]
+        ))
+    return out

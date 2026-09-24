@@ -179,3 +179,37 @@ def test_persisted_cluster_component_lineage(tmp_path):
     assert isinstance(components, list)
     assert len(components) == 3
     assert set(components) == {"S1", "S2", "S3"}
+
+def test_load_observations_for_companies(tmp_path):
+    c = connect(tmp_path / "x.sqlite")
+    obs1 = Observation("ABC", "revenue", 100, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED)
+    obs2 = Observation("DEF", "revenue", 200, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED)
+    save_observations(c, [obs1, obs2])
+    from financial_radar.store import load_observations_for_companies
+    loaded = load_observations_for_companies(c, ["ABC", "DEF"])
+    assert len(loaded) == 2
+
+
+def test_filing_persistence_idempotence(tmp_path):
+    c = connect(tmp_path / "x.sqlite")
+    from financial_radar.store import save_filings
+    filings = {"0001": {"accessionNumber": "0001", "form": "10-Q", "filingDate": "2025-01-01", "source_url": "http://sec.gov"}}
+    save_filings(c, "12345", filings)
+    save_filings(c, "12345", filings)  # Should not raise IntegrityError
+    res = rows(c, "SELECT * FROM filings")
+    assert len(res) == 1
+
+
+def test_derived_lineage(tmp_path):
+    c = connect(tmp_path / "x.sqlite")
+    ocf = Observation("ABC", "operating_cash_flow", 100, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (_prov(),))
+    cap = Observation("ABC", "capex", -20, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (_prov(),))
+    from financial_radar.core import free_cash_flow
+    fcf = free_cash_flow(ocf, cap)
+    assert fcf.derived_from == ("operating_cash_flow", "capex")
+    
+    sig = Signal("TEST", "ABC", "LOW", "LOW", "Test", (fcf,))
+    save_signals(c, [sig])
+    saved = rows(c, "SELECT evidence FROM signals")[0]["evidence"]
+    ev = json.loads(saved)
+    assert ev[0]["derived_from"] == ["operating_cash_flow", "capex"]

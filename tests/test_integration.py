@@ -2,9 +2,11 @@ import json
 from datetime import date, datetime
 from financial_radar.models import Observation, Provenance, DataQuality
 from financial_radar.store import connect, save_watchlist, save_observations, save_signals, rows
+from financial_radar.signals import divergence, cluster
 from financial_radar.signals_phase2 import leverage
 from financial_radar.events import extract_events
-from financial_radar.pipeline import evaluate
+from financial_radar.pipeline import evaluate, _ratio
+from financial_radar.core import free_cash_flow
 
 
 def _prov(acc="ACC001", url="https://sec.gov/filing"):
@@ -112,3 +114,70 @@ def test_persisted_signal_provenance_chain(tmp_path):
     assert row["severity"] == "HIGH"
     assert row["version"] == "v1"
     assert row["suppressed"] is None
+
+
+def test_mismatched_period_end_divergence():
+    rev_c = Observation("ABC", "revenue", 200_000_000, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED)
+    rev_p = Observation("ABC", "revenue", 100_000_000, "USD", date(2024, 6, 30), "QUARTER", DataQuality.REPORTED)
+    # AR current is deliberately from March instead of June
+    ar_c = Observation("ABC", "accounts_receivable", 300_000_000, "USD", date(2025, 3, 31), "INSTANT", DataQuality.REPORTED)
+    ar_p = Observation("ABC", "accounts_receivable", 100_000_000, "USD", date(2024, 6, 30), "INSTANT", DataQuality.REPORTED)
+    
+    sig = divergence("RECEIVABLES_REVENUE_DIVERGENCE", ar_c, rev_c, ar_p, rev_p)
+    assert sig is not None
+    assert sig.suppressed_reason == "misaligned periods"
+    assert sig.actionable is False
+
+
+def test_mismatched_period_end_ratio_calculation():
+    gp = Observation("ABC", "gross_profit", 50, "USD", date(2025, 3, 31), "QUARTER", DataQuality.REPORTED)
+    rev = Observation("ABC", "revenue", 100, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED)
+    ratio = _ratio(gp, rev, "gross_margin")
+    assert ratio.value is None
+    assert ratio.quality == DataQuality.CALCULATION_INVALID
+    assert ratio.comparable is False
+
+
+def test_mismatched_currency_ratio_calculation():
+    gp = Observation("ABC", "gross_profit", 50, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED)
+    rev = Observation("ABC", "revenue", 100, "EUR", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED)
+    ratio = _ratio(gp, rev, "gross_margin")
+    assert ratio.value is None
+    assert ratio.quality == DataQuality.CALCULATION_INVALID
+    assert ratio.comparable is False
+
+
+def test_mismatched_period_fcf():
+    ocf = Observation("ABC", "operating_cash_flow", 50, "USD", date(2025, 3, 31), "QUARTER", DataQuality.REPORTED)
+    capex = Observation("ABC", "capex", -20, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED)
+    fcf = free_cash_flow(ocf, capex)
+    assert fcf.value is None
+    assert fcf.quality == DataQuality.CALCULATION_INVALID
+    assert fcf.comparable is False
+
+
+def test_persisted_cluster_component_lineage(tmp_path):
+    c = connect(tmp_path / "prov.sqlite")
+
+    # Create 3 actionable signals
+    p = _prov()
+    s1 = Observation("ABC", "a", 1, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,))
+    s2 = Observation("ABC", "b", 1, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,))
+    s3 = Observation("ABC", "c", 1, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,))
+    
+    sig1 = divergence("S1", s1, s2, s1, s2, -1)
+    sig2 = divergence("S2", s2, s3, s2, s3, -1)
+    sig3 = divergence("S3", s3, s1, s3, s1, -1)
+    
+    clustered = cluster([sig1, sig2, sig3])
+    assert len(clustered) == 1
+    hit = clustered[0]
+
+    save_signals(c, [hit])
+    persisted = rows(c, "SELECT * FROM signals WHERE signal_id='MULTI_FACTOR_DETERIORATION_CLUSTER'")
+    row = persisted[0]
+
+    components = json.loads(row["components"])
+    assert isinstance(components, list)
+    assert len(components) == 3
+    assert set(components) == {"S1", "S2", "S3"}

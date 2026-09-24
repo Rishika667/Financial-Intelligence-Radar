@@ -122,7 +122,7 @@ def extract_companyfacts(company, cik, payload, filings):
                     "quality": DataQuality.DERIVED,
                     "provenance": (c_debt["prov"], nc_debt["prov"]),
                     "filed": max(c_debt["filed"], nc_debt["filed"]),
-                    "tag_idx": 0
+                    "tag_idx": 0, "derived_from": ("debt_current", "debt_noncurrent")
                 }
 
     obs_map = defaultdict(list)
@@ -138,7 +138,7 @@ def extract_companyfacts(company, cik, payload, filings):
         provs = f.get("provenance")
         if provs is None:
             provs = (f["prov"],)
-        o = Observation(company, metric, f["value"], f["unit"], f["end"], f["pt"], f["quality"], provs)
+        o = Observation(company, metric, f["value"], f["unit"], f["end"], f["pt"], f["quality"], provs, f.get("derived_from", ()))
         obs_map[metric].append(o)
         out.append(o)
 

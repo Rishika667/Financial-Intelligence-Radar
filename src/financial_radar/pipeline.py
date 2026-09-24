@@ -1,4 +1,3 @@
-"""The single local production flow: SEC -> raw -> normalize -> SQLite -> signals/events/peers."""
 import json
 import logging
 import time
@@ -221,6 +220,8 @@ def ingest_company(client, c, company):
     # Normalize observations
     obs = extract_companyfacts(ticker, cik, facts, filings)
     save_observations(c, obs)
+    from .store import save_filings
+    save_filings(c, cik, filings)
 
     # Clear old signals before re-evaluation
     clear_signals(c, ticker)
@@ -231,8 +232,21 @@ def ingest_company(client, c, company):
 
     # Peer context
     clear_peer_context(c, ticker)
-    peer_ctx = compute_peer_context(ticker, obs)
-    save_peer_context(c, ticker, peer_ctx)
+    try:
+        from .store import load_observations_for_companies
+        pg = load_peer_groups()
+        from .peers import find_peer_group
+        group_id, members = find_peer_group(ticker, pg)
+        
+        all_obs = list(obs)
+        if members:
+            peer_obs = load_observations_for_companies(c, members)
+            all_obs.extend(peer_obs)
+            
+        peer_ctx = peer_context_for_company(ticker, all_obs, pg)
+        save_peer_context(c, ticker, peer_ctx)
+    except Exception as e:
+        logger.warning(f"Peer context failed: {e}")
 
     # Extract events from 8-K filings
     events_found = _extract_events_from_submissions(ticker, filings, c, client)

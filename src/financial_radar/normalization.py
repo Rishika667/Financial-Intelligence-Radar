@@ -98,12 +98,12 @@ def extract_companyfacts(company, cik, payload, filings):
             curr = canonical[key]
             # Priority: lower tag_idx (standard concept preferred)
             if f["tag_idx"] < curr["tag_idx"]:
+                f["provenance"] = f.get("provenance", (f["prov"],)) + curr.get("provenance", (curr["prov"],))
                 canonical[key] = f
             elif f["tag_idx"] == curr["tag_idx"]:
                 # Same tag: prefer later filing (handles restatements)
-                if f["filed"] > curr["filed"]:
-                    canonical[key] = f
-                elif f["filed"] == curr["filed"] and f["quality"] == DataQuality.AMENDED:
+                if f["filed"] > curr["filed"] or (f["filed"] == curr["filed"] and f["quality"] == DataQuality.AMENDED):
+                    f["provenance"] = f.get("provenance", (f["prov"],)) + curr.get("provenance", (curr["prov"],))
                     canonical[key] = f
 
     # 3. Debt Aggregation (Current + Noncurrent if Total is missing)

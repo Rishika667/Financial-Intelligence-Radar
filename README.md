@@ -18,7 +18,7 @@ Ten deterministic financial signals, each with severity, confidence, evidence pr
 | RECEIVABLES_REVENUE_DIVERGENCE | Monetary divergence |
 | INVENTORY_SALES_DIVERGENCE | Monetary divergence |
 | GROSS_MARGIN_COMPRESSION | Ratio decline |
-| OPERATING_DELEVERAGE | Ratio decline |
+| OPERATING_MARGIN_DETERIORATION | Ratio decline |
 | EARNINGS_CASH_CONVERSION_DETERIORATION | Ratio decline |
 | FREE_CASH_FLOW_DETERIORATION | Monetary decline |
 | LEVERAGE_INTEREST_BURDEN | Ratio increase |
@@ -32,6 +32,7 @@ GitHub Actions uses Python 3.11, compiles source and app.py, then runs pytest on
 No paid API, API key, or cloud service is required.
 
 ## Intentional limitations
+- **Historical Coverage Bound.** To prevent excessive ingestion load and to respect SEC API limits, the historical coverage strictly relies on the SEC's 'recent' submissions index. This inherently bounds historical context to approximately the most recent 1,000 filings per company, representing roughly 7-10 years of history.
 - **US-GAAP scope only.** XBRL concept mapping covers a curated set of US-GAAP tags. IFRS taxonomies are not supported.
 - **No runtime FX conversion.** All monetary comparisons require matching units; USD vs EUR observations are suppressed, not converted.
 - **Heuristic fiscal-period classification.** Quarter/YTD/annual periods are inferred from date ranges (80–100 days = quarter, etc.). Non-standard fiscal calendars may misclassify.

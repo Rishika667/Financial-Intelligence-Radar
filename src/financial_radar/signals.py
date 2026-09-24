@@ -5,12 +5,17 @@ from .core import pct_change
 
 def _ok(*o):
     """Comparability and completeness gate."""
-    return all(
+    valid_states = all(
         x.value is not None
         and x.comparable
-        and x.quality in (DataQuality.REPORTED, DataQuality.DERIVED)
+        and x.quality in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED)
         for x in o
     )
+    if not valid_states:
+        return False
+    # Ensure all monetary observations share the same currency/unit
+    units = {x.unit for x in o if x.unit != "pure"}
+    return len(units) <= 1
 
 
 def _confidence(*o):

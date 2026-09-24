@@ -13,7 +13,7 @@ from financial_radar.core import SECClient
 st.set_page_config(page_title="Financial Intelligence Radar", layout="wide")
 st.title("Financial Intelligence Radar")
 st.caption(
-    "Public-disclosure intelligence for analyst attention \u2014 not investment advice."
+    "Public-disclosure intelligence for analyst attention — not investment advice."
 )
 
 # ---------------------------------------------------------------------------
@@ -78,20 +78,20 @@ with portfolio_tab:
                     ]
                     for i, company in enumerate(companies_to_refresh):
                         with st.status(
-                            f"Refreshing {company['ticker']}\u2026", expanded=False
+                            f"Refreshing {company['ticker']}…", expanded=False
                         ):
                             result = ingest_company(client, db, company)
                             st.write(
-                                f"\u2705 {result['observations']} observations, "
+                                f"✅ {result['observations']} observations, "
                                 f"{result['signals']} signals"
                             )
                             if result.get("peer_group"):
                                 st.write(
-                                    f"\U0001f465 Peer group: {result['peer_group']}"
+                                    f"👥 Peer group: {result['peer_group']}"
                                 )
                             if result.get("events"):
                                 st.write(
-                                    f"\U0001f4c4 {result['events']} filing events detected"
+                                    f"📄 {result['events']} filing events detected"
                                 )
                         progress.progress((i + 1) / len(companies_to_refresh))
                     st.success(
@@ -111,7 +111,7 @@ with portfolio_tab:
         st.stop()
 
     # --- Actionable signals ---
-    st.subheader("\U0001f6a8 Actionable signals")
+    st.subheader("🚨 Actionable signals")
     if active_tickers:
         placeholders = ",".join("?" * len(active_tickers))
         signals = rows(
@@ -179,9 +179,9 @@ with portfolio_tab:
                 )
 
     # --- Filing evidence: linked events + signals ---
-    st.subheader("\U0001f4c4 SEC filing evidence")
+    st.subheader("📄 SEC filing evidence")
     st.caption(
-        "Filing \u2192 event \u2192 evidence snippet \u2192 related signal. "
+        "Filing → event → evidence snippet → other active signals. "
         "Events and signals are presented together; no causal claims are made."
     )
     if active_tickers:
@@ -197,7 +197,7 @@ with portfolio_tab:
 
     if events:
         df_events = pd.DataFrame(events)
-        # Enrich with related signals for the same company
+        # Enrich with other active signals for the same company
         for idx, event_row in df_events.iterrows():
             company = event_row["company"]
             company_signals = rows(
@@ -206,13 +206,13 @@ with portfolio_tab:
                 "WHERE company=? AND suppressed IS NULL",
                 (company,),
             )
-            df_events.at[idx, "related_signals"] = ", ".join(
+            df_events.at[idx, "other_active_signals"] = ", ".join(
                 s["signal_id"] for s in company_signals
             ) if company_signals else ""
 
         display_cols = [
             "company", "type", "filed", "description",
-            "related_signals", "source_url",
+            "other_active_signals", "source_url",
         ]
         available = [c for c in display_cols if c in df_events.columns]
         st.dataframe(
@@ -229,7 +229,7 @@ with portfolio_tab:
         st.info("No filing events found. Refresh data to extract events.")
 
     # --- Peer context summary ---
-    st.subheader("\U0001f465 Peer context")
+    st.subheader("👥 Peer context")
     if active_tickers:
         peer_data = rows(
             db,
@@ -266,7 +266,7 @@ with research_tab:
         st.stop()
 
     # --- Company overview ---
-    st.subheader(f"\U0001f50d {ticker} \u2014 Research")
+    st.subheader(f"🔍 {ticker} — Research")
     company_meta = next(
         (x for x in universe if x["ticker"] == ticker), None
     )
@@ -366,9 +366,9 @@ with research_tab:
         st.info(f"No signals for {ticker}. Refresh data first.")
 
     # --- Filing events with evidence ---
-    st.subheader("\U0001f4c4 Filing evidence")
+    st.subheader("📄 Filing evidence")
     st.caption(
-        "Filing \u2192 event type \u2192 evidence snippet \u2192 SEC source. "
+        "Filing → event type → evidence snippet → SEC source. "
         "Events and signals are presented separately; no causal claims are made."
     )
     company_events = rows(
@@ -422,8 +422,8 @@ with research_tab:
     # --- Evidence & provenance trail ---
     st.subheader("Evidence & provenance")
     st.caption(
-        "Signal \u2192 rule/version \u2192 calculation \u2192 "
-        "normalized observation \u2192 raw XBRL fact \u2192 SEC filing."
+        "Signal → rule/version → calculation → "
+        "normalized observation → raw XBRL fact → SEC filing."
     )
     if metrics:
         provenance_data = []

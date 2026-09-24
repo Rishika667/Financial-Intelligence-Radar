@@ -2,9 +2,16 @@ from collections import defaultdict
 from .models import DataQuality, Signal
 from .core import pct_change
 
-def _ok(*o): 
+
+def _ok(*o):
     """Comparability and completeness gate."""
-    return all(x.value is not None and x.comparable and x.quality in (DataQuality.REPORTED, DataQuality.DERIVED) for x in o)
+    return all(
+        x.value is not None
+        and x.comparable
+        and x.quality in (DataQuality.REPORTED, DataQuality.DERIVED)
+        for x in o
+    )
+
 
 def _confidence(*o):
     """Determine signal confidence based on data quality."""
@@ -12,28 +19,37 @@ def _confidence(*o):
         return "MEDIUM"
     return "HIGH"
 
-def _material(val1, val2, economic_floor=1_000_000):
-    """Economic magnitude gate."""
-    return abs(val1 - val2) >= economic_floor
+
+def _monetary_material(val1, val2, floor=1_000_000):
+    """Economic magnitude gate for monetary values."""
+    return abs(val1 - val2) >= floor
+
 
 def divergence(kind, balance, revenue, prior_balance, prior_revenue, threshold=0.15):
-    if not _ok(balance, revenue, prior_balance, prior_revenue): 
+    """Divergence signal for monetary balance-sheet vs revenue metrics."""
+    if not _ok(balance, revenue, prior_balance, prior_revenue):
         return Signal(
             kind, balance.company, "UNKNOWN", "LOW",
             "Cannot assess: missing or incomparable data",
-            (balance, revenue), suppressed_reason="data quality/comparability"
+            (balance, revenue, prior_balance, prior_revenue),
+            suppressed_reason="data quality/comparability"
         )
-    
-    # Materiality: economic floor
-    if not _material(balance.value, prior_balance.value) and not _material(revenue.value, prior_revenue.value):
+
+    # Monetary materiality: at least one of the inputs must have a material change
+    if (
+        not _monetary_material(balance.value, prior_balance.value)
+        and not _monetary_material(revenue.value, prior_revenue.value)
+    ):
         return Signal(
-            kind, balance.company, "LOW", _confidence(balance, revenue, prior_balance, prior_revenue),
+            kind, balance.company, "LOW",
+            _confidence(balance, revenue, prior_balance, prior_revenue),
             "Changes are economically insignificant",
-            (balance, revenue, prior_balance, prior_revenue), suppressed_reason="economic insignificance"
+            (balance, revenue, prior_balance, prior_revenue),
+            suppressed_reason="economic insignificance"
         )
-        
+
     gap = pct_change(balance.value, prior_balance.value) - pct_change(revenue.value, prior_revenue.value)
-    
+
     if gap >= threshold:
         sev = "HIGH" if gap >= 0.30 else "MODERATE"
         conf = _confidence(balance, revenue, prior_balance, prior_revenue)
@@ -44,14 +60,16 @@ def divergence(kind, balance, revenue, prior_balance, prior_revenue, threshold=0
         )
     return None
 
+
 def margin_compression(current, prior, threshold=0.03):
-    if not _ok(current, prior): 
+    """Margin compression signal — ratio-based, no monetary floor."""
+    if not _ok(current, prior):
         return Signal(
             "GROSS_MARGIN_COMPRESSION", current.company, "UNKNOWN", "LOW",
             "Cannot assess margin", (current, prior),
             suppressed_reason="data quality/comparability"
         )
-    
+
     d = current.value - prior.value
     if d <= -threshold:
         sev = "HIGH" if d <= -0.06 else "MODERATE"
@@ -63,7 +81,9 @@ def margin_compression(current, prior, threshold=0.03):
         )
     return None
 
+
 def _comparison_window(signal):
+    """Extract the (current, prior) period_end pair from a signal's evidence."""
     period_ends = sorted({o.period_end for o in signal.evidence})
     if len(period_ends) != 2:
         return None
@@ -71,9 +91,13 @@ def _comparison_window(signal):
 
 
 def cluster(signals):
+    """Multi-factor deterioration cluster.
+
+    Only clusters valid comparable signals from the same comparison window.
+    Suppressed signals are excluded.
+    """
     groups = defaultdict(list)
     for s in signals:
-        # Cluster only valid signals evaluated over the same current/prior window.
         window = _comparison_window(s) if s else None
         if (
             s

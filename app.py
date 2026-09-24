@@ -187,7 +187,7 @@ with portfolio_tab:
     if active_tickers:
         events = rows(
             db,
-            f"SELECT company, type, filed, description, source_url, accession "
+            f"SELECT company, type, form, filed, accession, description, source_url, extraction_version "
             f"FROM events WHERE company IN ({placeholders}) "
             f"ORDER BY filed DESC LIMIT 50",
             active_tickers,
@@ -211,8 +211,8 @@ with portfolio_tab:
             ) if company_signals else ""
 
         display_cols = [
-            "company", "type", "filed", "description",
-            "other_active_signals", "source_url",
+            "company", "type", "form", "filed", "accession",
+            "description", "other_active_signals", "extraction_version", "source_url",
         ]
         available = [c for c in display_cols if c in df_events.columns]
         st.dataframe(
@@ -314,7 +314,7 @@ with research_tab:
         with st.expander("All observations", expanded=False):
             display_cols = [
                 "metric", "value", "unit", "period_end",
-                "period_type", "quality",
+                "period_type", "quality", "comparable", "reason"
             ]
             available = [c for c in display_cols if c in df_obs.columns]
             st.dataframe(
@@ -373,14 +373,19 @@ with research_tab:
     )
     company_events = rows(
         db,
-        "SELECT type, filed, description, source_url, accession "
+        "SELECT type, form, filed, accession, description, source_url, extraction_version "
         "FROM events WHERE company=? ORDER BY filed DESC",
         (ticker,),
     )
     if company_events:
         df_events = pd.DataFrame(company_events)
+        display_cols = [
+            "type", "form", "filed", "accession",
+            "description", "extraction_version", "source_url",
+        ]
+        available = [c for c in display_cols if c in df_events.columns]
         st.dataframe(
-            df_events,
+            df_events[available],
             use_container_width=True,
             hide_index=True,
             column_config={

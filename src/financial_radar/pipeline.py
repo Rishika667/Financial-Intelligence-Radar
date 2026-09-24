@@ -101,7 +101,17 @@ def _ratio(a, b, name):
     """
     from .models import Observation, DataQuality
 
-    if b.value in (None, 0):
+    valid = (
+        a.company == b.company
+        and a.unit == b.unit
+        and a.period_end == b.period_end
+        and a.period_type == b.period_type
+        and a.comparable
+        and b.comparable
+        and a.value is not None
+    )
+
+    if not valid or b.value in (None, 0):
         return Observation(
             a.company, name, None, "pure", a.period_end, a.period_type,
             DataQuality.CALCULATION_INVALID, comparable=False,

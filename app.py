@@ -31,7 +31,6 @@ if not existing:
     save_watchlist(db, universe)
     existing = {x["ticker"] for x in universe}
 
-# Build sector lookup
 sector_map = {x["ticker"]: x.get("sector", "Other") for x in universe}
 
 # ---------------------------------------------------------------------------
@@ -90,9 +89,13 @@ with portfolio_tab:
                                 st.write(
                                     f"\U0001f465 Peer group: {result['peer_group']}"
                                 )
+                            if result.get("events"):
+                                st.write(
+                                    f"\U0001f4c4 {result['events']} filing events detected"
+                                )
                         progress.progress((i + 1) / len(companies_to_refresh))
                     st.success(
-                        "Refresh complete. Signals and peer context updated."
+                        "Refresh complete. Signals, events, and peer context updated."
                     )
                 except Exception as exc:
                     st.error(
@@ -122,7 +125,6 @@ with portfolio_tab:
 
     if signals:
         df_sig = pd.DataFrame(signals)
-        # Color-code severity
         display_cols = [
             "company", "signal_id", "severity", "confidence",
             "explanation", "version",
@@ -134,7 +136,6 @@ with portfolio_tab:
             hide_index=True,
         )
 
-        # Signal explanations
         with st.expander("Signal definitions", expanded=False):
             st.markdown("""
 | Signal | What it measures |
@@ -168,8 +169,8 @@ with portfolio_tab:
                 f"Suppressed signals ({len(suppressed)})", expanded=False
             ):
                 st.caption(
-                    "These signals were suppressed due to missing or "
-                    "incomparable data."
+                    "These signals were suppressed due to missing, "
+                    "incomparable, or economically insignificant data."
                 )
                 st.dataframe(
                     pd.DataFrame(suppressed),
@@ -177,12 +178,16 @@ with portfolio_tab:
                     hide_index=True,
                 )
 
-    # --- Filing events ---
-    st.subheader("\U0001f4c4 Recent filing events")
+    # --- Filing evidence: linked events + signals ---
+    st.subheader("\U0001f4c4 SEC filing evidence")
+    st.caption(
+        "Filing \u2192 event \u2192 evidence snippet \u2192 related signal. "
+        "Events and signals are presented together; no causal claims are made."
+    )
     if active_tickers:
         events = rows(
             db,
-            f"SELECT company, type, filed, description, source_url "
+            f"SELECT company, type, filed, description, source_url, accession "
             f"FROM events WHERE company IN ({placeholders}) "
             f"ORDER BY filed DESC LIMIT 50",
             active_tickers,
@@ -191,10 +196,34 @@ with portfolio_tab:
         events = []
 
     if events:
+        df_events = pd.DataFrame(events)
+        # Enrich with related signals for the same company
+        for idx, event_row in df_events.iterrows():
+            company = event_row["company"]
+            company_signals = rows(
+                db,
+                "SELECT signal_id, severity, confidence, explanation FROM signals "
+                "WHERE company=? AND suppressed IS NULL",
+                (company,),
+            )
+            df_events.at[idx, "related_signals"] = ", ".join(
+                s["signal_id"] for s in company_signals
+            ) if company_signals else ""
+
+        display_cols = [
+            "company", "type", "filed", "description",
+            "related_signals", "source_url",
+        ]
+        available = [c for c in display_cols if c in df_events.columns]
         st.dataframe(
-            pd.DataFrame(events),
+            df_events[available],
             use_container_width=True,
             hide_index=True,
+            column_config={
+                "source_url": st.column_config.LinkColumn(
+                    "SEC Filing", display_text="View on SEC"
+                ),
+            },
         )
     else:
         st.info("No filing events found. Refresh data to extract events.")
@@ -259,7 +288,6 @@ with research_tab:
 
     if metrics:
         df_obs = pd.DataFrame(metrics)
-        # Summary metrics for latest period
         latest_period = df_obs["period_end"].max() if not df_obs.empty else None
         if latest_period:
             latest = df_obs[df_obs["period_end"] == latest_period]
@@ -283,7 +311,6 @@ with research_tab:
                 else:
                     cols[i].metric(km.replace("_", " ").title(), "N/A")
 
-        # Full observation table
         with st.expander("All observations", expanded=False):
             display_cols = [
                 "metric", "value", "unit", "period_end",
@@ -338,6 +365,36 @@ with research_tab:
     else:
         st.info(f"No signals for {ticker}. Refresh data first.")
 
+    # --- Filing events with evidence ---
+    st.subheader("\U0001f4c4 Filing evidence")
+    st.caption(
+        "Filing \u2192 event type \u2192 evidence snippet \u2192 SEC source. "
+        "Events and signals are presented separately; no causal claims are made."
+    )
+    company_events = rows(
+        db,
+        "SELECT type, filed, description, source_url, accession "
+        "FROM events WHERE company=? ORDER BY filed DESC",
+        (ticker,),
+    )
+    if company_events:
+        df_events = pd.DataFrame(company_events)
+        st.dataframe(
+            df_events,
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "source_url": st.column_config.LinkColumn(
+                    "SEC Filing", display_text="View on SEC"
+                ),
+                "description": st.column_config.TextColumn(
+                    "Evidence Snippet", width="large"
+                ),
+            },
+        )
+    else:
+        st.info(f"No filing events for {ticker}.")
+
     # --- Peer context ---
     st.subheader("Peer context")
     company_peers = rows(
@@ -362,24 +419,7 @@ with research_tab:
             "Company may not be in a configured peer group."
         )
 
-    # --- Corporate events ---
-    st.subheader("Corporate events")
-    company_events = rows(
-        db,
-        "SELECT type, filed, description, source_url, accession "
-        "FROM events WHERE company=? ORDER BY filed DESC",
-        (ticker,),
-    )
-    if company_events:
-        st.dataframe(
-            pd.DataFrame(company_events),
-            use_container_width=True,
-            hide_index=True,
-        )
-    else:
-        st.info(f"No events for {ticker}.")
-
-    # --- Evidence / provenance trail ---
+    # --- Evidence & provenance trail ---
     st.subheader("Evidence & provenance")
     st.caption(
         "Signal \u2192 rule/version \u2192 calculation \u2192 "
@@ -387,7 +427,7 @@ with research_tab:
     )
     if metrics:
         provenance_data = []
-        for r in metrics[:10]:
+        for r in metrics[:20]:
             try:
                 prov = json.loads(r["provenance"]) if r.get("provenance") else []
             except (json.JSONDecodeError, TypeError):
@@ -406,10 +446,16 @@ with research_tab:
                     }
                 )
         if provenance_data:
+            df_prov = pd.DataFrame(provenance_data)
             st.dataframe(
-                pd.DataFrame(provenance_data),
+                df_prov,
                 use_container_width=True,
                 hide_index=True,
+                column_config={
+                    "source_url": st.column_config.LinkColumn(
+                        "SEC Source", display_text="View"
+                    ),
+                },
             )
         else:
             st.info("No provenance data available for recent observations.")

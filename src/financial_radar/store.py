@@ -89,6 +89,40 @@ def save_observations(c, rows):
     c.commit()
 
 
+def _serialize_evidence(evidence):
+    """Serialize signal evidence observations with full provenance chain.
+
+    Persists metric, value, unit, period_end, period_type, quality,
+    and the complete provenance array for each evidence observation.
+    This allows a persisted signal to be traced back to:
+      signal -> evidence observation -> provenance -> accession/form/date/SEC URL.
+    """
+    out = []
+    for o in evidence:
+        prov_list = []
+        for p in o.provenance:
+            prov_list.append({
+                "accession": p.accession,
+                "source_url": p.source_url,
+                "filing_date": p.filing_date.isoformat(),
+                "form": p.form,
+                "concept": p.concept,
+                "raw_value": p.raw_value,
+                "mapping_version": p.mapping_version,
+            })
+        out.append({
+            "metric": o.metric,
+            "value": o.value,
+            "unit": o.unit,
+            "period_end": o.period_end.isoformat(),
+            "period_type": o.period_type,
+            "quality": o.quality.value if hasattr(o.quality, 'value') else str(o.quality),
+            "comparable": o.comparable,
+            "provenance": prov_list,
+        })
+    return out
+
+
 def save_signals(c, rows):
     for s in rows:
         if s:
@@ -101,7 +135,7 @@ def save_signals(c, rows):
                     s.confidence,
                     s.explanation,
                     s.suppressed_reason,
-                    json.dumps([o.metric for o in s.evidence]),
+                    json.dumps(_serialize_evidence(s.evidence)),
                     getattr(s, "version", "v1"),
                 ),
             )

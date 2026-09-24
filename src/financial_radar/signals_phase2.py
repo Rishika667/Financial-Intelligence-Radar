@@ -5,11 +5,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 def ok(*x):
-    return all(
+    valid_states = all(
         a and a.value is not None and a.comparable
         and a.quality in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED)
         for a in x
     )
+    if not valid_states:
+        return False
+    units = {a.unit for a in x if a and a.unit != "pure"}
+    return len(units) <= 1
 
 def _confidence(*x):
     if any(a and getattr(a, "quality", None) == DataQuality.DERIVED for a in x):

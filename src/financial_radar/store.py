@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS observations(
 );
 CREATE TABLE IF NOT EXISTS signals(
     signal_id TEXT, company TEXT, severity TEXT, confidence TEXT,
-    explanation TEXT, suppressed TEXT, evidence TEXT, version TEXT DEFAULT 'v1'
+    explanation TEXT, suppressed TEXT, evidence TEXT, version TEXT DEFAULT 'v1',
+    components TEXT
 );
 CREATE TABLE IF NOT EXISTS events(
     id TEXT PRIMARY KEY, company TEXT, type TEXT, filed TEXT,
@@ -44,6 +45,10 @@ def connect(path="data/radar.sqlite"):
         pass
     try:
         c.execute("ALTER TABLE events ADD COLUMN extraction_version TEXT")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        c.execute("ALTER TABLE signals ADD COLUMN components TEXT")
     except sqlite3.OperationalError:
         pass
     return c
@@ -127,7 +132,7 @@ def save_signals(c, rows):
     for s in rows:
         if s:
             c.execute(
-                "INSERT INTO signals VALUES(?,?,?,?,?,?,?,?)",
+                "INSERT INTO signals VALUES(?,?,?,?,?,?,?,?,?)",
                 (
                     s.signal_id,
                     s.company,
@@ -137,6 +142,7 @@ def save_signals(c, rows):
                     s.suppressed_reason,
                     json.dumps(_serialize_evidence(s.evidence)),
                     getattr(s, "version", "v1"),
+                    json.dumps(s.component_signal_ids) if getattr(s, "component_signal_ids", None) else None,
                 ),
             )
     c.commit()

@@ -38,28 +38,23 @@ def load_universe(path="config/universe.json"):
 def filing_index(submissions, cik):
     """Build accession -> filing metadata index from SEC submissions."""
     r = submissions.get("filings", {}).get("recent", {})
+    if not r:
+        return {}
     out = {}
-    accession_numbers = r.get("accessionNumber", [])
-    for i, accession in enumerate(accession_numbers):
-        form = r.get("form", [None] * len(accession_numbers))[i]
-        if form in FORMS:
-            doc = r.get("primaryDocument", [""] * len(accession_numbers))[i]
-            if not doc:
-                continue
-            out[accession.replace("-", "")] = {
-                "accessionNumber": accession,
-                "form": form,
-                "filingDate": r.get("filingDate", [None] * len(accession_numbers))[i],
-                "source_url": (
-                    f"https://www.sec.gov/Archives/edgar/data/"
-                    f"{int(cik)}/{accession.replace('-', '')}/{doc}"
-                ),
-            }
+    for i, acc in enumerate(r.get("accessionNumber", [])):
+        if r.get("form", [""])[i] not in FORMS:
+            continue
+        out[acc.replace("-", "")] = {
+            "accessionNumber": acc,
+            "form": r.get("form", [""])[i],
+            "filingDate": r.get("filingDate", [""])[i],
+            "source_url": f"https://www.sec.gov/Archives/edgar/data/{cik}/{acc.replace('-', '')}/{r.get('primaryDocument', [''])[i]}",
+        }
     return out
 
 
 def _latest(items, metric, pt):
-    """Return populated observations sorted by period end, including quality flags."""
+    """Sort relevant observations descending by period_end."""
     x = [
         o
         for o in items
@@ -232,9 +227,11 @@ def ingest_company(client, c, company):
 
     # Peer context
     clear_peer_context(c, ticker)
+    peer_ctx = {"group_id": None, "contexts": []}
     try:
         from .store import load_observations_for_companies
         pg = load_peer_groups()
+        peer_ctx["version"] = pg.get("version")
         from .peers import find_peer_group
         group_id, members = find_peer_group(ticker, pg)
         

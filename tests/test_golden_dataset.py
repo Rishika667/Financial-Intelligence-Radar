@@ -292,11 +292,11 @@ def test_golden_materiality_ratio_no_monetary_floor():
     Operating margin 0.1 -> 0.2 is a 10pp decline — this should fire even
     though the absolute difference is 0.1 (far below $1M).
     """
-    from financial_radar.signals_phase2 import operating_deleverage
+    from financial_radar.signals_phase2 import operating_margin_deterioration
     current_margin = o("operating_margin", 0.10, "2025-06-30")
     prior_margin = o("operating_margin", 0.20, "2024-06-30")
 
-    sig = operating_deleverage(current_margin, prior_margin)
+    sig = operating_margin_deterioration(current_margin, prior_margin)
     assert sig is not None
     assert sig.actionable  # NOT suppressed
     assert sig.severity in ("HIGH", "MODERATE")

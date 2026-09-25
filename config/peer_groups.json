@@ -1,6 +1,6 @@
 {
   "version": "2026.1",
-  "methodology": "Explicit, analyst-reviewed, versioned peer groups based on sector, business model and scale. Context only; no rank.",
+  "methodology": "Explicit, analyst-reviewed, versioned peer groups based on sector, business model and scale. Context only; no rank. Groups with <3 members (like software, energy) will not generate peer context due to the strict >=2 peer requirement.",
   "groups": [
     {
       "id": "software",
@@ -13,14 +13,16 @@
       "id": "banks",
       "members": [
         "JPM",
-        "BAC"
+        "BAC",
+        "GS"
       ]
     },
     {
       "id": "pharma",
       "members": [
         "JNJ",
-        "PFE"
+        "PFE",
+        "UNH"
       ]
     },
     {

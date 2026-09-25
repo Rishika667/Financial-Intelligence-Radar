@@ -113,6 +113,8 @@ def _ratio(a, b, name):
     return Observation(
         a.company, name, a.value / b.value, "pure", a.period_end,
         a.period_type, DataQuality.DERIVED, a.provenance + b.provenance,
+        derived_from=(f"{a.metric} {a.period_end.isoformat()} {a.period_type}", f"{b.metric} {b.period_end.isoformat()} {b.period_type}"),
+        period_start=a.period_start
     )
 
 

@@ -43,7 +43,9 @@ def divergence(kind, balance, revenue, prior_balance, prior_revenue, threshold=0
     if (balance.company != revenue.company
         or prior_balance.company != prior_revenue.company
         or balance.period_end != revenue.period_end
-        or prior_balance.period_end != prior_revenue.period_end):
+        or prior_balance.period_end != prior_revenue.period_end
+        or balance.period_type != prior_balance.period_type
+        or revenue.period_type != prior_revenue.period_type):
         return Signal(
             kind, balance.company, "UNKNOWN", "LOW",
             "Cannot assess: misaligned periods",
@@ -79,7 +81,7 @@ def divergence(kind, balance, revenue, prior_balance, prior_revenue, threshold=0
 
 def margin_compression(current, prior, threshold=0.03):
     """Margin compression signal — ratio-based, no monetary floor."""
-    if not _ok(current, prior):
+    if not _ok(current, prior) or current.period_type != prior.period_type:
         return Signal(
             "GROSS_MARGIN_COMPRESSION", current.company, "UNKNOWN", "LOW",
             "Cannot assess margin", (current, prior),

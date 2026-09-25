@@ -133,7 +133,7 @@ def extract_companyfacts(company, cik, payload, filings):
                     "provenance": c_debt.get("provenance", (c_debt["prov"],)) + nc_debt.get("provenance", (nc_debt["prov"],)),
                     "filed": max(c_debt["filed"], nc_debt["filed"]),
                     "tag_idx": 0,
-                    "derived_from": ("debt_current", "debt_noncurrent"),
+                    "derived_from": (f"debt_current {end.isoformat()} INSTANT", f"debt_noncurrent {end.isoformat()} INSTANT"),
                     "start": None,
                 }
 

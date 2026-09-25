@@ -53,7 +53,7 @@ def _ratio_material(val1, val2, floor=0.005):
 # ---------------------------------------------------------------------------
 def decline(id, current, prior, floor, label):
     """Decline signal for margin/ratio values — no monetary materiality."""
-    if not ok(current, prior):
+    if not ok(current, prior) or current.period_type != prior.period_type:
         return suppressed(id, current, prior)
 
     d = current.value - prior.value
@@ -72,7 +72,7 @@ def operating_margin_deterioration(c, p):
 
 def fcf_deterioration(c, p):
     """FCF is monetary — apply monetary materiality floor."""
-    if not ok(c, p):
+    if not ok(c, p) or c.period_type != p.period_type:
         return suppressed("FREE_CASH_FLOW_DETERIORATION", c, p)
 
     if not _monetary_material(c.value, p.value):
@@ -94,7 +94,7 @@ def fcf_deterioration(c, p):
 
 
 def dilution(c, p):
-    if not ok(c, p):
+    if not ok(c, p) or c.period_type != p.period_type:
         return suppressed("SHARE_COUNT_DILUTION", c, p)
 
     r = pct_change(c.value, p.value)
@@ -115,7 +115,10 @@ def ratio_drop(id, a, b, oa, ob, floor, label):
     if (a.company != b.company
         or oa.company != ob.company
         or a.period_end != b.period_end
-        or oa.period_end != ob.period_end):
+        or oa.period_end != ob.period_end
+        or a.period_type != oa.period_type
+        or b.period_type != ob.period_type
+        or a.period_type != b.period_type):
         return misaligned(id, a, b, oa, ob)
 
     now, old = a.value / b.value, oa.value / ob.value
@@ -145,7 +148,9 @@ def leverage(debt, ebit, old_debt, old_ebit):
     if (debt.company != ebit.company
         or old_debt.company != old_ebit.company
         or debt.period_end != ebit.period_end
-        or old_debt.period_end != old_ebit.period_end):
+        or old_debt.period_end != old_ebit.period_end
+        or debt.period_type != old_debt.period_type
+        or ebit.period_type != old_ebit.period_type):
         return misaligned("LEVERAGE_INTEREST_BURDEN", debt, ebit, old_debt, old_ebit)
 
     now, old = debt.value / ebit.value, old_debt.value / old_ebit.value

@@ -1,6 +1,9 @@
 import json
 import sqlite3
+import logging
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 DDL = """CREATE TABLE IF NOT EXISTS watchlist(
     ticker TEXT PRIMARY KEY, cik TEXT, active INTEGER, metadata TEXT
@@ -30,6 +33,9 @@ CREATE TABLE IF NOT EXISTS peer_context(
     version TEXT,
     UNIQUE(company, metric, version)
 );
+CREATE TABLE IF NOT EXISTS system_state(
+    key TEXT PRIMARY KEY, value TEXT
+);
 """
 
 
@@ -50,15 +56,24 @@ def connect(path="data/radar.sqlite"):
             c.execute(stmt)
         except sqlite3.OperationalError:
             pass
-    # Idempotent unique index on natural observation identity
+
+    # Safely deduplicate logical observations before creating unique index
     try:
+        c.execute("""
+            DELETE FROM observations WHERE rowid NOT IN (
+                SELECT MAX(rowid) FROM observations
+                GROUP BY company, metric, period_end, period_type, unit, IFNULL(period_start, '')
+            )
+        """)
+        c.execute('DROP INDEX IF EXISTS idx_obs_identity')
         c.execute(
-            'CREATE UNIQUE INDEX IF NOT EXISTS idx_obs_identity '
+            'CREATE UNIQUE INDEX idx_obs_identity '
             'ON observations(company, metric, period_end, period_type, unit, '
             'IFNULL(period_start, ""))'
         )
-    except sqlite3.OperationalError:
-        pass
+    except sqlite3.OperationalError as e:
+        logger.warning(f"Database index migration failed: {e}")
+        
     return c
 
 

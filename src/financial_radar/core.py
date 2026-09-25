@@ -2,6 +2,7 @@ import json
 import time
 from pathlib import Path
 import requests
+from datetime import timedelta
 from .models import DataQuality, Observation
 
 def pct_change(current, prior):
@@ -30,7 +31,8 @@ def derive_standalone_quarter(ytd, prior_ytd):
         ytd.company, ytd.metric, ytd.value - prior_ytd.value, ytd.unit,
         ytd.period_end, "QUARTER", DataQuality.DERIVED,
         ytd.provenance + prior_ytd.provenance,
-        derived_from=(f"{ytd.metric} {ytd.period_type}", f"{prior_ytd.metric} {prior_ytd.period_type}")
+        derived_from=(f"{ytd.metric} {ytd.period_end.isoformat()} {ytd.period_type}", f"{prior_ytd.metric} {prior_ytd.period_end.isoformat()} {prior_ytd.period_type}"),
+        period_start=prior_ytd.period_end + timedelta(days=1)
     )
 
 def free_cash_flow(ocf, capex):
@@ -53,12 +55,13 @@ def free_cash_flow(ocf, capex):
         ocf.company, "free_cash_flow", ocf.value - abs(capex.value), ocf.unit,
         ocf.period_end, ocf.period_type, DataQuality.DERIVED,
         ocf.provenance + capex.provenance,
-        derived_from=("operating_cash_flow", "capex")
+        derived_from=(f"operating_cash_flow {ocf.period_end.isoformat()} {ocf.period_type}", f"capex {capex.period_end.isoformat()} {capex.period_type}"),
+        period_start=ocf.period_start
     )
 
 class SECClient:
     def __init__(self, user_agent, raw_dir="data/raw", min_interval_seconds=0.2):
-        if "@" not in user_agent:
+        if not user_agent or "@" not in user_agent:
             raise ValueError("SEC User-Agent must identify operator and contact email")
         self.s = requests.Session()
         self.s.headers.update({"User-Agent": user_agent, "Accept-Encoding": "gzip, deflate"})

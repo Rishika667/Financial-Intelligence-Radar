@@ -2,6 +2,7 @@ import os
 import json
 import streamlit as st
 import pandas as pd
+from datetime import datetime
 
 from financial_radar.store import connect, rows, save_watchlist
 from financial_radar.pipeline import load_universe, ingest_company
@@ -24,12 +25,18 @@ db = connect()
 # Freshness: show last SEC refresh timestamp and latest processed filing
 try:
     _latest_filing = rows(db, "SELECT MAX(filed) as latest FROM filings")
-    _latest_event = rows(db, "SELECT MAX(filed) as latest FROM events")
+    _latest_obs = rows(
+        db, "SELECT MAX(period_end) as latest FROM observations WHERE quality NOT IN ('NOT_REPORTED', 'CALCULATION_INVALID') AND comparable=1"
+    )
+    _last_refresh = rows(db, "SELECT value FROM system_state WHERE key='last_refresh'")
+    
     _fresh_parts = []
+    if _last_refresh and _last_refresh[0]["value"]:
+        _fresh_parts.append(f"Last SEC refresh: {_last_refresh[0]['value']}")
     if _latest_filing and _latest_filing[0]["latest"]:
-        _fresh_parts.append(f"Latest processed filing: {_latest_filing[0]['latest']}")
-    if _latest_event and _latest_event[0]["latest"]:
-        _fresh_parts.append(f"Latest filing event: {_latest_event[0]['latest']}")
+        _fresh_parts.append(f"Latest filing: {_latest_filing[0]['latest']}")
+    if _latest_obs and _latest_obs[0]["latest"]:
+        _fresh_parts.append(f"Latest valid financial period: {_latest_obs[0]['latest']}")
     if _fresh_parts:
         st.caption(" | ".join(_fresh_parts))
 except Exception:
@@ -55,7 +62,10 @@ with portfolio_tab:
         active_signals = rows(
             db,
             f"SELECT company, signal_id, severity, confidence, explanation, version "
-            f"FROM signals WHERE suppressed IS NULL AND company IN ({ph}) ORDER BY company",
+            f"FROM signals WHERE suppressed IS NULL AND company IN ({ph}) "
+            f"ORDER BY "
+            f"CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 ELSE 3 END, "
+            f"company, signal_id",
             tuple(active_tickers),
         )
     else:
@@ -145,6 +155,9 @@ with portfolio_tab:
                         except Exception as e:
                             st.error(f"Failed to ingest {c['ticker']}: {e}")
                         progress.progress((i + 1) / len(active_companies))
+                    
+                    db.execute("INSERT OR REPLACE INTO system_state VALUES('last_refresh', ?)", (datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),))
+                    db.commit()
                     st.success("Refresh complete!")
                     st.rerun()
 

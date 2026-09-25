@@ -58,7 +58,7 @@ def peer_context(company, metric, observations, members):
         and o.quality in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED)
     ]
     
-    has_peers = len(peer_values) >= 1
+    has_peers = len(peer_values) >= 2
     return {
         "metric": metric,
         "available": has_peers,

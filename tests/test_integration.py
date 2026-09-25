@@ -57,78 +57,41 @@ def test_leverage_direction_and_event():
 
 
 def test_persisted_signal_provenance_chain(tmp_path):
-    """Verify the full signal->evidence->provenance->SEC URL chain survives SQLite.
-
-    This is the critical traceability test: a signal read back from the
-    database must contain enough information to trace every evidence
-    observation to its source XBRL concept, accession number, filing form,
-    filing date, and SEC source URL.
-    """
+    """Verify the full signal->evidence->provenance->SEC URL chain survives SQLite."""
     c = connect(tmp_path / "prov.sqlite")
 
     p = _prov()
     rev_c = Observation(
-        "ABC",
-        "revenue",
-        200_000_000,
-        "USD",
-        date(2025, 6, 30),
-        "QUARTER",
-        DataQuality.REPORTED,
-        (p,),
+        "ABC", "revenue", 200_000_000, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,),
     )
     rev_p = Observation(
-        "ABC",
-        "revenue",
-        100_000_000,
-        "USD",
-        date(2024, 6, 30),
-        "QUARTER",
-        DataQuality.REPORTED,
-        (p,),
+        "ABC", "revenue", 100_000_000, "USD",
+        date(2024, 6, 30), "QUARTER", DataQuality.REPORTED, (p,),
     )
     ar_c = Observation(
-        "ABC",
-        "accounts_receivable",
-        300_000_000,
-        "USD",
-        date(2025, 6, 30),
-        "INSTANT",
-        DataQuality.REPORTED,
-        (p,),
+        "ABC", "accounts_receivable", 300_000_000, "USD",
+        date(2025, 6, 30), "INSTANT", DataQuality.REPORTED, (p,),
     )
     ar_p = Observation(
-        "ABC",
-        "accounts_receivable",
-        100_000_000,
-        "USD",
-        date(2024, 6, 30),
-        "INSTANT",
-        DataQuality.REPORTED,
-        (p,),
+        "ABC", "accounts_receivable", 100_000_000, "USD",
+        date(2024, 6, 30), "INSTANT", DataQuality.REPORTED, (p,),
     )
 
     signals = evaluate("ABC", [rev_c, rev_p, ar_c, ar_p])
     hit = next(s for s in signals if s.signal_id == "RECEIVABLES_REVENUE_DIVERGENCE")
 
-    # Persist to SQLite
     save_signals(c, [hit])
-
-    # Read back from SQLite
     persisted = rows(
         c, "SELECT * FROM signals WHERE signal_id='RECEIVABLES_REVENUE_DIVERGENCE'"
     )
     assert len(persisted) == 1
     row = persisted[0]
 
-    # Parse the evidence JSON
     evidence = json.loads(row["evidence"])
-
-    # Verify evidence is a list of observation dicts with full provenance
     assert isinstance(evidence, list)
-    assert len(evidence) >= 2  # at least revenue + AR observations
+    assert len(evidence) >= 2
 
-    # Trace at least one evidence observation to its provenance
     obs = evidence[0]
     assert "metric" in obs
     assert "value" in obs
@@ -137,7 +100,6 @@ def test_persisted_signal_provenance_chain(tmp_path):
     assert "quality" in obs
     assert "provenance" in obs
 
-    # Trace the provenance to SEC source
     prov = obs["provenance"]
     assert isinstance(prov, list)
     assert len(prov) >= 1
@@ -149,7 +111,6 @@ def test_persisted_signal_provenance_chain(tmp_path):
     assert p0["filing_date"] == "2025-07-25"
     assert p0["raw_value"] == 200_000_000
 
-    # Verify the signal metadata
     assert row["severity"] == "HIGH"
     assert row["version"] == "v1"
     assert row["suppressed"] is None
@@ -157,41 +118,20 @@ def test_persisted_signal_provenance_chain(tmp_path):
 
 def test_mismatched_period_end_divergence():
     rev_c = Observation(
-        "ABC",
-        "revenue",
-        200_000_000,
-        "USD",
-        date(2025, 6, 30),
-        "QUARTER",
-        DataQuality.REPORTED,
+        "ABC", "revenue", 200_000_000, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
     )
     rev_p = Observation(
-        "ABC",
-        "revenue",
-        100_000_000,
-        "USD",
-        date(2024, 6, 30),
-        "QUARTER",
-        DataQuality.REPORTED,
+        "ABC", "revenue", 100_000_000, "USD",
+        date(2024, 6, 30), "QUARTER", DataQuality.REPORTED,
     )
-    # AR current is deliberately from March instead of June
     ar_c = Observation(
-        "ABC",
-        "accounts_receivable",
-        300_000_000,
-        "USD",
-        date(2025, 3, 31),
-        "INSTANT",
-        DataQuality.REPORTED,
+        "ABC", "accounts_receivable", 300_000_000, "USD",
+        date(2025, 3, 31), "INSTANT", DataQuality.REPORTED,
     )
     ar_p = Observation(
-        "ABC",
-        "accounts_receivable",
-        100_000_000,
-        "USD",
-        date(2024, 6, 30),
-        "INSTANT",
-        DataQuality.REPORTED,
+        "ABC", "accounts_receivable", 100_000_000, "USD",
+        date(2024, 6, 30), "INSTANT", DataQuality.REPORTED,
     )
 
     sig = divergence("RECEIVABLES_REVENUE_DIVERGENCE", ar_c, rev_c, ar_p, rev_p)
@@ -204,16 +144,12 @@ def test_mismatched_period_end_ratio_calculation():
     from financial_radar.pipeline import _ratio
 
     gp = Observation(
-        "ABC",
-        "gross_profit",
-        50,
-        "USD",
-        date(2025, 3, 31),
-        "QUARTER",
-        DataQuality.REPORTED,
+        "ABC", "gross_profit", 50, "USD",
+        date(2025, 3, 31), "QUARTER", DataQuality.REPORTED,
     )
     rev = Observation(
-        "ABC", "revenue", 100, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED
+        "ABC", "revenue", 100, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
     )
     ratio = _ratio(gp, rev, "gross_margin")
     assert ratio.value is None
@@ -225,16 +161,12 @@ def test_mismatched_currency_ratio_calculation():
     from financial_radar.pipeline import _ratio
 
     gp = Observation(
-        "ABC",
-        "gross_profit",
-        50,
-        "USD",
-        date(2025, 6, 30),
-        "QUARTER",
-        DataQuality.REPORTED,
+        "ABC", "gross_profit", 50, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
     )
     rev = Observation(
-        "ABC", "revenue", 100, "EUR", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED
+        "ABC", "revenue", 100, "EUR",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
     )
     ratio = _ratio(gp, rev, "gross_margin")
     assert ratio.value is None
@@ -246,16 +178,12 @@ def test_mismatched_period_fcf():
     from financial_radar.core import free_cash_flow
 
     ocf = Observation(
-        "ABC",
-        "operating_cash_flow",
-        50,
-        "USD",
-        date(2025, 3, 31),
-        "QUARTER",
-        DataQuality.REPORTED,
+        "ABC", "operating_cash_flow", 50, "USD",
+        date(2025, 3, 31), "QUARTER", DataQuality.REPORTED,
     )
     capex = Observation(
-        "ABC", "capex", -20, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED
+        "ABC", "capex", -20, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
     )
     fcf = free_cash_flow(ocf, capex)
     assert fcf.value is None
@@ -268,24 +196,12 @@ def test_persisted_cluster_component_lineage(tmp_path):
 
     p = _prov()
     obs_c = Observation(
-        "ABC",
-        "metric",
-        1,
-        "USD",
-        date(2025, 6, 30),
-        "QUARTER",
-        DataQuality.REPORTED,
-        (p,),
+        "ABC", "metric", 1, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,),
     )
     obs_p = Observation(
-        "ABC",
-        "metric",
-        1,
-        "USD",
-        date(2024, 6, 30),
-        "QUARTER",
-        DataQuality.REPORTED,
-        (p,),
+        "ABC", "metric", 1, "USD",
+        date(2024, 6, 30), "QUARTER", DataQuality.REPORTED, (p,),
     )
 
     sig1 = Signal("S1", "ABC", "HIGH", "HIGH", "exp", (obs_c, obs_p))
@@ -309,18 +225,26 @@ def test_persisted_cluster_component_lineage(tmp_path):
 
 
 def test_load_observations_for_companies(tmp_path):
+    """Verify observations round-trip through SQLite correctly."""
     c = connect(tmp_path / "x.sqlite")
     obs1 = Observation(
-        "ABC", "revenue", 100, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED
+        "ABC", "revenue", 100, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
     )
     obs2 = Observation(
-        "DEF", "revenue", 200, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED
+        "DEF", "revenue", 200, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
     )
     save_observations(c, [obs1, obs2])
     from financial_radar.store import load_observations_for_companies
 
     loaded = load_observations_for_companies(c, ["ABC", "DEF"])
     assert len(loaded) == 2
+    tickers = {o.company for o in loaded}
+    assert tickers == {"ABC", "DEF"}
+    for ob in loaded:
+        assert ob.metric == "revenue"
+        assert ob.quality == DataQuality.REPORTED
 
 
 def test_filing_persistence_idempotence(tmp_path):
@@ -336,7 +260,7 @@ def test_filing_persistence_idempotence(tmp_path):
         }
     }
     save_filings(c, "12345", filings)
-    save_filings(c, "12345", filings)  # Should not raise IntegrityError
+    save_filings(c, "12345", filings)
     res = rows(c, "SELECT * FROM filings")
     assert len(res) == 1
 
@@ -344,24 +268,12 @@ def test_filing_persistence_idempotence(tmp_path):
 def test_derived_lineage(tmp_path):
     c = connect(tmp_path / "x.sqlite")
     ocf = Observation(
-        "ABC",
-        "operating_cash_flow",
-        100,
-        "USD",
-        date(2025, 6, 30),
-        "QUARTER",
-        DataQuality.REPORTED,
-        (_prov(),),
+        "ABC", "operating_cash_flow", 100, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (_prov(),),
     )
     cap = Observation(
-        "ABC",
-        "capex",
-        -20,
-        "USD",
-        date(2025, 6, 30),
-        "QUARTER",
-        DataQuality.REPORTED,
-        (_prov(),),
+        "ABC", "capex", -20, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (_prov(),),
     )
     from financial_radar.core import free_cash_flow
 
@@ -376,13 +288,19 @@ def test_derived_lineage(tmp_path):
 
 
 def test_production_peer_pipeline(tmp_path, monkeypatch):
+    """End-to-end: ingest -> persist -> reload -> peer context -> persist -> retrieve."""
     c = connect(tmp_path / "x.sqlite")
 
-    # Setup mock peer group
     pg = {"version": "v1", "groups": [{"id": "G1", "members": ["ABC", "DEF"]}]}
 
-    # Mock SEC client
     class MockClient:
+        delay = 0
+        last = 0
+        class s:
+            @staticmethod
+            def get(*a, **kw):
+                raise RuntimeError("no 8-K fetch in test")
+
         def submissions(self, cik):
             return {
                 "filings": {
@@ -406,6 +324,7 @@ def test_production_peer_pipeline(tmp_path, monkeypatch):
                                         "accn": "0001",
                                         "filed": "2025-01-01",
                                         "end": "2025-06-30",
+                                        "start": "2025-04-01",
                                         "val": 100,
                                         "form": "10-Q",
                                     }
@@ -417,7 +336,6 @@ def test_production_peer_pipeline(tmp_path, monkeypatch):
             }
 
     from financial_radar.pipeline import ingest_company
-    import financial_radar.peers
     import financial_radar.pipeline
 
     monkeypatch.setattr(
@@ -426,19 +344,20 @@ def test_production_peer_pipeline(tmp_path, monkeypatch):
         lambda p="config/peer_groups.json": pg,
     )
 
+    # Ingest peer DEF first
     ingest_company(MockClient(), c, {"ticker": "DEF", "cik": "2"})
 
-    # Ingest primary ABC
+    # Ingest primary ABC — peer context should load DEF from DB
     res = ingest_company(MockClient(), c, {"ticker": "ABC", "cik": "1"})
 
-    # Verify peer context was generated using DEF's data
+    # Verify peer context was generated
     pctx = rows(
         c, "SELECT * FROM peer_context WHERE company='ABC' AND metric='revenue'"
     )
     assert len(pctx) == 1
-    assert pctx[0]["n_peers"] == 1  # DEF is the only peer
+    assert pctx[0]["n_peers"] == 1
 
-    # Verify safe failure handling (if peer calculation fails, no unhandled exception)
+    # Verify safe failure handling
     def failing_load(*args, **kwargs):
         raise Exception("Mock failure")
 
@@ -449,38 +368,88 @@ def test_production_peer_pipeline(tmp_path, monkeypatch):
 
 
 def test_observation_idempotence(tmp_path):
+    """Repeated saves with different provenance timestamps must not duplicate rows."""
     c = connect(tmp_path / "x.sqlite")
     p1 = _prov(dt="2025-01-01")
     p2 = _prov(dt="2025-01-02")
 
-    # Save the same observation with different provenance timestamps
     o1 = Observation(
-        "ABC",
-        "revenue",
-        100,
-        "USD",
-        date(2025, 6, 30),
-        "QUARTER",
-        DataQuality.REPORTED,
-        (p1,),
+        "ABC", "revenue", 100, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p1,),
     )
     save_observations(c, [o1])
 
     o2 = Observation(
-        "ABC",
-        "revenue",
-        100,
-        "USD",
-        date(2025, 6, 30),
-        "QUARTER",
-        DataQuality.REPORTED,
-        (p2,),
+        "ABC", "revenue", 100, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p2,),
     )
     save_observations(c, [o2])
 
-    # Should only be one row!
-    res = rows(c, "SELECT * FROM observations WHERE company='ABC'")
+    res = rows(c, "SELECT * FROM observations WHERE company='ABC' AND metric='revenue'")
     assert len(res) == 1
-    # Should have the latest provenance
     prov = json.loads(res[0]["provenance"])
     assert "2025-01-02" in prov[0]["filing_date"]
+
+
+# --- Event extraction regression tests ---
+
+def test_event_positive_acquisition():
+    """Positive completed acquisition should be extracted."""
+    events = extract_events(
+        "XYZ",
+        {"accessionNumber": "ACC1", "filingDate": "2025-06-01", "source_url": "s", "form": "8-K"},
+        "On June 1, the company completed an acquisition of Widget Corp for $500M.",
+    )
+    types = [e["type"] for e in events]
+    assert "acquisition" in types
+
+
+def test_event_negative_not_completed():
+    """Negated acquisition should be suppressed."""
+    events = extract_events(
+        "XYZ",
+        {"accessionNumber": "ACC2", "filingDate": "2025-06-01", "source_url": "s", "form": "8-K"},
+        "The company did not complete the acquisition.",
+    )
+    types = [e["type"] for e in events]
+    assert "acquisition" not in types
+
+
+def test_event_terminated():
+    """Terminated acquisition should be suppressed via postfix check."""
+    events = extract_events(
+        "XYZ",
+        {"accessionNumber": "ACC3", "filingDate": "2025-06-01", "source_url": "s", "form": "8-K"},
+        "The previously announced acquisition was terminated effective immediately.",
+    )
+    types = [e["type"] for e in events]
+    assert "acquisition" not in types
+
+
+def test_event_historical_conditional():
+    """Historical/conditional mention of litigation should still extract."""
+    events = extract_events(
+        "XYZ",
+        {"accessionNumber": "ACC4", "filingDate": "2025-06-01", "source_url": "s", "form": "8-K"},
+        "The company is currently involved in litigation regarding patent infringement.",
+    )
+    types = [e["type"] for e in events]
+    assert "legal" in types
+
+
+def test_observation_with_period_start_roundtrip(tmp_path):
+    """period_start survives save/load cycle."""
+    c = connect(tmp_path / "ps.sqlite")
+    p = _prov()
+    obs = Observation(
+        "ABC", "revenue", 100, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,),
+        (), True, None, date(2025, 4, 1),
+    )
+    save_observations(c, [obs])
+    from financial_radar.store import load_observations_for_companies
+    loaded = load_observations_for_companies(c, ["ABC"])
+    assert len(loaded) == 1
+    assert loaded[0].period_start == date(2025, 4, 1)
+    assert loaded[0].metric == "revenue"
+    assert loaded[0].value == 100

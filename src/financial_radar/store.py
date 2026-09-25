@@ -39,28 +39,24 @@ def connect(path="data/radar.sqlite"):
     c.row_factory = sqlite3.Row
     c.executescript(DDL)
     # Safely migrate existing databases
+    for stmt in [
+        "ALTER TABLE events ADD COLUMN form TEXT",
+        "ALTER TABLE events ADD COLUMN extraction_version TEXT",
+        "ALTER TABLE signals ADD COLUMN components TEXT",
+        "ALTER TABLE observations ADD COLUMN period_start TEXT",
+        "ALTER TABLE observations ADD COLUMN derived_from TEXT",
+    ]:
+        try:
+            c.execute(stmt)
+        except sqlite3.OperationalError:
+            pass
+    # Idempotent unique index on natural observation identity
     try:
-        c.execute("ALTER TABLE events ADD COLUMN form TEXT")
-    except sqlite3.OperationalError:
-        pass
-    try:
-        c.execute("ALTER TABLE events ADD COLUMN extraction_version TEXT")
-    except sqlite3.OperationalError:
-        pass
-    try:
-        c.execute("ALTER TABLE signals ADD COLUMN components TEXT")
-    except sqlite3.OperationalError:
-        pass
-    try:
-        c.execute("ALTER TABLE observations ADD COLUMN period_start TEXT")
-    except sqlite3.OperationalError:
-        pass
-    try:
-        c.execute("ALTER TABLE observations ADD COLUMN derived_from TEXT")
-    except sqlite3.OperationalError:
-        pass
-    try:
-        c.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_obs_identity ON observations(company, metric, period_end, period_type, unit, IFNULL(period_start, \"\"))")
+        c.execute(
+            'CREATE UNIQUE INDEX IF NOT EXISTS idx_obs_identity '
+            'ON observations(company, metric, period_end, period_type, unit, '
+            'IFNULL(period_start, ""))'
+        )
     except sqlite3.OperationalError:
         pass
     return c
@@ -79,10 +75,15 @@ def save_observations(c, rows):
     for o in rows:
         p = json.dumps(
             [
-                p.__dict__
-                | {
+                {
+                    "accession": p.accession,
+                    "source_url": p.source_url,
                     "filing_date": p.filing_date.isoformat(),
+                    "form": p.form,
+                    "concept": p.concept,
                     "retrieval_timestamp": p.retrieval_timestamp.isoformat(),
+                    "raw_value": p.raw_value,
+                    "mapping_version": p.mapping_version,
                     "period_start": p.period_start.isoformat() if getattr(p, "period_start", None) else None,
                 }
                 for p in o.provenance
@@ -90,7 +91,10 @@ def save_observations(c, rows):
             default=str,
         )
         c.execute(
-            "INSERT OR REPLACE INTO observations(company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, period_start, derived_from) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+            "INSERT OR REPLACE INTO observations"
+            "(company, metric, value, unit, period_end, period_type, "
+            "quality, comparable, reason, provenance, period_start, derived_from) "
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 o.company,
                 o.metric,
@@ -113,8 +117,8 @@ def _serialize_evidence(evidence):
     """Serialize signal evidence observations with full provenance chain.
 
     Persists metric, value, unit, period_end, period_type, quality,
-    and the complete provenance array for each evidence observation.
-    This allows a persisted signal to be traced back to:
+    period_start, derived_from, and the complete provenance array for each
+    evidence observation.  This allows a persisted signal to be traced back to:
       signal -> evidence observation -> provenance -> accession/form/date/SEC URL.
     """
     out = []
@@ -129,6 +133,7 @@ def _serialize_evidence(evidence):
                 "concept": p.concept,
                 "raw_value": p.raw_value,
                 "mapping_version": p.mapping_version,
+                "period_start": p.period_start.isoformat() if getattr(p, "period_start", None) else None,
             })
         out.append({
             "metric": o.metric,
@@ -140,6 +145,7 @@ def _serialize_evidence(evidence):
             "comparable": o.comparable,
             "provenance": prov_list,
             "derived_from": list(o.derived_from),
+            "period_start": o.period_start.isoformat() if getattr(o, "period_start", None) else None,
         })
     return out
 
@@ -219,6 +225,7 @@ def clear_peer_context(c, company):
 def rows(c, sql, args=()):
     return [dict(x) for x in c.execute(sql, args).fetchall()]
 
+
 def save_filings(c, cik, filings_dict):
     for f in filings_dict.values():
         c.execute(
@@ -229,32 +236,44 @@ def save_filings(c, cik, filings_dict):
                 f.get("form"),
                 f.get("filingDate"),
                 f.get("source_url"),
-            )
+            ),
         )
     c.commit()
 
+
 def load_observations_for_companies(c, companies):
+    """Load observations for a list of companies from SQLite.
+
+    Converts each sqlite3.Row to a dict first so .get() works for
+    columns that may not exist in older databases (period_start,
+    derived_from).
+    """
     from datetime import date, datetime
     from .models import Observation, DataQuality, Provenance
+
     out = []
     if not companies:
         return out
-    
+
     placeholders = ",".join("?" * len(companies))
     q = f"SELECT * FROM observations WHERE company IN ({placeholders})"
-    for r in c.execute(q, tuple(companies)):
+    for raw_row in c.execute(q, tuple(companies)):
+        r = dict(raw_row)
         p_raw = json.loads(r["provenance"])
         provs = []
         for p in p_raw:
             provs.append(Provenance(
-                p["accession"], p["source_url"], 
-                date.fromisoformat(p["filing_date"]), 
-                p["form"], p["concept"], 
+                p["accession"],
+                p["source_url"],
+                date.fromisoformat(p["filing_date"]),
+                p["form"],
+                p["concept"],
                 datetime.fromisoformat(p["retrieval_timestamp"]),
-                p.get("raw_value"), p.get("mapping_version", "v1"),
-                date.fromisoformat(p["period_start"]) if p.get("period_start") else None
+                p.get("raw_value"),
+                p.get("mapping_version", "v1"),
+                date.fromisoformat(p["period_start"]) if p.get("period_start") else None,
             ))
-        
+
         start_str = r.get("period_start")
         start_dt = date.fromisoformat(start_str) if start_str else None
         der_str = r.get("derived_from")
@@ -263,6 +282,7 @@ def load_observations_for_companies(c, companies):
         out.append(Observation(
             r["company"], r["metric"], r["value"], r["unit"],
             date.fromisoformat(r["period_end"]), r["period_type"],
-            DataQuality(r["quality"]), tuple(provs), der_from, bool(r["comparable"]), r["reason"], start_dt
+            DataQuality(r["quality"]), tuple(provs), der_from,
+            bool(r["comparable"]), r.get("reason"), start_dt,
         ))
     return out

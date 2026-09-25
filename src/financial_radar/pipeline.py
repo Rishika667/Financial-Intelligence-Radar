@@ -231,19 +231,18 @@ def ingest_company(client, c, company):
     try:
         from .store import load_observations_for_companies
         pg = load_peer_groups()
-        peer_ctx["version"] = pg.get("version")
         from .peers import find_peer_group
         group_id, members = find_peer_group(ticker, pg)
-        
+
         all_obs = list(obs)
         if members:
             peer_obs = load_observations_for_companies(c, members)
             all_obs.extend(peer_obs)
-            
+
         peer_ctx = peer_context_for_company(ticker, all_obs, pg)
         save_peer_context(c, ticker, peer_ctx)
     except Exception as e:
-        logger.warning(f"Peer context failed: {e}")
+        logger.warning("Peer context failed for %s: %s", ticker, e)
 
     # Extract events from 8-K filings
     events_found = _extract_events_from_submissions(ticker, filings, c, client)
@@ -266,7 +265,7 @@ def _extract_events_from_submissions(ticker, filings, c, client):
     recent_8ks = sorted(
         [f for f in filings.values() if f.get("form") in ("8-K", "8-K/A")],
         key=lambda x: x.get("filingDate", ""),
-        reverse=True
+        reverse=True,
     )[:5]
 
     for filing in recent_8ks:
@@ -288,7 +287,7 @@ def _extract_events_from_submissions(ticker, filings, c, client):
             except Exception as exc:
                 logger.warning(
                     "Event extraction failed for %s filing %s: %s",
-                    ticker, filing.get("accessionNumber", "?"), exc
+                    ticker, filing.get("accessionNumber", "?"), exc,
                 )
     return count
 

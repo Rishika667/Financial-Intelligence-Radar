@@ -10,12 +10,12 @@ class DataQuality(str, Enum):
 @dataclass(frozen=True)
 class Provenance:
     accession: str; source_url: str; filing_date: date; form: str; concept: str; retrieval_timestamp: datetime
-    raw_value: float | None = None; mapping_version: str = "v1"
+    raw_value: float | None = None; mapping_version: str = "v1"; period_start: date | None = None
 
 @dataclass(frozen=True)
 class Observation:
     company: str; metric: str; value: float | None; unit: str; period_end: date; period_type: str; quality: DataQuality
-    provenance: tuple[Provenance, ...] = (); derived_from: tuple[str, ...] = (); comparable: bool = True; comparability_reason: str | None = None
+    provenance: tuple[Provenance, ...] = (); derived_from: tuple[str, ...] = (); comparable: bool = True; comparability_reason: str | None = None; period_start: date | None = None
 
 @dataclass(frozen=True)
 class Signal:

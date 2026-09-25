@@ -29,7 +29,9 @@ def extract_events(company, filing, text):
         m = re.search(pattern, clean_text, re.I)
         if m:
             prefix = clean_text[max(0, m.start() - 40) : m.start()].lower()
-            if any(neg in prefix for neg in ["did not", "does not", "no ", "not "]):
+            postfix = clean_text[m.end() : m.end() + 40].lower()
+            if any(neg in prefix for neg in ["did not", "does not", "no ", "not "]) or \
+               any(neg in postfix for neg in ["not completed", "terminated", "cancelled", "abandoned", "did not", "failed to"]):
                 continue
             
             event_id = hashlib.sha1(

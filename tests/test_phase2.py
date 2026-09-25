@@ -7,9 +7,9 @@ def o(m, v):
     return Observation("ABC", m, v, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED)
 
 
-def test_operating_deleverage():
+def test_operating_margin_deterioration():
     """Margin signals use ratio floor, not monetary floor."""
-    sig = operating_deleverage(o("margin", 0.1), o("margin", 0.2))
+    sig = operating_margin_deterioration(o("margin", 0.1), o("margin", 0.2))
     assert sig is not None
     assert sig.actionable  # NOT suppressed
     assert sig.severity in ("HIGH", "MODERATE")

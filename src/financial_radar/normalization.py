@@ -72,7 +72,7 @@ def extract_companyfacts(company, cik, payload, filings):
                     q = DataQuality.AMENDED if str(x.get("form", "")).endswith("/A") else DataQuality.REPORTED
                     prov = Provenance(
                         acc, filing.get("source_url", ""), filed_dt,
-                        x.get("form", ""), tag, datetime.utcnow(), val
+                        x.get("form", ""), tag, datetime.utcnow(), val, "v1", start_dt if start_str else None
                     )
 
                     raw_facts.append({
@@ -84,14 +84,15 @@ def extract_companyfacts(company, cik, payload, filings):
                         "quality": q,
                         "prov": prov,
                         "filed": filed_dt,
-                        "tag_idx": tag_idx
+                        "tag_idx": tag_idx,
+                        "start": start_dt if start_str else None
                     })
 
     # 2. Canonical Fact Selection (deduplication, restatements, amendments)
     #    Key includes unit to prevent collapsing incompatible currencies.
     canonical = {}
     for f in raw_facts:
-        key = (f["metric"], f["end"], f["pt"], f["unit"])
+        key = (f["metric"], f["end"], f["pt"], f["unit"], f.get("start"))
         if key not in canonical:
             canonical[key] = f
         else:
@@ -110,19 +111,20 @@ def extract_companyfacts(company, cik, payload, filings):
     instant_ends = {(k[1], k[3]) for k in canonical.keys() if k[2] == "INSTANT"}
     for end, unit in instant_ends:
         if ("debt", end, "INSTANT", unit) not in canonical:
-            c_debt = canonical.get(("debt_current", end, "INSTANT", unit))
-            nc_debt = canonical.get(("debt_noncurrent", end, "INSTANT", unit))
+            c_debt = canonical.get(("debt_current", end, "INSTANT", unit, None))
+            nc_debt = canonical.get(("debt_noncurrent", end, "INSTANT", unit, None))
             if c_debt and nc_debt and c_debt["value"] is not None and nc_debt["value"] is not None:
-                canonical[("debt", end, "INSTANT", unit)] = {
+                canonical[("debt", end, "INSTANT", unit, None)] = {
                     "metric": "debt",
                     "value": c_debt["value"] + nc_debt["value"],
                     "unit": unit,
                     "end": end,
                     "pt": "INSTANT",
                     "quality": DataQuality.DERIVED,
-                    "provenance": (c_debt["prov"], nc_debt["prov"]),
+                    "provenance": c_debt.get("provenance", (c_debt["prov"],)) + nc_debt.get("provenance", (nc_debt["prov"],)),
                     "filed": max(c_debt["filed"], nc_debt["filed"]),
-                    "tag_idx": 0, "derived_from": ("debt_current", "debt_noncurrent")
+                    "tag_idx": 0, "derived_from": ("debt_current", "debt_noncurrent"),
+                    "start": None
                 }
 
     obs_map = defaultdict(list)
@@ -138,7 +140,7 @@ def extract_companyfacts(company, cik, payload, filings):
         provs = f.get("provenance")
         if provs is None:
             provs = (f["prov"],)
-        o = Observation(company, metric, f["value"], f["unit"], f["end"], f["pt"], f["quality"], provs, f.get("derived_from", ()))
+        o = Observation(company, metric, f["value"], f["unit"], f["end"], f["pt"], f["quality"], provs, f.get("derived_from", ()), True, None, f.get("start"))
         obs_map[metric].append(o)
         out.append(o)
 

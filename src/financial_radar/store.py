@@ -51,6 +51,18 @@ def connect(path="data/radar.sqlite"):
         c.execute("ALTER TABLE signals ADD COLUMN components TEXT")
     except sqlite3.OperationalError:
         pass
+    try:
+        c.execute("ALTER TABLE observations ADD COLUMN period_start TEXT")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        c.execute("ALTER TABLE observations ADD COLUMN derived_from TEXT")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        c.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_obs_identity ON observations(company, metric, period_end, period_type, unit, IFNULL(period_start, \"\"))")
+    except sqlite3.OperationalError:
+        pass
     return c
 
 
@@ -71,13 +83,14 @@ def save_observations(c, rows):
                 | {
                     "filing_date": p.filing_date.isoformat(),
                     "retrieval_timestamp": p.retrieval_timestamp.isoformat(),
+                    "period_start": p.period_start.isoformat() if getattr(p, "period_start", None) else None,
                 }
                 for p in o.provenance
             ],
             default=str,
         )
         c.execute(
-            "INSERT OR REPLACE INTO observations VALUES(?,?,?,?,?,?,?,?,?,?)",
+            "INSERT OR REPLACE INTO observations(company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, period_start, derived_from) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 o.company,
                 o.metric,
@@ -85,10 +98,12 @@ def save_observations(c, rows):
                 o.unit,
                 o.period_end.isoformat(),
                 o.period_type,
-                o.quality.value,
+                o.quality.value if hasattr(o.quality, "value") else str(o.quality),
                 int(o.comparable),
                 o.comparability_reason,
                 p,
+                o.period_start.isoformat() if getattr(o, "period_start", None) else None,
+                json.dumps(list(o.derived_from)) if getattr(o, "derived_from", None) else None,
             ),
         )
     c.commit()
@@ -207,7 +222,7 @@ def rows(c, sql, args=()):
 def save_filings(c, cik, filings_dict):
     for f in filings_dict.values():
         c.execute(
-            "INSERT OR IGNORE INTO filings VALUES(?,?,?,?,?)",
+            "INSERT OR REPLACE INTO filings VALUES(?,?,?,?,?)",
             (
                 f.get("accessionNumber"),
                 cik,
@@ -236,11 +251,18 @@ def load_observations_for_companies(c, companies):
                 date.fromisoformat(p["filing_date"]), 
                 p["form"], p["concept"], 
                 datetime.fromisoformat(p["retrieval_timestamp"]),
-                p.get("raw_value"), p.get("mapping_version", "v1")
+                p.get("raw_value"), p.get("mapping_version", "v1"),
+                date.fromisoformat(p["period_start"]) if p.get("period_start") else None
             ))
+        
+        start_str = r.get("period_start")
+        start_dt = date.fromisoformat(start_str) if start_str else None
+        der_str = r.get("derived_from")
+        der_from = tuple(json.loads(der_str)) if der_str else ()
+
         out.append(Observation(
             r["company"], r["metric"], r["value"], r["unit"],
             date.fromisoformat(r["period_end"]), r["period_type"],
-            DataQuality(r["quality"]), tuple(provs), (), bool(r["comparable"]), r["reason"]
+            DataQuality(r["quality"]), tuple(provs), der_from, bool(r["comparable"]), r["reason"], start_dt
         ))
     return out

@@ -1,25 +1,17 @@
 import json
 import logging
-from datetime import date, datetime, timezone
-import sqlite3
-
-from financial_radar.models import (
-    Observation,
-    DataQuality,
-    Provenance,
-    Signal,
-)
+from datetime import date, datetime
+from financial_radar.models import Observation, DataQuality, Provenance, Signal
 from financial_radar.store import (
     connect,
     save_watchlist,
     save_observations,
-    save_signals,
-    save_peer_context,
     rows,
+    save_signals,
 )
-from financial_radar.pipeline import _ratio
+from financial_radar.pipeline import evaluate
 from financial_radar.events import extract_events
-from financial_radar.signals_phase2 import divergence
+from financial_radar.signals import divergence, cluster
 
 
 def _prov(dt="2025-07-25"):
@@ -41,6 +33,8 @@ def o(m, v):
 
 
 def test_mismatched_period_end_ratio_calculation():
+    from financial_radar.pipeline import _ratio
+
     gp = Observation(
         "ABC", "gross_profit", 50, "USD",
         date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
@@ -56,6 +50,8 @@ def test_mismatched_period_end_ratio_calculation():
 
 
 def test_mismatched_currency_ratio_calculation():
+    from financial_radar.pipeline import _ratio
+
     gp = Observation(
         "ABC", "gross_profit", 50, "EUR",
         date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
@@ -115,7 +111,6 @@ def test_persisted_signal_provenance_chain(tmp_path):
         "ABC", "accounts_receivable", 100_000_000, "USD",
         date(2024, 6, 30), "INSTANT", DataQuality.REPORTED, (p,),
     )
-    from financial_radar.signals import evaluate
     signals = evaluate("ABC", [rev_c, rev_p, ar_c, ar_p])
     hit = next(s for s in signals if s.signal_id == "RECEIVABLES_REVENUE_DIVERGENCE")
 
@@ -194,7 +189,6 @@ def test_persisted_cluster_component_lineage(tmp_path):
     sig2 = Signal("S2", "ABC", "HIGH", "HIGH", "exp", (obs_c, obs_p))
     sig3 = Signal("S3", "ABC", "HIGH", "HIGH", "exp", (obs_c, obs_p))
 
-    from financial_radar.signals_phase2 import cluster
     clustered = cluster([sig1, sig2, sig3])
     assert len(clustered) == 1
     hit = clustered[0]

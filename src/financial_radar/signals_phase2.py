@@ -143,7 +143,7 @@ def liquidity(a, b, oa, ob):
 def leverage(debt, ebit, old_debt, old_ebit):
     """Leverage uses monetary inputs but the signal is ratio-based."""
     if not ok(debt, ebit, old_debt, old_ebit) or ebit.value <= 0 or old_ebit.value <= 0:
-        return suppressed("LEVERAGE_INTEREST_BURDEN", debt, ebit)
+        return suppressed("DEBT_OPERATING_INCOME_DETERIORATION", debt, ebit)
 
     if (debt.company != ebit.company
         or old_debt.company != old_ebit.company
@@ -151,13 +151,13 @@ def leverage(debt, ebit, old_debt, old_ebit):
         or old_debt.period_end != old_ebit.period_end
         or debt.period_type != old_debt.period_type
         or ebit.period_type != old_ebit.period_type):
-        return misaligned("LEVERAGE_INTEREST_BURDEN", debt, ebit, old_debt, old_ebit)
+        return misaligned("DEBT_OPERATING_INCOME_DETERIORATION", debt, ebit, old_debt, old_ebit)
 
     now, old = debt.value / ebit.value, old_debt.value / old_ebit.value
     if now - old >= 0.5:
         sev = "HIGH" if now - old >= 1 else "MODERATE"
         return Signal(
-            "LEVERAGE_INTEREST_BURDEN", debt.company, sev, _confidence(debt, ebit, old_debt, old_ebit),
+            "DEBT_OPERATING_INCOME_DETERIORATION", debt.company, sev, _confidence(debt, ebit, old_debt, old_ebit),
             f"Debt/operating-income increased from {old:.2f}x to {now:.2f}x.",
             (debt, ebit, old_debt, old_ebit)
         )

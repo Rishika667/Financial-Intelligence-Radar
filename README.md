@@ -52,7 +52,7 @@ GitHub Actions uses Python 3.11, compiles source and app.py, then runs pytest on
 No paid API, API key, or cloud service is required.
 
 ## Intentional limitations
-- **Historical Coverage Bound.** Ingestion uses the SEC’s ‘recent’ submissions index. This bounds historical context to approximately the most recent 1,000 filings per company. The system does not claim guaranteed 7–10 year coverage; actual depth depends on filing frequency.
+- **Historical Coverage Bound.** Current SEC submissions are supplemented with SEC historical submission JSON files when historical fetching is enabled. Actual coverage depends on available SEC submission history. This is not a guaranteed fixed 7-10 year warehouse. Refresh is still manual.
 - **US-GAAP scope only.** XBRL concept mapping covers a curated set of US-GAAP tags. IFRS taxonomies are not supported.
 - **No runtime FX conversion.** All monetary comparisons require matching units; USD vs EUR observations are suppressed, not converted.
 - **Heuristic fiscal-period classification.** Quarter/YTD/annual periods are inferred from date ranges (80–100 days = quarter, etc.). Non-standard fiscal calendars may misclassify.

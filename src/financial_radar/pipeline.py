@@ -29,6 +29,7 @@ from .peers import load_peer_groups, peer_context_for_company
 logger = logging.getLogger(__name__)
 
 FORMS = {"10-K", "10-Q", "8-K", "20-F", "6-K", "10-K/A", "10-Q/A", "8-K/A"}
+MAX_8K_PROCESSED = 10
 
 
 def load_universe(path="config/universe.json"):
@@ -210,7 +211,7 @@ def ingest_company(client, c, company):
     cik = company["cik"]
 
     # Fetch from SEC
-    sub = client.submissions(cik)
+    sub = client.submissions(cik, fetch_historical=True)
     facts = client.company_facts(cik)
     filings = filing_index(sub, cik)
 
@@ -263,12 +264,12 @@ def _extract_events_from_submissions(ticker, filings, c, client):
     Retrieval failures are logged (observable) but do not break the pipeline.
     """
     count = 0
-    # Process only the 5 most recent 8-Ks to respect SEC pacing/volume
+        # Process only the most recent 8-Ks to respect SEC pacing/volume
     recent_8ks = sorted(
         [f for f in filings.values() if f.get("form") in ("8-K", "8-K/A")],
         key=lambda x: x.get("filingDate", ""),
         reverse=True,
-    )[:5]
+    )[:MAX_8K_PROCESSED]
 
     for filing in recent_8ks:
         url = filing.get("source_url")

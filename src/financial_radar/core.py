@@ -85,5 +85,14 @@ class SECClient:
     def company_facts(self, cik):
         return self.get_json(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{int(cik):010d}.json", f"companyfacts/CIK{int(cik):010d}.json")
 
-    def submissions(self, cik):
-        return self.get_json(f"https://data.sec.gov/submissions/CIK{int(cik):010d}.json", f"submissions/CIK{int(cik):010d}.json")
+    def submissions(self, cik, fetch_historical=False):
+        payload = self.get_json(f"https://data.sec.gov/submissions/CIK{int(cik):010d}.json", f"submissions/CIK{int(cik):010d}.json")
+        if fetch_historical:
+            recent = payload.get("filings", {}).get("recent", {})
+            for f in payload.get("filings", {}).get("files", []):
+                if name := f.get("name"):
+                    hist = self.get_json(f"https://data.sec.gov/submissions/{name}", f"submissions/{name}")
+                    for k in recent:
+                        if k in hist:
+                            recent[k].extend(hist[k])
+        return payload

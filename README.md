@@ -39,7 +39,7 @@ Ten deterministic financial signals, each with severity (analyst attention prior
 | OPERATING_MARGIN_DETERIORATION | Ratio decline |
 | EARNINGS_CASH_CONVERSION_DETERIORATION | Ratio decline |
 | FREE_CASH_FLOW_DETERIORATION | Monetary decline |
-| LEVERAGE_INTEREST_BURDEN | Ratio increase |
+| DEBT_OPERATING_INCOME_DETERIORATION | Ratio increase |
 | LIQUIDITY_COMPRESSION | Ratio decline |
 | SHARE_COUNT_DILUTION | Percentage increase |
 | MULTI_FACTOR_DETERIORATION_CLUSTER | 3+ simultaneous signals |
@@ -58,7 +58,7 @@ No paid API, API key, or cloud service is required.
 - **Heuristic fiscal-period classification.** Quarter/YTD/annual periods are inferred from date ranges (80–100 days = quarter, etc.). Non-standard fiscal calendars may misclassify.
 - **Amendment/later-filing precedence, not semantic restatement detection.** Later filings for the same period supersede earlier ones deterministically. The system does not semantically parse whether a value change constitutes a “restatement.”
 - **Dimensional-fact suppression.** Facts with segment/axis/member dimensions are excluded to prevent treating dimensional breakdowns as consolidated totals.
-- **Deterministic 8-K event extraction.** Events are extracted via conservative regex patterns (precision over recall). No LLM/NLP is used. Coverage is limited to the 5 most recent 8-K filings per company.
+- **Deterministic 8-K event extraction.** Events are extracted via conservative regex patterns (precision over recall). No LLM/NLP is used. Coverage is limited to the 10 most recent 8-K filings per company.
 - **Bounded peer groups.** Peer groups are explicitly configured (24-company universe). The system does not automatically discover or expand peers.
 - **Manual SEC refresh.** Data refresh is operator-initiated, not scheduled.
 - **No investment recommendations, valuation, or prediction.**

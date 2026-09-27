@@ -9,7 +9,7 @@ Ten deterministic rules, each producing severity (analyst attention priority), c
 | OPERATING_MARGIN_DETERIORATION | Ratio decline | ≥3pp drop, ≥6pp = HIGH |
 | EARNINGS_CASH_CONVERSION_DETERIORATION | Ratio decline | ≥0.2 drop, ≥0.4 = HIGH |
 | FREE_CASH_FLOW_DETERIORATION | Monetary decline | ≥20% of prior + \$1M floor |
-| LEVERAGE_INTEREST_BURDEN | Ratio increase | ≥0.5x increase, ≥1x = HIGH |
+| DEBT_OPERATING_INCOME_DETERIORATION | Ratio increase | ≥0.5x increase, ≥1x = HIGH |
 | LIQUIDITY_COMPRESSION | Ratio decline | ≥0.1 drop, ≥0.2 = HIGH |
 | SHARE_COUNT_DILUTION | Percentage increase | ≥3%, ≥10% = HIGH |
 | MULTI_FACTOR_DETERIORATION_CLUSTER | 3+ simultaneous signals | Same comparison window |

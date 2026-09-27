@@ -49,7 +49,6 @@ def extract_companyfacts(company, cik, payload, filings):
                         continue
 
                     start_str = x.get("start")
-                    start_dt = None
 
                     if not start_str:
                         pt = "INSTANT"
@@ -73,8 +72,7 @@ def extract_companyfacts(company, cik, payload, filings):
                     q = DataQuality.AMENDED if str(x.get("form", "")).endswith("/A") else DataQuality.REPORTED
                     prov = Provenance(
                         acc, filing.get("source_url", ""), filed_dt,
-                        x.get("form", ""), tag, datetime.utcnow(), val, "v1",
-                        start_dt,
+                        x.get("form", ""), tag, datetime.utcnow(), val
                     )
 
                     raw_facts.append({
@@ -86,15 +84,14 @@ def extract_companyfacts(company, cik, payload, filings):
                         "quality": q,
                         "prov": prov,
                         "filed": filed_dt,
-                        "tag_idx": tag_idx,
-                        "start": start_dt,
+                        "tag_idx": tag_idx
                     })
 
     # 2. Canonical Fact Selection (deduplication, restatements, amendments)
-    #    Key includes unit and start to prevent collapsing incompatible facts.
+    #    Key includes unit to prevent collapsing incompatible currencies.
     canonical = {}
     for f in raw_facts:
-        key = (f["metric"], f["end"], f["pt"], f["unit"], f.get("start"))
+        key = (f["metric"], f["end"], f["pt"], f["unit"])
         if key not in canonical:
             canonical[key] = f
         else:
@@ -109,32 +106,23 @@ def extract_companyfacts(company, cik, payload, filings):
                     f["provenance"] = f.get("provenance", (f["prov"],)) + curr.get("provenance", (curr["prov"],))
                     canonical[key] = f
 
-    # 3. Debt Aggregation (Current + Noncurrent ONLY if no valid total-debt fact exists)
-    #    Keys are 5-tuples: (metric, end, pt, unit, start).
-    #    Instant facts have start=None.
+    # 3. Debt Aggregation (Current + Noncurrent if Total is missing)
     instant_ends = {(k[1], k[3]) for k in canonical.keys() if k[2] == "INSTANT"}
     for end, unit in instant_ends:
-        # Check whether a valid total-debt fact already exists
-        has_total_debt = any(
-            k[0] == "debt" and k[1] == end and k[2] == "INSTANT" and k[3] == unit
-            for k in canonical
-        )
-        if not has_total_debt:
-            c_debt = canonical.get(("debt_current", end, "INSTANT", unit, None))
-            nc_debt = canonical.get(("debt_noncurrent", end, "INSTANT", unit, None))
+        if ("debt", end, "INSTANT", unit) not in canonical:
+            c_debt = canonical.get(("debt_current", end, "INSTANT", unit))
+            nc_debt = canonical.get(("debt_noncurrent", end, "INSTANT", unit))
             if c_debt and nc_debt and c_debt["value"] is not None and nc_debt["value"] is not None:
-                canonical[("debt", end, "INSTANT", unit, None)] = {
+                canonical[("debt", end, "INSTANT", unit)] = {
                     "metric": "debt",
                     "value": c_debt["value"] + nc_debt["value"],
                     "unit": unit,
                     "end": end,
                     "pt": "INSTANT",
                     "quality": DataQuality.DERIVED,
-                    "provenance": c_debt.get("provenance", (c_debt["prov"],)) + nc_debt.get("provenance", (nc_debt["prov"],)),
+                    "provenance": (c_debt["prov"], nc_debt["prov"]),
                     "filed": max(c_debt["filed"], nc_debt["filed"]),
-                    "tag_idx": 0,
-                    "derived_from": (f"debt_current {end.isoformat()} INSTANT", f"debt_noncurrent {end.isoformat()} INSTANT"),
-                    "start": None,
+                    "tag_idx": 0, "derived_from": ("debt_current", "debt_noncurrent")
                 }
 
     obs_map = defaultdict(list)
@@ -150,11 +138,7 @@ def extract_companyfacts(company, cik, payload, filings):
         provs = f.get("provenance")
         if provs is None:
             provs = (f["prov"],)
-        o = Observation(
-            company, metric, f["value"], f["unit"], f["end"], f["pt"],
-            f["quality"], provs, f.get("derived_from", ()),
-            True, None, f.get("start"),
-        )
+        o = Observation(company, metric, f["value"], f["unit"], f["end"], f["pt"], f["quality"], provs, f.get("derived_from", ()))
         obs_map[metric].append(o)
         out.append(o)
 
@@ -164,43 +148,46 @@ def extract_companyfacts(company, cik, payload, filings):
             out.append(Observation(
                 company, metric, None, "USD", date.today(), "UNKNOWN",
                 DataQuality.NOT_REPORTED, comparable=False,
-                comparability_reason="No accepted standard XBRL concept",
+                comparability_reason="No accepted standard XBRL concept"
             ))
 
     # 5. Derive Standalone Quarters from YTD
     for metric, obs_list in obs_map.items():
         for o in obs_list:
             if o.period_type == "YTD_6M":
+                # Q2 standalone = H1 YTD - Q1 QUARTER
                 q1 = next(
                     (c for c in obs_list
                      if c.period_type == "QUARTER"
                      and c.unit == o.unit
                      and 80 <= (o.period_end - c.period_end).days <= 100),
-                    None,
+                    None
                 )
                 if q1:
                     derived = derive_standalone_quarter(o, q1)
                     if derived.value is not None:
                         out.append(derived)
             elif o.period_type == "YTD_9M":
+                # Q3 standalone = 9M YTD - H1 YTD
                 ytd6 = next(
                     (c for c in obs_list
                      if c.period_type == "YTD_6M"
                      and c.unit == o.unit
                      and 80 <= (o.period_end - c.period_end).days <= 100),
-                    None,
+                    None
                 )
                 if ytd6:
                     derived = derive_standalone_quarter(o, ytd6)
                     if derived.value is not None:
                         out.append(derived)
             elif o.period_type == "ANNUAL":
+                # Q4 standalone = FY ANNUAL - 9M YTD
                 ytd9 = next(
                     (c for c in obs_list
                      if c.period_type == "YTD_9M"
                      and c.unit == o.unit
                      and 80 <= (o.period_end - c.period_end).days <= 100),
-                    None,
+                    None
                 )
                 if ytd9:
                     derived = derive_standalone_quarter(o, ytd9)

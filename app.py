@@ -170,8 +170,9 @@ with portfolio_tab:
             "signal. The analyst must determine causation.\n"
             "3. **Peer Groups:** Peer comparisons require strictly compatible metrics and are only computed "
             "in configured peer groups.\n"
-            "4. **Historical Coverage:** Ingestion uses the SEC 'recent' submissions index, covering "
-            "approximately the most recent 1,000 filings per company.\n"
+            "4. **Historical Coverage:** Current SEC submissions are supplemented with SEC historical "
+            "submission JSON files when enabled. Actual coverage depends on available SEC submission "
+            "history; this is not a guaranteed fixed 7-10 year warehouse, and refresh is still manual.\n"
             "5. **Deterministic Thresholds:** Signal severity is determined by fixed thresholds, not "
             "accounting materiality judgments. They indicate analyst attention priority only."
         )

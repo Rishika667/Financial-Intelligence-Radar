@@ -90,3 +90,41 @@ def test_free_cash_flow_incomparable_input():
     capex = o("capex", -100, date(2025, 6, 30), "QUARTER")
     fcf = free_cash_flow(ocf, capex)
     assert fcf.quality == DataQuality.CALCULATION_INVALID
+
+def test_historical_submissions(tmp_path, monkeypatch):
+    from financial_radar.core import SECClient
+    import json
+
+    client = SECClient("test@example.com", raw_dir=str(tmp_path))
+    
+    # Mock requests.Session.get
+    class MockResponse:
+        def __init__(self, data):
+            self._data = data
+        def raise_for_status(self):
+            pass
+        def json(self):
+            return self._data
+            
+    def mock_get(url, timeout=30):
+        if "CIK0000000001.json" in url:
+            return MockResponse({
+                "filings": {
+                    "recent": {"accessionNumber": ["111-222"]},
+                    "files": [{"name": "CIK0000000001-submissions-001.json"}]
+                }
+            })
+        elif "CIK0000000001-submissions-001.json" in url:
+            return MockResponse({"accessionNumber": ["333-444"]})
+        raise ValueError(f"Unexpected url: {url}")
+        
+    monkeypatch.setattr(client.s, "get", mock_get)
+    
+    # Test without fetch_historical
+    res1 = client.submissions("1", fetch_historical=False)
+    assert res1["filings"]["recent"]["accessionNumber"] == ["111-222"]
+    
+    # Test with fetch_historical
+    res2 = client.submissions("1", fetch_historical=True)
+    assert "333-444" in res2["filings"]["recent"]["accessionNumber"]
+

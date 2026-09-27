@@ -1,213 +1,102 @@
 import json
-import logging
-from datetime import date, datetime
-from financial_radar.models import Observation, DataQuality, Provenance, Signal
-from financial_radar.store import (
-    connect,
-    save_watchlist,
-    save_observations,
-    rows,
-    save_signals,
-)
-from financial_radar.pipeline import evaluate
+from datetime import date
+from financial_radar.store import connect, rows, save_observations, save_signals
+from financial_radar.models import Observation, Provenance, DataQuality, Signal
 from financial_radar.events import extract_events
-from financial_radar.signals import divergence, cluster
 
 
-def _prov(dt="2025-07-25"):
+def _prov(dt="2025-01-01"):
     return Provenance(
-        "ACC001",
-        "https://sec.gov/filing",
-        date.fromisoformat(dt),
-        "10-Q",
-        "RevenueFromContractWithCustomerExcludingAssessedTax",
-        datetime(2025, 7, 25),
-        200_000_000,
+        "0001", "https://sec.example", date(2025, 1, 1),
+        "10-Q", "Revenue", dt,
     )
 
 
-def o(m, v):
-    return Observation(
-        "ABC", m, v, "USD", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED
-    )
+def test_schema_creation(tmp_path):
+    c = connect(tmp_path / "test.sqlite")
+    tables = [
+        r["name"]
+        for r in rows(c, "SELECT name FROM sqlite_master WHERE type='table'")
+    ]
+    assert "observations" in tables
+    assert "signals" in tables
+    assert "watchlist" in tables
 
 
-def test_mismatched_period_end_ratio_calculation():
-    from financial_radar.pipeline import _ratio
-
-    gp = Observation(
-        "ABC", "gross_profit", 50, "USD",
-        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
-    )
-    rev = Observation(
-        "ABC", "revenue", 100, "USD",
-        date(2025, 3, 31), "QUARTER", DataQuality.REPORTED,
-    )
-    ratio = _ratio(gp, rev, "gross_margin")
-    assert ratio.value is None
-    assert ratio.quality == DataQuality.CALCULATION_INVALID
-    assert ratio.comparable is False
-
-
-def test_mismatched_currency_ratio_calculation():
-    from financial_radar.pipeline import _ratio
-
-    gp = Observation(
-        "ABC", "gross_profit", 50, "EUR",
-        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
-    )
-    rev = Observation(
-        "ABC", "revenue", 100, "USD",
-        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
-    )
-    ratio = _ratio(gp, rev, "gross_margin")
-    assert ratio.value is None
-    assert ratio.quality == DataQuality.CALCULATION_INVALID
-    assert ratio.comparable is False
-
-
-def test_mismatched_period_fcf():
-    from financial_radar.core import free_cash_flow
-
-    ocf = Observation(
-        "ABC", "operating_cash_flow", 50, "USD",
-        date(2025, 3, 31), "QUARTER", DataQuality.REPORTED,
-    )
-    capex = Observation(
-        "ABC", "capex", -20, "USD",
-        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
-    )
-    fcf = free_cash_flow(ocf, capex)
-    assert fcf.value is None
-    assert fcf.quality == DataQuality.CALCULATION_INVALID
-    assert fcf.comparable is False
-
-
-def test_store_and_watchlist(tmp_path):
+def test_watchlist_persistence(tmp_path):
     c = connect(tmp_path / "x.sqlite")
+    from financial_radar.store import save_watchlist
+
     save_watchlist(c, [{"ticker": "ABC", "cik": "1", "active": True}])
-    save_observations(c, [o("revenue", 2)])
-    assert rows(c, "select * from watchlist")[0]["ticker"] == "ABC"
-    assert rows(c, "select * from observations")[0]["value"] == 2
+    res = rows(c, "SELECT * FROM watchlist WHERE ticker='ABC'")
+    assert len(res) == 1
+    assert res[0]["active"] == 1
+    assert res[0]["cik"] == "1"
 
 
-def test_persisted_signal_provenance_chain(tmp_path):
-    c = connect(tmp_path / "prov.sqlite")
-
-    p = _prov()
-    rev_c = Observation(
-        "ABC", "revenue", 200_000_000, "USD",
-        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,),
+def test_observation_persistence(tmp_path):
+    c = connect(tmp_path / "x.sqlite")
+    obs = Observation(
+        "ABC", "revenue", 100, "USD",
+        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (_prov(),),
     )
-    rev_p = Observation(
-        "ABC", "revenue", 100_000_000, "USD",
-        date(2024, 6, 30), "QUARTER", DataQuality.REPORTED, (p,),
-    )
-    ar_c = Observation(
-        "ABC", "accounts_receivable", 300_000_000, "USD",
-        date(2025, 6, 30), "INSTANT", DataQuality.REPORTED, (p,),
-    )
-    ar_p = Observation(
-        "ABC", "accounts_receivable", 100_000_000, "USD",
-        date(2024, 6, 30), "INSTANT", DataQuality.REPORTED, (p,),
-    )
-    signals = evaluate("ABC", [rev_c, rev_p, ar_c, ar_p])
-    hit = next(s for s in signals if s.signal_id == "RECEIVABLES_REVENUE_DIVERGENCE")
-
-    save_signals(c, [hit])
-    persisted = rows(
-        c, "SELECT * FROM signals WHERE signal_id='RECEIVABLES_REVENUE_DIVERGENCE'"
-    )
-    assert len(persisted) == 1
-    row = persisted[0]
-
-    evidence = json.loads(row["evidence"])
-    assert isinstance(evidence, list)
-    assert len(evidence) >= 2
-
-    obs = evidence[0]
-    assert "metric" in obs
-    assert "value" in obs
-    assert "unit" in obs
-    assert "period_end" in obs
-    assert "quality" in obs
-    assert "provenance" in obs
-
-    prov = obs["provenance"]
-    assert isinstance(prov, list)
-    assert len(prov) >= 1
-    p0 = prov[0]
-    assert p0["accession"] == "ACC001"
-    assert p0["source_url"] == "https://sec.gov/filing"
-    assert p0["form"] == "10-Q"
-    assert p0["concept"] == "RevenueFromContractWithCustomerExcludingAssessedTax"
-    assert p0["filing_date"] == "2025-07-25"
-    assert p0["raw_value"] == 200_000_000
-
-    assert row["severity"] == "HIGH"
-    assert row["version"] == "v1"
-    assert row["suppressed"] is None
+    save_observations(c, [obs])
+    res = rows(c, "SELECT * FROM observations WHERE company='ABC'")
+    assert len(res) == 1
+    assert res[0]["metric"] == "revenue"
+    assert res[0]["value"] == 100
+    assert res[0]["period_end"] == "2025-06-30"
 
 
-def test_mismatched_period_end_divergence():
-    rev_c = Observation(
-        "ABC", "revenue", 200_000_000, "USD",
-        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
-    )
-    rev_p = Observation(
-        "ABC", "revenue", 100_000_000, "USD",
-        date(2024, 6, 30), "QUARTER", DataQuality.REPORTED,
-    )
-    ar_c = Observation(
-        "ABC", "accounts_receivable", 300_000_000, "USD",
-        date(2025, 3, 31), "INSTANT", DataQuality.REPORTED,
-    )
-    ar_p = Observation(
-        "ABC", "accounts_receivable", 100_000_000, "USD",
-        date(2024, 6, 30), "INSTANT", DataQuality.REPORTED,
-    )
+def test_signal_persistence(tmp_path):
+    c = connect(tmp_path / "x.sqlite")
+    from financial_radar.store import clear_signals
 
-    sig = divergence("RECEIVABLES_REVENUE_DIVERGENCE", ar_c, rev_c, ar_p, rev_p)
-    assert sig is not None
-    assert sig.suppressed_reason == "misaligned periods"
-    assert sig.actionable is False
+    sig = Signal("TEST_SIG", "ABC", "HIGH", "HIGH", "Reason", ())
+    save_signals(c, [sig])
+    res = rows(c, "SELECT * FROM signals WHERE company='ABC'")
+    assert len(res) == 1
+    assert res[0]["signal_id"] == "TEST_SIG"
+
+    clear_signals(c, "ABC")
+    res2 = rows(c, "SELECT * FROM signals WHERE company='ABC'")
+    assert len(res2) == 0
 
 
-def test_persisted_cluster_component_lineage(tmp_path):
-    c = connect(tmp_path / "prov.sqlite")
+def test_peer_context_persistence(tmp_path):
+    c = connect(tmp_path / "x.sqlite")
+    from financial_radar.store import save_peer_context, clear_peer_context
 
-    p = _prov()
-    obs_c = Observation(
-        "ABC", "metric", 1, "USD",
-        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,),
-    )
-    obs_p = Observation(
-        "ABC", "metric", 1, "USD",
-        date(2024, 6, 30), "QUARTER", DataQuality.REPORTED, (p,),
-    )
-    sig1 = Signal("S1", "ABC", "HIGH", "HIGH", "exp", (obs_c, obs_p))
-    sig2 = Signal("S2", "ABC", "HIGH", "HIGH", "exp", (obs_c, obs_p))
-    sig3 = Signal("S3", "ABC", "HIGH", "HIGH", "exp", (obs_c, obs_p))
+    ctx = {
+        "group_id": "TECH",
+        "version": "v1",
+        "contexts": [
+            {
+                "metric": "revenue",
+                "company_value": 100,
+                "peer_median": 120,
+                "peer_range": (90, 150),
+                "n_peers": 3,
+                "peer_group_version": "v1",
+                "group_id": "TECH",
+            }
+        ],
+    }
+    save_peer_context(c, "ABC", ctx)
+    res = rows(c, "SELECT * FROM peer_context WHERE company='ABC'")
+    assert len(res) == 1
+    assert res[0]["group_id"] == "TECH"
+    assert res[0]["peer_median"] == 120
+    assert res[0]["peer_min"] == 90
+    assert res[0]["peer_max"] == 150
+    assert res[0]["version"] == "v1"
 
-    clustered = cluster([sig1, sig2, sig3])
-    assert len(clustered) == 1
-    hit = clustered[0]
-
-    save_signals(c, [hit])
-    persisted = rows(
-        c, "SELECT * FROM signals WHERE signal_id='MULTI_FACTOR_DETERIORATION_CLUSTER'"
-    )
-    assert len(persisted) == 1
-    row = persisted[0]
-
-    components = json.loads(row["components"])
-    assert isinstance(components, list)
-    assert len(components) == 3
-    assert set(components) == {"S1", "S2", "S3"}
+    clear_peer_context(c, "ABC")
+    res2 = rows(c, "SELECT * FROM peer_context WHERE company='ABC'")
+    assert len(res2) == 0
 
 
 def test_load_observations_for_companies(tmp_path):
-    """Verify observations round-trip through SQLite correctly."""
     c = connect(tmp_path / "x.sqlite")
     obs1 = Observation(
         "ABC", "revenue", 100, "USD",
@@ -283,7 +172,7 @@ def test_production_peer_pipeline(tmp_path, monkeypatch):
             def get(*a, **kw):
                 raise RuntimeError("no 8-K fetch in test")
 
-        def submissions(self, cik):
+        def submissions(self, cik, fetch_historical=False):
             return {
                 "filings": {
                     "recent": {

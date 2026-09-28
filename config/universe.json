@@ -1,149 +1,405 @@
 {
-  "version": "2026.1",
+  "version": "sp500",
   "companies": [
     {
-      "ticker": "AAPL",
-      "cik": "0000320193",
-      "sector": "Technology",
-      "active": true
-    },
-    {
-      "ticker": "MSFT",
-      "cik": "0000789019",
-      "sector": "Technology",
-      "active": true
-    },
-    {
-      "ticker": "NVDA",
-      "cik": "0001045810",
-      "sector": "Technology",
-      "active": true
-    },
-    {
-      "ticker": "ORCL",
-      "cik": "0001341439",
-      "sector": "Technology",
-      "active": true
-    },
-    {
-      "ticker": "WMT",
-      "cik": "0000104169",
-      "sector": "Staples",
-      "active": true
-    },
-    {
-      "ticker": "COST",
-      "cik": "0000909832",
-      "sector": "Staples",
-      "active": true
-    },
-    {
-      "ticker": "KO",
-      "cik": "0000021344",
-      "sector": "Staples",
-      "active": true
-    },
-    {
-      "ticker": "JPM",
-      "cik": "0000019617",
-      "sector": "Financials",
-      "active": true
-    },
-    {
-      "ticker": "BAC",
-      "cik": "0000070858",
-      "sector": "Financials",
-      "active": true
-    },
-    {
-      "ticker": "GS",
-      "cik": "0000886982",
-      "sector": "Financials",
-      "active": true
-    },
-    {
-      "ticker": "JNJ",
-      "cik": "0000200406",
-      "sector": "Health Care",
-      "active": true
-    },
-    {
-      "ticker": "PFE",
-      "cik": "0000078003",
-      "sector": "Health Care",
-      "active": true
-    },
-    {
-      "ticker": "UNH",
-      "cik": "0000731766",
-      "sector": "Health Care",
-      "active": true
-    },
-    {
-      "ticker": "XOM",
-      "cik": "0000034088",
-      "sector": "Energy",
-      "active": true
-    },
-    {
-      "ticker": "CVX",
-      "cik": "0000093410",
-      "sector": "Energy",
-      "active": true
-    },
-    {
-      "ticker": "CAT",
-      "cik": "0000018230",
+      "ticker": "MMM",
+      "cik": "0000066740",
+      "title": "3M",
       "sector": "Industrials",
-      "active": true
+      "sub_industry": "Industrial Conglomerates",
+      "active": false
     },
     {
-      "ticker": "GE",
-      "cik": "0000040545",
+      "ticker": "AOS",
+      "cik": "0000091142",
+      "title": "A. O. Smith",
       "sector": "Industrials",
-      "active": true
+      "sub_industry": "Building Products",
+      "active": false
     },
     {
-      "ticker": "HD",
-      "cik": "0000354950",
-      "sector": "Consumer",
-      "active": true
+      "ticker": "ABT",
+      "cik": "0000001800",
+      "title": "Abbott Laboratories",
+      "sector": "Health Care",
+      "sub_industry": "Health Care Equipment",
+      "active": false
     },
     {
-      "ticker": "MCD",
-      "cik": "0000063908",
-      "sector": "Consumer",
-      "active": true
+      "ticker": "ABBV",
+      "cik": "0001551152",
+      "title": "AbbVie",
+      "sector": "Health Care",
+      "sub_industry": "Biotechnology",
+      "active": false
+    },
+    {
+      "ticker": "ACN",
+      "cik": "0001467373",
+      "title": "Accenture",
+      "sector": "Information Technology",
+      "sub_industry": "IT Consulting & Other Services",
+      "active": false
+    },
+    {
+      "ticker": "ADBE",
+      "cik": "0000796343",
+      "title": "Adobe Inc.",
+      "sector": "Information Technology",
+      "sub_industry": "Application Software",
+      "active": false
+    },
+    {
+      "ticker": "AMD",
+      "cik": "0000002488",
+      "title": "Advanced Micro Devices",
+      "sector": "Information Technology",
+      "sub_industry": "Semiconductors",
+      "active": false
+    },
+    {
+      "ticker": "AES",
+      "cik": "0000874761",
+      "title": "AES Corporation",
+      "sector": "Utilities",
+      "sub_industry": "Independent Power Producers & Energy Traders",
+      "active": false
+    },
+    {
+      "ticker": "AFL",
+      "cik": "0000004977",
+      "title": "Aflac",
+      "sector": "Financials",
+      "sub_industry": "Life & Health Insurance",
+      "active": false
+    },
+    {
+      "ticker": "A",
+      "cik": "0001090872",
+      "title": "Agilent Technologies",
+      "sector": "Health Care",
+      "sub_industry": "Life Sciences Tools & Services",
+      "active": false
+    },
+    {
+      "ticker": "APD",
+      "cik": "0000002969",
+      "title": "Air Products",
+      "sector": "Materials",
+      "sub_industry": "Industrial Gases",
+      "active": false
+    },
+    {
+      "ticker": "ABNB",
+      "cik": "0001559720",
+      "title": "Airbnb",
+      "sector": "Consumer Discretionary",
+      "sub_industry": "Hotels, Resorts & Cruise Lines",
+      "active": false
+    },
+    {
+      "ticker": "AKAM",
+      "cik": "0001086222",
+      "title": "Akamai Technologies",
+      "sector": "Information Technology",
+      "sub_industry": "Internet Services & Infrastructure",
+      "active": false
+    },
+    {
+      "ticker": "ALB",
+      "cik": "0000915913",
+      "title": "Albemarle Corporation",
+      "sector": "Materials",
+      "sub_industry": "Specialty Chemicals",
+      "active": false
+    },
+    {
+      "ticker": "ARE",
+      "cik": "0001035443",
+      "title": "Alexandria Real Estate Equities",
+      "sector": "Real Estate",
+      "sub_industry": "Office REITs",
+      "active": false
+    },
+    {
+      "ticker": "ALGN",
+      "cik": "0001097149",
+      "title": "Align Technology",
+      "sector": "Health Care",
+      "sub_industry": "Health Care Supplies",
+      "active": false
+    },
+    {
+      "ticker": "ALLE",
+      "cik": "0001579241",
+      "title": "Allegion",
+      "sector": "Industrials",
+      "sub_industry": "Building Products",
+      "active": false
+    },
+    {
+      "ticker": "LNT",
+      "cik": "0000352541",
+      "title": "Alliant Energy",
+      "sector": "Utilities",
+      "sub_industry": "Electric Utilities",
+      "active": false
+    },
+    {
+      "ticker": "ALL",
+      "cik": "0000899051",
+      "title": "Allstate",
+      "sector": "Financials",
+      "sub_industry": "Property & Casualty Insurance",
+      "active": false
+    },
+    {
+      "ticker": "GOOGL",
+      "cik": "0001652044",
+      "title": "Alphabet Inc. (Class A)",
+      "sector": "Communication Services",
+      "sub_industry": "Interactive Media & Services",
+      "active": false
+    },
+    {
+      "ticker": "GOOG",
+      "cik": "0001652044",
+      "title": "Alphabet Inc. (Class C)",
+      "sector": "Communication Services",
+      "sub_industry": "Interactive Media & Services",
+      "active": false
+    },
+    {
+      "ticker": "MO",
+      "cik": "0000764180",
+      "title": "Altria",
+      "sector": "Consumer Staples",
+      "sub_industry": "Tobacco",
+      "active": false
     },
     {
       "ticker": "AMZN",
       "cik": "0001018724",
-      "sector": "Consumer",
-      "active": true
+      "title": "Amazon",
+      "sector": "Consumer Discretionary",
+      "sub_industry": "Broadline Retail",
+      "active": false
     },
     {
-      "ticker": "V",
-      "cik": "0001403161",
+      "ticker": "AMCR",
+      "cik": "0001748790",
+      "title": "Amcor",
+      "sector": "Materials",
+      "sub_industry": "Paper & Plastic Packaging Products & Materials",
+      "active": false
+    },
+    {
+      "ticker": "AEE",
+      "cik": "0001002910",
+      "title": "Ameren",
+      "sector": "Utilities",
+      "sub_industry": "Multi-Utilities",
+      "active": false
+    },
+    {
+      "ticker": "AEP",
+      "cik": "0000004904",
+      "title": "American Electric Power",
+      "sector": "Utilities",
+      "sub_industry": "Electric Utilities",
+      "active": false
+    },
+    {
+      "ticker": "AXP",
+      "cik": "0000004962",
+      "title": "American Express",
       "sector": "Financials",
-      "active": true
+      "sub_industry": "Consumer Finance",
+      "active": false
+    },
+    {
+      "ticker": "AIG",
+      "cik": "0000005272",
+      "title": "American International Group",
+      "sector": "Financials",
+      "sub_industry": "Multi-line Insurance",
+      "active": false
+    },
+    {
+      "ticker": "AMT",
+      "cik": "0001053507",
+      "title": "American Tower",
+      "sector": "Real Estate",
+      "sub_industry": "Telecom Tower REITs",
+      "active": false
+    },
+    {
+      "ticker": "AWK",
+      "cik": "0001410636",
+      "title": "American Water Works",
+      "sector": "Utilities",
+      "sub_industry": "Water Utilities",
+      "active": false
+    },
+    {
+      "ticker": "AMP",
+      "cik": "0000820027",
+      "title": "Ameriprise Financial",
+      "sector": "Financials",
+      "sub_industry": "Asset Management & Custody Banks",
+      "active": false
+    },
+    {
+      "ticker": "AME",
+      "cik": "0001037868",
+      "title": "Ametek",
+      "sector": "Industrials",
+      "sub_industry": "Electrical Components & Equipment",
+      "active": false
+    },
+    {
+      "ticker": "AMGN",
+      "cik": "0000318154",
+      "title": "Amgen",
+      "sector": "Health Care",
+      "sub_industry": "Biotechnology",
+      "active": false
+    },
+    {
+      "ticker": "APH",
+      "cik": "0000820313",
+      "title": "Amphenol",
+      "sector": "Information Technology",
+      "sub_industry": "Electronic Components",
+      "active": false
+    },
+    {
+      "ticker": "ADI",
+      "cik": "0000006281",
+      "title": "Analog Devices",
+      "sector": "Information Technology",
+      "sub_industry": "Semiconductors",
+      "active": false
+    },
+    {
+      "ticker": "AON",
+      "cik": "0000315293",
+      "title": "Aon plc",
+      "sector": "Financials",
+      "sub_industry": "Insurance Brokers",
+      "active": false
+    },
+    {
+      "ticker": "APA",
+      "cik": "0001841666",
+      "title": "APA Corporation",
+      "sector": "Energy",
+      "sub_industry": "Oil & Gas Exploration & Production",
+      "active": false
+    },
+    {
+      "ticker": "APO",
+      "cik": "0001858681",
+      "title": "Apollo Global Management",
+      "sector": "Financials",
+      "sub_industry": "Asset Management & Custody Banks",
+      "active": false
+    },
+    {
+      "ticker": "AAPL",
+      "cik": "0000320193",
+      "title": "Apple Inc.",
+      "sector": "Information Technology",
+      "sub_industry": "Technology Hardware, Storage & Peripherals",
+      "active": false
+    },
+    {
+      "ticker": "AMAT",
+      "cik": "0000006951",
+      "title": "Applied Materials",
+      "sector": "Information Technology",
+      "sub_industry": "Semiconductor Materials & Equipment",
+      "active": false
+    },
+    {
+      "ticker": "APP",
+      "cik": "0001751008",
+      "title": "AppLovin",
+      "sector": "Communication Services",
+      "sub_industry": "Advertising",
+      "active": false
+    },
+    {
+      "ticker": "APTV",
+      "cik": "0001521332",
+      "title": "Aptiv",
+      "sector": "Consumer Discretionary",
+      "sub_industry": "Automotive Parts & Equipment",
+      "active": false
+    },
+    {
+      "ticker": "ACGL",
+      "cik": "0000947484",
+      "title": "Arch Capital Group",
+      "sector": "Financials",
+      "sub_industry": "Property & Casualty Insurance",
+      "active": false
+    },
+    {
+      "ticker": "ADM",
+      "cik": "0000007084",
+      "title": "Archer Daniels Midland",
+      "sector": "Consumer Staples",
+      "sub_industry": "Agricultural Products & Services",
+      "active": false
+    },
+    {
+      "ticker": "ARES",
+      "cik": "0001176948",
+      "title": "Ares Management",
+      "sector": "Financials",
+      "sub_industry": "Asset Management & Custody Banks",
+      "active": false
+    },
+    {
+      "ticker": "ANET",
+      "cik": "0001596532",
+      "title": "Arista Networks",
+      "sector": "Information Technology",
+      "sub_industry": "Communications Equipment",
+      "active": false
+    },
+    {
+      "ticker": "AJG",
+      "cik": "0000354190",
+      "title": "Arthur J. Gallagher & Co.",
+      "sector": "Financials",
+      "sub_industry": "Insurance Brokers",
+      "active": false
+    },
+    {
+      "ticker": "AIZ",
+      "cik": "0001267238",
+      "title": "Assurant",
+      "sector": "Financials",
+      "sub_industry": "Multi-line Insurance",
+      "active": false
     },
     {
       "ticker": "T",
       "cik": "0000732717",
-      "sector": "Communication",
-      "active": true
+      "title": "AT&T",
+      "sector": "Communication Services",
+      "sub_industry": "Integrated Telecommunication Services",
+      "active": false
     },
     {
-      "ticker": "DIS",
-      "cik": "0001744489",
-      "sector": "Communication",
-      "active": true
-    },
-    {
-      "ticker": "PG",
-      "cik": "0000080424",
-      "sector": "Staples",
-      "active": true
+      "ticker": "ATO",
+      "cik": "0000731802",
+      "title": "Atmos Energy",
+      "sector": "Utilities",
+      "sub_industry": "Gas Utilities",
+      "active": false
     }
   ]
 }

@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS filings(
 CREATE TABLE IF NOT EXISTS observations(
     company TEXT, metric TEXT, value REAL, unit TEXT, period_end TEXT,
     period_type TEXT, quality TEXT, comparable INTEGER, reason TEXT,
-    provenance TEXT,
+    provenance TEXT, period_start TEXT, derived_from TEXT,
     UNIQUE(company, metric, period_end, period_type, provenance)
 );
 CREATE TABLE IF NOT EXISTS signals(

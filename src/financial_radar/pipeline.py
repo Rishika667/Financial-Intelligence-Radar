@@ -29,7 +29,6 @@ from .peers import load_peer_groups, peer_context_for_company
 logger = logging.getLogger(__name__)
 
 FORMS = {"10-K", "10-Q", "8-K", "20-F", "6-K", "10-K/A", "10-Q/A", "8-K/A"}
-MAX_8K_PROCESSED = 10
 
 
 def load_universe(path="config/universe.json"):
@@ -119,7 +118,7 @@ def _ratio(a, b, name):
     )
 
 
-def evaluate(company, items):
+def evaluate(company, items, sector="Unknown"):
     """Evaluate all 10 deterministic signals for a company's observations."""
     pt = "QUARTER"
     out = []
@@ -136,7 +135,8 @@ def evaluate(company, items):
         out.append(divergence("RECEIVABLES_REVENUE_DIVERGENCE", ar, rev, prevar, prevrev))
     # Signal 2: Inventory-sales divergence
     if rev and prevrev and inv and previnv:
-        out.append(divergence("INVENTORY_SALES_DIVERGENCE", inv, rev, previnv, prevrev))
+        if sector != "Financials":
+            out.append(divergence("INVENTORY_SALES_DIVERGENCE", inv, rev, previnv, prevrev))
 
     gp, pgp = pair("gross_profit")
     op, pop = pair("operating_income")
@@ -211,7 +211,7 @@ def ingest_company(client, c, company):
     cik = company["cik"]
 
     # Fetch from SEC
-    sub = client.submissions(cik, fetch_historical=True)
+    sub = client.submissions(cik)
     facts = client.company_facts(cik)
     filings = filing_index(sub, cik)
 
@@ -225,29 +225,9 @@ def ingest_company(client, c, company):
     clear_signals(c, ticker)
 
     # Evaluate signals
-    sig = evaluate(ticker, obs)
+    sig = evaluate(ticker, obs, company.get("sector", "Unknown"))
     save_signals(c, sig)
 
-    # Peer context
-    clear_peer_context(c, ticker)
-    peer_ctx = {"group_id": None, "contexts": []}
-    try:
-        from .store import load_observations_for_companies
-        pg = load_peer_groups()
-        from .peers import find_peer_group
-        group_id, members = find_peer_group(ticker, pg)
-
-        all_obs = list(obs)
-        if members:
-            peer_obs = load_observations_for_companies(c, members)
-            all_obs.extend(peer_obs)
-
-        peer_ctx = peer_context_for_company(ticker, all_obs, pg)
-        save_peer_context(c, ticker, peer_ctx)
-    except Exception as e:
-        logger.warning("Peer context failed for %s: %s", ticker, e)
-
-    # Extract events from 8-K filings
     events_found = _extract_events_from_submissions(ticker, filings, c, client)
 
     return {
@@ -264,12 +244,12 @@ def _extract_events_from_submissions(ticker, filings, c, client):
     Retrieval failures are logged (observable) but do not break the pipeline.
     """
     count = 0
-        # Process only the most recent 8-Ks to respect SEC pacing/volume
+    # Process only the 5 most recent 8-Ks to respect SEC pacing/volume
     recent_8ks = sorted(
         [f for f in filings.values() if f.get("form") in ("8-K", "8-K/A")],
         key=lambda x: x.get("filingDate", ""),
         reverse=True,
-    )[:MAX_8K_PROCESSED]
+    )[:5]
 
     for filing in recent_8ks:
         url = filing.get("source_url")
@@ -298,3 +278,21 @@ def _extract_events_from_submissions(ticker, filings, c, client):
 def ingest_events(company, filing, text, c):
     """Ingest events from filing document text."""
     save_events(c, extract_events(company["ticker"], filing, text))
+
+
+def refresh_peer_contexts(c, active_tickers):
+    import logging
+    logger = logging.getLogger(__name__)
+    try:
+        from .store import load_observations_for_companies, clear_peer_context, save_peer_context
+        from .peers import load_peer_groups, peer_context_for_company
+        pg = load_peer_groups("config/universe.json")
+        
+        all_obs = load_observations_for_companies(c, active_tickers)
+        
+        for t in active_tickers:
+            clear_peer_context(c, t)
+            peer_ctx = peer_context_for_company(t, all_obs, pg)
+            save_peer_context(c, t, peer_ctx)
+    except Exception as e:
+        logger.error(f"Failed to refresh peer contexts: {e}")

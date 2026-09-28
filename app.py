@@ -134,7 +134,7 @@ with tab_dashboard:
         placeholders = ",".join("?" * len(active_tickers))
         signals = rows(
             db,
-            f"SELECT * FROM signals WHERE company IN ({placeholders}) AND suppressed IS NULL ORDER BY severity DESC",
+            f"SELECT * FROM signals WHERE company IN ({placeholders}) AND suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC",
             active_tickers,
         )
         
@@ -183,7 +183,8 @@ with tab_research:
         obs = rows(db, "SELECT * FROM observations WHERE company=? ORDER BY period_end DESC", (ticker,))
         if obs:
             df_obs = pd.DataFrame(obs)
-            latest_period = df_obs["period_end"].max()
+            valid_obs = df_obs[~df_obs["quality"].astype(str).str.contains("NOT_REPORTED|CALCULATION_INVALID")]
+            latest_period = valid_obs["period_end"].max() if not valid_obs.empty else df_obs["period_end"].max()
             st.caption(f"**Latest Valid Financial Period:** {latest_period}")
             
             st.markdown("### Executive Snapshot")
@@ -193,7 +194,7 @@ with tab_research:
             for i, m in enumerate(metrics):
                 row = latest[latest["metric"] == m]
                 val = row.iloc[0]["value"] if not row.empty else None
-                if val:
+                if val is not None:
                     display = f"${val/1e9:.1f}B" if abs(val) >= 1e9 else f"${val/1e6:.1f}M"
                     cols[i].metric(m.replace("_", " ").title(), display)
                 else:
@@ -212,6 +213,7 @@ with tab_research:
                     intel = generate_intelligence(s["signal_id"], ticker, company_meta.get("sector"), s.get("evidence", ""))
                     with st.expander(f"🚨 {intel['title']} (Priority: {s['severity']})", expanded=True):
                         st.write(f"**What Changed:** {intel['what_changed']}")
+                        st.write(f"**Why It Matters:** {intel['why_it_matters']}")
                         st.write("**Investigate:**")
                         for item in intel["investigate"]:
                             st.write(f"- {item}")
@@ -223,7 +225,7 @@ with tab_research:
             if company_peers:
                 st.dataframe(pd.DataFrame(company_peers), use_container_width=True, hide_index=True)
             else:
-                st.info("No peer context calculated.")
+                st.info("Peer context unavailable — peer financial observations have not been refreshed.")
                 
             st.markdown("### Corporate Events & Evidence")
             events = rows(db, "SELECT type, filed, description, source_url FROM events WHERE company=? ORDER BY filed DESC LIMIT 10", (ticker,))

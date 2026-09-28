@@ -33,6 +33,10 @@ CREATE TABLE IF NOT EXISTS peer_context(
     version TEXT,
     UNIQUE(company, metric, version)
 );
+
+CREATE TABLE IF NOT EXISTS portfolio(
+    ticker TEXT PRIMARY KEY, shares REAL, weight REAL, exposure REAL, cost_basis REAL
+);
 CREATE TABLE IF NOT EXISTS system_state(
     key TEXT PRIMARY KEY, value TEXT
 );
@@ -41,7 +45,10 @@ CREATE TABLE IF NOT EXISTS system_state(
 
 def connect(path="data/radar.sqlite"):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
-    c = sqlite3.connect(path)
+    # Use standard sqlite defaults but enable WAL
+    c = sqlite3.connect(path, timeout=30.0)
+    c.execute("PRAGMA journal_mode=WAL")
+    c.execute("PRAGMA synchronous=NORMAL")
     c.row_factory = sqlite3.Row
     c.executescript(DDL)
     # Safely migrate existing databases
@@ -301,3 +308,14 @@ def load_observations_for_companies(c, companies):
             bool(r["comparable"]), r.get("reason"), start_dt,
         ))
     return out
+
+def save_portfolio(c, rows):
+    for r in rows:
+        c.execute(
+            "INSERT OR REPLACE INTO portfolio VALUES(?,?,?,?,?)",
+            (r["ticker"], r.get("shares"), r.get("weight"), r.get("exposure"), r.get("cost_basis"))
+        )
+    c.commit()
+
+def load_portfolio(c):
+    return rows(c, "SELECT * FROM portfolio")

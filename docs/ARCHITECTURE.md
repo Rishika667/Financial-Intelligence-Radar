@@ -7,7 +7,7 @@ Ingestion is callable through pipeline functions and the UI. An operator sets th
 
 The Portfolio tab displays actionable signals for active watchlist companies only. The watchlist defaults to inactive for new companies and is saved explicitly by the user. Signals in Research Mode include an evidence drill-down that exposes the full chain: signal → explanation → evidence observations (current/prior, derived_from, period info) → XBRL provenance (concept, accession, form, filing date, raw value, SEC source URL).
 
-Peer context is generated within explicitly configured peer groups and rendered in the UI. Restatements and amended filings are deterministically handled (later filing supersedes previous). Dimensional facts are strictly ignored to prevent cross-contamination.
+Peer context is generated within dynamic peer groups and rendered in the UI. Restatements and amended filings are deterministically handled (later filing supersedes previous). Dimensional facts are strictly ignored to prevent cross-contamination.
 
 Observation identity is company + metric + period_end + period_type + unit + period_start. Repeated SEC refreshes update existing observations idempotently via a unique SQLite index.
 

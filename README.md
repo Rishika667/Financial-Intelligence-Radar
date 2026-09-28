@@ -23,7 +23,7 @@ The application creates `data/radar.sqlite` locally and preserves SEC JSON under
 3. **Signal Triage:** Active signals are shown only for watched companies. Each signal has severity (analyst attention priority), confidence, and evidence.
 4. **Signal Drill-Down:** In Research Mode, expand any signal to see the full evidence chain: current/prior observations, derived_from lineage, XBRL concepts, accession numbers, filing dates, and SEC source URLs.
 5. **Filing Events:** 8-K events are extracted deterministically and presented separately from financial signals. The analyst determines causation.
-6. **Peer Context:** Peer comparisons are computed within explicitly configured peer groups with strict compatibility requirements.
+6. **Peer Context:** Peer comparisons are computed within dynamic peer groups with strict compatibility requirements.
 
 ## Research Mode
 Drill into any company's financial observations, signals (with evidence drill-down), filing events, peer context, and full XBRL provenance.
@@ -52,13 +52,13 @@ GitHub Actions uses Python 3.11, compiles source and app.py, then runs pytest on
 No paid API, API key, or cloud service is required.
 
 ## Intentional limitations
-- **Historical Coverage Bound.** Current SEC submissions are supplemented with SEC historical submission JSON files when historical fetching is enabled. Actual coverage depends on available SEC submission history. This is not a guaranteed fixed 7-10 year warehouse. Refresh is still manual.
+- **Historical Coverage Bound.** Ingestion uses the SEC’s ‘recent’ submissions index. This bounds historical context to approximately the most recent 1,000 filings per company. The system does not claim guaranteed 7–10 year coverage; actual depth depends on filing frequency.
 - **US-GAAP scope only.** XBRL concept mapping covers a curated set of US-GAAP tags. IFRS taxonomies are not supported.
 - **No runtime FX conversion.** All monetary comparisons require matching units; USD vs EUR observations are suppressed, not converted.
 - **Heuristic fiscal-period classification.** Quarter/YTD/annual periods are inferred from date ranges (80–100 days = quarter, etc.). Non-standard fiscal calendars may misclassify.
 - **Amendment/later-filing precedence, not semantic restatement detection.** Later filings for the same period supersede earlier ones deterministically. The system does not semantically parse whether a value change constitutes a “restatement.”
 - **Dimensional-fact suppression.** Facts with segment/axis/member dimensions are excluded to prevent treating dimensional breakdowns as consolidated totals.
-- **Deterministic 8-K event extraction.** Events are extracted via conservative regex patterns (precision over recall). No LLM/NLP is used. Coverage is limited to the 10 most recent 8-K filings per company.
-- **Bounded peer groups.** Peer groups are explicitly configured (24-company universe). The system does not automatically discover or expand peers.
+- **Deterministic 8-K event extraction.** Events are extracted via conservative regex patterns (precision over recall). No LLM/NLP is used. Coverage is limited to the 5 most recent 8-K filings per company.
+- **Bounded peer groups.** Peer groups are explicitly configured (50-company universe). The system does not automatically discover or expand peers.
 - **Manual SEC refresh.** Data refresh is operator-initiated, not scheduled.
 - **No investment recommendations, valuation, or prediction.**

@@ -283,7 +283,7 @@ def test_production_peer_pipeline(tmp_path, monkeypatch):
             def get(*a, **kw):
                 raise RuntimeError("no 8-K fetch in test")
 
-        def submissions(self, cik, fetch_historical=False):
+        def submissions(self, cik):
             return {
                 "filings": {
                     "recent": {
@@ -318,12 +318,12 @@ def test_production_peer_pipeline(tmp_path, monkeypatch):
             }
 
     from financial_radar.pipeline import ingest_company
-    import financial_radar.pipeline
+    import financial_radar.peers
 
     monkeypatch.setattr(
-        financial_radar.pipeline,
+        financial_radar.peers,
         "load_peer_groups",
-        lambda p="config/peer_groups.json": pg,
+        lambda p="config/universe.json": pg,
     )
 
     # Ingest peer DEF first
@@ -332,6 +332,7 @@ def test_production_peer_pipeline(tmp_path, monkeypatch):
 
     # Ingest primary ABC — peer context should load DEF from DB
     res = ingest_company(MockClient(), c, {"ticker": "ABC", "cik": "1"})
+    financial_radar.pipeline.refresh_peer_contexts(c, ["ABC", "DEF", "GHI"])
 
     # Verify peer context was generated
     pctx = rows(

@@ -233,7 +233,7 @@ def ingest_company(client, c, company):
     return {
         "observations": len(obs),
         "signals": len(sig),
-        "peer_group": peer_ctx.get("group_id"),
+        "peer_group": None,
         "events": events_found,
     }
 
@@ -283,16 +283,14 @@ def ingest_events(company, filing, text, c):
 def refresh_peer_contexts(c, active_tickers):
     import logging
     logger = logging.getLogger(__name__)
-    try:
-        from .store import load_observations_for_companies, clear_peer_context, save_peer_context
-        from .peers import load_peer_groups, peer_context_for_company
-        pg = load_peer_groups("config/universe.json")
-        
-        all_obs = load_observations_for_companies(c, active_tickers)
-        
-        for t in active_tickers:
-            clear_peer_context(c, t)
-            peer_ctx = peer_context_for_company(t, all_obs, pg)
-            save_peer_context(c, t, peer_ctx)
-    except Exception as e:
-        logger.error(f"Failed to refresh peer contexts: {e}")
+    
+    from .store import load_observations_for_companies, clear_peer_context, save_peer_context
+    from .peers import load_peer_groups, peer_context_for_company
+    pg = load_peer_groups("config/universe.json")
+    
+    all_obs = load_observations_for_companies(c, active_tickers)
+    
+    for t in active_tickers:
+        clear_peer_context(c, t)
+        peer_ctx = peer_context_for_company(t, all_obs, pg)
+        save_peer_context(c, t, peer_ctx)

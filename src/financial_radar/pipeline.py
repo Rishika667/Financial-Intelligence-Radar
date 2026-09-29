@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 FORMS = {"10-K", "10-Q", "8-K", "20-F", "6-K", "10-K/A", "10-Q/A", "8-K/A"}
 
 
-def load_universe(path="config/universe.json"):
+def load_universe(path="config/sp500_representative_50_2026.json"):
     return json.loads(Path(path).read_text())["companies"]
 
 
@@ -125,14 +125,26 @@ def evaluate(company, items, sector="Unknown"):
 
     def pair(m):
         return _comparable_pair(items, m, pt)
+        
+    def _suppress(id):
+        from .models import Signal
+        return Signal(id, company, "UNKNOWN", "LOW", "Not applicable to Financials sector", (), suppressed_reason="Sector Context (Financials)")
 
     rev, prevrev = pair("revenue")
     ar, prevar = _comparable_pair(items, "accounts_receivable", "INSTANT")
     inv, previnv = _comparable_pair(items, "inventory", "INSTANT")
 
+    if sector == "Financials":
+        out.append(_suppress("RECEIVABLES_REVENUE_DIVERGENCE"))
+        out.append(_suppress("INVENTORY_SALES_DIVERGENCE"))
+        out.append(_suppress("FREE_CASH_FLOW_DETERIORATION"))
+        out.append(_suppress("DEBT_OPERATING_INCOME_DETERIORATION"))
+        out.append(_suppress("LIQUIDITY_COMPRESSION"))
+
     # Signal 1: Receivables-revenue divergence
     if rev and prevrev and ar and prevar:
-        out.append(divergence("RECEIVABLES_REVENUE_DIVERGENCE", ar, rev, prevar, prevrev))
+        if sector != "Financials":
+            out.append(divergence("RECEIVABLES_REVENUE_DIVERGENCE", ar, rev, prevar, prevrev))
     # Signal 2: Inventory-sales divergence
     if rev and prevrev and inv and previnv:
         if sector != "Financials":
@@ -176,17 +188,20 @@ def evaluate(company, items, sector="Unknown"):
         out.append(cash_conversion(ocf, ni, pocf, pni))
     # Signal 6: FCF deterioration
     if ocf and cap and pocf and pcap:
-        out.append(
-            fcf_deterioration(
-                free_cash_flow(ocf, cap), free_cash_flow(pocf, pcap)
+        if sector != "Financials":
+            out.append(
+                fcf_deterioration(
+                    free_cash_flow(ocf, cap), free_cash_flow(pocf, pcap)
+                )
             )
-        )
     # Signal 7: Leverage/interest burden
     if debt_cur and op and pdebt and pop:
-        out.append(leverage(debt_cur, op, pdebt, pop))
+        if sector != "Financials":
+            out.append(leverage(debt_cur, op, pdebt, pop))
     # Signal 8: Liquidity compression
     if cash and cl and pcash and pcl:
-        out.append(liquidity(cash, cl, pcash, pcl))
+        if sector != "Financials":
+            out.append(liquidity(cash, cl, pcash, pcl))
     # Signal 9: Share-count dilution
     if shares and pshares:
         out.append(dilution(shares, pshares))
@@ -286,7 +301,7 @@ def refresh_peer_contexts(c, active_tickers):
     
     from .store import load_observations_for_companies, clear_peer_context, save_peer_context
     from .peers import load_peer_groups, peer_context_for_company
-    pg = load_peer_groups("config/universe.json")
+    pg = load_peer_groups("config/sp500_representative_50_2026.json")
     
     all_obs = load_observations_for_companies(c, active_tickers)
     

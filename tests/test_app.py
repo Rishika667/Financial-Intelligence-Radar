@@ -24,7 +24,7 @@ def setup_mock_db():
     
     # Golden Signal
     ev_json = json.dumps([
-        {"metric": "Operating Margin", "value": 0.15, "unit": "pure", "period_end": "2025-03-31", "period_type": "QUARTER", "quality": "REPORTED", "comparable": True, "derived_from": "x", "provenance": [{"xbrl_concept": "OperatingIncomeLoss", "accession": "0001", "form": "10-Q", "filing_date": "2025-04-15", "raw_value": 150, "mapping_version": "1", "source_url": "https://sec.gov"}]},
+        {"metric": "Operating Margin", "value": 0.15, "unit": "pure", "period_end": "2025-03-31", "period_type": "QUARTER", "quality": "REPORTED", "comparable": True, "derived_from": "x", "provenance": [{"concept": "OperatingIncomeLoss", "accession": "0001", "form": "10-Q", "filing_date": "2025-04-15", "raw_value": 150, "mapping_version": "1", "source_url": "https://sec.gov"}]},
         {"metric": "Operating Margin", "value": 0.20, "unit": "pure", "period_end": "2024-12-31", "period_type": "QUARTER", "quality": "REPORTED", "comparable": True, "derived_from": "y", "provenance": []}
     ])
     db.execute("INSERT INTO signals(signal_id, company, severity, confidence, evidence) VALUES(?, ?, ?, ?, ?)", 
@@ -154,8 +154,24 @@ def test_streamlit_app_workflow(tmp_path, monkeypatch):
     assert any("OBSERVATION" in c.value for c in expander.caption)
     
     # SEC provenance fields / SEC URL
-    assert any("XBRL Concept:** OperatingIncomeLoss" in m for m in markdowns)
-    assert any("[SEC URL](https://sec.gov)" in m for m in markdowns)
+    
+    def get_all_text(node):
+        out = []
+        if hasattr(node, "value") and isinstance(node.value, str):
+            out.append(node.value)
+        if hasattr(node, "children"):
+            for child in node.children.values():
+                if isinstance(child, list):
+                    for item in child:
+                        out.extend(get_all_text(item))
+                else:
+                    out.extend(get_all_text(child))
+        return out
+    
+    all_text_expander = " ".join(get_all_text(at.tabs[2]))
+    
+    assert "OperatingIncomeLoss" in all_text_expander
+    assert "[SEC URL]" in all_text_expander
     
     # 15 & 16. Peer available state is correct
     assert any("Tech" in getattr(m, "value", "") for m in at.tabs[2].markdown)

@@ -23,7 +23,7 @@ db = connect()
 try:
     universe = load_universe()
 except FileNotFoundError:
-    st.error("config/universe.json not found. Cannot load company universe.")
+    st.error("config/sp500_representative_50_2026.json not found. Cannot load company universe.")
     st.stop()
 
 existing = {r["ticker"] for r in rows(db, "SELECT ticker FROM watchlist WHERE active=1")}
@@ -200,7 +200,7 @@ with tab_dashboard:
             
             st.markdown("### Portfolio Attention Summary")
             col1, col2, col3, col4 = st.columns(4)
-            col1.metric("Active Holdings", len(active_tickers))
+            col1.metric("Monitored Companies", len(active_tickers))
             col2.metric("Total Signals", len(signals))
             col3.metric("High Priority", len([s for s in signals if s["severity"] == "HIGH"]))
             col4.metric("Companies with Signals", len(set(s["company"] for s in signals)))
@@ -212,7 +212,7 @@ with tab_research:
     
     if ticker:
         company_meta = next((x for x in universe if x["ticker"] == ticker), None)
-        st.subheader(f"🔎 {ticker} — {company_meta.get('title', 'Unknown')} ({company_meta.get('sector', 'Unknown')})")
+        st.subheader(f"🔍 {ticker} — {company_meta.get('title', 'Unknown')} ({company_meta.get('sector', 'Unknown')})")
         
         obs = rows(db, "SELECT * FROM observations WHERE company=? ORDER BY period_end DESC", (ticker,))
         if obs:
@@ -247,59 +247,67 @@ with tab_research:
                 st.error("No valid financial period available.")
                 
             st.markdown("### What Changed? & Investigation")
-            company_signals = rows(db, "SELECT * FROM signals WHERE company=? AND suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC", (ticker,))
+            company_signals = rows(db, "SELECT * FROM signals WHERE company=? ORDER BY CASE WHEN suppressed IS NOT NULL THEN 5 WHEN severity = 'HIGH' THEN 1 WHEN severity = 'MODERATE' THEN 2 WHEN severity = 'LOW' THEN 3 ELSE 4 END ASC", (ticker,))
             if company_signals:
                 for s in company_signals:
-                    ev_str = s.get("evidence", "")
-                    intel = generate_intelligence(s["signal_id"], ticker, company_meta.get("sector"), ev_str)
+                    is_suppressed = bool(s.get("suppressed"))
                     
-                    with st.expander(f"🚨 {intel['title']} (Priority: {s['severity']})", expanded=True):
-                        st.write(f"**WHAT CHANGED:** {intel['what_changed']}")
-                        st.write(f"**WHY IT MATTERS:** {intel['why_it_matters']}")
-                        st.write("**INVESTIGATE:**")
-                        for item in intel["investigate"]:
-                            st.write(f"- {item}")
+                    if is_suppressed:
+                        with st.expander(f"⚠️ SUPPRESSED: {s['signal_id'].replace('_', ' ').title()}", expanded=False):
+                            st.info(f"**Suppressed Reason:** {s['suppressed']}")
+                            st.write(s.get("explanation", ""))
+                    else:
+                        ev_str = s.get("evidence", "")
+                        intel = generate_intelligence(s["signal_id"], ticker, company_meta.get("sector"), ev_str)
+                        
+                        with st.expander(f"🚨 {intel['title']} (Priority: {s['severity']})", expanded=True):
+                            st.write(f"**WHAT CHANGED:** {intel['what_changed']}")
+                            st.write(f"**WHY IT MATTERS:** {intel['why_it_matters']}")
+                            st.write("**INVESTIGATE:**")
+                            for item in intel["investigate"]:
+                                st.write(f"- {item}")
                             
-                        st.write("**Evidence Trail:**")
-                        try:
-                            ev_json = json.loads(ev_str)
-                            if isinstance(ev_json, list) and ev_json:
-                                for ev_item in ev_json:
-                                    # True Analyst Evidence Drill-Down
-                                    prov = ev_item.get("provenance", [])
-                                    
-                                    cols_ev = st.columns([1, 1])
-                                    with cols_ev[0]:
-                                        st.caption("OBSERVATION")
-                                        st.write(f"**Metric:** {ev_item.get('metric', 'N/A')}")
-                                        val = ev_item.get('value')
-                                        st.write(f"**Value:** {'$0' if val == 0 else val}")
-                                        st.write(f"**Unit:** {ev_item.get('unit', 'N/A')}")
-                                        st.write(f"**Period End:** {ev_item.get('period_end', 'N/A')}")
-                                        st.write(f"**Period Type:** {ev_item.get('period_type', 'N/A')}")
-                                        st.write(f"**Quality:** {ev_item.get('quality', 'N/A')}")
-                                        st.write(f"**Comparable:** {ev_item.get('comparable', 'N/A')}")
-                                        st.write(f"**Derived From:** {ev_item.get('derived_from', 'N/A')}")
-                                    
-                                    with cols_ev[1]:
-                                        st.caption("PROVENANCE (SOURCE)")
-                                        if prov and len(prov) > 0:
-                                            p = prov[0]
-                                            st.write(f"**XBRL Concept:** {p.get('xbrl_concept', 'N/A')}")
-                                            st.write(f"**Accession:** {p.get('accession', 'N/A')}")
-                                            st.write(f"**Form:** {p.get('form', 'N/A')}")
-                                            st.write(f"**Filing Date:** {p.get('filing_date', 'N/A')}")
-                                            st.write(f"**Raw Value:** {p.get('raw_value', 'N/A')}")
-                                            st.write(f"**Mapping Version:** {p.get('mapping_version', 'N/A')}")
-                                            url = p.get('source_url', '#')
-                                            st.markdown(f"**[SEC URL]({url})**")
-                                        else:
-                                            st.write("No direct provenance available (e.g., derived metric).")
-                                    st.divider()
-                            else:
-                                st.caption("No evidence objects provided.")
-                        except Exception as e:
-                            st.caption(f"Could not parse evidence: {e}")
+                            st.write("**Evidence Trail:**")
+                            try:
+                                ev_json = json.loads(ev_str)
+                                if isinstance(ev_json, list) and ev_json:
+                                    for ev_item in ev_json:
+                                        # True Analyst Evidence Drill-Down
+                                        prov = ev_item.get("provenance", [])
+                                        
+                                        cols_ev = st.columns([1, 1])
+                                        with cols_ev[0]:
+                                            st.caption("OBSERVATION")
+                                            st.write(f"**Metric:** {ev_item.get('metric', 'N/A')}")
+                                            val = ev_item.get('value')
+                                            st.write(f"**Value:** {'$0' if val == 0 else val}")
+                                            st.write(f"**Unit:** {ev_item.get('unit', 'N/A')}")
+                                            st.write(f"**Period End:** {ev_item.get('period_end', 'N/A')}")
+                                            st.write(f"**Period Type:** {ev_item.get('period_type', 'N/A')}")
+                                            st.write(f"**Quality:** {ev_item.get('quality', 'N/A')}")
+                                            st.write(f"**Comparable:** {ev_item.get('comparable', 'N/A')}")
+                                            st.write(f"**Derived From:** {ev_item.get('derived_from', 'N/A')}")
+                                        
+                                        with cols_ev[1]:
+                                            st.caption("PROVENANCE (SOURCE)")
+                                            if prov and len(prov) > 0:
+                                                p = prov[0]
+                                                st.write(f"**XBRL Concept:** {p.get('concept', 'N/A')}")
+                                                st.write(f"**Accession:** {p.get('accession', 'N/A')}")
+                                                st.write(f"**Form:** {p.get('form', 'N/A')}")
+                                                st.write(f"**Filing Date:** {p.get('filing_date', 'N/A')}")
+                                                st.write(f"**Retrieval Time:** {p.get('retrieval_timestamp', 'N/A')}")
+                                                st.write(f"**Raw Value:** {p.get('raw_value', 'N/A')}")
+                                                st.write(f"**Mapping Version:** {p.get('mapping_version', 'N/A')}")
+                                                url = p.get('source_url', '#')
+                                                st.markdown(f"**[SEC URL]({url})**")
+                                            else:
+                                                st.write("No direct provenance available (e.g., derived metric).")
+                                        st.divider()
+                                else:
+                                    st.caption("No evidence objects provided.")
+                            except Exception as e:
+                                st.caption(f"Could not parse evidence: {e}")
             else:
                 st.success("No critical deterioration signals detected.")
                 

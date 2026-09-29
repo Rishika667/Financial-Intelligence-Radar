@@ -2,13 +2,16 @@ import re
 import hashlib
 
 PATTERNS = {
+    "earnings_release": r"(?i)\bitem 2\.02\b|\bresults of operations\b",
+    "leadership_change": r"(?i)\bitem 5\.02\b|\bdeparture of directors\b|\bappointment of certain officers\b",
+    "guidance_update": r"(?i)\bguidance\b|\boutlook\b|\bfinancial expectations\b",
     "acquisition": r"\b(acquisitions?|mergers?|acquired|business combinations?)\b",
     "divestiture": r"\b(divestitures?|dispose[ds]?|sold .{0,30}business)\b",
     "debt": r"\b(refinanc|credit facility|notes due|debt issuance|term loan)\b",
     "equity": r"\b(equity offering|stock issuance|secondary offering)\b",
     "buyback": r"\b(repurchases?|buybacks?|share repurchases?)\b",
     "restructuring": r"\brestructur",
-    "material_agreement": r"material definitive agreement",
+    "material_agreement": r"(?i)\bitem 1\.01\b|material definitive agreement",
     "legal": r"\b(litigation|lawsuits?|legal proceedings?|settlements?)\b",
     "segment": r"\b(segment change|reportable segments?|operating segments?)\b",
 }

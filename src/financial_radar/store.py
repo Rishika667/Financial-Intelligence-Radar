@@ -310,6 +310,7 @@ def load_observations_for_companies(c, companies):
     return out
 
 def save_portfolio(c, rows):
+    c.execute("DELETE FROM portfolio")
     for r in rows:
         c.execute(
             "INSERT OR REPLACE INTO portfolio VALUES(?,?,?,?,?)",

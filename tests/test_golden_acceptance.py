@@ -145,3 +145,47 @@ def test_no_aggressive_fraud_assertions():
         assert "misconduct" not in text
         assert "aggressive revenue" not in text
         assert "lower quality of earnings" not in text
+
+
+def test_earnings_event_detection():
+    from financial_radar.events import extract_events
+    filing = {"accessionNumber": "0001", "filingDate": "2025-01-01", "form": "8-K", "source_url": "url"}
+    text = "On January 1, 2025, ABC announced its financial results. Item 2.02 Results of Operations and Financial Condition. The company reported record revenue."
+    
+    events = extract_events("ABC", filing, text)
+    earnings = [e for e in events if e["type"] == "earnings_release"]
+    assert len(earnings) == 1
+    assert "Item 2.02" in earnings[0]["description"]
+
+
+def test_aapl_q3_golden_expectations():
+    from datetime import date
+    from financial_radar.pipeline import evaluate
+    from financial_radar.models import Observation, DataQuality
+    
+    # AAPL Q3 mock:
+    # Revenue: 90000 -> 95000
+    # Gross Profit: 40000 -> 45000 (Margin 44.4% -> 47.3%)
+    # Op Income: 25000 -> 30000 (Margin 27.7% -> 31.5%)
+    # Shares: 15.5B -> 15.1B
+    
+    def obs(m, v, u, d, pt="QUARTER"):
+        return Observation("AAPL", m, v, u, date.fromisoformat(d), pt, DataQuality.REPORTED, tuple(), tuple(), True, None, None)
+        
+    items = [
+        obs("revenue", 95000, "USD", "2026-06-30"),
+        obs("revenue", 90000, "USD", "2025-06-30"),
+        obs("gross_profit", 45000, "USD", "2026-06-30"),
+        obs("gross_profit", 40000, "USD", "2025-06-30"),
+        obs("operating_income", 30000, "USD", "2026-06-30"),
+        obs("operating_income", 25000, "USD", "2025-06-30"),
+        obs("share_count", 15.1e9, "shares", "2026-06-30"),
+        obs("share_count", 15.5e9, "shares", "2025-06-30")
+    ]
+    
+    signals = evaluate("AAPL", items, "Technology")
+    sig_ids = [s.signal_id for s in signals if s.suppressed_reason is None]
+    
+    assert "GROSS_MARGIN_COMPRESSION" not in sig_ids
+    assert "OPERATING_MARGIN_DETERIORATION" not in sig_ids
+    assert "SHARE_COUNT_DILUTION" not in sig_ids

@@ -120,7 +120,7 @@ def generate_intelligence(signal_id, company, sector, evidence_str):
                 "Analyze convertible debt conversions."
             ]
         }
-    elif signal_id == "MULTI_FACTOR_DETERIORATION":
+    elif signal_id == "MULTI_FACTOR_DETERIORATION_CLUSTER":
         return {
             "title": "Multi-Factor Deterioration Cluster",
             "what_changed": "3 or more fundamental deterioration signals fired simultaneously.",

@@ -47,6 +47,26 @@ def _format_value(val):
         return f"${val/1e6:.1f}M"
     return f"${val:,.0f}"
 
+def validate_portfolio_csv(df_port, universe_tickers):
+    if "ticker" not in df_port.columns:
+        return False, "CSV must contain 'ticker' column."
+    if not df_port["ticker"].isin(universe_tickers).all():
+        return False, "Some tickers are not in the 50-company representative universe."
+    if df_port["ticker"].duplicated().any():
+        return False, "Duplicate tickers found in CSV."
+        
+    for col in ["shares", "weight", "cost_basis"]:
+        if col in df_port.columns:
+            df_port[col] = pd.to_numeric(df_port[col], errors='coerce')
+            if df_port[col].isna().any():
+                return False, f"Column '{col}' must contain valid numeric values."
+            if col in ["shares", "cost_basis"] and (df_port[col] < 0).any():
+                return False, f"Column '{col}' cannot contain negative values."
+            if col == "weight" and ((df_port[col] < 0).any() or (df_port[col] > 1).any()):
+                return False, "Column 'weight' must be between 0 and 1 (decimal format)."
+    return True, ""
+
+
 # ---------------------------------------------------------------------------
 # Tabs
 # ---------------------------------------------------------------------------
@@ -79,37 +99,20 @@ with tab_portfolio:
             if uploaded_file is not None:
                 try:
                     df_port = pd.read_csv(uploaded_file)
-                    if "ticker" not in df_port.columns:
-                        st.error("CSV must contain 'ticker' column.")
-                    elif not df_port["ticker"].isin([x["ticker"] for x in universe]).all():
-                        st.error("Some tickers are not in the 50-company representative universe.")
-                    elif df_port["ticker"].duplicated().any():
-                        st.error("Duplicate tickers found in CSV.")
+                    valid, err_msg = validate_portfolio_csv(df_port, [x["ticker"] for x in universe])
+                    if not valid:
+                        st.error(err_msg)
                     else:
-                        valid = True
-                        for col in ["shares", "weight", "cost_basis"]:
-                            if col in df_port.columns:
-                                df_port[col] = pd.to_numeric(df_port[col], errors='coerce')
-                                if df_port[col].isna().any():
-                                    st.error(f"Column '{col}' must contain valid numeric values.")
-                                    valid = False
-                                if col in ["shares", "cost_basis"] and (df_port[col] < 0).any():
-                                    st.error(f"Column '{col}' cannot contain negative values.")
-                                    valid = False
-                                if col == "weight" and ((df_port[col] < 0).any() or (df_port[col] > 1).any()):
-                                    st.error("Column 'weight' must be between 0 and 1 (decimal format).")
-                                    valid = False
-                        if valid:
-                            st.dataframe(df_port, use_container_width=True, hide_index=True)
-                            if st.button("Apply Portfolio"):
-                                selected = df_port["ticker"].tolist()
-                                save_watchlist(db, [{**x, "active": x["ticker"] in selected} for x in universe])
-                                
-                                # Actual portfolio persistence
-                                records = df_port.to_dict(orient="records")
-                                save_portfolio(db, records)
-                                st.success("Portfolio persisted and applied to active watchlist.")
-                                st.rerun()
+                        st.dataframe(df_port, use_container_width=True, hide_index=True)
+                        if st.button("Apply Portfolio"):
+                            selected = df_port["ticker"].tolist()
+                            save_watchlist(db, [{**x, "active": x["ticker"] in selected} for x in universe])
+                            
+                            # Actual portfolio persistence
+                            records = df_port.to_dict(orient="records")
+                            save_portfolio(db, records)
+                            st.success("Portfolio persisted and applied to active watchlist.")
+                            st.rerun()
                 except Exception as e:
                     st.error(f"Error parsing CSV: {e}")
                     
@@ -209,7 +212,7 @@ with tab_research:
     
     if ticker:
         company_meta = next((x for x in universe if x["ticker"] == ticker), None)
-        st.subheader(f"🔍 {ticker} — {company_meta.get('title', 'Unknown')} ({company_meta.get('sector', 'Unknown')})")
+        st.subheader(f"🔎 {ticker} — {company_meta.get('title', 'Unknown')} ({company_meta.get('sector', 'Unknown')})")
         
         obs = rows(db, "SELECT * FROM observations WHERE company=? ORDER BY period_end DESC", (ticker,))
         if obs:

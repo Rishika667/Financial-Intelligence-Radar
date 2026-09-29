@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-from financial_radar.store import connect, rows, save_watchlist
+from financial_radar.store import connect, rows, save_watchlist, save_portfolio
 from financial_radar.pipeline import load_universe, ingest_company
 from financial_radar.core import SECClient
 from financial_radar.intelligence import generate_intelligence
@@ -26,7 +26,6 @@ except FileNotFoundError:
     st.error("config/universe.json not found. Cannot load company universe.")
     st.stop()
 
-# Ensure we have active watchlist tracker
 existing = {r["ticker"] for r in rows(db, "SELECT ticker FROM watchlist WHERE active=1")}
 if not existing:
     save_watchlist(db, universe)
@@ -40,6 +39,8 @@ sector_map = {x["ticker"]: x.get("sector", "Other") for x in universe}
 def _format_value(val):
     if val is None:
         return "N/A"
+    if val == 0:
+        return "$0"
     if abs(val) >= 1e9:
         return f"${val/1e9:.1f}B"
     elif abs(val) >= 1e6:
@@ -85,15 +86,39 @@ with tab_portfolio:
                     elif df_port["ticker"].duplicated().any():
                         st.error("Duplicate tickers found in CSV.")
                     else:
-                        st.dataframe(df_port, use_container_width=True, hide_index=True)
-                        if st.button("Apply Portfolio"):
-                            # Simple update of watchlist to active ones
-                            selected = df_port["ticker"].tolist()
-                            save_watchlist(db, [{**x, "active": x["ticker"] in selected} for x in universe])
-                            st.success("Portfolio applied to active watchlist.")
-                            st.rerun()
+                        valid = True
+                        for col in ["shares", "weight", "cost_basis"]:
+                            if col in df_port.columns:
+                                df_port[col] = pd.to_numeric(df_port[col], errors='coerce')
+                                if df_port[col].isna().any():
+                                    st.error(f"Column '{col}' must contain valid numeric values.")
+                                    valid = False
+                                if col in ["shares", "cost_basis"] and (df_port[col] < 0).any():
+                                    st.error(f"Column '{col}' cannot contain negative values.")
+                                    valid = False
+                                if col == "weight" and ((df_port[col] < 0).any() or (df_port[col] > 1).any()):
+                                    st.error("Column 'weight' must be between 0 and 1 (decimal format).")
+                                    valid = False
+                        if valid:
+                            st.dataframe(df_port, use_container_width=True, hide_index=True)
+                            if st.button("Apply Portfolio"):
+                                selected = df_port["ticker"].tolist()
+                                save_watchlist(db, [{**x, "active": x["ticker"] in selected} for x in universe])
+                                
+                                # Actual portfolio persistence
+                                records = df_port.to_dict(orient="records")
+                                save_portfolio(db, records)
+                                st.success("Portfolio persisted and applied to active watchlist.")
+                                st.rerun()
                 except Exception as e:
                     st.error(f"Error parsing CSV: {e}")
+                    
+        # Clean portfolio summary
+        port_rows = rows(db, "SELECT * FROM portfolio")
+        if port_rows:
+            st.markdown("### Portfolio Summary")
+            df_curr_port = pd.DataFrame(port_rows)
+            st.dataframe(df_curr_port, use_container_width=True, hide_index=True)
 
     with st.expander("Refresh SEC Data", expanded=False):
         contact = st.text_input("SEC User-Agent contact email", value=os.getenv("SEC_USER_AGENT", ""), help="Required by SEC policy.")
@@ -146,7 +171,6 @@ with tab_dashboard:
         st.info("No active companies. Add to watchlist or portfolio.")
     else:
         placeholders = ",".join("?" * len(active_tickers))
-        # Ensure HIGH > MODERATE > LOW via CASE statement
         signals = rows(
             db,
             f"SELECT * FROM signals WHERE company IN ({placeholders}) AND suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC",
@@ -191,35 +215,33 @@ with tab_research:
         if obs:
             df_obs = pd.DataFrame(obs)
             
-            # Latest Valid Financial Period
+            # Latest Valid Financial Period logic
             valid_qualities = ["REPORTED", "DERIVED", "AMENDED"]
-            # Exclude enum prefixes if present
-            valid_obs = df_obs[df_obs["quality"].astype(str).apply(lambda x: x.split(".")[-1] in valid_qualities)]
+            valid_obs = df_obs[df_obs["quality"].astype(str).apply(lambda x: str(x).split(".")[-1] in valid_qualities)]
             
             if not valid_obs.empty:
                 latest_period = valid_obs["period_end"].max()
+                st.caption(f"**Latest Valid Financial Period:** {latest_period}")
+                
+                st.markdown("### Executive Snapshot")
+                latest = df_obs[df_obs["period_end"] == latest_period]
+                metrics = ["revenue", "gross_profit", "operating_income", "operating_cash_flow"]
+                cols = st.columns(len(metrics))
+                for i, m in enumerate(metrics):
+                    row = latest[latest["metric"] == m]
+                    val = row.iloc[0]["value"] if not row.empty else None
+                    cols[i].metric(m.replace("_", " ").title(), _format_value(val))
+                        
+                st.markdown("### Historical Trends")
+                hist_df = df_obs[df_obs["period_type"] == "QUARTER"]
+                if not hist_df.empty:
+                    metric_sel = st.selectbox("Select Metric", hist_df["metric"].unique().tolist())
+                    filtered_hist = hist_df[hist_df["metric"] == metric_sel]
+                    if not filtered_hist.empty:
+                        fig = px.line(filtered_hist, x="period_end", y="value", title=f"{metric_sel.replace('_', ' ').title()} (Quarterly)")
+                        st.plotly_chart(fig, use_container_width=True)
             else:
-                latest_period = df_obs["period_end"].max()
-            
-            st.caption(f"**Latest Valid Financial Period:** {latest_period}")
-            
-            st.markdown("### Executive Snapshot")
-            latest = df_obs[df_obs["period_end"] == latest_period]
-            metrics = ["revenue", "gross_profit", "operating_income", "operating_cash_flow"]
-            cols = st.columns(len(metrics))
-            for i, m in enumerate(metrics):
-                row = latest[latest["metric"] == m]
-                val = row.iloc[0]["value"] if not row.empty else None
-                cols[i].metric(m.replace("_", " ").title(), _format_value(val))
-                    
-            st.markdown("### Historical Trends")
-            hist_df = df_obs[df_obs["period_type"] == "QUARTER"]
-            if not hist_df.empty:
-                metric_sel = st.multiselect("Select Metrics", hist_df["metric"].unique().tolist(), default=["revenue", "gross_profit", "operating_income"])
-                filtered_hist = hist_df[hist_df["metric"].isin(metric_sel)]
-                if not filtered_hist.empty:
-                    fig = px.line(filtered_hist, x="period_end", y="value", color="metric", title="Financial Trajectory (Quarterly)")
-                    st.plotly_chart(fig, use_container_width=True)
+                st.error("No valid financial period available.")
                 
             st.markdown("### What Changed? & Investigation")
             company_signals = rows(db, "SELECT * FROM signals WHERE company=? AND suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC", (ticker,))
@@ -235,28 +257,65 @@ with tab_research:
                         for item in intel["investigate"]:
                             st.write(f"- {item}")
                             
-                        # Evidence Drill-down
                         st.write("**Evidence Trail:**")
                         try:
                             ev_json = json.loads(ev_str)
                             if isinstance(ev_json, list) and ev_json:
-                                ev_df = pd.DataFrame(ev_json)
-                                st.dataframe(ev_df, use_container_width=True, hide_index=True)
+                                for ev_item in ev_json:
+                                    # True Analyst Evidence Drill-Down
+                                    prov = ev_item.get("provenance", [])
+                                    
+                                    cols_ev = st.columns([1, 1])
+                                    with cols_ev[0]:
+                                        st.caption("OBSERVATION")
+                                        st.write(f"**Metric:** {ev_item.get('metric', 'N/A')}")
+                                        val = ev_item.get('value')
+                                        st.write(f"**Value:** {'$0' if val == 0 else val}")
+                                        st.write(f"**Unit:** {ev_item.get('unit', 'N/A')}")
+                                        st.write(f"**Period End:** {ev_item.get('period_end', 'N/A')}")
+                                        st.write(f"**Period Type:** {ev_item.get('period_type', 'N/A')}")
+                                        st.write(f"**Quality:** {ev_item.get('quality', 'N/A')}")
+                                        st.write(f"**Comparable:** {ev_item.get('comparable', 'N/A')}")
+                                        st.write(f"**Derived From:** {ev_item.get('derived_from', 'N/A')}")
+                                    
+                                    with cols_ev[1]:
+                                        st.caption("PROVENANCE (SOURCE)")
+                                        if prov and len(prov) > 0:
+                                            p = prov[0]
+                                            st.write(f"**XBRL Concept:** {p.get('xbrl_concept', 'N/A')}")
+                                            st.write(f"**Accession:** {p.get('accession', 'N/A')}")
+                                            st.write(f"**Form:** {p.get('form', 'N/A')}")
+                                            st.write(f"**Filing Date:** {p.get('filing_date', 'N/A')}")
+                                            st.write(f"**Raw Value:** {p.get('raw_value', 'N/A')}")
+                                            st.write(f"**Mapping Version:** {p.get('mapping_version', 'N/A')}")
+                                            url = p.get('source_url', '#')
+                                            st.markdown(f"**[SEC URL]({url})**")
+                                        else:
+                                            st.write("No direct provenance available (e.g., derived metric).")
+                                    st.divider()
                             else:
-                                st.caption("No tabular evidence provided.")
-                        except Exception:
-                            st.caption("Could not parse evidence JSON.")
+                                st.caption("No evidence objects provided.")
+                        except Exception as e:
+                            st.caption(f"Could not parse evidence: {e}")
             else:
                 st.success("No critical deterioration signals detected.")
                 
             st.markdown("### Peer Context")
             company_peers = rows(db, "SELECT metric, company_value, peer_median, peer_min, peer_max, n_peers, group_id FROM peer_context WHERE company=?", (ticker,))
             if company_peers:
-                st.dataframe(pd.DataFrame(company_peers), use_container_width=True, hide_index=True)
+                n_peers = company_peers[0]["n_peers"] if company_peers else 0
+                if n_peers < 2:
+                    st.info(f"Peer group exists ({company_peers[0]['group_id']}), but fewer than 2 comparable peer observations exist.")
+                else:
+                    st.write(f"**Peer group:** {company_peers[0]['group_id']} | **Peer count:** {n_peers}")
+                    st.dataframe(pd.DataFrame(company_peers)[['metric', 'company_value', 'peer_median', 'peer_min', 'peer_max']], use_container_width=True, hide_index=True)
             else:
-                # Need to determine why it's missing
-                # If they are in universe but no peers have been ingested
-                st.info("Peer context unavailable — peer financial observations have not been refreshed or insufficient peers exist.")
+                # Need to determine if they even have a peer group
+                group = company_meta.get('sector')
+                if not group:
+                    st.info("No qualifying peer group exists for this company.")
+                else:
+                    st.info(f"Peer group exists ({group}) but peer observations are unavailable.")
                 
             st.markdown("### Corporate Events")
             events = rows(db, "SELECT type, filed, description, source_url, accession, form FROM events WHERE company=? ORDER BY filed DESC LIMIT 10", (ticker,))
@@ -264,10 +323,10 @@ with tab_research:
                 for e in events:
                     # Removed Completed heuristic, label explicitly
                     st.write(f"**{e['filed']} - {e['type'].upper()}**")
-                    st.write(f"*{e['description']}*")
+                    st.write(f"*{e['description']}* (Heuristic extraction)")
                     st.caption(f"Form: {e.get('form', 'Unknown')} | Accession: {e.get('accession', 'Unknown')} | [SEC Source]({e.get('source_url', '#')})")
                     st.divider()
             else:
-                st.info("No recent 8-K material events extracted.")
+                st.info("No recent material events extracted.")
         else:
             st.info("No data available. Refresh the company in the Portfolio tab.")

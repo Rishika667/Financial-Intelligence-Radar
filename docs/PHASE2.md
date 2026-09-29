@@ -1,1 +1,5 @@
-Phase 2 adds configured 24 issuer watchlist, versioned peers, conservative accepted-concept normalization, SQLite watchlist/observation persistence, focused document event taxonomy, and six deterministic signals. Unknown XBRL concepts remain NOT_REPORTED rather than guessed. Peer context is descriptive only. Event snippets are triage evidence, not semantic certainty.
+# Phase 2 Documentation
+
+Phase 2 implements a 50-company representative universe, sector-aware peer groups, SQLite persistence (portfolio, watchlist, observations, signals, and events), robust SEC EDGAR ingestion, and 10 deterministic financial signals.
+
+Unknown XBRL concepts remain `NOT_REPORTED` rather than guessed. The `app.py` dashboard surfaces actionable intel with full tabular drill-down into the raw JSON evidence, providing explicit provenance (Accession, Form, XBRL Concept, and Filing URL). Peer context distinguishes gracefully between missing data, inadequate comparable peers, and available metrics. Portfolio positions (via CSV import) are seamlessly saved and integrated.

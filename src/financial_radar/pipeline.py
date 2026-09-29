@@ -221,7 +221,7 @@ def evaluate(company, items, sector="Unknown"):
     return out + cluster(out)
 
 
-def compute_peer_context(company, observations, peer_groups_path="config/peer_groups.json"):
+def compute_peer_context(company, observations, peer_groups_path="config/sp500_representative_50_2026.json"):
     """Compute peer context for a company using configured peer groups."""
     try:
         pg = load_peer_groups(peer_groups_path)
@@ -387,7 +387,7 @@ def calculate_data_readiness(ticker, c):
         return ReadinessState.NOT_READY, "No observations found"
         
     metrics = set([o['metric'] for o in obs])
-    core = {'revenue', 'net_income', 'operating_income', 'total_assets', 'total_liabilities'}
+    core = {'revenue', 'net_income', 'operating_income', 'operating_cash_flow', 'cash_and_equivalents'}
     
     missing = core - metrics
     if not missing:

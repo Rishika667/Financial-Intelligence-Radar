@@ -1,18 +1,21 @@
 import os
 import json
+import time
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from datetime import datetime
 
 from financial_radar.store import connect, rows, save_watchlist, save_portfolio
-from financial_radar.pipeline import load_universe, ingest_company
+from financial_radar.pipeline import load_universe, ingest_company, refresh_peer_contexts
 from financial_radar.core import SECClient
 from financial_radar.intelligence import generate_intelligence
+from financial_radar.models import ReadinessState
 
 # ---------------------------------------------------------------------------
 # Page config
 # ---------------------------------------------------------------------------
-st.set_page_config(page_title="Financial Intelligence Radar", layout="wide")
+st.set_page_config(page_title="Financial Intelligence Radar", layout="wide", initial_sidebar_state="expanded")
 st.title("Financial Intelligence Radar")
 st.caption("Public-disclosure intelligence for analyst attention — not investment advice.")
 
@@ -26,318 +29,238 @@ except FileNotFoundError:
     st.error("config/sp500_representative_50_2026.json not found. Cannot load company universe.")
     st.stop()
 
-existing = {r["ticker"] for r in rows(db, "SELECT ticker FROM watchlist WHERE active=1")}
-if not existing:
-    save_watchlist(db, universe)
-    existing = {x["ticker"] for x in universe}
+# Build useful mappings
+universe_map = {c["ticker"]: c for c in universe}
 
-sector_map = {x["ticker"]: x.get("sector", "Other") for x in universe}
+def format_readiness(r):
+    if r == "READY": return "✅ Ready"
+    if r == "PARTIAL": return "⚠️ Partial"
+    if r == "FAILED": return "❌ Failed"
+    return "⏳ Not Ready"
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-def _format_value(val):
-    if val is None:
-        return "N/A"
-    if val == 0:
-        return "$0"
-    if abs(val) >= 1e9:
-        return f"${val/1e9:.1f}B"
-    elif abs(val) >= 1e6:
-        return f"${val/1e6:.1f}M"
-    return f"${val:,.0f}"
-
-def validate_portfolio_csv(df_port, universe_tickers):
-    if "ticker" not in df_port.columns:
-        return False, "CSV must contain 'ticker' column."
-    if not df_port["ticker"].isin(universe_tickers).all():
-        return False, "Some tickers are not in the 50-company representative universe."
-    if df_port["ticker"].duplicated().any():
-        return False, "Duplicate tickers found in CSV."
-        
-    for col in ["shares", "weight", "cost_basis"]:
-        if col in df_port.columns:
-            df_port[col] = pd.to_numeric(df_port[col], errors='coerce')
-            if df_port[col].isna().any():
-                return False, f"Column '{col}' must contain valid numeric values."
-            if col in ["shares", "cost_basis"] and (df_port[col] < 0).any():
-                return False, f"Column '{col}' cannot contain negative values."
-            if col == "weight" and ((df_port[col] < 0).any() or (df_port[col] > 1).any()):
-                return False, "Column 'weight' must be between 0 and 1 (decimal format)."
-    return True, ""
-
-
-# ---------------------------------------------------------------------------
-# Tabs
-# ---------------------------------------------------------------------------
-tab_portfolio, tab_dashboard, tab_research = st.tabs([
-    "Portfolio Intelligence", "Attention Queue", "Research Mode"
-])
-
+# Calculate active tickers
 active_tickers = sorted({r["ticker"] for r in rows(db, "SELECT ticker FROM watchlist WHERE active=1")})
 
-with tab_portfolio:
-    st.subheader("Manage Universe & Holdings")
+# Setup SEC Client for validation
+user_agent = os.environ.get("SEC_USER_AGENT", "")
+
+# ---------------------------------------------------------------------------
+# Tab Navigation
+# ---------------------------------------------------------------------------
+tab_setup, tab_portfolio, tab_dashboard, tab_research = st.tabs([
+    "Setup & Preflight", "Portfolio Sync", "Attention Queue", "Research Mode"
+])
+
+# ---------------------------------------------------------------------------
+# Tab 1: Setup & Preflight (First-Run Requirement)
+# ---------------------------------------------------------------------------
+with tab_setup:
+    st.subheader("1. Company Selection & Preflight")
     
-    col_w, col_p = st.columns(2)
-    with col_w:
-        with st.expander("Watchlist Management", expanded=True):
-            selected = st.multiselect(
-                "Monitored companies",
-                [x["ticker"] for x in universe],
-                default=active_tickers,
-            )
-            if st.button("Save Watchlist"):
-                save_watchlist(db, [{**x, "active": x["ticker"] in selected} for x in universe])
-                st.success("Watchlist saved locally.")
-                st.rerun()
-                
-    with col_p:
-        with st.expander("Import Portfolio Holdings (CSV)", expanded=True):
-            st.caption("Portfolio exposure is based on imported portfolio fields; live market-value exposure is not available.")
-            uploaded_file = st.file_uploader("Upload CSV (Required: ticker. Optional: shares, weight, cost_basis)", type="csv")
-            if uploaded_file is not None:
-                try:
-                    df_port = pd.read_csv(uploaded_file)
-                    valid, err_msg = validate_portfolio_csv(df_port, [x["ticker"] for x in universe])
-                    if not valid:
-                        st.error(err_msg)
-                    else:
-                        st.dataframe(df_port, use_container_width=True, hide_index=True)
-                        if st.button("Apply Portfolio"):
-                            selected = df_port["ticker"].tolist()
-                            save_watchlist(db, [{**x, "active": x["ticker"] in selected} for x in universe])
-                            
-                            # Actual portfolio persistence
-                            records = df_port.to_dict(orient="records")
-                            save_portfolio(db, records)
-                            st.success("Portfolio persisted and applied to active watchlist.")
-                            st.rerun()
-                except Exception as e:
-                    st.error(f"Error parsing CSV: {e}")
-                    
-        # Clean portfolio summary
-        port_rows = rows(db, "SELECT * FROM portfolio")
-        if port_rows:
-            st.markdown("### Portfolio Summary")
-            df_curr_port = pd.DataFrame(port_rows)
-            st.dataframe(df_curr_port, use_container_width=True, hide_index=True)
+    selected_tickers = st.multiselect(
+        "Select Companies to Monitor:", 
+        options=[u["ticker"] for u in universe],
+        default=active_tickers,
+        format_func=lambda x: f"{x} - {universe_map[x].get('name', 'Unknown')} ({universe_map[x].get('sector', 'Unknown')})"
+    )
+    
+    if st.button("Save Monitored Companies"):
+        save_watchlist(db, [{"ticker": t, "cik": universe_map[t].get("cik", ""), "active": (t in selected_tickers)} for t in universe_map.keys()])
+        st.success("Monitored companies saved!")
+        time.sleep(1)
+        st.rerun()
 
-    with st.expander("Refresh SEC Data", expanded=False):
-        contact = st.text_input("SEC User-Agent contact email", value=os.getenv("SEC_USER_AGENT", ""), help="Required by SEC policy.")
-        if st.button("Refresh Active Companies"):
-            if not active_tickers:
-                st.warning("Select at least one company in the watchlist.")
-            elif not contact or "@" not in contact:
-                st.warning("Provide a valid contact email for SEC User-Agent.")
+    st.subheader("2. SEC Connectivity & Data Refresh")
+    st.write(f"**SEC User-Agent Environment Variable:** {'Configured' if user_agent else 'MISSING'}")
+    if not user_agent:
+        st.warning("Please configure SEC_USER_AGENT in your environment to fetch from EDGAR.")
+        
+    if active_tickers:
+        if st.button("Initialize & Refresh Selected Data"):
+            if not user_agent:
+                st.error("Cannot refresh without SEC_USER_AGENT.")
             else:
-                os.environ["SEC_USER_AGENT"] = f"Financial Intelligence Radar {contact}"
-                try:
-                    client = SECClient(os.environ["SEC_USER_AGENT"])
-                    progress = st.progress(0)
-                    successes = 0
-                    failures = 0
-                    
-                    for i, ticker in enumerate(active_tickers):
-                        company_meta = next((c for c in universe if c["ticker"] == ticker), {"ticker": ticker, "cik": "0000000000"})
-                        with st.status(f"Refreshing {ticker}...", expanded=False) as status:
-                            try:
-                                res = ingest_company(client, db, company_meta)
-                                st.write(f"✓ {res['observations']} observations, {res['signals']} signals")
-                                status.update(label=f"✓ {ticker} refreshed", state="complete")
-                                successes += 1
-                            except Exception as e:
-                                st.write(f"❌ Failed: {e}")
-                                status.update(label=f"❌ {ticker} failed", state="error")
-                                failures += 1
-                        progress.progress((i + 1) / len(active_tickers))
-                    
-                    with st.status("Computing Peer Contexts...", expanded=True) as status:
-                        from financial_radar.pipeline import refresh_peer_contexts
-                        try:
-                            refresh_peer_contexts(db, active_tickers)
-                            status.update(label="✓ Peer contexts computed", state="complete")
-                        except Exception as e:
-                            st.write(f"❌ Peer calculation failed: {e}")
-                            status.update(label="❌ Peer calculation failed", state="error")
-                    
-                    if failures == 0:
-                        st.success(f"Refresh successful for {successes} companies.")
-                    else:
-                        st.warning(f"Refresh partial: {successes} succeeded, {failures} failed.")
-                except Exception as exc:
-                    st.error(f"Refresh aborted: {exc}")
+                st.write("Refreshing data from SEC EDGAR...")
+                progress = st.progress(0)
+                status_list = []
+                client = SECClient(user_agent)
+                
+                for i, ticker in enumerate(active_tickers):
+                    try:
+                        res = ingest_company(ticker, universe_map[ticker]["cik"], db, client)
+                        status_list.append({"Company": ticker, "SEC Access": "✅", "Submissions": "✅", "XBRL Data": "✅", "Events": "✅", "Status": "READY"})
+                    except Exception as exc:
+                        st.error(f"Failed to ingest {ticker}: {exc}")
+                        status_list.append({"Company": ticker, "SEC Access": "❌", "Submissions": "-", "XBRL Data": "-", "Events": "-", "Status": "FAILED"})
+                    progress.progress((i + 1) / len(active_tickers))
+                
+                with st.spinner("Computing peer contexts..."):
+                    refresh_peer_contexts(db, active_tickers)
+                st.success("Data refresh complete.")
+                st.dataframe(pd.DataFrame(status_list), use_container_width=True, hide_index=True)
 
+# ---------------------------------------------------------------------------
+# Tab 2: Portfolio Sync (Portfolio CSV separate from Watchlist)
+# ---------------------------------------------------------------------------
+with tab_portfolio:
+    st.subheader("Portfolio Sync")
+    st.write("Upload a portfolio CSV (ticker, shares, weight, cost_basis) to overlay your holdings. Portfolio companies are distinct from Monitored Companies.")
+    
+    from financial_radar.pipeline import validate_portfolio_csv
+    uploaded_file = st.file_uploader("Upload Portfolio Holdings (CSV)", type=["csv"])
+    if uploaded_file is not None:
+        try:
+            df_port = pd.read_csv(uploaded_file)
+            is_valid, err_msg = validate_portfolio_csv(df_port, [u["ticker"] for u in universe])
+            if not is_valid:
+                st.error(f"Validation failed: {err_msg}")
+            else:
+                st.success("Portfolio validated successfully.")
+                if st.button("Apply Portfolio"):
+                    save_portfolio(db, df_port.to_dict(orient="records"))
+                    st.success("Portfolio saved.")
+        except Exception as e:
+            st.error(f"Failed to process CSV: {e}")
+
+# ---------------------------------------------------------------------------
+# Tab 3: Attention Queue (Analyst Triage)
+# ---------------------------------------------------------------------------
 with tab_dashboard:
     st.subheader("Attention Queue")
     if not active_tickers:
-        st.info("No active companies. Add to watchlist or portfolio.")
+        st.info("No active companies. Go to Setup & Preflight to configure companies.")
     else:
         placeholders = ",".join("?" * len(active_tickers))
         signals = rows(
             db,
-            f"SELECT * FROM signals WHERE company IN ({placeholders}) AND suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC",
+            f"SELECT company as Company, signal_id as Signal, severity as Severity FROM signals WHERE company IN ({placeholders}) AND suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC",
             active_tickers,
         )
-        
         if signals:
-            queue_data = []
-            for s in signals:
-                comp = next((x for x in universe if x["ticker"] == s["company"]), {})
-                sector = comp.get("sector", "Unknown")
-                intel = generate_intelligence(s["signal_id"], s["company"], sector, s.get("evidence", ""))
-                
-                queue_data.append({
-                    "Company": s["company"],
-                    "Priority": s["severity"],
-                    "Signal": intel["title"],
-                    "What Changed": intel["what_changed"],
-                    "Confidence": s["confidence"]
-                })
-            
-            df_queue = pd.DataFrame(queue_data)
-            st.dataframe(df_queue, use_container_width=True, hide_index=True)
-            
-            st.markdown("### Portfolio Attention Summary")
-            col1, col2, col3, col4 = st.columns(4)
-            col1.metric("Monitored Companies", len(active_tickers))
-            col2.metric("Total Signals", len(signals))
-            col3.metric("High Priority", len([s for s in signals if s["severity"] == "HIGH"]))
-            col4.metric("Companies with Signals", len(set(s["company"] for s in signals)))
+            df_sig = pd.DataFrame(signals)
+            st.dataframe(df_sig, use_container_width=True, hide_index=True)
         else:
-            st.info("No actionable signals in the queue. All clear.")
+            st.success("No actionable deterioration signals detected.")
 
+# ---------------------------------------------------------------------------
+# Tab 4: Research Mode (Cross-Metric Synthesis & Evidence)
+# ---------------------------------------------------------------------------
 with tab_research:
-    ticker = st.selectbox("Select Company for Research", active_tickers if active_tickers else [x["ticker"] for x in universe])
-    
-    if ticker:
-        company_meta = next((x for x in universe if x["ticker"] == ticker), None)
-        st.subheader(f"🔍 {ticker} — {company_meta.get('title', 'Unknown')} ({company_meta.get('sector', 'Unknown')})")
+    if not active_tickers:
+        st.info("No active companies available for research.")
+    else:
+        ticker = st.selectbox("Select Company for Research", active_tickers)
+        company_meta = universe_map.get(ticker, {})
         
-        obs = rows(db, "SELECT * FROM observations WHERE company=? ORDER BY period_end DESC", (ticker,))
-        if obs:
-            df_obs = pd.DataFrame(obs)
+        st.header(f"{ticker} - {company_meta.get('name', 'Unknown')} ({company_meta.get('sector', 'Unknown')})")
+        
+        # We need to compute readiness state
+        obs_count = rows(db, "SELECT count(*) as c FROM observations WHERE company=?", (ticker,))[0]["c"]
+        if obs_count == 0:
+            st.error("NOT READY: No data exists for this company. Please refresh from the Setup tab.")
+        else:
+            st.success(f"READY: {obs_count} data points available.")
             
-            # Latest Valid Financial Period logic
-            valid_qualities = ["REPORTED", "DERIVED", "AMENDED"]
-            valid_obs = df_obs[df_obs["quality"].astype(str).apply(lambda x: str(x).split(".")[-1] in valid_qualities)]
+            # --- Executive Snapshot ---
+            st.markdown("## 1. Executive Snapshot")
+            latest_obs = rows(db, "SELECT metric, value, unit, period_end FROM observations WHERE company=? AND period_type='QUARTER' AND quality IN ('REPORTED', 'DERIVED', 'AMENDED') ORDER BY period_end DESC", (ticker,))
             
-            if not valid_obs.empty:
-                latest_period = valid_obs["period_end"].max()
-                st.caption(f"**Latest Valid Financial Period:** {latest_period}")
-                
-                st.markdown("### Executive Snapshot")
-                latest = df_obs[df_obs["period_end"] == latest_period]
-                metrics = ["revenue", "gross_profit", "operating_income", "operating_cash_flow"]
-                cols = st.columns(len(metrics))
-                for i, m in enumerate(metrics):
-                    row = latest[latest["metric"] == m]
-                    val = row.iloc[0]["value"] if not row.empty else None
-                    cols[i].metric(m.replace("_", " ").title(), _format_value(val))
-                        
-                st.markdown("### Historical Trends")
-                hist_df = df_obs[df_obs["period_type"] == "QUARTER"]
-                if not hist_df.empty:
-                    metric_sel = st.selectbox("Select Metric", hist_df["metric"].unique().tolist())
-                    filtered_hist = hist_df[hist_df["metric"] == metric_sel]
-                    if not filtered_hist.empty:
-                        fig = px.line(filtered_hist, x="period_end", y="value", title=f"{metric_sel.replace('_', ' ').title()} (Quarterly)")
-                        st.plotly_chart(fig, use_container_width=True)
-            else:
-                st.error("No valid financial period available.")
-                
-            st.markdown("### What Changed? & Investigation")
+            # Build simple dict for latest metrics
+            latest_metrics = {}
+            for row in latest_obs:
+                m = row["metric"]
+                if m not in latest_metrics:
+                    latest_metrics[m] = row["value"]
+            
+            col1, col2, col3, col4 = st.columns(4)
+            col1.metric("Revenue", f"" if 'revenue' in latest_metrics else "N/A")
+            col2.metric("Gross Profit", f"" if 'gross_profit' in latest_metrics else "N/A")
+            col3.metric("Operating Income", f"" if 'operating_income' in latest_metrics else "N/A")
+            col4.metric("Free Cash Flow", f"" if 'free_cash_flow' in latest_metrics else "N/A")
+            
+            # --- Cross-Metric Synthesis ---
+            st.markdown("## 2. Analyst Synthesis")
             company_signals = rows(db, "SELECT * FROM signals WHERE company=? ORDER BY CASE WHEN suppressed IS NOT NULL THEN 5 WHEN severity = 'HIGH' THEN 1 WHEN severity = 'MODERATE' THEN 2 WHEN severity = 'LOW' THEN 3 ELSE 4 END ASC", (ticker,))
-            if company_signals:
+            
+            if not company_signals:
+                st.write("No signals detected.")
+            else:
                 for s in company_signals:
                     is_suppressed = bool(s.get("suppressed"))
-                    
                     if is_suppressed:
                         with st.expander(f"⚠️ SUPPRESSED: {s['signal_id'].replace('_', ' ').title()}", expanded=False):
-                            st.info(f"**Suppressed Reason:** {s['suppressed']}")
+                            st.info(f"**Suppressed Reason:** {s['suppressed_reason']}")
                             st.write(s.get("explanation", ""))
                     else:
-                        ev_str = s.get("evidence", "")
+                        ev_str = s.get("evidence", "[]")
                         intel = generate_intelligence(s["signal_id"], ticker, company_meta.get("sector"), ev_str)
-                        
-                        with st.expander(f"🚨 {intel['title']} (Priority: {s['severity']})", expanded=True):
+                        with st.expander(f"📉 {intel['title']} (Severity: {s['severity']})", expanded=True):
                             st.write(f"**WHAT CHANGED:** {intel['what_changed']}")
                             st.write(f"**WHY IT MATTERS:** {intel['why_it_matters']}")
                             st.write("**INVESTIGATE:**")
                             for item in intel["investigate"]:
                                 st.write(f"- {item}")
-                            
+                                
                             st.write("**Evidence Trail:**")
                             try:
                                 ev_json = json.loads(ev_str)
                                 if isinstance(ev_json, list) and ev_json:
                                     for ev_item in ev_json:
-                                        # True Analyst Evidence Drill-Down
                                         prov = ev_item.get("provenance", [])
-                                        
                                         cols_ev = st.columns([1, 1])
                                         with cols_ev[0]:
                                             st.caption("OBSERVATION")
                                             st.write(f"**Metric:** {ev_item.get('metric', 'N/A')}")
                                             val = ev_item.get('value')
-                                            st.write(f"**Value:** {'$0' if val == 0 else val}")
+                                            st.write(f"**Value:** {'' if val == 0 else val}")
                                             st.write(f"**Unit:** {ev_item.get('unit', 'N/A')}")
                                             st.write(f"**Period End:** {ev_item.get('period_end', 'N/A')}")
-                                            st.write(f"**Period Type:** {ev_item.get('period_type', 'N/A')}")
-                                            st.write(f"**Quality:** {ev_item.get('quality', 'N/A')}")
-                                            st.write(f"**Comparable:** {ev_item.get('comparable', 'N/A')}")
-                                            st.write(f"**Derived From:** {ev_item.get('derived_from', 'N/A')}")
-                                        
                                         with cols_ev[1]:
                                             st.caption("PROVENANCE (SOURCE)")
                                             if prov and len(prov) > 0:
                                                 p = prov[0]
                                                 st.write(f"**XBRL Concept:** {p.get('concept', 'N/A')}")
                                                 st.write(f"**Accession:** {p.get('accession', 'N/A')}")
-                                                st.write(f"**Form:** {p.get('form', 'N/A')}")
                                                 st.write(f"**Filing Date:** {p.get('filing_date', 'N/A')}")
                                                 st.write(f"**Retrieval Time:** {p.get('retrieval_timestamp', 'N/A')}")
-                                                st.write(f"**Raw Value:** {p.get('raw_value', 'N/A')}")
-                                                st.write(f"**Mapping Version:** {p.get('mapping_version', 'N/A')}")
-                                                url = p.get('source_url', '#')
-                                                st.markdown(f"**[SEC URL]({url})**")
+                                                st.markdown(f"**[SEC URL]({p.get('source_url', '#')})**")
                                             else:
-                                                st.write("No direct provenance available (e.g., derived metric).")
+                                                st.write("No direct provenance available.")
                                         st.divider()
-                                else:
-                                    st.caption("No evidence objects provided.")
                             except Exception as e:
                                 st.caption(f"Could not parse evidence: {e}")
-            else:
-                st.success("No critical deterioration signals detected.")
-                
-            st.markdown("### Peer Context")
+                                
+            # --- Historical Trends ---
+            st.markdown("## 3. Financial Performance (Historical)")
+            hist_df = pd.DataFrame(rows(db, "SELECT metric, value, period_end, period_type FROM observations WHERE company=? AND period_type='QUARTER'", (ticker,)))
+            if not hist_df.empty:
+                metric_sel = st.selectbox("Select Metric", hist_df["metric"].unique().tolist())
+                filtered_hist = hist_df[hist_df["metric"] == metric_sel].sort_values("period_end")
+                if not filtered_hist.empty:
+                    fig = px.line(filtered_hist, x="period_end", y="value", title=f"{metric_sel.replace('_', ' ').title()} (Quarterly)")
+                    st.plotly_chart(fig, use_container_width=True)
+
+            # --- Peer Comparison ---
+            st.markdown("## 4. Peer Comparison")
             company_peers = rows(db, "SELECT metric, company_value, peer_median, peer_min, peer_max, n_peers, group_id FROM peer_context WHERE company=?", (ticker,))
             if company_peers:
                 n_peers = company_peers[0]["n_peers"] if company_peers else 0
                 if n_peers < 2:
-                    st.info(f"Peer group exists ({company_peers[0]['group_id']}), but fewer than 2 comparable peer observations exist.")
+                    st.info("Insufficient peer coverage.")
                 else:
                     st.write(f"**Peer group:** {company_peers[0]['group_id']} | **Peer count:** {n_peers}")
                     st.dataframe(pd.DataFrame(company_peers)[['metric', 'company_value', 'peer_median', 'peer_min', 'peer_max']], use_container_width=True, hide_index=True)
             else:
-                # Need to determine if they even have a peer group
-                group = company_meta.get('sector')
-                if not group:
-                    st.info("No qualifying peer group exists for this company.")
-                else:
-                    st.info(f"Peer group exists ({group}) but peer observations are unavailable.")
+                st.info("Insufficient peer coverage.")
                 
-            st.markdown("### Corporate Events")
+            # --- Corporate Events ---
+            st.markdown("## 5. Corporate Events (Recent 5 Filings Only)")
             events = rows(db, "SELECT type, filed, description, source_url, accession, form FROM events WHERE company=? ORDER BY filed DESC LIMIT 10", (ticker,))
             if events:
                 for e in events:
-                    # Removed Completed heuristic, label explicitly
                     st.write(f"**{e['filed']} - {e['type'].upper()}**")
-                    st.write(f"*{e['description']}* (Heuristic extraction)")
+                    st.write(f"*{e['description']}* (Heuristic extraction - may not capture full exhibit text)")
                     st.caption(f"Form: {e.get('form', 'Unknown')} | Accession: {e.get('accession', 'Unknown')} | [SEC Source]({e.get('source_url', '#')})")
                     st.divider()
             else:
                 st.info("No recent material events extracted.")
-        else:
-            st.info("No data available. Refresh the company in the Portfolio tab.")

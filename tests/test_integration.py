@@ -323,7 +323,7 @@ def test_production_peer_pipeline(tmp_path, monkeypatch):
     monkeypatch.setattr(
         financial_radar.peers,
         "load_peer_groups",
-        lambda p="config/universe.json": pg,
+        lambda p="config/sp500_representative_50_2026.json": pg,
     )
 
     # Ingest peer DEF first

@@ -53,7 +53,7 @@ def test_intel_share_count_dilution():
     assert "Diluted share count increased by 10.0%" in res["what_changed"]
 
 def test_intel_multi_factor_deterioration_cluster():
-    res = generate_intelligence("MULTI_FACTOR_DETERIORATION", "ABC", "Tech", "[]")
+    res = generate_intelligence("MULTI_FACTOR_DETERIORATION_CLUSTER", "ABC", "Tech", "[]")
     assert res["title"] == "Multi-Factor Deterioration Cluster"
 
 def test_intel_incomplete_evidence_fallback():

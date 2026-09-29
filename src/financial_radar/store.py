@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS observations(
     company TEXT, metric TEXT, value REAL, unit TEXT, period_end TEXT,
     period_type TEXT, quality TEXT, comparable INTEGER, reason TEXT,
     provenance TEXT, period_start TEXT, derived_from TEXT,
-    UNIQUE(company, metric, period_end, period_type, provenance)
+    UNIQUE(company, metric, period_end, period_type, unit)
 );
 CREATE TABLE IF NOT EXISTS signals(
     signal_id TEXT, company TEXT, severity TEXT, confidence TEXT,

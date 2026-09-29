@@ -3,18 +3,21 @@ from typing import Dict, List, Any
 from .store import rows
 
 def get_latest_and_prior(c, ticker, metrics):
-    obs = rows(c, "SELECT metric, value, period_end, unit FROM observations WHERE company=? AND period_type='QUARTER' ORDER BY period_end DESC", (ticker,))
-    
-    # Extract latest quarter end date
+    obs = rows(c, "SELECT metric, value, period_end, unit, period_type FROM observations WHERE company=? AND period_type='QUARTER' ORDER BY period_end DESC", (ticker,))
     if not obs:
         return {}, {}
         
     latest_end = obs[0]['period_end']
+    from datetime import date
+    try:
+        latest_end_dt = date.fromisoformat(latest_end)
+    except ValueError:
+        return {}, {}
     
-    # Sort into latest and prior
     latest = {}
     prior = {}
     
+    # We want YoY comparable quarter (350 to 380 days prior)
     for o in obs:
         m = o['metric']
         if m not in metrics:
@@ -22,8 +25,14 @@ def get_latest_and_prior(c, ticker, metrics):
             
         if o['period_end'] == latest_end and m not in latest:
             latest[m] = o
-        elif o['period_end'] < latest_end and m not in prior:
-            prior[m] = o
+        else:
+            try:
+                candidate_dt = date.fromisoformat(o['period_end'])
+                days_diff = (latest_end_dt - candidate_dt).days
+                if 350 <= days_diff <= 380 and m not in prior:
+                    prior[m] = o
+            except ValueError:
+                continue
             
     return latest, prior
 

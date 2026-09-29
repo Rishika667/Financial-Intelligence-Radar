@@ -4,7 +4,7 @@ from statistics import median
 from .models import DataQuality
 
 
-def load_peer_groups(universe_path="config/universe.json"):
+def load_peer_groups(universe_path="config/sp500_representative_50_2026.json"):
     """Dynamically generate peer groups from the company universe based on GICS Sectors/Sub-Industries."""
     try:
         data = json.loads(Path(universe_path).read_text(encoding="utf-8"))

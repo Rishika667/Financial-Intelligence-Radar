@@ -68,6 +68,7 @@ with tab_setup:
             else: st.error("Some SEC preflight checks failed.")
             
     if active_tickers:
+        include_peers = st.checkbox("Also fetch SEC data for unmonitored peers to build peer context", value=True)
         if st.button("Refresh Selected Data"):
             if not user_agent:
                 st.error("Cannot refresh without SEC_USER_AGENT.")
@@ -75,19 +76,33 @@ with tab_setup:
                 progress = st.progress(0)
                 status_list = []
                 client = SECClient(user_agent)
-                for i, ticker in enumerate(active_tickers):
+                
+                # Determine ingestion list
+                ingest_list = list(active_tickers)
+                if include_peers:
+                    from financial_radar.peers import load_peer_groups, find_peer_group
+                    pg = load_peer_groups("config/sp500_representative_50_2026.json")
+                    for t in active_tickers:
+                        gid, peers = find_peer_group(t, pg)
+                        for p in peers:
+                            if p not in ingest_list:
+                                ingest_list.append(p)
+                                
+                for i, ticker in enumerate(ingest_list):
+                    if ticker not in universe_map: continue
                     try:
                         ingest_company(client, db, universe_map[ticker])
                         status_list.append({"Company": ticker, "Status": "SUCCESS"})
-                    except Exception as exc:
-                        st.error(f"Failed to ingest {ticker}: {exc}")
-                        status_list.append({"Company": ticker, "Status": "FAILED"})
-                    progress.progress((i + 1) / len(active_tickers))
-                with st.spinner("Computing peer contexts..."):
-                    refresh_peer_contexts(db, active_tickers)
+                    except Exception as e:
+                        status_list.append({"Company": ticker, "Status": f"ERROR: {e}"})
+                    progress.progress((i + 1) / len(ingest_list))
+                
+                # Refresh peer contexts for active tickers
+                refresh_peer_contexts(db, active_tickers)
+                
                 st.success("Data refresh complete.")
                 st.dataframe(pd.DataFrame(status_list), use_container_width=True, hide_index=True)
-                
+
     st.subheader("3. Data Readiness")
     if active_tickers:
         readiness_list = []
@@ -117,14 +132,18 @@ with tab_dashboard:
         st.info("No active companies.")
     else:
         placeholders = ",".join("?" * len(active_tickers))
-        signals = rows(db, f"SELECT * FROM signals WHERE company IN ({placeholders}) AND suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC", active_tickers)
+        signals = rows(db, f"SELECT s.*, p.weight, p.exposure FROM signals s LEFT JOIN portfolio p ON s.company = p.ticker WHERE s.company IN ({placeholders}) AND s.suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC", active_tickers)
         if signals:
             for s in signals:
                 sev_color = "red" if s["severity"] == "HIGH" else "orange" if s["severity"] == "MODERATE" else "blue"
                 with st.expander(f"[{s['severity']}] {s['company']} - {s['signal_id']} (Confidence: {s['confidence']})"):
                     st.markdown(f"**Explanation:** {s['explanation']}")
                     st.markdown(f"**Investigation:** Review {s['signal_id']} alongside latest 10-Q/10-K disclosures.")
+                    
+                    if s.get("weight") is not None:
+                        st.markdown(f"**Portfolio Context:** Weight: {s['weight']*100:.2f}%, Exposure: ")
                     st.markdown("### Evidence")
+
                     if s["evidence"]:
                         try:
                             ev_data = json.loads(s["evidence"])
@@ -156,10 +175,10 @@ with tab_research:
             latest_metrics = {row["metric"]: row["value"] for row in latest_obs}
             
             col1, col2, col3, col4 = st.columns(4)
-            col1.metric("Revenue", f"${latest_metrics.get('revenue', 0):,.0f}" if 'revenue' in latest_metrics else "N/A")
-            col2.metric("Gross Margin", f"{latest_metrics.get('gross_margin', 0)*100:.1f}%" if 'gross_margin' in latest_metrics else "N/A")
-            col3.metric("Operating Margin", f"{latest_metrics.get('operating_margin', 0)*100:.1f}%" if 'operating_margin' in latest_metrics else "N/A")
-            col4.metric("Net Income", f"${latest_metrics.get('net_income', 0):,.0f}" if 'net_income' in latest_metrics else "N/A")
+            col1.metric("Revenue", "$" + f"{latest_metrics['revenue']:,.0f}" if latest_metrics.get('revenue') is not None else "N/A")
+            col2.metric("Gross Margin", f"{latest_metrics['gross_margin']*100:.1f}%" if latest_metrics.get('gross_margin') is not None else "N/A")
+            col3.metric("Operating Margin", f"{latest_metrics['operating_margin']*100:.1f}%" if latest_metrics.get('operating_margin') is not None else "N/A")
+            col4.metric("Net Income", "$" + f"{latest_metrics['net_income']:,.0f}" if latest_metrics.get('net_income') is not None else "N/A")
             
             st.markdown("## 2. Analyst Synthesis")
             synth = synthesize_company(ticker, db)

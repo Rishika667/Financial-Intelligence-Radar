@@ -93,3 +93,22 @@ def test_data_readiness_contract():
     save_observations(c, obs2)
     state, msg = calculate_data_readiness("AAPL", c)
     assert state == ReadinessState.READY
+
+def test_nvda_golden_expectations():
+    c = setup_db()
+    # NVDA is famous for massive sequential revenue and margin growth.
+    obs = [
+        Observation("NVDA", "revenue", 22103000000.0, "USD", date(2024, 1, 28), "QUARTER", DataQuality.REPORTED, tuple(), tuple(), True, None, None),
+        Observation("NVDA", "gross_profit", 16952000000.0, "USD", date(2024, 1, 28), "QUARTER", DataQuality.REPORTED, tuple(), tuple(), True, None, None),
+        
+        # Prior period
+        Observation("NVDA", "revenue", 6051000000.0, "USD", date(2023, 1, 29), "QUARTER", DataQuality.REPORTED, tuple(), tuple(), True, None, None),
+        Observation("NVDA", "gross_profit", 3833000000.0, "USD", date(2023, 1, 29), "QUARTER", DataQuality.REPORTED, tuple(), tuple(), True, None, None),
+    ]
+    save_observations(c, obs)
+    
+    signals = evaluate("NVDA", obs, "Information Technology")
+    
+    # Assert no margin compression, it expanded massively
+    sig_ids = [s.signal_id for s in signals if s.actionable]
+    assert "GROSS_MARGIN_COMPRESSION" not in sig_ids

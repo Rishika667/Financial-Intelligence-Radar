@@ -372,3 +372,27 @@ def validate_portfolio_csv(df, universe_tickers):
         return False, f"Total weight must sum to 1.0. Current sum is {total_weight:.4f}."
         
     return True, ""
+
+def calculate_data_readiness(ticker, c):
+    from .store import rows
+    from .models import ReadinessState
+    
+    # Check if failed
+    errs = rows(c, "SELECT count(*) as c FROM signals WHERE company=? AND signal_id='INGESTION_FAILED'", (ticker,))
+    if errs and errs[0]['c'] > 0:
+        return ReadinessState.FAILED, "Ingestion failed"
+        
+    obs = rows(c, "SELECT metric FROM observations WHERE company=?", (ticker,))
+    if not obs:
+        return ReadinessState.NOT_READY, "No observations found"
+        
+    metrics = set([o['metric'] for o in obs])
+    core = {'revenue', 'net_income', 'operating_income', 'total_assets', 'total_liabilities'}
+    
+    missing = core - metrics
+    if not missing:
+        return ReadinessState.READY, "Core metrics present"
+    elif len(metrics) > 0:
+        return ReadinessState.PARTIAL, f"Missing: {', '.join(missing)}"
+    else:
+        return ReadinessState.NOT_READY, "Insufficient data"

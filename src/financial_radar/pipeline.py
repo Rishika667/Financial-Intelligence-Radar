@@ -128,7 +128,17 @@ def evaluate(company, items, sector="Unknown"):
         
     def _suppress(id):
         from .models import Signal
-        return Signal(id, company, "UNKNOWN", "LOW", "Not applicable to Financials sector", (), suppressed_reason="Sector Context (Financials)")
+        if "DEBT" in id:
+            exp = "Debt/Operating Income is suppressed for financial institutions because the metric is not directly comparable with non-financial corporate capital structures."
+        elif "INVENTORY" in id:
+            exp = "Inventory Divergence is suppressed for financial institutions because inventory dynamics are generally not applicable."
+        elif "RECEIVABLES" in id:
+            exp = "Receivables/Revenue Divergence is suppressed for financial institutions."
+        elif "GROSS" in id:
+            exp = "Gross Margin is suppressed for financial institutions."
+        else:
+            exp = "Not applicable to Financials sector."
+        return Signal(id, company, "UNKNOWN", "LOW", exp, (), suppressed_reason="Sector Context (Financials)")
 
     rev, prevrev = pair("revenue")
     ar, prevar = _comparable_pair(items, "accounts_receivable", "INSTANT")
@@ -303,9 +313,62 @@ def refresh_peer_contexts(c, active_tickers):
     from .peers import load_peer_groups, peer_context_for_company
     pg = load_peer_groups("config/sp500_representative_50_2026.json")
     
-    all_obs = load_observations_for_companies(c, active_tickers)
+    # Need to load observations for all peers of active tickers, not just active tickers
+    tickers_to_load = set(active_tickers)
+    from .peers import find_peer_group
+    for t in active_tickers:
+        group_id, peers = find_peer_group(t, pg)
+        if peers:
+            tickers_to_load.update(peers)
+            
+    all_obs = load_observations_for_companies(c, list(tickers_to_load))
     
     for t in active_tickers:
         clear_peer_context(c, t)
         peer_ctx = peer_context_for_company(t, all_obs, pg)
         save_peer_context(c, t, peer_ctx)
+
+def validate_portfolio_csv(df, universe_tickers):
+    if df.empty:
+        return False, "CSV is empty."
+        
+    df.columns = [str(c).strip().lower() for c in df.columns]
+    required = ["ticker", "shares", "weight", "cost_basis"]
+    
+    for req in required:
+        if req not in df.columns:
+            return False, f"CSV must contain '{req}' column."
+            
+    df["ticker"] = df["ticker"].astype(str).str.strip().str.upper()
+    
+    if df["ticker"].duplicated().any():
+        return False, "CSV contains duplicate tickers."
+        
+    for t in df["ticker"]:
+        if t not in universe_tickers:
+            return False, f"Ticker {t} is not in the 50-company universe."
+            
+    try:
+        df["shares"] = df["shares"].astype(float)
+        df["weight"] = df["weight"].astype(float)
+        df["cost_basis"] = df["cost_basis"].astype(float)
+    except ValueError:
+        return False, "Numeric columns contain invalid non-numeric data."
+        
+    if df.isna().any().any():
+        return False, "CSV contains NaN or blank values."
+        
+    if (df["shares"] <= 0).any():
+        return False, "Column 'shares' cannot be zero or negative."
+        
+    if (df["cost_basis"] <= 0).any():
+        return False, "Column 'cost_basis' cannot be zero or negative."
+        
+    if (df["weight"] <= 0).any() or (df["weight"] > 1).any():
+        return False, "Column 'weight' must be between 0 and 1."
+        
+    total_weight = df["weight"].sum()
+    if abs(total_weight - 1.0) > 0.01:
+        return False, f"Total weight must sum to 1.0. Current sum is {total_weight:.4f}."
+        
+    return True, ""

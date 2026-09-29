@@ -77,7 +77,7 @@ with tab_setup:
                 client = SECClient(user_agent)
                 for i, ticker in enumerate(active_tickers):
                     try:
-                        ingest_company(ticker, universe_map[ticker]["cik"], db, client)
+                        ingest_company(client, db, universe_map[ticker])
                         status_list.append({"Company": ticker, "Status": "SUCCESS"})
                     except Exception as exc:
                         st.error(f"Failed to ingest {ticker}: {exc}")
@@ -117,9 +117,20 @@ with tab_dashboard:
         st.info("No active companies.")
     else:
         placeholders = ",".join("?" * len(active_tickers))
-        signals = rows(db, f"SELECT company as Company, signal_id as Signal, severity as Severity FROM signals WHERE company IN ({placeholders}) AND suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC", active_tickers)
+        signals = rows(db, f"SELECT * FROM signals WHERE company IN ({placeholders}) AND suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC", active_tickers)
         if signals:
-            st.dataframe(pd.DataFrame(signals), use_container_width=True, hide_index=True)
+            for s in signals:
+                sev_color = "red" if s["severity"] == "HIGH" else "orange" if s["severity"] == "MODERATE" else "blue"
+                with st.expander(f"[{s['severity']}] {s['company']} - {s['signal_id']} (Confidence: {s['confidence']})"):
+                    st.markdown(f"**Explanation:** {s['explanation']}")
+                    st.markdown(f"**Investigation:** Review {s['signal_id']} alongside latest 10-Q/10-K disclosures.")
+                    st.markdown("### Evidence")
+                    if s["evidence"]:
+                        try:
+                            ev_data = json.loads(s["evidence"])
+                            st.json(ev_data)
+                        except:
+                            st.write(s["evidence"])
         else:
             st.success("No actionable deterioration signals detected.")
 
@@ -160,7 +171,16 @@ with tab_research:
             for item in synth['investigate']: st.write(f"- {item}")
             
             st.markdown("## 3. Financial Performance")
-            st.info("Trend charts disabled in basic view.")
+            
+            st.markdown("### Growth & Profitability Trends")
+            rev_obs = [r for r in latest_obs if r["metric"] in ("revenue", "gross_profit", "operating_income", "net_income")]
+            if rev_obs:
+                df_trends = pd.DataFrame(rev_obs)
+                fig = px.bar(df_trends, x="period_end", y="value", color="metric", barmode="group", title="Recent Performance")
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.info("Insufficient data for trend charts.")
+    
             
             st.markdown("## 4. Signals & Evidence")
             company_signals = rows(db, "SELECT * FROM signals WHERE company=? ORDER BY CASE WHEN suppressed IS NOT NULL THEN 5 WHEN severity = 'HIGH' THEN 1 WHEN severity = 'MODERATE' THEN 2 WHEN severity = 'LOW' THEN 3 ELSE 4 END ASC", (ticker,))
@@ -185,4 +205,9 @@ with tab_research:
                         except: pass
             
             st.markdown("## 5. Peer Context")
-            st.info("Peer context disabled in basic view.")
+            
+            peers_obs = rows(db, "SELECT * FROM peer_context WHERE company=?", (ticker,))
+            if not peers_obs:
+                st.info("Insufficient peer coverage.")
+            else:
+                st.dataframe(pd.DataFrame(peers_obs), hide_index=True, use_container_width=True)

@@ -22,7 +22,7 @@ db = connect()
 try:
     universe = load_universe()
 except FileNotFoundError:
-    st.error("config/sp500_representative_50_2026.json not found. Cannot load company universe.")
+    st.error("config/sp500_representative_51_2026.json not found. Cannot load company universe.")
     st.stop()
 
 universe_map = {c["ticker"]: c for c in universe}
@@ -81,26 +81,39 @@ with tab_setup:
                 ingest_list = list(active_tickers)
                 if include_peers:
                     from financial_radar.peers import load_peer_groups, find_peer_group
-                    pg = load_peer_groups("config/sp500_representative_50_2026.json")
+                    pg = load_peer_groups("config/sp500_representative_51_2026.json")
                     for t in active_tickers:
                         gid, peers = find_peer_group(t, pg)
                         for p in peers:
                             if p not in ingest_list:
                                 ingest_list.append(p)
                                 
+                success_count = 0
                 for i, ticker in enumerate(ingest_list):
                     if ticker not in universe_map: continue
                     try:
                         ingest_company(client, db, universe_map[ticker])
-                        status_list.append({"Company": ticker, "Status": "SUCCESS"})
+                        status_list.append({"Company": ticker, "Status": "SUCCESS", "Message": ""})
+                        success_count += 1
                     except Exception as e:
-                        status_list.append({"Company": ticker, "Status": f"ERROR: {e}"})
+                        import traceback
+                        traceback.print_exc()
+                        status_list.append({"Company": ticker, "Status": "FAILED", "Message": str(e)})
                     progress.progress((i + 1) / len(ingest_list))
                 
                 # Refresh peer contexts for active tickers
                 refresh_peer_contexts(db, active_tickers)
                 
-                st.success("Data refresh complete.")
+                total = len(ingest_list)
+                failed = total - success_count
+                
+                if failed == 0:
+                    st.success(f"SUCCESS: Data refresh completed successfully for all {total} companies.")
+                elif success_count == 0:
+                    st.error(f"FAILED: Data refresh failed for all {total} companies.")
+                else:
+                    st.warning(f"PARTIAL SUCCESS: Refresh completed with {success_count}/{total} companies successful. {failed} failed.")
+                
                 st.dataframe(pd.DataFrame(status_list), use_container_width=True, hide_index=True)
 
     st.subheader("3. Data Readiness")
@@ -171,8 +184,12 @@ with tab_research:
             else: st.success("READY")
             
             st.markdown("## 1. Executive Snapshot")
-            latest_obs = rows(db, "SELECT metric, value, unit, period_end FROM observations WHERE company=? AND period_type='QUARTER' ORDER BY period_end DESC", (ticker,))
-            latest_metrics = {row["metric"]: row["value"] for row in latest_obs}
+            all_q_obs = rows(db, "SELECT metric, value, unit, period_end, quality FROM observations WHERE company=? AND period_type='QUARTER' ORDER BY period_end DESC", (ticker,))
+            
+            latest_metrics = {}
+            for row in all_q_obs:
+                if row["metric"] not in latest_metrics:
+                    latest_metrics[row["metric"]] = row["value"]
             
             col1, col2, col3, col4 = st.columns(4)
             col1.metric("Revenue", "$" + f"{latest_metrics['revenue']:,.0f}" if latest_metrics.get('revenue') is not None else "N/A")
@@ -191,11 +208,14 @@ with tab_research:
             
             st.markdown("## 3. Financial Performance")
             
-            st.markdown("### Growth & Profitability Trends")
-            rev_obs = [r for r in latest_obs if r["metric"] in ("revenue", "gross_profit", "operating_income", "net_income")]
-            if rev_obs:
-                df_trends = pd.DataFrame(rev_obs)
-                fig = px.bar(df_trends, x="period_end", y="value", color="metric", barmode="group", title="Recent Performance")
+            st.markdown("### Historical Series")
+            hist_metrics = ("revenue", "gross_margin", "operating_margin", "operating_cash_flow", "free_cash_flow", "revenue_growth_yoy")
+            hist_obs = [r for r in all_q_obs if r["metric"] in hist_metrics]
+            if hist_obs:
+                df_trends = pd.DataFrame(hist_obs)
+                # Ensure it's sorted historically
+                df_trends = df_trends.sort_values("period_end")
+                fig = px.line(df_trends, x="period_end", y="value", color="metric", markers=True, title="Quarterly Historical Trends")
                 st.plotly_chart(fig, use_container_width=True)
             else:
                 st.info("Insufficient data for trend charts.")

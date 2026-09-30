@@ -1,128 +1,83 @@
-import sqlite3
-from typing import Dict, List, Any
 from .store import rows
+from .metrics import get_comparison_pair
+from .models import Observation, DataQuality
 
-def get_latest_and_prior(c, ticker, metrics):
-    obs = rows(c, "SELECT metric, value, period_end, unit, period_type FROM observations WHERE company=? AND period_type='QUARTER' ORDER BY period_end DESC", (ticker,))
-    if not obs:
-        return {}, {}
-        
-    latest_end = obs[0]['period_end']
-    from datetime import date
-    try:
-        latest_end_dt = date.fromisoformat(latest_end)
-    except ValueError:
-        return {}, {}
-    
-    latest = {}
-    prior = {}
-    
-    # We want YoY comparable quarter (350 to 380 days prior)
-    for o in obs:
-        m = o['metric']
-        if m not in metrics:
-            continue
-            
-        if o['period_end'] == latest_end and m not in latest:
-            latest[m] = o
-        else:
-            try:
-                candidate_dt = date.fromisoformat(o['period_end'])
-                days_diff = (latest_end_dt - candidate_dt).days
-                if 350 <= days_diff <= 380 and m not in prior:
-                    prior[m] = o
-            except ValueError:
-                continue
-            
-    return latest, prior
-
-def _format_pct(change):
-    if change > 0: return f"+{change*100:.1f}%"
-    return f"{change*100:.1f}%"
-    
-def _format_bps(change):
-    if change > 0: return f"+{change*10000:.0f} bps"
-    return f"{change*10000:.0f} bps"
-
-def synthesize_company(ticker: str, c: sqlite3.Connection) -> Dict[str, List[str]]:
-    metrics_to_check = {
-        'revenue', 'net_income', 'operating_income', 
-        'gross_margin', 'operating_margin', 'net_margin',
-        'operating_cash_flow', 'free_cash_flow', 'cash_conversion',
-        'cash_and_equivalents', 'debt', 'current_liabilities',
-        'share_count'
-    }
-    
-    latest, prior = get_latest_and_prior(c, ticker, metrics_to_check)
-    
+def synthesize_company(ticker, c):
+    """
+    Synthesizes current financial posture strictly using explicit, supported facts.
+    """
     synthesis = {
         "observed": [],
         "context": [],
         "investigate": []
     }
     
-    if not latest:
-        synthesis["observed"].append("No recent financial observations found.")
+    # Load all observations
+    obs_rows = rows(c, "SELECT * FROM observations WHERE company=?", (ticker,))
+    if not obs_rows:
+        synthesis["observed"].append("No sufficient financial evidence for synthesis.")
         return synthesis
-
-    # Evaluate Growth
-    growth_trends = []
-    if 'revenue' in latest and 'revenue' in prior:
-        r_change = (latest['revenue']['value'] - prior['revenue']['value']) / abs(prior['revenue']['value']) if prior['revenue']['value'] != 0 else 0
-        synthesis["observed"].append(f"Revenue changed by {_format_pct(r_change)}.")
-        growth_trends.append("positive" if r_change > 0 else "negative")
         
-    if 'net_income' in latest and 'net_income' in prior:
-        ni_change = (latest['net_income']['value'] - prior['net_income']['value']) / abs(prior['net_income']['value']) if prior['net_income']['value'] != 0 else 0
-        synthesis["observed"].append(f"Net income changed by {_format_pct(ni_change)}.")
+    obs = []
+    for r in obs_rows:
+        from datetime import date
+        pend = date.fromisoformat(r['period_end'])
+        pstart = date.fromisoformat(r['period_start']) if r['period_start'] else None
+        obs.append(Observation(
+            company=r['company'],
+            metric=r['metric'],
+            value=r['value'],
+            unit=r['unit'],
+            period_end=pend,
+            period_type=r['period_type'],
+            quality=DataQuality(r['quality']) if r['quality'] else DataQuality.REPORTED,
+            comparable=bool(r['comparable']),
+            period_start=pstart,
+        ))
 
-    # Evaluate Profitability
-    margin_trends = []
-    if 'gross_margin' in latest and 'gross_margin' in prior:
-        gm_change = latest['gross_margin']['value'] - prior['gross_margin']['value']
-        synthesis["observed"].append(f"Gross margin changed by {_format_bps(gm_change)}.")
-        margin_trends.append("expanded" if gm_change > 0 else "contracted")
+    # Identify YoY metrics
+    rev, prevrev = get_comparison_pair(obs, "revenue", "QUARTER", "yoy")
+    gm, prevgm = get_comparison_pair(obs, "gross_margin", "QUARTER", "yoy")
+    om, prevom = get_comparison_pair(obs, "operating_margin", "QUARTER", "yoy")
+    
+    if rev and prevrev and prevrev.value:
+        change = (rev.value - prevrev.value) / prevrev.value
+        synthesis["observed"].append(f"Revenue moved {change:+.1%} YoY to .")
         
-    if 'operating_margin' in latest and 'operating_margin' in prior:
-        om_change = latest['operating_margin']['value'] - prior['operating_margin']['value']
-        synthesis["observed"].append(f"Operating margin changed by {_format_bps(om_change)}.")
-        margin_trends.append("expanded" if om_change > 0 else "contracted")
-
-    # Evaluate Cash
-    cash_trends = []
-    if 'operating_cash_flow' in latest and 'operating_cash_flow' in prior:
-        ocf_change = (latest['operating_cash_flow']['value'] - prior['operating_cash_flow']['value']) / abs(prior['operating_cash_flow']['value']) if prior['operating_cash_flow']['value'] != 0 else 0
-        synthesis["observed"].append(f"Operating cash flow changed by {_format_pct(ocf_change)}.")
-        cash_trends.append("strengthened" if ocf_change > 0 else "weakened")
-
-    # Pattern identification
-    if growth_trends and margin_trends and cash_trends:
-        is_growth = growth_trends[0] == "positive"
-        is_margin_weak = all(m == "contracted" for m in margin_trends)
-        is_cash_weak = cash_trends[0] == "weakened"
+    if gm and prevgm and gm.value is not None and prevgm.value is not None:
+        change = gm.value - prevgm.value
+        synthesis["observed"].append(f"Gross margin moved {change*100:+.1f} points YoY to {gm.value*100:.1f}%.")
         
-        if is_growth and is_margin_weak and is_cash_weak:
-            synthesis["observed"].append("Observed pattern: Top-line growth remained positive while profitability and cash generation weakened relative to the prior comparable period.")
-        elif not is_growth and is_margin_weak:
-            synthesis["observed"].append("Observed pattern: Simultaneous top-line and margin deterioration.")
-        elif is_growth and not is_margin_weak:
-            synthesis["observed"].append("Observed pattern: Growth accompanied by stable or expanding margins.")
-
-    # Context (from events)
-    events = rows(c, "SELECT title FROM events WHERE company=? ORDER BY date DESC LIMIT 3", (ticker,))
+    if om and prevom and om.value is not None and prevom.value is not None:
+        change = om.value - prevom.value
+        synthesis["observed"].append(f"Operating margin moved {change*100:+.1f} points YoY to {om.value*100:.1f}%.")
+        if change <= -0.03:
+            synthesis["investigate"].append("Analyze margin drivers (pricing vs input costs) during the period.")
+            
+    # Cash Flow
+    ocf, prevocf = get_comparison_pair(obs, "operating_cash_flow", "QUARTER", "yoy")
+    if ocf and prevocf and prevocf.value:
+        change = (ocf.value - prevocf.value) / prevocf.value
+        synthesis["observed"].append(f"Operating cash flow changed {change:+.1%} YoY to .")
+        if change <= -0.10:
+            synthesis["investigate"].append("Determine working capital components impacting cash generation.")
+            
+    # Signals Context
+    sigs = rows(c, "SELECT signal_id, severity FROM signals WHERE company=? AND suppressed IS NULL", (ticker,))
+    if sigs:
+        ids = [s['signal_id'] for s in sigs]
+        synthesis["observed"].append(f"Detected actionable deterioration signals: {', '.join(ids)}.")
+        
+    # Context (Events)
+    events = rows(c, "SELECT description, form, filed FROM events WHERE company=? ORDER BY filed DESC LIMIT 3", (ticker,))
     if events:
-        synthesis["context"].append("Recent 8-K filings establish the following corporate events:")
+        synthesis["context"].append("Recent filings contain the following context:")
         for e in events:
-            synthesis["context"].append(f"- {e['title']}")
+            synthesis["context"].append(f"- {e['form']} ({e['filed']}): {e['description']}")
     else:
         synthesis["context"].append("No recent 8-K context located.")
         
-    # Investigate
-    if "contracted" in margin_trends:
-        synthesis["investigate"].append("Review management commentary to determine if margin compression is structural or transient.")
-    if cash_trends and cash_trends[0] == "weakened":
-        synthesis["investigate"].append("Analyze working capital changes driving cash flow deterioration.")
     if not synthesis["investigate"]:
-        synthesis["investigate"].append("Monitor upcoming filings for deviation from observed stable trends.")
-        
+        synthesis["investigate"].append("Standard fundamental tracking recommended.")
+
     return synthesis

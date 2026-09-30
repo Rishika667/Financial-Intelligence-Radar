@@ -24,7 +24,9 @@ def test_pipeline_signal_keeps_provenance():
         o("revenue", 100_000_000, now, (p,)),
         o("revenue", 50_000_000, old, (p,)),
         o("accounts_receivable", 200_000_000, now, (p,), "INSTANT"),
+        o("receivables_revenue_ratio", 2.0, now, (p,), "QUARTER"),
         o("accounts_receivable", 50_000_000, old, (p,), "INSTANT"),
+        o("receivables_revenue_ratio", 1.0, old, (p,), "QUARTER"),
     ]
     signals = evaluate("ABC", data)
     hit = next(s for s in signals if s.signal_id == "RECEIVABLES_REVENUE_DIVERGENCE")

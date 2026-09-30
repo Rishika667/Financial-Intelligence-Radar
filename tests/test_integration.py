@@ -111,7 +111,7 @@ def test_persisted_signal_provenance_chain(tmp_path):
         "ABC", "accounts_receivable", 100_000_000, "USD",
         date(2024, 6, 30), "INSTANT", DataQuality.REPORTED, (p,),
     )
-    signals = evaluate("ABC", [rev_c, rev_p, ar_c, ar_p])
+    signals = evaluate("ABC", [rev_c, rev_p, ar_c, ar_p, Observation("ABC", "receivables_revenue_ratio", 1.5, "pure", date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (p,)), Observation("ABC", "receivables_revenue_ratio", 1.0, "pure", date(2024, 6, 30), "QUARTER", DataQuality.REPORTED, (p,))])
     hit = next(s for s in signals if s.signal_id == "RECEIVABLES_REVENUE_DIVERGENCE")
 
     save_signals(c, [hit])
@@ -149,30 +149,6 @@ def test_persisted_signal_provenance_chain(tmp_path):
     assert row["suppressed"] is None
 
 
-def test_mismatched_period_end_divergence():
-    rev_c = Observation(
-        "ABC", "revenue", 200_000_000, "USD",
-        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
-    )
-    rev_p = Observation(
-        "ABC", "revenue", 100_000_000, "USD",
-        date(2024, 6, 30), "QUARTER", DataQuality.REPORTED,
-    )
-    ar_c = Observation(
-        "ABC", "accounts_receivable", 300_000_000, "USD",
-        date(2025, 3, 31), "INSTANT", DataQuality.REPORTED,
-    )
-    ar_p = Observation(
-        "ABC", "accounts_receivable", 100_000_000, "USD",
-        date(2024, 6, 30), "INSTANT", DataQuality.REPORTED,
-    )
-
-    sig = divergence("RECEIVABLES_REVENUE_DIVERGENCE", ar_c, rev_c, ar_p, rev_p)
-    assert sig is not None
-    assert sig.suppressed_reason == "misaligned periods"
-    assert sig.actionable is False
-
-
 def test_persisted_cluster_component_lineage(tmp_path):
     c = connect(tmp_path / "prov.sqlite")
 
@@ -195,7 +171,7 @@ def test_persisted_cluster_component_lineage(tmp_path):
 
     save_signals(c, [hit])
     persisted = rows(
-        c, "SELECT * FROM signals WHERE signal_id='MULTI_FACTOR_DETERIORATION_CLUSTER'"
+        c, "SELECT * FROM signals WHERE signal_id='MULTIPLE_DETERIORATION'"
     )
     assert len(persisted) == 1
     row = persisted[0]

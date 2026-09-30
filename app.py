@@ -153,8 +153,10 @@ with tab_dashboard:
                     st.markdown(f"**Explanation:** {s['explanation']}")
                     st.markdown(f"**Investigation:** Review {s['signal_id']} alongside latest 10-Q/10-K disclosures.")
                     
-                    if s.get("weight") is not None:
+                    if s.get("weight") is not None and s.get("exposure") is not None:
                         st.markdown(f"**Portfolio Context:** Weight: {s['weight']*100:.2f}%, Exposure: ")
+                    else:
+                        st.markdown("**Portfolio Context:** N/A")
                     st.markdown("### Evidence")
 
                     if s["evidence"]:

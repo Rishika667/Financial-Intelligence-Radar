@@ -1,145 +1,40 @@
-from collections import defaultdict
-from .models import DataQuality, Signal
-from .core import pct_change
-
+from .models import Signal, DataQuality
 
 def _ok(*o):
-    """Comparability and completeness gate."""
-    valid_states = all(
-        x.value is not None
-        and x.comparable
-        and x.quality in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED)
+    return all(
+        x is not None and getattr(x, "value", None) is not None and getattr(x, "comparable", True)
+        and getattr(x, "quality", None) in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED)
         for x in o
     )
-    if not valid_states:
-        return False
-    # Ensure all monetary observations share the same currency/unit
-    units = {x.unit for x in o if x.unit != "pure"}
-    return len(units) <= 1
-
 
 def _confidence(*o):
-    """Determine signal confidence based on data quality."""
-    if any(x.quality == DataQuality.DERIVED for x in o):
-        return "MEDIUM"
-    return "HIGH"
+    return "MODERATE" if any(getattr(x, "quality", None) == DataQuality.DERIVED for x in o) else "HIGH"
 
-
-def _monetary_material(val1, val2, floor=1_000_000):
-    """Economic magnitude gate for monetary values."""
-    return abs(val1 - val2) >= floor
-
-
-def divergence(kind, balance, revenue, prior_balance, prior_revenue, threshold=0.15):
-    """Divergence signal for monetary balance-sheet vs revenue metrics."""
-    if not _ok(balance, revenue, prior_balance, prior_revenue):
-        return Signal(
-            kind, balance.company, "UNKNOWN", "LOW",
-            "Cannot assess: missing or incomparable data",
-            (balance, revenue, prior_balance, prior_revenue),
-            suppressed_reason="data quality/comparability"
-        )
-
-    if (balance.company != revenue.company
-        or prior_balance.company != prior_revenue.company
-        or balance.period_end != revenue.period_end
-        or prior_balance.period_end != prior_revenue.period_end
-        or balance.period_type != prior_balance.period_type
-        or revenue.period_type != prior_revenue.period_type):
-        return Signal(
-            kind, balance.company, "UNKNOWN", "LOW",
-            "Cannot assess: misaligned periods",
-            (balance, revenue, prior_balance, prior_revenue),
-            suppressed_reason="misaligned periods"
-        )
-
-    # Monetary materiality: at least one of the inputs must have a material change
-    if (
-        not _monetary_material(balance.value, prior_balance.value)
-        and not _monetary_material(revenue.value, prior_revenue.value)
-    ):
-        return Signal(
-            kind, balance.company, "LOW",
-            _confidence(balance, revenue, prior_balance, prior_revenue),
-            "Changes are economically insignificant",
-            (balance, revenue, prior_balance, prior_revenue),
-            suppressed_reason="economic insignificance"
-        )
-
-    gap = pct_change(balance.value, prior_balance.value) - pct_change(revenue.value, prior_revenue.value)
-
-    if gap >= threshold:
-        sev = "HIGH" if gap >= 0.30 else "MODERATE"
-        conf = _confidence(balance, revenue, prior_balance, prior_revenue)
-        return Signal(
-            kind, balance.company, sev, conf,
-            f"{balance.metric} grew {gap:.0%} faster than revenue.",
-            (balance, revenue, prior_balance, prior_revenue)
-        )
+def divergence(signal_id, curr, prior):
+    if not _ok(curr, prior): return None
+    d = curr.value - prior.value
+    if d >= 0.05:
+        sev = "HIGH" if d >= 0.1 else "MODERATE"
+        return Signal(signal_id, curr.company, sev, _confidence(curr, prior),
+                      f"Ratio increased by {abs(d):.1%} points.", (curr, prior))
     return None
 
-
-def margin_compression(current, prior, threshold=0.03):
-    """Margin compression signal — ratio-based, no monetary floor."""
-    if not _ok(current, prior) or current.period_type != prior.period_type:
-        return Signal(
-            "GROSS_MARGIN_COMPRESSION", current.company, "UNKNOWN", "LOW",
-            "Cannot assess margin", (current, prior),
-            suppressed_reason="data quality/comparability"
-        )
-
-    d = current.value - prior.value
-    if d <= -threshold:
+def margin_compression(curr, prior):
+    if not _ok(curr, prior): return None
+    d = curr.value - prior.value
+    if d <= -0.03:
         sev = "HIGH" if d <= -0.06 else "MODERATE"
-        conf = _confidence(current, prior)
-        return Signal(
-            "GROSS_MARGIN_COMPRESSION", current.company, sev, conf,
-            f"Gross margin fell {abs(d):.1%} points.",
-            (current, prior)
-        )
+        return Signal("GROSS_MARGIN_COMPRESSION", curr.company, sev, _confidence(curr, prior),
+                      f"Gross margin fell {abs(d):.1%} points.", (curr, prior))
     return None
 
-
-def _comparison_window(signal):
-    """Extract the (current, prior) period_end pair from a signal's evidence."""
-    period_ends = sorted({o.period_end for o in signal.evidence})
-    if len(period_ends) != 2:
-        return None
-    return period_ends[1], period_ends[0]
-
-
-def cluster(signals):
-    """Multi-factor deterioration cluster.
-
-    Only clusters valid comparable signals from the same comparison window.
-    Suppressed signals are excluded.
-    """
-    groups = defaultdict(list)
-    for s in signals:
-        window = _comparison_window(s) if s else None
-        if (
-            s
-            and s.actionable
-            and s.confidence in ("HIGH", "MEDIUM")
-            and window is not None
-        ):
-            groups[(s.company, window)].append(s)
-
-    out = []
-    for (company, _window), component_signals in groups.items():
-        by_id = {s.signal_id: s for s in component_signals}
-        if len(by_id) >= 3:
-            components = tuple(by_id.values())
-            evidence = tuple(o for s in components for o in s.evidence)
-            confidence = (
-                "HIGH"
-                if all(s.confidence == "HIGH" for s in components)
-                else "MEDIUM"
-            )
-            out.append(Signal(
-                "MULTI_FACTOR_DETERIORATION_CLUSTER", company, "HIGH", confidence,
-                f"{len(components)} distinct valid deterioration signals warrant review.",
-                evidence,
-                component_signal_ids=tuple(s.signal_id for s in components),
-            ))
-    return out
+def cluster(out):
+    if len(out) >= 3:
+        # Extract unique underlying observations from all component signals
+        obs_set = set()
+        for sig in out:
+            for o in sig.evidence:
+                obs_set.add(o)
+        return [Signal("MULTIPLE_DETERIORATION", out[0].company, "HIGH", "HIGH",
+                       f"Detected {len(out)} concurrent warnings.", tuple(obs_set), component_signal_ids=tuple(s.signal_id for s in out))]
+    return []

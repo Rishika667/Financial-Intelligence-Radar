@@ -1,0 +1,361 @@
+{
+    "version": "sp500_representative_50_2026",
+    "companies": [
+        {
+            "ticker": "AAPL",
+            "cik": "0000320193",
+            "sector": "Information Technology",
+            "name": "Apple Inc."
+        },
+        {
+            "ticker": "MSFT",
+            "cik": "0000078901",
+            "sector": "Information Technology",
+            "name": "Microsoft Corporation"
+        },
+        {
+            "ticker": "GOOGL",
+            "cik": "0001652044",
+            "sector": "Communication Services",
+            "name": "Alphabet Inc."
+        },
+        {
+            "ticker": "AMZN",
+            "cik": "0001018724",
+            "sector": "Consumer Discretionary",
+            "name": "Amazon.com, Inc."
+        },
+        {
+            "ticker": "META",
+            "cik": "0001326801",
+            "sector": "Communication Services",
+            "name": "Meta Platforms, Inc."
+        },
+        {
+            "ticker": "TSLA",
+            "cik": "0001318605",
+            "sector": "Consumer Discretionary",
+            "name": "Tesla, Inc."
+        },
+        {
+            "ticker": "JNJ",
+            "cik": "0000200406",
+            "sector": "Health Care",
+            "name": "Johnson & Johnson"
+        },
+        {
+            "ticker": "JPM",
+            "cik": "0000019617",
+            "sector": "Financials",
+            "name": "JPMorgan Chase & Co."
+        },
+        {
+            "ticker": "V",
+            "cik": "0001403161",
+            "sector": "Financials",
+            "name": "Visa Inc."
+        },
+        {
+            "ticker": "UNH",
+            "cik": "0000731766",
+            "sector": "Health Care",
+            "name": "UnitedHealth Group Inc."
+        },
+        {
+            "ticker": "PG",
+            "cik": "0000080424",
+            "sector": "Consumer Staples",
+            "name": "Procter & Gamble Co."
+        },
+        {
+            "ticker": "XOM",
+            "cik": "0000034088",
+            "sector": "Energy",
+            "name": "Exxon Mobil Corporation"
+        },
+        {
+            "ticker": "MA",
+            "cik": "0001141391",
+            "sector": "Financials",
+            "name": "Mastercard Incorporated"
+        },
+        {
+            "ticker": "HD",
+            "cik": "0000354950",
+            "sector": "Consumer Discretionary",
+            "name": "The Home Depot, Inc."
+        },
+        {
+            "ticker": "CVX",
+            "cik": "0000093410",
+            "sector": "Energy",
+            "name": "Chevron Corporation"
+        },
+        {
+            "ticker": "ABBV",
+            "cik": "0001551152",
+            "sector": "Health Care",
+            "name": "AbbVie Inc."
+        },
+        {
+            "ticker": "LLY",
+            "cik": "0000059478",
+            "sector": "Health Care",
+            "name": "Eli Lilly and Company"
+        },
+        {
+            "ticker": "MRK",
+            "cik": "0000064978",
+            "sector": "Health Care",
+            "name": "Merck & Co., Inc."
+        },
+        {
+            "ticker": "PEP",
+            "cik": "0000077476",
+            "sector": "Consumer Staples",
+            "name": "PepsiCo, Inc."
+        },
+        {
+            "ticker": "KO",
+            "cik": "0000021344",
+            "sector": "Consumer Staples",
+            "name": "The Coca-Cola Company"
+        },
+        {
+            "ticker": "BAC",
+            "cik": "0000070858",
+            "sector": "Financials",
+            "name": "Bank of America Corporation"
+        },
+        {
+            "ticker": "AVGO",
+            "cik": "0001730165",
+            "sector": "Information Technology",
+            "name": "Broadcom Inc."
+        },
+        {
+            "ticker": "TMO",
+            "cik": "0000097745",
+            "sector": "Health Care",
+            "name": "Thermo Fisher Scientific Inc."
+        },
+        {
+            "ticker": "COST",
+            "cik": "0000909832",
+            "sector": "Consumer Staples",
+            "name": "Costco Wholesale Corporation"
+        },
+        {
+            "ticker": "CSCO",
+            "cik": "0000858877",
+            "sector": "Information Technology",
+            "name": "Cisco Systems, Inc."
+        },
+        {
+            "ticker": "MCD",
+            "cik": "0000063908",
+            "sector": "Consumer Discretionary",
+            "name": "McDonalds Corporation"
+        },
+        {
+            "ticker": "ABT",
+            "cik": "0000001800",
+            "sector": "Health Care",
+            "name": "Abbott Laboratories"
+        },
+        {
+            "ticker": "CRM",
+            "cik": "0001108524",
+            "sector": "Information Technology",
+            "name": "Salesforce, Inc."
+        },
+        {
+            "ticker": "WFC",
+            "cik": "0000072971",
+            "sector": "Financials",
+            "name": "Wells Fargo Company"
+        },
+        {
+            "ticker": "DIS",
+            "cik": "0001744489",
+            "sector": "Communication Services",
+            "name": "The Walt Disney Company"
+        },
+        {
+            "ticker": "LIN",
+            "cik": "0001707925",
+            "sector": "Materials",
+            "name": "Linde plc"
+        },
+        {
+            "ticker": "DHR",
+            "cik": "0000313616",
+            "sector": "Health Care",
+            "name": "Danaher Corporation"
+        },
+        {
+            "ticker": "TXN",
+            "cik": "0000097476",
+            "sector": "Information Technology",
+            "name": "Texas Instruments Incorporated"
+        },
+        {
+            "ticker": "PM",
+            "cik": "0001413329",
+            "sector": "Consumer Staples",
+            "name": "Philip Morris International Inc."
+        },
+        {
+            "ticker": "VZ",
+            "cik": "0000732712",
+            "sector": "Communication Services",
+            "name": "Verizon Communications Inc."
+        },
+        {
+            "ticker": "NEE",
+            "cik": "0000037472",
+            "sector": "Utilities",
+            "name": "NextEra Energy, Inc."
+        },
+        {
+            "ticker": "RTX",
+            "cik": "0000101829",
+            "sector": "Industrials",
+            "name": "RTX Corporation"
+        },
+        {
+            "ticker": "MS",
+            "cik": "0000895421",
+            "sector": "Financials",
+            "name": "Morgan Stanley"
+        },
+        {
+            "ticker": "HON",
+            "cik": "0000773840",
+            "sector": "Industrials",
+            "name": "Honeywell International Inc."
+        },
+        {
+            "ticker": "INTC",
+            "cik": "0000050863",
+            "sector": "Information Technology",
+            "name": "Intel Corporation"
+        },
+        {
+            "ticker": "QCOM",
+            "cik": "0000804328",
+            "sector": "Information Technology",
+            "name": "QUALCOMM Incorporated"
+        },
+        {
+            "ticker": "BMY",
+            "cik": "0000014272",
+            "sector": "Health Care",
+            "name": "Bristol-Myers Squibb Company"
+        },
+        {
+            "ticker": "UNP",
+            "cik": "0000100885",
+            "sector": "Industrials",
+            "name": "Union Pacific Corporation"
+        },
+        {
+            "ticker": "C",
+            "cik": "0000831001",
+            "sector": "Financials",
+            "name": "Citigroup Inc."
+        },
+        {
+            "ticker": "LOW",
+            "cik": "0000060667",
+            "sector": "Consumer Discretionary",
+            "name": "Lowes Companies, Inc."
+        },
+        {
+            "ticker": "IBM",
+            "cik": "0000051143",
+            "sector": "Information Technology",
+            "name": "International Business Machines"
+        },
+        {
+            "ticker": "AMGN",
+            "cik": "0000318154",
+            "sector": "Health Care",
+            "name": "Amgen Inc."
+        },
+        {
+            "ticker": "BA",
+            "cik": "0000012927",
+            "sector": "Industrials",
+            "name": "The Boeing Company"
+        },
+        {
+            "ticker": "CAT",
+            "cik": "0000018230",
+            "sector": "Industrials",
+            "name": "Caterpillar Inc."
+        },
+        {
+            "ticker": "SPGI",
+            "cik": "0000064040",
+            "sector": "Financials",
+            "name": "S&P Global Inc."
+        },
+        {
+            "ticker": "NVDA",
+            "name": "NVIDIA Corporation",
+            "sector": "Information Technology",
+            "cik": "0001045810"
+        }
+    ],
+    "peer_groups": [
+        {
+            "peer_group_id": "mega_cap_tech",
+            "rationale": "Mega-cap diversified technology and software",
+            "members": [
+                "AAPL",
+                "MSFT",
+                "GOOGL",
+                "META",
+                "AMZN"
+            ]
+        },
+        {
+            "peer_group_id": "semiconductors",
+            "rationale": "Large-cap semiconductor and hardware",
+            "members": [
+                "NVDA",
+                "AMD",
+                "INTC"
+            ]
+        },
+        {
+            "peer_group_id": "large_banks",
+            "rationale": "Systemically important financial institutions",
+            "members": [
+                "JPM",
+                "BAC",
+                "C",
+                "WFC"
+            ]
+        },
+        {
+            "peer_group_id": "healthcare_majors",
+            "rationale": "Diversified healthcare and pharmaceuticals",
+            "members": [
+                "JNJ",
+                "PFE",
+                "UNH"
+            ]
+        },
+        {
+            "peer_group_id": "energy_majors",
+            "rationale": "Integrated energy and petroleum",
+            "members": [
+                "XOM",
+                "CVX"
+            ]
+        }
+    ],
+    "peer_group_version": "v1"
+}

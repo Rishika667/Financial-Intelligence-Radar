@@ -12,55 +12,55 @@ def synthesize_company(ticker, c):
         "investigate": []
     }
     
-    # Load all observations
-    obs_rows = rows(c, "SELECT * FROM observations WHERE company=?", (ticker,))
-    if not obs_rows:
+    from .store import load_observations_for_companies
+    obs = load_observations_for_companies(c, [ticker])
+    if not obs:
         synthesis["observed"].append("No sufficient financial evidence for synthesis.")
         return synthesis
-        
-    obs = []
-    for r in obs_rows:
-        from datetime import date
-        pend = date.fromisoformat(r['period_end'])
-        pstart = date.fromisoformat(r['period_start']) if r['period_start'] else None
-        obs.append(Observation(
-            company=r['company'],
-            metric=r['metric'],
-            value=r['value'],
-            unit=r['unit'],
-            period_end=pend,
-            period_type=r['period_type'],
-            quality=DataQuality(r['quality']) if r['quality'] else DataQuality.REPORTED,
-            comparable=bool(r['comparable']),
-            period_start=pstart,
-        ))
 
     # Identify YoY metrics
     rev, prevrev = get_comparison_pair(obs, "revenue", "QUARTER", "yoy")
     gm, prevgm = get_comparison_pair(obs, "gross_margin", "QUARTER", "yoy")
     om, prevom = get_comparison_pair(obs, "operating_margin", "QUARTER", "yoy")
     
-    if rev and prevrev and prevrev.value:
-        change = (rev.value - prevrev.value) / prevrev.value
-        synthesis["observed"].append(f"Revenue moved {change:+.1%} YoY to .")
-        
+    def _fmt(val):
+        if val is None: return "unavailable"
+        if val >= 1_000_000_000:
+            return f"B"
+        if val >= 1_000_000:
+            return f"M"
+        return f""
+
+    if rev and prevrev and prevrev.value is not None and prevrev.value != 0:
+        change = (rev.value - prevrev.value) / prevrev.value if rev.value is not None else None
+        if change is not None and rev.value is not None:
+            direction = "increased" if change > 0 else "decreased"
+            synthesis["observed"].append(f"Revenue {direction} {abs(change):.1%} YoY to {_fmt(rev.value)} from {_fmt(prevrev.value)}.")
+        elif change is not None:
+            direction = "increased" if change > 0 else "decreased"
+            synthesis["observed"].append(f"Revenue {direction} {abs(change):.1%} YoY; current value unavailable.")
+
     if gm and prevgm and gm.value is not None and prevgm.value is not None:
         change = gm.value - prevgm.value
-        synthesis["observed"].append(f"Gross margin moved {change*100:+.1f} points YoY to {gm.value*100:.1f}%.")
+        direction = "increased" if change > 0 else "decreased"
+        synthesis["observed"].append(f"Gross margin {direction} {abs(change)*100:.1f} points YoY to {gm.value*100:.1f}% from {prevgm.value*100:.1f}%.")
         
     if om and prevom and om.value is not None and prevom.value is not None:
         change = om.value - prevom.value
-        synthesis["observed"].append(f"Operating margin moved {change*100:+.1f} points YoY to {om.value*100:.1f}%.")
+        direction = "increased" if change > 0 else "decreased"
+        synthesis["observed"].append(f"Operating margin {direction} {abs(change)*100:.1f} points YoY to {om.value*100:.1f}% from {prevom.value*100:.1f}%.")
         if change <= -0.03:
             synthesis["investigate"].append("Analyze margin drivers (pricing vs input costs) during the period.")
             
     # Cash Flow
     ocf, prevocf = get_comparison_pair(obs, "operating_cash_flow", "QUARTER", "yoy")
-    if ocf and prevocf and prevocf.value:
-        change = (ocf.value - prevocf.value) / prevocf.value
-        synthesis["observed"].append(f"Operating cash flow changed {change:+.1%} YoY to .")
-        if change <= -0.10:
-            synthesis["investigate"].append("Determine working capital components impacting cash generation.")
+    if ocf and prevocf and prevocf.value is not None and prevocf.value != 0:
+        change = (ocf.value - prevocf.value) / prevocf.value if ocf.value is not None else None
+        if change is not None and ocf.value is not None:
+            direction = "increased" if change > 0 else "decreased"
+            synthesis["observed"].append(f"Operating cash flow {direction} {abs(change):.1%} YoY to {_fmt(ocf.value)} from {_fmt(prevocf.value)}.")
+            if change <= -0.10:
+                synthesis["investigate"].append("Determine working capital components impacting cash generation.")
             
     # Signals Context
     sigs = rows(c, "SELECT signal_id, severity FROM signals WHERE company=? AND suppressed IS NULL", (ticker,))

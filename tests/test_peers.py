@@ -88,3 +88,32 @@ def test_strict_peer_matching():
     assert ctx["n_peers"] == 2
     assert ctx["available"] is True
     assert ctx["peer_median"] == 115
+
+def test_45_day_fiscal_alignment():
+    from financial_radar.peers import peer_context_for_company
+    from financial_radar.models import Observation, DataQuality
+    from datetime import date
+    o = lambda c, m, v, u, pe, pt: Observation(c, m, v, u, pe, pt, DataQuality.REPORTED)
+    
+    obs = [
+        o("AAPL", "revenue", 100, "USD", date(2023, 9, 30), "QUARTER"),
+        # Valid peer, same period type, same unit, 35 days apart
+        o("MSFT", "revenue", 120, "USD", date(2023, 11, 4), "QUARTER"),
+        o("GOOG", "revenue", 90, "USD", date(2023, 9, 30), "QUARTER"),
+        # Invalid peer, different period type (ANNUAL)
+        o("MSFT", "revenue", 500, "USD", date(2023, 11, 4), "ANNUAL"),
+        # Invalid peer, >45 days apart
+        o("GOOG", "revenue", 1000, "USD", date(2023, 8, 14), "QUARTER"),
+        # Invalid peer, different unit
+        o("META", "revenue", 80, "EUR", date(2023, 9, 30), "QUARTER")
+    ]
+    
+    pg = {"version": "v1", "groups": [{"id": "G1", "members": ["AAPL", "MSFT", "GOOG", "META"]}]}
+    ctx = peer_context_for_company("AAPL", obs, pg)
+    
+    contexts = ctx['contexts']
+    assert len(contexts) == 1
+    assert contexts[0]["metric"] == "revenue"
+    
+    assert contexts[0]["peer_median"] == 105.0
+     # AAPL (100) vs MSFT (120), AAPL is lowest

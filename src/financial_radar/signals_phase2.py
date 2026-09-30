@@ -1,164 +1,61 @@
 from .models import Signal, DataQuality
-from .core import pct_change
-import logging
 
-logger = logging.getLogger(__name__)
-
-def ok(*x):
-    valid_states = all(
-        a and a.value is not None and a.comparable
-        and a.quality in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED)
-        for a in x
+def ok(*o):
+    return all(
+        x is not None and getattr(x, "value", None) is not None and getattr(x, "comparable", True)
+        and getattr(x, "quality", None) in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED)
+        for x in o
     )
-    if not valid_states:
-        return False
-    units = {a.unit for a in x if a and a.unit != "pure"}
-    return len(units) <= 1
 
-def _confidence(*x):
-    if any(a and getattr(a, "quality", None) == DataQuality.DERIVED for a in x):
-        return "MEDIUM"
+def _confidence(*o):
+    if any(x.quality == DataQuality.DERIVED for x in o): return "MODERATE"
     return "HIGH"
 
-def suppressed(id, *x):
-    return Signal(
-        id, x[0].company, "UNKNOWN", "LOW",
-        "Suppressed: unreliable or incomparable evidence", tuple(x),
-        suppressed_reason="data quality/comparability"
-    )
-
-def misaligned(id, *x):
-    return Signal(
-        id, x[0].company, "UNKNOWN", "LOW",
-        "Cannot assess: misaligned periods", tuple(x),
-        suppressed_reason="misaligned periods"
-    )
-
-
-# ---------------------------------------------------------------------------
-# Materiality helpers — metric-type-aware
-# ---------------------------------------------------------------------------
-def _monetary_material(val1, val2, floor=1_000_000):
-    """Economic magnitude gate for monetary values (revenue, debt, cash)."""
-    return abs(val1 - val2) >= floor
-
-
-def _ratio_material(val1, val2, floor=0.005):
-    """Materiality gate for ratio/margin signals — always material above floor."""
-    return abs(val1 - val2) >= floor
-
-
-# ---------------------------------------------------------------------------
-# Signal functions
-# ---------------------------------------------------------------------------
-def decline(id, current, prior, floor, label):
-    """Decline signal for margin/ratio values — no monetary materiality."""
-    if not ok(current, prior) or current.period_type != prior.period_type:
-        return suppressed(id, current, prior)
-
-    d = current.value - prior.value
-    if d <= -floor:
-        sev = "HIGH" if d <= -2 * floor else "MODERATE"
-        return Signal(
-            id, current.company, sev, _confidence(current, prior),
-            f"{label} deteriorated by {abs(d):.2f}.", (current, prior)
-        )
+def operating_margin_deterioration(curr, prior):
+    if not ok(curr, prior): return None
+    d = curr.value - prior.value
+    if d <= -0.03:
+        sev = "HIGH" if d <= -0.06 else "MODERATE"
+        return Signal("OPERATING_MARGIN_DETERIORATION", curr.company, sev, _confidence(curr, prior),
+                      f"Operating margin fell {abs(d):.1%} points.", (curr, prior))
     return None
 
-
-def operating_margin_deterioration(c, p):
-    return decline("OPERATING_MARGIN_DETERIORATION", c, p, 0.03, "Operating margin")
-
-
-def fcf_deterioration(c, p):
-    """FCF is monetary — apply monetary materiality floor."""
-    if not ok(c, p) or c.period_type != p.period_type:
-        return suppressed("FREE_CASH_FLOW_DETERIORATION", c, p)
-
-    if not _monetary_material(c.value, p.value):
-        return Signal(
-            "FREE_CASH_FLOW_DETERIORATION", c.company, "LOW", _confidence(c, p),
-            "Changes are economically insignificant", (c, p),
-            suppressed_reason="economic insignificance"
-        )
-
-    floor = max(abs(p.value) * 0.2, 1) if p.value is not None else 1
-    d = c.value - p.value
-    if d <= -floor:
-        sev = "HIGH" if d <= -2 * floor else "MODERATE"
-        return Signal(
-            "FREE_CASH_FLOW_DETERIORATION", c.company, sev, _confidence(c, p),
-            f"Free cash flow deteriorated by {abs(d):.2f}.", (c, p)
-        )
+def cash_conversion(curr, prior):
+    if not ok(curr, prior): return None
+    d = curr.value - prior.value
+    if d <= -0.2:
+        return Signal("CASH_CONVERSION_DETERIORATION", curr.company, "HIGH" if d <= -0.4 else "MODERATE", _confidence(curr, prior),
+                      f"Cash conversion dropped {abs(d):.1%} points.", (curr, prior))
     return None
 
-
-def dilution(c, p):
-    if not ok(c, p) or c.period_type != p.period_type:
-        return suppressed("SHARE_COUNT_DILUTION", c, p)
-
-    r = pct_change(c.value, p.value)
-    if r is not None and r >= 0.03:
-        sev = "HIGH" if r >= 0.1 else "MODERATE"
-        return Signal(
-            "SHARE_COUNT_DILUTION", c.company, sev, _confidence(c, p),
-            f"Share count increased {r:.1%}.", (c, p)
-        )
+def fcf_deterioration(curr, prior):
+    if not ok(curr, prior): return None
+    d = (curr.value - prior.value) / prior.value if prior.value > 0 else 0
+    if d <= -0.15:
+        return Signal("FREE_CASH_FLOW_DETERIORATION", curr.company, "HIGH" if d <= -0.3 else "MODERATE", _confidence(curr, prior),
+                      f"FCF fell {abs(d):.1%}.", (curr, prior))
     return None
 
-
-def ratio_drop(id, a, b, oa, ob, floor, label):
-    """Ratio-based signal — no monetary materiality, only ratio floor."""
-    if not ok(a, b, oa, ob) or b.value <= 0 or ob.value <= 0:
-        return suppressed(id, a, b)
-    
-    if (a.company != b.company
-        or oa.company != ob.company
-        or a.period_end != b.period_end
-        or oa.period_end != ob.period_end
-        or a.period_type != oa.period_type
-        or b.period_type != ob.period_type
-        or a.period_type != b.period_type):
-        return misaligned(id, a, b, oa, ob)
-
-    now, old = a.value / b.value, oa.value / ob.value
-    if old - now >= floor:
-        sev = "HIGH" if old - now >= 2 * floor else "MODERATE"
-        return Signal(
-            id, a.company, sev, _confidence(a, b, oa, ob),
-            f"{label} declined from {old:.2f}x to {now:.2f}x.",
-            (a, b, oa, ob)
-        )
+def leverage(curr, prior):
+    if not ok(curr, prior): return None
+    d = curr.value - prior.value
+    if d >= 0.5:
+        return Signal("DEBT_OPERATING_INCOME_DETERIORATION", curr.company, "HIGH" if d >= 1 else "MODERATE", _confidence(curr, prior),
+                      f"Debt/OpInc increased from {prior.value:.2f}x to {curr.value:.2f}x.", (curr, prior))
     return None
 
+def liquidity(curr, prior):
+    if not ok(curr, prior): return None
+    d = curr.value - prior.value
+    if d <= -0.1:
+        return Signal("LIQUIDITY_COMPRESSION", curr.company, "HIGH" if d <= -0.2 else "MODERATE", _confidence(curr, prior),
+                      f"Liquidity ratio fell from {prior.value:.2f}x to {curr.value:.2f}x.", (curr, prior))
+    return None
 
-def cash_conversion(a, b, oa, ob):
-    return ratio_drop("EARNINGS_CASH_CONVERSION_DETERIORATION", a, b, oa, ob, 0.2, "OCF/earnings conversion")
-
-
-def liquidity(a, b, oa, ob):
-    return ratio_drop("LIQUIDITY_COMPRESSION", a, b, oa, ob, 0.1, "Cash/current-liabilities")
-
-
-def leverage(debt, ebit, old_debt, old_ebit):
-    """Leverage uses monetary inputs but the signal is ratio-based."""
-    if not ok(debt, ebit, old_debt, old_ebit) or ebit.value <= 0 or old_ebit.value <= 0:
-        return suppressed("DEBT_OPERATING_INCOME_DETERIORATION", debt, ebit)
-
-    if (debt.company != ebit.company
-        or old_debt.company != old_ebit.company
-        or debt.period_end != ebit.period_end
-        or old_debt.period_end != old_ebit.period_end
-        or debt.period_type != old_debt.period_type
-        or ebit.period_type != old_ebit.period_type):
-        return misaligned("DEBT_OPERATING_INCOME_DETERIORATION", debt, ebit, old_debt, old_ebit)
-
-    now, old = debt.value / ebit.value, old_debt.value / old_ebit.value
-    if now - old >= 0.5:
-        sev = "HIGH" if now - old >= 1 else "MODERATE"
-        return Signal(
-            "DEBT_OPERATING_INCOME_DETERIORATION", debt.company, sev, _confidence(debt, ebit, old_debt, old_ebit),
-            f"Debt/operating-income increased from {old:.2f}x to {now:.2f}x.",
-            (debt, ebit, old_debt, old_ebit)
-        )
+def dilution(curr, prior):
+    if not ok(curr, prior): return None
+    d = (curr.value - prior.value) / prior.value if prior.value > 0 else 0
+    if d >= 0.05:
+        return Signal("SHARE_DILUTION", curr.company, "HIGH" if d >= 0.1 else "MODERATE", _confidence(curr, prior),
+                      f"Share count grew {d:.1%}.", (curr, prior))
     return None

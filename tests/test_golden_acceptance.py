@@ -76,23 +76,41 @@ def test_data_readiness_contract():
     state, msg = calculate_data_readiness("AAPL", c)
     assert state == ReadinessState.NOT_READY
     
-    # Partial obs -> PARTIAL
-    obs = [Observation("AAPL", "revenue", 1.0, "USD", date(2023, 9, 30), "ANNUAL", DataQuality.REPORTED, tuple(), tuple(), True, None, None)]
+    from financial_radar.normalization import Provenance
+    from datetime import datetime
+    prov = [Provenance("0001", "url", date(2023,1,1), "10-K", "c", datetime.now(), 1.0, "v1")]
+    
+    # All NULL / Invalid -> NOT_READY (Wait, it says PARTIAL if any valid exists, NOT_READY if 0 valid)
+    obs = [Observation("AAPL", "revenue", None, "USD", date(2023, 9, 30), "ANNUAL", DataQuality.NOT_REPORTED, tuple(), tuple(), True, None, None)]
     save_observations(c, obs)
     state, msg = calculate_data_readiness("AAPL", c)
-    assert state == ReadinessState.PARTIAL
-    assert "Missing" in msg
+    assert state == ReadinessState.NOT_READY
     
-    # Core obs -> READY
-    obs2 = [
-        Observation("AAPL", "net_income", 1.0, "USD", date(2023, 9, 30), "ANNUAL", DataQuality.REPORTED, tuple(), tuple(), True, None, None),
-        Observation("AAPL", "operating_income", 1.0, "USD", date(2023, 9, 30), "ANNUAL", DataQuality.REPORTED, tuple(), tuple(), True, None, None),
-        Observation("AAPL", "operating_cash_flow", 1.0, "USD", date(2023, 9, 30), "ANNUAL", DataQuality.REPORTED, tuple(), tuple(), True, None, None),
-        Observation("AAPL", "cash_and_equivalents", 1.0, "USD", date(2023, 9, 30), "ANNUAL", DataQuality.REPORTED, tuple(), tuple(), True, None, None),
-    ]
+    # Partial obs -> PARTIAL
+    obs2 = [Observation("AAPL", "revenue", 1.0, "USD", date(2023, 9, 30), "ANNUAL", DataQuality.REPORTED, tuple(prov), tuple(), True, None, None)]
     save_observations(c, obs2)
     state, msg = calculate_data_readiness("AAPL", c)
+    assert state == ReadinessState.PARTIAL
+    assert "Missing or invalid evidence" in msg
+    
+    # Core obs -> READY
+    obs3 = [
+        Observation("AAPL", "net_income", 1.0, "USD", date(2023, 9, 30), "ANNUAL", DataQuality.REPORTED, tuple(prov), tuple(), True, None, None),
+        Observation("AAPL", "operating_income", 1.0, "USD", date(2023, 9, 30), "ANNUAL", DataQuality.REPORTED, tuple(prov), tuple(), True, None, None),
+        Observation("AAPL", "operating_cash_flow", 1.0, "USD", date(2023, 9, 30), "ANNUAL", DataQuality.REPORTED, tuple(prov), tuple(), True, None, None),
+        Observation("AAPL", "cash_and_equivalents", 1.0, "USD", date(2023, 9, 30), "ANNUAL", DataQuality.REPORTED, tuple(prov), tuple(), True, None, None),
+    ]
+    save_observations(c, obs3)
+    state, msg = calculate_data_readiness("AAPL", c)
     assert state == ReadinessState.READY
+    
+    # Real Ingestion Failure -> FAILED
+    from financial_radar.models import Signal
+    from financial_radar.store import save_signals
+    fail_sig = [Signal("INGESTION_FAILED", "AAPL", "HIGH", "HIGH", "Failed", ())]
+    save_signals(c, fail_sig)
+    state, msg = calculate_data_readiness("AAPL", c)
+    assert state == ReadinessState.FAILED
 
 def test_nvda_golden_expectations():
     c = setup_db()

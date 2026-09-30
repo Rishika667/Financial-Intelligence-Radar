@@ -16,6 +16,7 @@ from .store import (
 )
 from .signals import divergence, margin_compression, cluster
 from .signals_phase2 import (
+cash_conversion as cash_conversion_deterioration,
     operating_margin_deterioration,
     cash_conversion,
     fcf_deterioration,
@@ -119,11 +120,10 @@ def _ratio(a, b, name):
 
 
 def evaluate(company, items, sector="Unknown"):
-    """Evaluate all 10 deterministic signals for a company's observations using canonical metrics."""
+    """Evaluate signals consuming canonical derived metrics."""
     from .metrics import derive_analytical_metrics, get_comparison_pair
-    derived = derive_analytical_metrics(items)
-    # Don't mutate the original items array permanently outside, but we can combine them here
-    all_obs = items + derived
+    # items already contains derived metrics now, but just in case, we can rely on items
+    all_obs = items
     
     out = []
 
@@ -147,57 +147,45 @@ def evaluate(company, items, sector="Unknown"):
             exp = "Not applicable to Financials sector."
         return Signal(id, company, "UNKNOWN", "LOW", exp, (), suppressed_reason="Sector Context (Financials)")
 
-    rev, prevrev = pair("revenue")
-    ar, prevar = pair_instant("accounts_receivable")
-    inv, previnv = pair_instant("inventory")
-
     if sector == "Financials":
         out.append(_suppress("RECEIVABLES_REVENUE_DIVERGENCE"))
         out.append(_suppress("INVENTORY_SALES_DIVERGENCE"))
         out.append(_suppress("FREE_CASH_FLOW_DETERIORATION"))
         out.append(_suppress("DEBT_OPERATING_INCOME_DETERIORATION"))
         out.append(_suppress("LIQUIDITY_COMPRESSION"))
+        out.append(_suppress("GROSS_MARGIN_COMPRESSION"))
 
-    if rev and prevrev and ar and prevar:
-        if sector != "Financials":
-            out.append(divergence("RECEIVABLES_REVENUE_DIVERGENCE", ar, rev, prevar, prevrev))
+    ar_rev, par_rev = pair("receivables_revenue_ratio")
+    if sector != "Financials" and ar_rev and par_rev:
+        out.append(divergence("RECEIVABLES_REVENUE_DIVERGENCE", ar_rev, par_rev))
             
-    if rev and prevrev and inv and previnv:
-        if sector != "Financials":
-            out.append(divergence("INVENTORY_SALES_DIVERGENCE", inv, rev, previnv, prevrev))
+    inv_rev, pinv_rev = pair("inventory_revenue_ratio")
+    if sector != "Financials" and inv_rev and pinv_rev:
+        out.append(divergence("INVENTORY_SALES_DIVERGENCE", inv_rev, pinv_rev))
 
-    # Margin compressions now use the CANONICAL metric
     gm, pgm = pair("gross_margin")
-    if gm and pgm:
-        if sector != "Financials":
-            out.append(margin_compression(gm, pgm))
+    if sector != "Financials" and gm and pgm:
+        out.append(margin_compression(gm, pgm))
 
     om, pom = pair("operating_margin")
     if om and pom:
         out.append(operating_margin_deterioration(om, pom))
 
-    ocf, pocf = pair("operating_cash_flow")
-    ni, pni = pair("net_income")
-    if ocf and ni and pocf and pni:
-        out.append(cash_conversion(ocf, ni, pocf, pni))
+    cc, pcc = pair("cash_conversion")
+    if cc and pcc:
+        out.append(cash_conversion_deterioration(cc, pcc))
 
     fcf, pfcf = pair("free_cash_flow")
-    if fcf and pfcf:
-        if sector != "Financials":
-            out.append(fcf_deterioration(fcf, pfcf))
+    if sector != "Financials" and fcf and pfcf:
+        out.append(fcf_deterioration(fcf, pfcf))
 
-    # For leverage, we compare Debt directly with Op Income as before, since it requires INSTANT vs QUARTER logic.
-    debt_cur, pdebt = pair_instant("debt")
-    op, pop = pair("operating_income")
-    if debt_cur and op and pdebt and pop:
-        if sector != "Financials":
-            out.append(leverage(debt_cur, op, pdebt, pop))
+    lev, plev = pair("debt_operating_income")
+    if sector != "Financials" and lev and plev:
+        out.append(leverage(lev, plev))
 
-    cash, pcash = pair_instant("cash_and_equivalents")
-    cl, pcl = pair_instant("current_liabilities")
-    if cash and cl and pcash and pcl:
-        if sector != "Financials":
-            out.append(liquidity(cash, cl, pcash, pcl))
+    liq, pliq = pair("liquidity_ratio")
+    if sector != "Financials" and liq and pliq:
+        out.append(liquidity(liq, pliq))
 
     shares, pshares = pair("share_count")
     if shares and pshares:
@@ -233,6 +221,30 @@ def ingest_company(client, c, company):
     from .metrics import derive_analytical_metrics
     derived = derive_analytical_metrics(obs)
     obs.extend(derived)
+    
+    # Enforce data model precedence: AMENDED > REPORTED > DERIVED > NOT_REPORTED
+    from .models import DataQuality
+    quality_rank = {
+        DataQuality.AMENDED: 4,
+        DataQuality.RESTATED: 4,
+        DataQuality.REPORTED: 3,
+        DataQuality.DERIVED: 2,
+        DataQuality.NOT_REPORTED: 1
+    }
+    
+    dedup = {}
+    for o in obs:
+        key = (o.company, o.metric, o.period_end, o.period_type, o.unit)
+        if key not in dedup:
+            dedup[key] = o
+        else:
+            existing = dedup[key]
+            eq = quality_rank.get(existing.quality, 0)
+            nq = quality_rank.get(o.quality, 0)
+            if nq > eq:
+                dedup[key] = o
+                
+    obs = list(dedup.values())
     
     save_observations(c, obs)
     from .store import save_filings

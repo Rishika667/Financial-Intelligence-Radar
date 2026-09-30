@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS system_state(
 def connect(path="data/radar.sqlite"):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     # Use standard sqlite defaults but enable WAL
-    c = sqlite3.connect(path, timeout=30.0)
+    c = sqlite3.connect(path, timeout=30.0, check_same_thread=False)
     c.execute("PRAGMA journal_mode=WAL")
     c.execute("PRAGMA synchronous=NORMAL")
     c.row_factory = sqlite3.Row

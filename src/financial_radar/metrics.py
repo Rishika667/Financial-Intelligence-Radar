@@ -15,16 +15,28 @@ def get_comparison_pair(
     - sequential: Q2 2026 vs Q1 2026 (QUARTER, ~90 days apart)
     - annual: FY2026 vs FY2025 (ANNUAL, ~365 days apart)
     """
-    candidates = [o for o in observations if o.metric == metric and o.period_type == period_type]
-    if not candidates:
+    # Filter for completely valid observations
+    valid_obs = [
+        o for o in observations
+        if o.metric == metric
+        and o.period_type == period_type
+        and o.value is not None
+        and getattr(o, "quality", None) in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED)
+        and getattr(o, "comparable", True)
+    ]
+    if not valid_obs:
         return None, None
         
     # Sort strictly by period_end descending
-    candidates.sort(key=lambda x: x.period_end, reverse=True)
-    current = candidates[0]
+    valid_obs.sort(key=lambda x: x.period_end, reverse=True)
+    current = valid_obs[0]
     
     prior = None
-    for candidate in candidates[1:]:
+    for candidate in valid_obs[1:]:
+        # Must have same unit
+        if candidate.unit != current.unit:
+            continue
+            
         days_diff = (current.period_end - candidate.period_end).days
         
         if mode == "yoy":
@@ -57,7 +69,16 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
             groups[key] = {}
         groups[key][o.metric] = o
         
+    # Helper to retrieve an INSTANT metric matching the period_end
+    def get_instant(m_name, pend):
+        if (pend, "INSTANT") in groups:
+            return groups[(pend, "INSTANT")].get(m_name)
+        return None
+        
     for (pend, pt), metrics in groups.items():
+        if pt == "INSTANT":
+            continue # We derive ratios from the PERIOD metrics (QUARTER/ANNUAL) combined with INSTANT metrics
+            
         company = next(iter(metrics.values())).company
         
         # Helper to create derived obs
@@ -70,51 +91,58 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
                 period_end=pend,
                 period_type=pt,
                 quality=quality,
-                provenance=tuple(set(p for b in bases for p in getattr(b, "provenance", ()))),
+                provenance=sum((b.provenance for b in bases), ()),
                 derived_from=tuple(b.metric for b in bases),
-                comparable=all(getattr(b, "comparable", True) for b in bases),
-                period_start=bases[0].period_start if bases and hasattr(bases[0], "period_start") else None
+                comparable=all(b.comparable for b in bases)
             )
-
+            
         rev = metrics.get("revenue")
         gp = metrics.get("gross_profit")
         oi = metrics.get("operating_income")
         ni = metrics.get("net_income")
         ocf = metrics.get("operating_cash_flow")
-        fcf = metrics.get("free_cash_flow")
-        capex = metrics.get("capex")
-        debt = metrics.get("debt")
-        cash = metrics.get("cash_and_equivalents")
-        cl = metrics.get("current_liabilities")
-        shares = metrics.get("share_count")
+        capex = metrics.get("capital_expenditures")
         
         # Gross Margin
-        if rev and gp and rev.value and rev.value != 0:
+        if gp and rev and rev.value and rev.value > 0:
             derived.append(_derive("gross_margin", gp.value / rev.value, "pure", [gp, rev]))
             
         # Operating Margin
-        if rev and oi and rev.value and rev.value != 0:
+        if oi and rev and rev.value and rev.value > 0:
             derived.append(_derive("operating_margin", oi.value / rev.value, "pure", [oi, rev]))
             
         # Net Margin
-        if rev and ni and rev.value and rev.value != 0:
+        if ni and rev and rev.value and rev.value > 0:
             derived.append(_derive("net_margin", ni.value / rev.value, "pure", [ni, rev]))
             
         # Free Cash Flow (if not directly reported but derived from OCF - Capex)
-        if ocf and capex and not fcf and ocf.value is not None and capex.value is not None:
+        if ocf and capex and "free_cash_flow" not in metrics:
             derived.append(_derive("free_cash_flow", ocf.value - capex.value, ocf.unit, [ocf, capex]))
-            fcf = derived[-1]
             
-        # Cash Conversion (OCF / Net Income)
-        if ocf and ni and ni.value and ni.value != 0:
+        # Cash Conversion
+        if ocf and ni and ni.value and ni.value > 0:
             derived.append(_derive("cash_conversion", ocf.value / ni.value, "pure", [ocf, ni]))
             
         # Debt / Operating Income
+        debt = get_instant("debt", pend)
         if debt and oi and oi.value and oi.value > 0:
-            # We enforce same period type and end date for simplicity of representation here
-            # For debt (INSTANT) vs oi (PERIOD), normalization handles the period_type logic,
-            # but if they happen to align here, we compute it. If not, signals will use pair logic.
-            pass
+            derived.append(_derive("debt_operating_income", debt.value / oi.value, "pure", [debt, oi]))
+            
+        # Liquidity (Cash / Current Liabilities)
+        cash = get_instant("cash_and_equivalents", pend)
+        cl = get_instant("current_liabilities", pend)
+        if cash and cl and cl.value and cl.value > 0:
+            derived.append(_derive("liquidity_ratio", cash.value / cl.value, "pure", [cash, cl]))
+            
+        # Receivables / Revenue
+        ar = get_instant("accounts_receivable", pend)
+        if ar and rev and rev.value and rev.value > 0:
+            derived.append(_derive("receivables_revenue_ratio", ar.value / rev.value, "pure", [ar, rev]))
+            
+        # Inventory / Revenue
+        inv = get_instant("inventory", pend)
+        if inv and rev and rev.value and rev.value > 0:
+            derived.append(_derive("inventory_revenue_ratio", inv.value / rev.value, "pure", [inv, rev]))
             
     # Calculate Growth metrics using our canonical comparison engine
     all_obs = observations + derived

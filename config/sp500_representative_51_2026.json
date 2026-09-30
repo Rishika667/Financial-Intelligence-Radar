@@ -318,7 +318,8 @@
                 "GOOGL",
                 "META",
                 "AMZN"
-            ]
+            ],
+            "universe_type": "APPLICATION_UNIVERSE"
         },
         {
             "peer_group_id": "semiconductors",
@@ -327,7 +328,8 @@
                 "NVDA",
                 "AMD",
                 "INTC"
-            ]
+            ],
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
         },
         {
             "peer_group_id": "large_banks",
@@ -337,7 +339,8 @@
                 "BAC",
                 "C",
                 "WFC"
-            ]
+            ],
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
         },
         {
             "peer_group_id": "healthcare_majors",
@@ -346,7 +349,8 @@
                 "JNJ",
                 "PFE",
                 "UNH"
-            ]
+            ],
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
         },
         {
             "peer_group_id": "energy_majors",
@@ -354,7 +358,8 @@
             "members": [
                 "XOM",
                 "CVX"
-            ]
+            ],
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
         }
     ],
     "peer_group_version": "v1"

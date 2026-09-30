@@ -4,62 +4,23 @@ from statistics import median
 from .models import DataQuality
 
 
-def load_peer_groups(universe_path="config/sp500_representative_50_2026.json"):
-    """Dynamically generate peer groups from the company universe based on GICS Sectors/Sub-Industries."""
+def load_peer_groups(universe_path="config/sp500_representative_51_2026.json"):
+    """Load explicitly curated peer groups."""
     try:
         data = json.loads(Path(universe_path).read_text(encoding="utf-8"))
     except FileNotFoundError:
         return {"version": "unknown", "groups": []}
 
-    companies = data.get("companies", [])
-    
-    # Group by Sector and Sub-Industry
-    sub_industries = {}
-    sectors = {}
-    for c in companies:
-        sub = c.get("sub_industry") or c.get("sector") or "Unknown"
-        sec = c.get("sector") or "Unknown"
-        sub_industries.setdefault(sub, []).append(c["ticker"])
-        sectors.setdefault(sec, []).append(c["ticker"])
-        
-    groups = []
-    # If a sub-industry has >= 3 members, it is a tight peer group
-    # Otherwise, fall back to sector if sector has >= 3 members
-    for c in companies:
-        ticker = c["ticker"]
-        sub = c.get("sub_industry") or c.get("sector") or "Unknown"
-        sec = c.get("sector") or "Unknown"
-        
-        if len(sub_industries[sub]) >= 3:
-            groups.append({"id": f"SubInd:{sub}", "members": sub_industries[sub]})
-        elif len(sectors[sec]) >= 3:
-            groups.append({"id": f"Sector:{sec}", "members": sectors[sec]})
-            
-    # Deduplicate groups
-    unique_groups = []
-    seen = set()
-    for g in groups:
-        if g["id"] not in seen:
-            seen.add(g["id"])
-            unique_groups.append(g)
-            
-    return {"version": data.get("version", "dynamic"), "groups": unique_groups}
-
+    return {
+        "version": data.get("peer_group_version", "v1"),
+        "groups": data.get("peer_groups", [])
+    }
 
 def find_peer_group(ticker, peer_groups):
-    """Find the tightest peer group containing a given ticker."""
-    best_group = None
-    best_members = []
-    
-    # Prefer SubInd over Sector, but load_peer_groups handles naming
+    """Find curated peer group containing ticker."""
     for group in peer_groups.get("groups", []):
         if ticker in group.get("members", []):
-            if best_group is None or group["id"].startswith("SubInd:"):
-                best_group = group["id"]
-                best_members = [m for m in group["members"] if m != ticker]
-                
-    if best_group:
-        return best_group, best_members
+            return group.get("peer_group_id", group.get("id")), [m for m in group["members"] if m != ticker]
     return None, []
 
 
@@ -97,7 +58,7 @@ def peer_context(company, metric, observations, members):
         and o.comparable
         and o.unit == anchor.unit
         and o.period_type == anchor.period_type
-        and o.period_end == anchor.period_end
+        and abs((o.period_end - anchor.period_end).days) <= 45  # Fiscal period alignment rule
         and o.quality in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED)
     ]
     

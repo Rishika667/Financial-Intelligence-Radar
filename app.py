@@ -156,7 +156,7 @@ with tab_dashboard:
                     if s.get("weight") is not None and s.get("exposure") is not None:
                         st.markdown(f"**Portfolio Context:** Weight: {s['weight']*100:.2f}%, Exposure: ")
                     else:
-                        st.markdown("**Portfolio Context:** N/A")
+                        st.markdown("**Portfolio Context:** Not held")
                     st.markdown("### Evidence")
 
                     if s["evidence"]:
@@ -211,14 +211,29 @@ with tab_research:
             st.markdown("## 3. Financial Performance")
             
             st.markdown("### Historical Series")
-            hist_metrics = ("revenue", "gross_margin", "operating_margin", "operating_cash_flow", "free_cash_flow", "revenue_growth_yoy")
-            hist_obs = [r for r in all_q_obs if r["metric"] in hist_metrics]
-            if hist_obs:
-                df_trends = pd.DataFrame(hist_obs)
-                # Ensure it's sorted historically
-                df_trends = df_trends.sort_values("period_end")
-                fig = px.line(df_trends, x="period_end", y="value", color="metric", markers=True, title="Quarterly Historical Trends")
-                st.plotly_chart(fig, use_container_width=True)
+            if all_q_obs:
+                df_trends = pd.DataFrame(all_q_obs).sort_values("period_end")
+                
+                # Chart A: Monetary performance
+                chart_a_metrics = ["revenue", "operating_cash_flow", "free_cash_flow"]
+                df_a = df_trends[df_trends["metric"].isin(chart_a_metrics)]
+                if not df_a.empty:
+                    fig_a = px.line(df_a, x="period_end", y="value", color="metric", markers=True, title="Chart A: Revenue & Cash Flow (USD)", labels={"value": "USD"})
+                    st.plotly_chart(fig_a, use_container_width=True)
+                    
+                # Chart B: Margins
+                chart_b_metrics = ["gross_margin", "operating_margin", "net_margin"]
+                df_b = df_trends[df_trends["metric"].isin(chart_b_metrics)]
+                if not df_b.empty:
+                    fig_b = px.line(df_b, x="period_end", y="value", color="metric", markers=True, title="Chart B: Margins (Ratio)", labels={"value": "Ratio"})
+                    st.plotly_chart(fig_b, use_container_width=True)
+                    
+                # Chart C: Growth
+                chart_c_metrics = ["revenue_growth_yoy"]
+                df_c = df_trends[df_trends["metric"].isin(chart_c_metrics)]
+                if not df_c.empty:
+                    fig_c = px.line(df_c, x="period_end", y="value", color="metric", markers=True, title="Chart C: Growth (YoY %)", labels={"value": "Growth %"})
+                    st.plotly_chart(fig_c, use_container_width=True)
             else:
                 st.info("Insufficient data for trend charts.")
     

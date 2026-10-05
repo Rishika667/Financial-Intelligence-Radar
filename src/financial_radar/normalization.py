@@ -51,22 +51,40 @@ def extract_companyfacts(company, cik, payload, filings):
                     start_str = x.get("start")
                     start_dt = None
 
+                    fy = x.get("fy")
+                    fp = x.get("fp")
+                    
                     if not start_str:
                         pt = "INSTANT"
                     else:
                         try:
                             start_dt = date.fromisoformat(start_str)
                             days = (end_dt - start_dt).days
-                            if 80 <= days <= 100:
-                                pt = "QUARTER"
-                            elif 170 <= days <= 190:
-                                pt = "YTD_6M"
-                            elif 260 <= days <= 280:
-                                pt = "YTD_9M"
-                            elif 350 <= days <= 380:
+                            
+                            if fp == "FY" or (350 <= days <= 380):
                                 pt = "ANNUAL"
+                            elif fp == "Q1":
+                                pt = "QUARTER"
+                            elif fp == "Q2":
+                                pt = "YTD_6M" if days > 120 else "QUARTER"
+                            elif fp == "Q3":
+                                pt = "YTD_9M" if days > 200 else "QUARTER"
+                            elif fp == "Q4":
+                                pt = "QUARTER"
+                            elif fp == "H1":
+                                pt = "YTD_6M"
                             else:
-                                pt = "UNKNOWN"
+                                # secondary guard
+                                if 80 <= days <= 100:
+                                    pt = "QUARTER"
+                                elif 170 <= days <= 190:
+                                    pt = "YTD_6M"
+                                elif 260 <= days <= 280:
+                                    pt = "YTD_9M"
+                                elif 350 <= days <= 380:
+                                    pt = "ANNUAL"
+                                else:
+                                    pt = "UNKNOWN"
                         except ValueError:
                             pt = "UNKNOWN"
 
@@ -88,6 +106,8 @@ def extract_companyfacts(company, cik, payload, filings):
                         "filed": filed_dt,
                         "tag_idx": tag_idx,
                         "start": start_dt,
+                        "fy": fy,
+                        "fp": fp,
                     })
 
     # 2. Canonical Fact Selection (deduplication, restatements, amendments)
@@ -135,6 +155,8 @@ def extract_companyfacts(company, cik, payload, filings):
                     "tag_idx": 0,
                     "derived_from": (f"debt_current {end.isoformat()} INSTANT", f"debt_noncurrent {end.isoformat()} INSTANT"),
                     "start": None,
+                    "fy": c_debt.get("fy"),
+                    "fp": c_debt.get("fp"),
                 }
 
     obs_map = defaultdict(list)
@@ -154,6 +176,7 @@ def extract_companyfacts(company, cik, payload, filings):
             company, metric, f["value"], f["unit"], f["end"], f["pt"],
             f["quality"], provs, f.get("derived_from", ()),
             True, None, f.get("start"),
+            f.get("fy"), f.get("fp")
         )
         obs_map[metric].append(o)
         out.append(o)

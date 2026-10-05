@@ -10,12 +10,7 @@ def get_comparison_pair(
 ) -> Tuple[Optional[Observation], Optional[Observation]]:
     """
     Authoritative comparison methodology.
-    Explicitly distinguishes:
-    - yoy: Q2 2026 vs Q2 2025 (QUARTER, ~365 days apart)
-    - sequential: Q2 2026 vs Q1 2026 (QUARTER, ~90 days apart)
-    - annual: FY2026 vs FY2025 (ANNUAL, ~365 days apart)
     """
-    # Filter for completely valid observations
     valid_obs = [
         o for o in observations
         if o.metric == metric
@@ -27,28 +22,42 @@ def get_comparison_pair(
     if not valid_obs:
         return None, None
         
-    # Sort strictly by period_end descending
     valid_obs.sort(key=lambda x: x.period_end, reverse=True)
     current = valid_obs[0]
     
     prior = None
     for candidate in valid_obs[1:]:
-        # Must have same unit
         if candidate.unit != current.unit:
             continue
             
+        # Fiscal semantics first
+        cfy = getattr(current, "fiscal_year", None)
+        cfp = getattr(current, "fiscal_period", None)
+        pfy = getattr(candidate, "fiscal_year", None)
+        pfp = getattr(candidate, "fiscal_period", None)
+        
         days_diff = (current.period_end - candidate.period_end).days
         
-        if mode == "yoy":
-            if 350 <= days_diff <= 380:
+        if cfy and pfy and cfp and pfp:
+            if mode == "yoy":
+                if cfy == pfy + 1 and cfp == pfp:
+                    prior = candidate
+                    break
+            elif mode == "annual":
+                if cfy == pfy + 1 and cfp == "FY" and pfp == "FY":
+                    prior = candidate
+                    break
+            elif mode == "sequential":
+                if (cfy == pfy and int(cfp.replace("Q", "")) == int(pfp.replace("Q", "")) + 1 if "Q" in cfp and "Q" in pfp else False) or (cfy == pfy + 1 and cfp == "Q1" and pfp == "Q4"):
+                    prior = candidate
+                    break
+
+        # Fallback to date boundaries if fiscal info missing or unmatched
+        if prior is None:
+            if mode in ("yoy", "annual") and (350 <= days_diff <= 380):
                 prior = candidate
                 break
-        elif mode == "sequential":
-            if 80 <= days_diff <= 100:
-                prior = candidate
-                break
-        elif mode == "annual":
-            if 350 <= days_diff <= 380:
+            elif mode == "sequential" and (80 <= days_diff <= 100):
                 prior = candidate
                 break
                 

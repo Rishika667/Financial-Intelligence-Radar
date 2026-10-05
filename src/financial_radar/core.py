@@ -27,12 +27,18 @@ def derive_standalone_quarter(ytd, prior_ytd):
             DataQuality.CALCULATION_INVALID, comparable=False,
             comparability_reason="Invalid YTD contexts"
         )
+    fp = None
+    if ytd.period_type == "YTD_6M": fp = "Q2"
+    elif ytd.period_type == "YTD_9M": fp = "Q3"
+    elif ytd.period_type == "ANNUAL": fp = "Q4"
     return Observation(
         ytd.company, ytd.metric, ytd.value - prior_ytd.value, ytd.unit,
         ytd.period_end, "QUARTER", DataQuality.DERIVED,
         ytd.provenance + prior_ytd.provenance,
         derived_from=(f"{ytd.metric} {ytd.period_end.isoformat()} {ytd.period_type}", f"{prior_ytd.metric} {prior_ytd.period_end.isoformat()} {prior_ytd.period_type}"),
-        period_start=prior_ytd.period_end + timedelta(days=1)
+        period_start=prior_ytd.period_end + timedelta(days=1),
+        fiscal_year=ytd.fiscal_year,
+        fiscal_period=fp
     )
 
 

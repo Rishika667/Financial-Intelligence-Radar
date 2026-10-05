@@ -1,6 +1,7 @@
 import json
 import logging
 import time
+from .models import Signal
 from pathlib import Path
 
 from .core import SECClient
@@ -14,15 +15,9 @@ from .store import (
     clear_signals,
     clear_peer_context,
 )
-from .signals import divergence, margin_compression, cluster
-from .signals_phase2 import (
-cash_conversion as cash_conversion_deterioration,
-    operating_margin_deterioration,
-    cash_conversion,
-    fcf_deterioration,
-    leverage,
-    liquidity,
-    dilution,
+from .signals import (
+    divergence, gross_margin_compression, operating_margin_deterioration,
+    cash_conversion, fcf_deterioration, leverage, liquidity, dilution, cluster
 )
 from .events import extract_events
 from .peers import load_peer_groups, peer_context_for_company
@@ -165,7 +160,7 @@ def evaluate(company, items, sector="Unknown"):
 
     gm, pgm = pair("gross_margin")
     if sector != "Financials" and gm and pgm:
-        out.append(margin_compression(gm, pgm))
+        out.append(gross_margin_compression(gm, pgm))
 
     om, pom = pair("operating_margin")
     if om and pom:
@@ -173,7 +168,7 @@ def evaluate(company, items, sector="Unknown"):
 
     cc, pcc = pair("cash_conversion")
     if cc and pcc:
-        out.append(cash_conversion_deterioration(cc, pcc))
+        out.append(cash_conversion(cc, pcc))
 
     fcf, pfcf = pair("free_cash_flow")
     if sector != "Financials" and fcf and pfcf:
@@ -209,10 +204,25 @@ def ingest_company(client, c, company):
     ticker = company["ticker"]
     cik = company["cik"]
 
-    # Fetch from SEC
-    sub = client.submissions(cik)
-    facts = client.company_facts(cik)
-    filings = filing_index(sub, cik)
+    try:
+        # Fetch from SEC
+        sub = client.submissions(cik)
+        facts = client.company_facts(cik)
+        filings = filing_index(sub, cik)
+    except Exception as e:
+        # Persist failure signal but preserve previous data
+        # Remove any previous INGESTION_FAILED signal, then add new one
+        c.execute("DELETE FROM signals WHERE company=? AND signal_id='INGESTION_FAILED'", (ticker,))
+        fail_sig = Signal(
+            signal_id="INGESTION_FAILED",
+            company=ticker,
+            severity="HIGH",
+            confidence="HIGH",
+            explanation=f"SEC ingestion failed: {str(e)}",
+            evidence=(),
+        )
+        save_signals(c, [fail_sig])
+        raise
 
     # Normalize observations
     obs = extract_companyfacts(ticker, cik, facts, filings)

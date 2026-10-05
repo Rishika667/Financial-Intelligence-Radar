@@ -154,7 +154,7 @@ def test_persisted_cluster_component_lineage(tmp_path):
 
     save_signals(c, [hit])
     persisted = rows(
-        c, "SELECT * FROM signals WHERE signal_id='MULTIPLE_DETERIORATION'"
+        c, "SELECT * FROM signals WHERE signal_id='MULTI_FACTOR_DETERIORATION_CLUSTER'"
     )
     assert len(persisted) == 1
     row = persisted[0]

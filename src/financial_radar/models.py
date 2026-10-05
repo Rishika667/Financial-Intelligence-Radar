@@ -33,6 +33,8 @@ class Provenance:
     raw_value: float | None = None
     mapping_version: str = "v1"
     period_start: date | None = None
+    fiscal_year: int | None = None
+    fiscal_period: str | None = None
 
 @dataclass(frozen=True)
 class Observation:
@@ -48,6 +50,8 @@ class Observation:
     comparable: bool = True
     comparability_reason: str | None = None
     period_start: date | None = None
+    fiscal_year: int | None = None
+    fiscal_period: str | None = None
 
 @dataclass(frozen=True)
 class Signal:

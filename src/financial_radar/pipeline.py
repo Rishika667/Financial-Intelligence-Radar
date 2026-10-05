@@ -3,7 +3,7 @@ import logging
 import time
 from pathlib import Path
 
-from .core import SECClient, free_cash_flow
+from .core import SECClient
 from .normalization import extract_companyfacts
 from .store import (
     save_observations,
@@ -350,7 +350,7 @@ def validate_portfolio_csv(df, universe_tickers):
         
     for t in df["ticker"]:
         if t not in universe_tickers:
-            return False, f"Ticker {t} is not in the 50-company universe."
+            return False, f"Ticker {t} is not in the 51-company universe."
             
     try:
         df["shares"] = df["shares"].astype(float)

@@ -1,4 +1,4 @@
-import pytest
+﻿import pytest
 from streamlit.testing.v1 import AppTest
 import os
 import json
@@ -17,33 +17,54 @@ def test_release_candidate_end_to_end(tmp_path, monkeypatch):
         def __init__(self, ua): pass
         def delay(self): pass
         def submissions(self, cik, fetch_historical=False):
-            t = "aapl" if cik == "0000320193" else "msft" if cik == "0000789019" else "nvda"
-            try:
-                with open(f'tests/fixtures/{t}_submissions.json', 'r', encoding='utf-8') as f:
-                    return json.load(f)
-            except Exception as e:
-                # Fallback to structural mock if file missing
-                return {"filings": {"recent": {"accessionNumber": ["0001", "0002"], "form": ["10-K", "8-K"], "reportDate": ["2023-09-30", "2023-10-01"], "primaryDocument": ["10k.htm", "8k.htm"], "filingDate": ["2023-11-03", "2023-10-05"]}}}
-                
+            import json, os
+            if cik == "0000320193": t = "aapl"
+            elif cik == "0000789019": t = "msft"
+            elif cik == "0000019617": t = "jpm"
+            else: t = "nvda"
+            path = f'tests/fixtures/{t}_submissions.json'
+            if not os.path.exists(path): raise FileNotFoundError(f"Required SEC golden fixture missing: {path}")
+            with open(path, 'r', encoding='utf-8') as f: return json.load(f)
+            
         def company_facts(self, cik):
-            t = "aapl" if cik == "0000320193" else "msft" if cik == "0000789019" else "nvda"
-            try:
-                with open(f'tests/fixtures/{t}_facts.json', 'r', encoding='utf-8') as f:
-                    return json.load(f)
-            except:
-                return {"facts": {"us-gaap": {"Revenues": {"units": {"USD": [{"end": "2023-09-30", "val": 383000000.0, "accn": "0001", "filed": "2023-11-03", "form": "10-K", "start": "2022-09-25"}, {"end": "2022-09-24", "val": 394000000.0, "accn": "0001", "filed": "2023-11-03", "form": "10-K", "start": "2021-09-26"}]}}}}}
-                
+            import json, os
+            if cik == "0000320193": t = "aapl"
+            elif cik == "0000789019": t = "msft"
+            elif cik == "0000019617": t = "jpm"
+            else: t = "nvda"
+            path = f'tests/fixtures/{t}_facts.json'
+            if not os.path.exists(path): raise FileNotFoundError(f"Required SEC golden fixture missing: {path}")
+            with open(path, 'r', encoding='utf-8') as f: return json.load(f)
+
     monkeypatch.setattr("financial_radar.core.SECClient", MockSECClient)
+    import sys
+    if "app" in sys.modules:
+        monkeypatch.setattr(sys.modules["app"], "SECClient", MockSECClient)
+
     
     class MockResponse:
         def __init__(self, text): self.text = text
         def raise_for_status(self): pass
         
     class MockSession:
+        def __init__(self): self.headers = {}
         def get(self, url, timeout): return MockResponse("Departure of Directors or Certain Officers. John Doe resigned.")
             
     monkeypatch.setattr("financial_radar.core.requests.Session", lambda: MockSession())
     
+
+    import streamlit as st
+    captured_dfs = []
+    def mock_df(data, *args, **kwargs):
+        import pandas as pd
+        df = pd.DataFrame(data)
+        captured_dfs.append(df)
+        st.text(f"MOCKED_DF: {len(df)} rows")
+    monkeypatch.setattr(st, "dataframe", mock_df)
+    import sys
+    if "app" in sys.modules:
+        monkeypatch.setattr(sys.modules["app"].st, "dataframe", mock_df)
+        
     at = AppTest.from_file("../app.py", default_timeout=30)
     at.run()
     

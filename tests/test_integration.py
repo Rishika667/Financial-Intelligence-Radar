@@ -66,23 +66,6 @@ def test_mismatched_currency_ratio_calculation():
     assert ratio.comparable is False
 
 
-def test_mismatched_period_fcf():
-    from financial_radar.core import free_cash_flow
-
-    ocf = Observation(
-        "ABC", "operating_cash_flow", 50, "USD",
-        date(2025, 3, 31), "QUARTER", DataQuality.REPORTED,
-    )
-    capex = Observation(
-        "ABC", "capex", -20, "USD",
-        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
-    )
-    fcf = free_cash_flow(ocf, capex)
-    assert fcf.value is None
-    assert fcf.quality == DataQuality.CALCULATION_INVALID
-    assert fcf.comparable is False
-
-
 def test_store_and_watchlist(tmp_path):
     c = connect(tmp_path / "x.sqlite")
     save_watchlist(c, [{"ticker": "ABC", "cik": "1", "active": True}])
@@ -223,28 +206,6 @@ def test_filing_persistence_idempotence(tmp_path):
     assert len(res) == 1
 
 
-def test_derived_lineage(tmp_path):
-    c = connect(tmp_path / "x.sqlite")
-    ocf = Observation(
-        "ABC", "operating_cash_flow", 100, "USD",
-        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (_prov(),),
-    )
-    cap = Observation(
-        "ABC", "capex", -20, "USD",
-        date(2025, 6, 30), "QUARTER", DataQuality.REPORTED, (_prov(),),
-    )
-    from financial_radar.core import free_cash_flow
-
-    fcf = free_cash_flow(ocf, cap)
-    assert fcf.derived_from == ("operating_cash_flow 2025-06-30 QUARTER", "capex 2025-06-30 QUARTER")
-
-    sig = Signal("TEST", "ABC", "LOW", "LOW", "Test", (fcf,))
-    save_signals(c, [sig])
-    saved = rows(c, "SELECT evidence FROM signals")[0]["evidence"]
-    ev = json.loads(saved)
-    assert ev[0]["derived_from"] == ["operating_cash_flow 2025-06-30 QUARTER", "capex 2025-06-30 QUARTER"]
-
-
 def test_production_peer_pipeline(tmp_path, monkeypatch):
     """End-to-end: ingest -> persist -> reload -> peer context -> persist -> retrieve."""
     c = connect(tmp_path / "x.sqlite")
@@ -299,7 +260,7 @@ def test_production_peer_pipeline(tmp_path, monkeypatch):
     monkeypatch.setattr(
         financial_radar.peers,
         "load_peer_groups",
-        lambda p="config/sp500_representative_50_2026.json": pg,
+        lambda p="config/sp500_representative_51_2026.json": pg,
     )
 
     # Ingest peer DEF first

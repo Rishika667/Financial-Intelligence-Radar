@@ -116,8 +116,8 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
             derived.append(_derive("net_margin", ni.value / rev.value, "pure", [ni, rev]))
             
         # Free Cash Flow (if not directly reported but derived from OCF - Capex)
-        if ocf and capex and "free_cash_flow" not in metrics:
-            derived.append(_derive("free_cash_flow", ocf.value - capex.value, ocf.unit, [ocf, capex]))
+        if ocf and capex and ocf.value is not None and capex.value is not None and "free_cash_flow" not in metrics:
+            derived.append(_derive("free_cash_flow", ocf.value - abs(capex.value), ocf.unit, [ocf, capex]))
             
         # Cash Conversion
         if ocf and ni and ni.value and ni.value > 0:

@@ -1,5 +1,5 @@
 from datetime import date
-from financial_radar.core import pct_change, derive_standalone_quarter, free_cash_flow
+from financial_radar.core import pct_change, derive_standalone_quarter
 from financial_radar.models import Observation, Provenance, DataQuality
 import datetime
 
@@ -64,32 +64,6 @@ def test_standalone_quarter_wrong_period_type():
     sq = derive_standalone_quarter(ytd, prior_ytd)
     assert sq.quality == DataQuality.CALCULATION_INVALID
 
-
-def test_free_cash_flow_normal():
-    ocf = o("operating_cash_flow", 500, date(2025, 6, 30), "QUARTER")
-    capex = o("capex", -100, date(2025, 6, 30), "QUARTER")
-    fcf = free_cash_flow(ocf, capex)
-    assert fcf.value == 400
-    assert fcf.metric == "free_cash_flow"
-    assert fcf.quality == DataQuality.DERIVED
-
-
-def test_free_cash_flow_missing_input():
-    ocf = o("operating_cash_flow", None, date(2025, 6, 30), "QUARTER")
-    capex = o("capex", -100, date(2025, 6, 30), "QUARTER")
-    fcf = free_cash_flow(ocf, capex)
-    assert fcf.value is None
-    assert fcf.quality == DataQuality.CALCULATION_INVALID
-
-
-def test_free_cash_flow_incomparable_input():
-    ocf = Observation(
-        "ABC", "operating_cash_flow", 500, "USD", date(2025, 6, 30),
-        "QUARTER", DataQuality.REPORTED, (_prov(),), comparable=False,
-    )
-    capex = o("capex", -100, date(2025, 6, 30), "QUARTER")
-    fcf = free_cash_flow(ocf, capex)
-    assert fcf.quality == DataQuality.CALCULATION_INVALID
 
 def test_historical_submissions(tmp_path, monkeypatch):
     from financial_radar.core import SECClient

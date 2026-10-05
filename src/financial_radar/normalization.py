@@ -12,7 +12,7 @@ CONCEPTS = {
     "operating_income": ("OperatingIncomeLoss",),
     "net_income": ("NetIncomeLoss",),
     "operating_cash_flow": ("NetCashProvidedByUsedInOperatingActivities",),
-    "capex": ("PaymentsToAcquirePropertyPlantAndEquipment",),
+    "capital_expenditures": ("PaymentsToAcquirePropertyPlantAndEquipment",),
     "accounts_receivable": ("AccountsReceivableNetCurrent",),
     "inventory": ("InventoryNet",),
     "cash_and_equivalents": ("CashAndCashEquivalentsAtCarryingValue",),

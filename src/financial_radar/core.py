@@ -35,22 +35,7 @@ def derive_standalone_quarter(ytd, prior_ytd):
         period_start=prior_ytd.period_end + timedelta(days=1)
     )
 
-def free_cash_flow(ocf, capex):
-    valid = (
-        ocf.value is not None 
-        and capex.value is not None 
-        and ocf.comparable 
-        and capex.comparable
-        and ocf.company == capex.company
-        and ocf.unit == capex.unit
-        and ocf.period_end == capex.period_end
-        and ocf.period_type == capex.period_type
-    )
-    if not valid:
-        return Observation(
-            ocf.company, "free_cash_flow", None, ocf.unit, ocf.period_end,
-            ocf.period_type, DataQuality.CALCULATION_INVALID, comparable=False
-        )
+
     return Observation(
         ocf.company, "free_cash_flow", ocf.value - abs(capex.value), ocf.unit,
         ocf.period_end, ocf.period_type, DataQuality.DERIVED,

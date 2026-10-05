@@ -28,32 +28,32 @@ def test_refresh_workflow(tmp_path, monkeypatch):
     
     class MockSECClient:
         def __init__(self, ua): pass
+        def delay(self): pass
         def submissions(self, cik, fetch_historical=False):
-            return {"filings": {"recent": {"accessionNumber": ["0001", "0002"], "form": ["10-K", "8-K"], "reportDate": ["2023-09-30", "2023-10-01"], "primaryDocument": ["10k.htm", "8k.htm"], "filingDate": ["2023-11-03", "2023-10-05"]}}}
-        def company_facts(self, cik):
-            return {
-                "facts": {
-                    "us-gaap": {
-                        "Revenues": {"units": {"USD": [
-                            {"end": "2023-09-30", "val": 383000000.0, "accn": "0001", "filed": "2023-11-03", "form": "10-K", "start": "2022-09-25"},
-                            {"end": "2022-09-24", "val": 394000000.0, "accn": "0001", "filed": "2023-11-03", "form": "10-K", "start": "2021-09-26"}
-                        ]}},
-                        "GrossProfit": {"units": {"USD": [
-                            {"end": "2023-09-30", "val": 169000000.0, "accn": "0001", "filed": "2023-11-03", "form": "10-K", "start": "2022-09-25"},
-                            {"end": "2022-09-24", "val": 170000000.0, "accn": "0001", "filed": "2023-11-03", "form": "10-K", "start": "2021-09-26"}
-                        ]}}
-                    }
-                }
-            }
+            import json, os
+            if cik == "0000320193": t = "aapl"
+            elif cik == "0000789019": t = "msft"
+            elif cik == "0000019617": t = "jpm"
+            else: t = "nvda"
+            path = f'tests/fixtures/{t}_submissions.json'
+            if not os.path.exists(path): raise FileNotFoundError(f"Required SEC golden fixture missing: {path}")
+            with open(path, 'r', encoding='utf-8') as f: return json.load(f)
             
+        def company_facts(self, cik):
+            import json, os
+            if cik == "0000320193": t = "aapl"
+            elif cik == "0000789019": t = "msft"
+            elif cik == "0000019617": t = "jpm"
+            else: t = "nvda"
+            path = f'tests/fixtures/{t}_facts.json'
+            if not os.path.exists(path): raise FileNotFoundError(f"Required SEC golden fixture missing: {path}")
+            with open(path, 'r', encoding='utf-8') as f: return json.load(f)
+
     monkeypatch.setattr("financial_radar.core.SECClient", MockSECClient)
-    
-    # Mock requests for events
-    class MockResponse:
-        def __init__(self, text):
-            self.text = text
-        def raise_for_status(self): pass
-        
+    import sys
+    if "app" in sys.modules:
+        monkeypatch.setattr(sys.modules["app"], "SECClient", MockSECClient)
+
     class MockSession:
         def get(self, url, timeout):
             return MockResponse("Departure of Directors or Certain Officers. John Doe resigned.")
@@ -61,6 +61,19 @@ def test_refresh_workflow(tmp_path, monkeypatch):
     import financial_radar.core
     monkeypatch.setattr("financial_radar.core.requests.Session", lambda: MockSession())
 
+
+    import streamlit as st
+    captured_dfs = []
+    def mock_df(data, *args, **kwargs):
+        import pandas as pd
+        df = pd.DataFrame(data)
+        captured_dfs.append(df)
+        st.text(f"MOCKED_DF: {len(df)} rows")
+    monkeypatch.setattr(st, "dataframe", mock_df)
+    import sys
+    if "app" in sys.modules:
+        monkeypatch.setattr(sys.modules["app"].st, "dataframe", mock_df)
+        
     at = AppTest.from_file("../app.py", default_timeout=30)
     at.run()
     
@@ -81,11 +94,12 @@ def test_refresh_workflow(tmp_path, monkeypatch):
         print("WARNING:", [w.value for w in at.tabs[0].warning])
     if getattr(at.tabs[0], "success", None) and at.tabs[0].success:
         print("SUCCESS MSG:", [s.value for s in at.tabs[0].success])
-    print("DATAFRAME:", at.tabs[0].dataframe[0].value if getattr(at.tabs[0], "dataframe", None) and at.tabs[0].dataframe else "None")
+    print("DATAFRAME MOCKED")
     assert getattr(at.tabs[0], "success", None) and len(at.tabs[0].success) > 0, "No success message found"
     
     # 3. Verify readiness
-    df_readiness = at.tabs[0].dataframe[1].value
+    df_readiness = next((df for df in reversed(captured_dfs) if "State" in df.columns), None)
+    assert df_readiness is not None
     assert "READY" in str(df_readiness.iloc[0]["State"]) or "PARTIAL" in str(df_readiness.iloc[0]["State"])
     
     # 4. Verify Attention Queue portfolio context & signals

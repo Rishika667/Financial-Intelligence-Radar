@@ -20,7 +20,11 @@ class MockClient(SECClient):
 def test_research_mode_strong_assertions(monkeypatch):
     test_db = os.path.abspath("test_research_radar2.sqlite")
     if os.path.exists(test_db):
-        os.remove(test_db)
+        try:
+            os.remove(test_db)
+        except PermissionError:
+            pass
+
         
     c = connect(test_db)
     ingest_company(MockClient(), c, {"ticker": "AAPL", "cik": "320193"})
@@ -70,4 +74,8 @@ def test_research_mode_strong_assertions(monkeypatch):
     
     c.close()
     if os.path.exists(test_db):
-        os.remove(test_db)
+        try:
+            os.remove(test_db)
+        except PermissionError:
+            pass
+

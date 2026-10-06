@@ -129,44 +129,44 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
         capex = metrics.get("capital_expenditures")
         
         # Gross Margin
-        if gp and rev and rev.value and rev.value > 0:
+        if gp and rev and rev.value and rev.value > 0 and gp.unit == rev.unit:
             derived.append(_derive("gross_margin", gp.value / rev.value, "pure", [gp, rev]))
             
         # Operating Margin
-        if oi and rev and rev.value and rev.value > 0:
+        if oi and rev and rev.value and rev.value > 0 and oi.unit == rev.unit:
             derived.append(_derive("operating_margin", oi.value / rev.value, "pure", [oi, rev]))
             
         # Net Margin
-        if ni and rev and rev.value and rev.value > 0:
+        if ni and rev and rev.value and rev.value > 0 and ni.unit == rev.unit:
             derived.append(_derive("net_margin", ni.value / rev.value, "pure", [ni, rev]))
             
         # Free Cash Flow (if not directly reported but derived from OCF - Capex)
-        if ocf and capex and ocf.value is not None and capex.value is not None and "free_cash_flow" not in metrics:
+        if ocf and capex and ocf.value is not None and capex.value is not None and ocf.unit == capex.unit and "free_cash_flow" not in metrics:
             derived.append(_derive("free_cash_flow", ocf.value - abs(capex.value), ocf.unit, [ocf, capex]))
             
         # Cash Conversion
-        if ocf and ni and ni.value and ni.value > 0:
+        if ocf and ni and ni.value and ni.value > 0 and ocf.unit == ni.unit:
             derived.append(_derive("cash_conversion", ocf.value / ni.value, "pure", [ocf, ni]))
             
         # Debt / Operating Income
         debt = get_instant("debt", pend)
-        if debt and oi and oi.value and oi.value > 0:
+        if debt and oi and oi.value and oi.value > 0 and debt.unit == oi.unit:
             derived.append(_derive("debt_operating_income", debt.value / oi.value, "pure", [debt, oi]))
             
         # Liquidity (Cash / Current Liabilities)
         cash = get_instant("cash_and_equivalents", pend)
         cl = get_instant("current_liabilities", pend)
-        if cash and cl and cl.value and cl.value > 0:
+        if cash and cl and cl.value and cl.value > 0 and cash.unit == cl.unit:
             derived.append(_derive("liquidity_ratio", cash.value / cl.value, "pure", [cash, cl]))
             
         # Receivables / Revenue
         ar = get_instant("accounts_receivable", pend)
-        if ar and rev and rev.value and rev.value > 0:
+        if ar and rev and rev.value and rev.value > 0 and ar.unit == rev.unit:
             derived.append(_derive("receivables_revenue_ratio", ar.value / rev.value, "pure", [ar, rev]))
             
         # Inventory / Revenue
         inv = get_instant("inventory", pend)
-        if inv and rev and rev.value and rev.value > 0:
+        if inv and rev and rev.value and rev.value > 0 and inv.unit == rev.unit:
             derived.append(_derive("inventory_revenue_ratio", inv.value / rev.value, "pure", [inv, rev]))
             
     # Calculate Growth metrics using our canonical comparison engine

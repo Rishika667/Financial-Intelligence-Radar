@@ -278,14 +278,18 @@ with tab_research:
                 chart_b_metrics = ["gross_margin", "operating_margin", "net_margin"]
                 df_b = df_trends[df_trends["metric"].isin(chart_b_metrics)]
                 if not df_b.empty:
-                    fig_b = px.line(df_b, x="period_end", y="value", color="metric", markers=True, title="Chart B: Margins (Ratio)", labels={"value": "Ratio"})
+                    df_b_copy = df_b.copy()
+                    df_b_copy["value"] = df_b_copy["value"] * 100
+                    fig_b = px.line(df_b_copy, x="period_end", y="value", color="metric", markers=True, title="Chart B: Margins (%)", labels={"value": "Margin %"})
                     st.plotly_chart(fig_b, use_container_width=True)
                     
                 # Chart C: Growth
                 chart_c_metrics = ["revenue_growth_yoy"]
                 df_c = df_trends[df_trends["metric"].isin(chart_c_metrics)]
                 if not df_c.empty:
-                    fig_c = px.line(df_c, x="period_end", y="value", color="metric", markers=True, title="Chart C: Growth (YoY %)", labels={"value": "Growth %"})
+                    df_c_copy = df_c.copy()
+                    df_c_copy["value"] = df_c_copy["value"] * 100
+                    fig_c = px.line(df_c_copy, x="period_end", y="value", color="metric", markers=True, title="Chart C: Growth (YoY %)", labels={"value": "Growth %"})
                     st.plotly_chart(fig_c, use_container_width=True)
             else:
                 st.info("Insufficient data for trend charts.")

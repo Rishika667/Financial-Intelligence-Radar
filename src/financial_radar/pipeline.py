@@ -44,7 +44,7 @@ def filing_index(submissions, cik):
             "accessionNumber": acc,
             "form": r.get("form", [""])[i],
             "filingDate": r.get("filingDate", [""])[i],
-            "source_url": f"https://www.sec.gov/Archives/edgar/data/{cik}/{acc.replace('-', '')}/{r.get('primaryDocument', [''])[i]}",
+            "source_url": f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{acc.replace('-', '')}/{r.get('primaryDocument', [''])[i]}",
         }
     return out
 

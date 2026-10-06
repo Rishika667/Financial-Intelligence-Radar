@@ -20,10 +20,16 @@ def generate_intelligence(signal_id, company, sector, evidence_str):
             if "MARGIN" in signal_id:
                 what = f"{signal_id.replace('_', ' ').title().split(' ')[0]} margin declined from {prev*100:.1f}% to {curr*100:.1f}%, a {(prev-curr)*100:.1f} percentage-point decline."
             elif "DIVERGENCE" in signal_id:
-                what = f"Target metric grew to {curr:,.0f} compared to {prev:,.0f} in prior period."
+                unit = ev[0].get("unit", "")
+                if unit == "pure":
+                    what = f"Target ratio rose from {prev*100:.1f}% to {curr*100:.1f}%."
+                else:
+                    from financial_radar.synthesis import format_val
+                    what = f"Target metric grew to {format_val(curr, unit)} compared to {format_val(prev, unit)} in prior period."
             elif "SHARE" in signal_id:
                 pct = ((curr - prev) / prev) * 100 if prev != 0 else 0
-                what = f"Diluted share count increased by {pct:.1f}% from {prev:,.0f} to {curr:,.0f}."
+                from financial_radar.synthesis import format_val
+                what = f"Diluted share count increased by {pct:.1f}% from {format_val(prev, 'shares')} to {format_val(curr, 'shares')}."
             elif "DEBT" in signal_id:
                 what = f"Debt/operating-income increased from {prev:.2f}x to {curr:.2f}x."
 

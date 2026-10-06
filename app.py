@@ -62,6 +62,26 @@ def test_sec_connectivity(ua):
         
     return results
     results['USER_AGENT_CONFIGURED'] = True
+    headers = {'User-Agent': ua, 'Accept-Encoding': 'gzip, deflate'}
+    
+    import requests
+    try:
+        r1 = requests.get('https://www.sec.gov/', headers=headers, timeout=5)
+        r1.raise_for_status()
+        results['SEC_REACHABLE'] = True
+        
+        r2 = requests.get('https://data.sec.gov/submissions/CIK0000320193.json', headers=headers, timeout=5)
+        r2.raise_for_status()
+        results['SUBMISSIONS_REACHABLE'] = True
+        
+        r3 = requests.get('https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json', headers=headers, timeout=5)
+        r3.raise_for_status()
+        results['XBRL_REACHABLE'] = True
+    except requests.exceptions.RequestException as e:
+        results['ERRORS'].append(f"Network or protocol error: {e}")
+        
+    return results
+    results['USER_AGENT_CONFIGURED'] = True
     headers = {'User-Agent': ua}
     try:
         if requests.get('https://www.sec.gov/', headers=headers, timeout=5).status_code == 200:
@@ -288,10 +308,15 @@ with tab_research:
             
             latest_metrics = {}
             latest_meta = {}
+            
+            # Find the most recent period_end across all metrics
+            max_q_end = all_q_obs[0]['period_end'] if all_q_obs else None
+            
             for row in all_q_obs:
-                if row["metric"] not in latest_metrics:
-                    latest_metrics[row["metric"]] = row
-                    latest_meta[row["metric"]] = row
+                if row['period_end'] == max_q_end:
+                    if row["metric"] not in latest_metrics:
+                        latest_metrics[row["metric"]] = row
+                        latest_meta[row["metric"]] = row
             
             # Show period metadata
             ref_row = latest_meta.get("revenue") or (list(latest_meta.values())[0] if latest_meta else None)

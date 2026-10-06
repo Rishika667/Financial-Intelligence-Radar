@@ -88,3 +88,29 @@ def test_legacy_migration_partial_and_coexist():
     
     if os.path.exists("test_legacy2.db"):
         os.remove("test_legacy2.db")
+
+def test_legacy_migration_partial_peer_context():
+    import os
+    import sqlite3
+    from financial_radar.store import connect
+    if os.path.exists("test_legacy_peer.db"):
+        os.remove("test_legacy_peer.db")
+        
+    c = sqlite3.connect("test_legacy_peer.db")
+    # Partial legacy peer_context (missing availability_state and coverage_ratio)
+    c.execute("CREATE TABLE peer_context(company TEXT, group_id TEXT, metric TEXT, company_value REAL, peer_median REAL, peer_min REAL, peer_max REAL, n_peers INTEGER, version TEXT, unavailable_peers TEXT, position TEXT, coverage_count INTEGER, total_peer_count INTEGER)")
+    c.execute("INSERT INTO peer_context VALUES ('AAPL', 'G1', 'revenue', 100, 110, 100, 120, 5, 'v1', '', 'BOTTOM', 5, 5)")
+    c.commit()
+    c.close()
+    
+    db = connect("test_legacy_peer.db")
+    res = db.execute("SELECT * FROM peer_context").fetchall()
+    
+    assert len(res) == 1
+    row = dict(res[0])
+    assert "availability_state" in row
+    assert "coverage_ratio" in row
+    
+    db.close()
+    if os.path.exists("test_legacy_peer.db"):
+        os.remove("test_legacy_peer.db")

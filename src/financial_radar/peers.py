@@ -42,7 +42,7 @@ def peer_context(company, metric, observations, members):
             "peer_median": None, "peer_range": None, "n_peers": 0,
             "peer_group_version": None, "unavailable_peers": members
         }
-    anchor = sorted(q_obs, key=lambda x: x.period_end)[-1]
+    anchor = sorted(q_obs, key=lambda x: (x.period_end, x.period_start or "", getattr(x, "quality", None).name if getattr(x, "quality", None) else ""))[-1]
     cfy = getattr(anchor, "fiscal_year", None)
     cfp = getattr(anchor, "fiscal_period", None)
     

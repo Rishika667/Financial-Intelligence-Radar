@@ -16,7 +16,7 @@ def divergence(signal_id, curr, prior):
     if d >= 0.15:
         sev = "HIGH" if d >= 0.30 else "MEDIUM"
         return Signal(signal_id, curr.company, sev, _confidence(curr, prior),
-                      f"Ratio increased by {abs(d):.1%} points.", (curr, prior))
+                      f"Ratio increased from {prior.value:.1%} to {curr.value:.1%}.", (curr, prior))
     return None
 
 def gross_margin_compression(curr, prior):
@@ -25,7 +25,7 @@ def gross_margin_compression(curr, prior):
     if d <= -0.03:
         sev = "HIGH" if d <= -0.06 else "MEDIUM"
         return Signal("GROSS_MARGIN_COMPRESSION", curr.company, sev, _confidence(curr, prior),
-                      f"Gross margin fell {abs(d):.1%} points.", (curr, prior))
+                      f"Gross margin fell from {prior.value:.1%} to {curr.value:.1%}.", (curr, prior))
     return None
 
 def operating_margin_deterioration(curr, prior):
@@ -34,7 +34,7 @@ def operating_margin_deterioration(curr, prior):
     if d <= -0.03:
         sev = "HIGH" if d <= -0.06 else "MEDIUM"
         return Signal("OPERATING_MARGIN_DETERIORATION", curr.company, sev, _confidence(curr, prior),
-                      f"Operating margin fell {abs(d):.1%} points.", (curr, prior))
+                      f"Operating margin fell from {prior.value:.1%} to {curr.value:.1%}.", (curr, prior))
     return None
 
 def cash_conversion(curr, prior):
@@ -42,7 +42,7 @@ def cash_conversion(curr, prior):
     d = curr.value - prior.value
     if d <= -0.2:
         return Signal("EARNINGS_CASH_CONVERSION_DETERIORATION", curr.company, "HIGH" if d <= -0.4 else "MEDIUM", _confidence(curr, prior),
-                      f"Cash conversion dropped {abs(d):.1f} points.", (curr, prior))
+                      f"Cash conversion fell from {prior.value:.1f}x to {curr.value:.1f}x.", (curr, prior))
     return None
 
 def fcf_deterioration(curr, prior):
@@ -52,7 +52,7 @@ def fcf_deterioration(curr, prior):
     # 20% of prior decline
     if d <= -0.20:
         return Signal("FREE_CASH_FLOW_DETERIORATION", curr.company, "HIGH", _confidence(curr, prior),
-                      f"FCF fell {abs(d):.1%}.", (curr, prior))
+                      f"FCF fell {abs(d):.1%} from {prior.value:,.1f} to {curr.value:,.1f}.", (curr, prior))
     return None
 
 def leverage(curr, prior):
@@ -77,15 +77,34 @@ def dilution(curr, prior):
     d = (curr.value - prior.value) / prior.value
     if d >= 0.03:
         return Signal("SHARE_COUNT_DILUTION", curr.company, "HIGH" if d >= 0.10 else "MEDIUM", _confidence(curr, prior),
-                      f"Share count grew {d:.1%}.", (curr, prior))
+                      f"Share count grew {d:.1%} from {prior.value:,.1f} to {curr.value:,.1f}.", (curr, prior))
     return None
 
 def cluster(out):
-    if len(out) >= 3:
-        obs_set = set()
-        for sig in out:
-            for o in sig.evidence:
-                obs_set.add(o)
-        return [Signal("MULTI_FACTOR_DETERIORATION_CLUSTER", out[0].company, "HIGH", "HIGH",
-                       f"Detected {len(out)} concurrent warnings.", tuple(obs_set), component_signal_ids=tuple(s.signal_id for s in out))]
-    return []
+    valid = [s for s in out if not s.suppressed_reason and s.severity in ("HIGH", "MEDIUM", "LOW")]
+    
+    from collections import defaultdict
+    by_company_period = defaultdict(list)
+    
+    for s in valid:
+        if not s.evidence: continue
+        curr = sorted(s.evidence, key=lambda x: x.period_end)[-1]
+        by_company_period[(s.company, curr.period_end)].append(s)
+        
+    clusters = []
+    for (company, period), sigs in by_company_period.items():
+        if len(sigs) >= 3:
+            obs_set = set()
+            for sig in sigs:
+                for o in sig.evidence:
+                    obs_set.add(o)
+            clusters.append(Signal(
+                "MULTI_FACTOR_DETERIORATION_CLUSTER", 
+                company, 
+                "HIGH", 
+                "HIGH",
+                f"Detected {len(sigs)} concurrent warnings in period {period.isoformat()}.", 
+                tuple(obs_set), 
+                component_signal_ids=tuple(s.signal_id for s in sigs)
+            ))
+    return clusters

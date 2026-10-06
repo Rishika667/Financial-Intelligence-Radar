@@ -475,3 +475,78 @@ def test_universe_contract_is_exactly_51():
     d = json.load(open("config/sp500_representative_51_2026.json"))
     assert len(d["companies"]) == 51, "Universe MUST be exactly 51 companies."
     assert "peer_references" in d, "peer_references must exist."
+
+def test_derived_period_start_preservation():
+    import sqlite3
+    import json
+    import os
+    from datetime import date, timedelta
+    from financial_radar.core import derive_standalone_quarter
+    from financial_radar.models import Observation, Provenance, DataQuality, Signal
+    from financial_radar.store import connect, save_observations, save_signals, _serialize_evidence
+    
+    q1_end = date(2023, 3, 31)
+    q1_start = date(2023, 1, 1)
+    ytd_end = date(2023, 6, 30)
+    ytd_start = date(2023, 1, 1)
+    
+    from datetime import datetime
+    prov1 = Provenance("1", "url", q1_end, "10-Q", "rev", datetime.now(), raw_value=100, period_start=q1_start)
+    q1 = Observation("AAPL", "revenue", 100, "USD", q1_end, "QUARTER", DataQuality.REPORTED, (prov1,), period_start=q1_start, fiscal_year=2023, fiscal_period="Q1")
+    
+    prov2 = Provenance("2", "url", ytd_end, "10-Q", "rev", datetime.now(), raw_value=250, period_start=ytd_start)
+    ytd = Observation("AAPL", "revenue", 250, "USD", ytd_end, "YTD_6M", DataQuality.REPORTED, (prov2,), period_start=ytd_start, fiscal_year=2023, fiscal_period="Q2")
+    
+    q2 = derive_standalone_quarter(ytd, q1)
+    
+    assert q2.period_start == q1_end + timedelta(days=1), "period_start must be start of standalone quarter"
+    assert "revenue" in q2.derived_from[0]
+    
+    if os.path.exists("test_derived.db"): os.remove("test_derived.db")
+    db = connect("test_derived.db")
+    
+    save_observations(db, [q2])
+    
+    # Reload observation
+    res = db.execute("SELECT * FROM observations WHERE metric='revenue'").fetchone()
+    assert res["period_start"] == q2.period_start.isoformat()
+    assert "revenue" in json.loads(res["derived_from"])[0]
+    
+    # Save as evidence
+    sig = Signal("TEST", "AAPL", "HIGH", "HIGH", "test", (q2,))
+    save_signals(db, [sig])
+    
+    # Reload evidence
+    sig_res = db.execute("SELECT evidence FROM signals WHERE signal_id='TEST'").fetchone()
+    ev = json.loads(sig_res["evidence"])
+    assert ev[0]["period_start"] == q2.period_start.isoformat()
+    assert "revenue" in ev[0]["derived_from"][0]
+    
+    db.close()
+    if os.path.exists("test_derived.db"): os.remove("test_derived.db")
+
+def test_cluster_integrity_period_isolation():
+    from financial_radar.signals import cluster
+    from financial_radar.models import Signal, Observation, DataQuality
+    from datetime import date
+    
+    # 2 signals in Q1, 1 signal in Q2 -> should NOT cluster (neither has 3)
+    # Also 3 signals in Q3 but one is suppressed -> should NOT cluster
+    
+    q1 = date(2023, 3, 31)
+    q2 = date(2023, 6, 30)
+    
+    o_q1 = Observation("AAPL", "rev", 10, "USD", q1, "QUARTER", DataQuality.REPORTED, tuple())
+    o_q2 = Observation("AAPL", "rev", 10, "USD", q2, "QUARTER", DataQuality.REPORTED, tuple())
+    
+    s1 = Signal("A", "AAPL", "HIGH", "HIGH", "a", (o_q1,))
+    s2 = Signal("B", "AAPL", "MEDIUM", "HIGH", "b", (o_q1,))
+    s3 = Signal("C", "AAPL", "HIGH", "HIGH", "c", (o_q2,)) # Different period
+    s4 = Signal("D", "AAPL", "UNKNOWN", "LOW", "d", (o_q1,), suppressed_reason="Bank") # Suppressed
+    
+    res = cluster([s1, s2, s3, s4])
+    assert len(res) == 0, "Should not cluster across periods or include suppressed"
+    
+    s5 = Signal("E", "AAPL", "HIGH", "HIGH", "e", (o_q1,))
+    res2 = cluster([s1, s2, s5])
+    assert len(res2) == 1, "Should cluster when 3 valid in same period"

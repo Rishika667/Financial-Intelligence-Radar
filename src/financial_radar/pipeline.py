@@ -38,16 +38,26 @@ def filing_index(submissions, cik):
         return {}
     out = {}
     for i, acc in enumerate(r.get("accessionNumber", [])):
-        if r.get("form", [""])[i] not in FORMS:
-            continue
-        pdoc = r.get('primaryDocument', [])[i] if i < len(r.get('primaryDocument', [])) else ""
-        source_url = f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{acc.replace('-', '')}/{pdoc}" if pdoc else None
-        out[acc.replace("-", "")] = {
-            "accessionNumber": acc,
-            "form": r.get("form", [""])[i],
-            "filingDate": r.get("filingDate", [""])[i],
-            "source_url": source_url,
-        }
+            if not acc:
+                continue
+            forms = r.get("form", [])
+            form = forms[i] if i < len(forms) else ""
+            if form not in FORMS:
+                continue
+            
+            pdocs = r.get("primaryDocument", [])
+            pdoc = pdocs[i] if i < len(pdocs) else ""
+            
+            fdates = r.get("filingDate", [])
+            fdate = fdates[i] if i < len(fdates) else ""
+            
+            source_url = f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{acc.replace('-', '')}/{pdoc}" if pdoc else None
+            out[acc.replace("-", "")] = {
+                "accessionNumber": acc,
+                "form": form,
+                "filingDate": fdate,
+                "source_url": source_url,
+            }
     return out
 
 
@@ -200,7 +210,7 @@ def _extract_events_from_submissions(ticker, filings, c, client):
     # Process only the 5 most recent 8-Ks to respect SEC pacing/volume
     recent_8ks = sorted(
         [f for f in filings.values() if f.get("form") in ("8-K", "8-K/A")],
-        key=lambda x: x.get("filingDate", ""),
+        key=lambda x: (x.get("filingDate", ""), x.get("accessionNumber", "")),
         reverse=True,
     )[:5]
 

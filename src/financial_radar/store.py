@@ -58,7 +58,7 @@ def connect(db_path="financial_radar.sqlite"):
 # Grab original SQL to check if it's the legacy schema
     row = c.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='observations'").fetchone()
     old_sql = row["sql"] if row else ""
-    needs_rebuild = "unit, period_start" not in old_sql and "UNIQUE(company" not in old_sql
+    needs_rebuild = "UNIQUE(company, metric, period_end, period_type, unit, period_start)" not in old_sql
 
     # Safe migration for existing observations table
     cols = [r["name"] for r in c.execute("PRAGMA table_info(observations)")]
@@ -89,14 +89,9 @@ def connect(db_path="financial_radar.sqlite"):
 
     # Migrate peer_context table
     p_cols = [r["name"] for r in c.execute("PRAGMA table_info(peer_context)")]
-    if "position" not in p_cols:
-        c.execute("ALTER TABLE peer_context ADD COLUMN position TEXT")
-        c.execute("ALTER TABLE peer_context ADD COLUMN coverage_count INTEGER")
-        c.execute("ALTER TABLE peer_context ADD COLUMN total_peer_count INTEGER")
-        if "coverage_ratio" not in p_cols:
-            c.execute("ALTER TABLE peer_context ADD COLUMN coverage_ratio REAL")
-        if "availability_state" not in p_cols:
-            c.execute("ALTER TABLE peer_context ADD COLUMN availability_state TEXT")
+    for col, col_type in [("position", "TEXT"), ("coverage_count", "INTEGER"), ("total_peer_count", "INTEGER"), ("coverage_ratio", "REAL"), ("availability_state", "TEXT")]:
+        if col not in p_cols:
+            c.execute(f"ALTER TABLE peer_context ADD COLUMN {col} {col_type}")
 
     return c
 

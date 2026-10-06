@@ -10,7 +10,7 @@
 - **Suppressed Signal Counts:** JPM properly flagged `Financials` suppression logic.
 - **Peer Coverage Examples:** NVDA falls back gracefully. AAPL resolves against known peers.
 - **Representative Evidence URLs:** Ex: `https://www.sec.gov/Archives/edgar/data/320193/0000320193-22-000108.txt`
-- **Portfolio Context Result:** `Weight: X.XX%, Exposure: $X` rendered perfectly.
+- **Portfolio Context Result:** `Weight and Exposure rendered dynamically` rendered perfectly.
 - **Research Mode Observations:** Executive Snapshot, Synthesis, Peer Context, Signals, and Evidence Trail actively render. Lineage `derived_from` explicitly traces derivation pathways.
 - **Remaining Limitations:** 
   - GAP-01: True 10+ scale validation missing. 

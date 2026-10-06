@@ -399,3 +399,79 @@ def test_readiness_stale_data(tmp_path):
     state, msg = calculate_data_readiness("ABC", c)
     assert state == ReadinessState.NOT_READY
     assert "quarterly" in msg.lower()
+
+def test_sec_connectivity_behavior(monkeypatch):
+    import sys; sys.path.append("."); import app
+    
+    # 1. Invalid/missing user agent -> failure
+    res = app.test_sec_connectivity("")
+    assert not res['USER_AGENT_CONFIGURED']
+    assert "Invalid or missing" in res['ERRORS'][0]
+    assert not all([res.get(k) for k in ('USER_AGENT_CONFIGURED', 'SEC_REACHABLE', 'SUBMISSIONS_REACHABLE', 'XBRL_REACHABLE')])
+    
+    # 2. Network exception -> visible diagnostic error
+    import requests
+    class MockRequests:
+        @staticmethod
+        def get(*args, **kwargs):
+            raise requests.exceptions.RequestException("Mock Timeout")
+    monkeypatch.setattr(requests, "get", MockRequests.get)
+    
+    res = app.test_sec_connectivity("valid_user@test.com")
+    assert res['USER_AGENT_CONFIGURED']
+    assert not res['SEC_REACHABLE']
+    assert len(res["ERRORS"]) > 0
+    
+    # 3. All endpoints successful -> success
+    class MockSuccess:
+        @staticmethod
+        def get(*args, **kwargs):
+            class Response:
+                def raise_for_status(self): pass
+            return Response()
+    monkeypatch.setattr(requests, "get", MockSuccess.get)
+    
+    res = app.test_sec_connectivity("valid_user@test.com")
+    assert res['USER_AGENT_CONFIGURED']
+    assert res['SEC_REACHABLE']
+    assert res['SUBMISSIONS_REACHABLE']
+    assert res['XBRL_REACHABLE']
+    assert len(res['ERRORS']) == 0
+    
+    # 4. One endpoint fails -> failure
+    class MockPartial:
+        @staticmethod
+        def get(url, *args, **kwargs):
+            class Response:
+                def raise_for_status(self): 
+                    if "companyfacts" in url:
+                        raise requests.exceptions.RequestException("Facts failed")
+            return Response()
+    monkeypatch.setattr(requests, "get", MockPartial.get)
+    
+    res = app.test_sec_connectivity("valid_user@test.com")
+    assert res['SEC_REACHABLE']
+    assert res['SUBMISSIONS_REACHABLE']
+    assert not res['XBRL_REACHABLE']
+    assert len(res["ERRORS"]) > 0
+
+def test_portfolio_exposure_contract():
+    import pandas as pd
+    from financial_radar.pipeline import validate_portfolio_csv
+    
+    # Missing exposure -> failure
+    df = pd.DataFrame({"ticker": ["ABC"], "shares": [10], "weight": [1.0], "cost_basis": [100]})
+    is_valid, msg = validate_portfolio_csv(df, ["ABC"])
+    assert not is_valid
+    assert "exposure" in msg.lower()
+    
+    # With exposure -> success
+    df_valid = pd.DataFrame({"ticker": ["ABC"], "shares": [10], "weight": [1.0], "cost_basis": [100], "exposure": [1000]})
+    is_valid_valid, msg_valid = validate_portfolio_csv(df_valid, ["ABC"])
+    assert is_valid_valid
+
+def test_universe_contract_is_exactly_51():
+    import json
+    d = json.load(open("config/sp500_representative_51_2026.json"))
+    assert len(d["companies"]) == 51, "Universe MUST be exactly 51 companies."
+    assert "peer_references" in d, "peer_references must exist."

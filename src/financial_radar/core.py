@@ -5,8 +5,6 @@ import requests
 from datetime import timedelta
 from .models import DataQuality, Observation
 
-def pct_change(current, prior):
-    return None if current is None or prior is None or prior == 0 else (current - prior) / abs(prior)
 
 def derive_standalone_quarter(ytd, prior_ytd):
     required_prior_type = {"YTD_6M": "QUARTER", "YTD_9M": "YTD_6M", "ANNUAL": "YTD_9M"}
@@ -80,14 +78,6 @@ def derive_standalone_quarter(ytd, prior_ytd):
         fiscal_period=fp
     )
 
-def _derive_fcf(ocf, capex):
-    return Observation(
-        company=ocf.company, metric="free_cash_flow", value=ocf.value - abs(capex.value), unit=ocf.unit,
-        period_end=ocf.period_end, period_type=ocf.period_type, quality=DataQuality.DERIVED,
-        provenance=ocf.provenance + capex.provenance,
-        derived_from=(f"operating_cash_flow {ocf.period_end.isoformat()} {ocf.period_type}", f"capex {capex.period_end.isoformat()} {capex.period_type}"),
-        period_start=ocf.period_start
-    )
 
 class SECClient:
     def __init__(self, user_agent, raw_dir="data/raw", min_interval_seconds=0.2):

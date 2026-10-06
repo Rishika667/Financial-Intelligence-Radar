@@ -105,3 +105,18 @@ def test_pipeline_malformed_filing_index():
     assert "111222" in idx
     assert "333444" not in idx
     assert idx["111222"]["form"] == "10-K"
+
+def test_missing_primary_document():
+    from financial_radar.pipeline import filing_index
+    submissions = {
+        "filings": {
+            "recent": {
+                "accessionNumber": ["0001-23-456789"],
+                "form": ["10-K"],
+                "filingDate": ["2024-01-01"],
+                "primaryDocument": [""] # Missing
+            }
+        }
+    }
+    index = filing_index(submissions, "320193")
+    assert index["000123456789"]["source_url"] is None

@@ -92,8 +92,12 @@ with tab_setup:
         with st.spinner("Testing SEC endpoints..."):
             res = test_sec_connectivity(user_agent)
             st.json(res)
-            if all(res.values()): st.success("All SEC preflight checks passed.")
-            else: st.error("Some SEC preflight checks failed.")
+            # Success means the 4 booleans are True (and ERRORS can be empty)
+            success = all([res.get(k) for k in ('USER_AGENT_CONFIGURED', 'SEC_REACHABLE', 'SUBMISSIONS_REACHABLE', 'XBRL_REACHABLE')])
+            if success:
+                st.success("All SEC preflight checks passed.")
+            else:
+                st.error("Some SEC preflight checks failed.")
             
     if active_tickers:
         include_peers = st.checkbox("Also fetch SEC data for unmonitored peers to build peer context", value=True)
@@ -301,10 +305,15 @@ with tab_research:
             gm_val = latest_metrics.get("gross_margin", {}).get("value") if isinstance(latest_metrics.get("gross_margin"), dict) else latest_metrics.get("gross_margin")
             om_val = latest_metrics.get("operating_margin", {}).get("value") if isinstance(latest_metrics.get("operating_margin"), dict) else latest_metrics.get("operating_margin")
             ni_val = latest_metrics.get("net_income", {}).get("value") if isinstance(latest_metrics.get("net_income"), dict) else latest_metrics.get("net_income")
-            col1.metric("Revenue", format_val(rev_val, "USD") if rev_val is not None else "N/A")
+
+            # We need to find units for rev_val and ni_val
+            rev_unit = next((o['unit'] for o in all_q_obs if o['metric'] == 'revenue' and o['period_end'] == (ref_row['period_end'] if ref_row else '')), "USD")
+            ni_unit = next((o['unit'] for o in all_q_obs if o['metric'] == 'net_income' and o['period_end'] == (ref_row['period_end'] if ref_row else '')), "USD")
+            
+            col1.metric("Revenue", format_val(rev_val, rev_unit) if rev_val is not None else "N/A")
             col2.metric("Gross Margin", format_val(gm_val, "pure") if gm_val is not None else "N/A")
             col3.metric("Operating Margin", format_val(om_val, "pure") if om_val is not None else "N/A")
-            col4.metric("Net Income", format_val(ni_val, "USD") if ni_val is not None else "N/A")
+            col4.metric("Net Income", format_val(ni_val, ni_unit) if ni_val is not None else "N/A")
             
             st.markdown("## 2. Analyst Synthesis")
             synth = synthesize_company(ticker, db)
@@ -321,12 +330,16 @@ with tab_research:
             if all_q_obs:
                 df_trends = pd.DataFrame(all_q_obs).sort_values("period_end")
                 
-                # Chart A: Monetary performance
-                chart_a_metrics = ["revenue", "operating_cash_flow", "free_cash_flow"]
-                df_a = df_trends[df_trends["metric"].isin(chart_a_metrics)]
+# Chart A: Monetary performance
+                df_a = df_trends[df_trends["metric"].isin(["revenue", "net_income", "operating_cash_flow", "free_cash_flow"])]
                 if not df_a.empty:
-                    fig_a = px.line(df_a, x="period_end", y="value", color="metric", markers=True, title="Chart A: Revenue & Cash Flow (USD)", labels={"value": "USD"})
-                    st.plotly_chart(fig_a, use_container_width=True)
+                    units_a = df_a["unit"].unique()
+                    if len(units_a) > 1:
+                        st.warning("Chart A suppressed due to mixed monetary units (e.g., currency changes).")
+                    else:
+                        unit_a = units_a[0]
+                        fig_a = px.line(df_a, x="period_end", y="value", color="metric", markers=True, title=f"Chart A: Revenue & Cash Flow ({unit_a})", labels={"value": unit_a})
+                        st.plotly_chart(fig_a, use_container_width=True)
                     
                 # Chart B: Margins
                 chart_b_metrics = ["gross_margin", "operating_margin", "net_margin"]

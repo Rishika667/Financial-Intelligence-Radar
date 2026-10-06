@@ -40,21 +40,15 @@ def filing_index(submissions, cik):
     for i, acc in enumerate(r.get("accessionNumber", [])):
         if r.get("form", [""])[i] not in FORMS:
             continue
+        pdoc = r.get('primaryDocument', [])[i] if i < len(r.get('primaryDocument', [])) else ""
+        source_url = f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{acc.replace('-', '')}/{pdoc}" if pdoc else None
         out[acc.replace("-", "")] = {
             "accessionNumber": acc,
             "form": r.get("form", [""])[i],
             "filingDate": r.get("filingDate", [""])[i],
-            "source_url": f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{acc.replace('-', '')}/{(r.get('primaryDocument', [])[i] if i < len(r.get('primaryDocument', [])) else '')}",
+            "source_url": source_url,
         }
     return out
-
-
-    return Observation(
-        a.company, name, a.value / b.value, "pure", a.period_end,
-        a.period_type, DataQuality.DERIVED, a.provenance + b.provenance,
-        derived_from=(f"{a.metric} {a.period_end.isoformat()} {a.period_type}", f"{b.metric} {b.period_end.isoformat()} {b.period_type}"),
-        period_start=a.period_start
-    )
 
 
 def evaluate(company, items, sector="Unknown"):
@@ -264,7 +258,7 @@ def validate_portfolio_csv(df, universe_tickers):
         return False, "CSV is empty."
         
     df.columns = [str(c).strip().lower() for c in df.columns]
-    required = ["ticker", "shares", "weight", "cost_basis"]
+    required = ["ticker", "shares", "weight", "cost_basis", "exposure"]
     
     for req in required:
         if req not in df.columns:

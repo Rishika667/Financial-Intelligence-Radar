@@ -19,7 +19,7 @@
 | `src/financial_radar/intelligence.py` | Narrative Generation | Converted divergence explanations for ratios into percentage formatting (e.g. `12.0% to 17.0%`). |
 | `src/financial_radar/store.py` | SQLite DB | Schema migration for `period_start` in Unique Constraint and newly mapped `fiscal_year`/`fiscal_period` columns. |
 | `src/financial_radar/peers.py` | Peer Intelligence | Integrated `NO_DEFINED_PEER_GROUP` for missing peer contexts. Assured strict self-exclusion. |
-| `app.py` | Streamlit UI | Properly rendered portfolio output string (`Exposure: $X.X`). |
+| `app.py` | Streamlit UI | Properly rendered portfolio output string (`Exposure: formatted currency`). |
 | `tests/*` | Testing | Rewrote mock implementations in `test_invariants.py` to call actual `deduplicate_observations` and eliminated no-op tests. |
 
 ## SECTION 3 — GAP REGISTER

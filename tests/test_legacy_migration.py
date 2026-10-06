@@ -56,3 +56,35 @@ def test_legacy_migration():
     db.close()
     if os.path.exists("test_legacy.db"):
         os.remove("test_legacy.db")
+
+def test_legacy_migration_partial_and_coexist():
+    import os
+    import sqlite3
+    from financial_radar.store import connect
+    if os.path.exists("test_legacy2.db"):
+        os.remove("test_legacy2.db")
+        
+    c = sqlite3.connect("test_legacy2.db")
+    c.execute("CREATE TABLE observations(company TEXT, metric TEXT, value REAL, unit TEXT, period_end TEXT, period_type TEXT, quality TEXT, provenance TEXT, derived_from TEXT, comparable INTEGER, PRIMARY KEY(company, metric, period_end, period_type))")
+    c.execute("INSERT INTO observations VALUES ('AAPL', 'revenue', 100, 'USD', '2023-12-31', 'QUARTER', 'REPORTED', '', '', 1)")
+    c.commit()
+    c.close()
+    
+    db = connect("test_legacy2.db")
+    
+    # Insert another observation with same period_end/type but DIFFERENT period_start (now valid)
+    db.execute("INSERT INTO observations (company, metric, value, unit, period_end, period_type, quality, comparable, period_start, fiscal_year, fiscal_period) VALUES ('AAPL', 'revenue', 150, 'USD', '2023-12-31', 'QUARTER', 'REPORTED', 1, '2023-10-01', 2023, 'Q4')")
+    db.commit()
+    
+    res = db.execute("SELECT * FROM observations").fetchall()
+    assert len(res) == 2, "Both observations must coexist with different period_start"
+    
+    # Re-running connect should be idempotent
+    db.close()
+    db2 = connect("test_legacy2.db")
+    res2 = db2.execute("SELECT * FROM observations").fetchall()
+    assert len(res2) == 2
+    db2.close()
+    
+    if os.path.exists("test_legacy2.db"):
+        os.remove("test_legacy2.db")

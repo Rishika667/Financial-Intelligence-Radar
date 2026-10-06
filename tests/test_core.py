@@ -1,5 +1,5 @@
 from datetime import date
-from financial_radar.core import pct_change, derive_standalone_quarter
+from financial_radar.core import derive_standalone_quarter
 from financial_radar.models import Observation, Provenance, DataQuality
 import datetime
 
@@ -15,19 +15,6 @@ def o(metric, value, end, pt="QUARTER", quality=DataQuality.REPORTED):
     return Observation(
         "ABC", metric, value, "USD", end, pt, quality, (_prov(),)
     )
-
-
-def test_pct_change_normal():
-    assert pct_change(120, 100) == 0.2
-
-
-def test_pct_change_zero_prior():
-    assert pct_change(100, 0) is None
-
-
-def test_pct_change_none_values():
-    assert pct_change(None, 100) is None
-    assert pct_change(100, None) is None
 
 
 def test_standalone_quarter_valid():

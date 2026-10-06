@@ -1,11 +1,11 @@
-﻿from .models import Signal, DataQuality
+from .models import Signal, DataQuality
 
 def _ok(*o):
     return all(
         x is not None and getattr(x, "value", None) is not None and getattr(x, "comparable", True)
         and getattr(x, "quality", None) in (DataQuality.REPORTED, DataQuality.DERIVED, DataQuality.AMENDED, DataQuality.RESTATED)
         for x in o
-    )
+    ) and (len(o) < 2 or all(getattr(o[i], "unit", None) == getattr(o[0], "unit", None) for i in range(1, len(o))))
 
 def _confidence(*o):
     return "MEDIUM" if any(getattr(x, "quality", None) == DataQuality.DERIVED for x in o) else "HIGH"
@@ -49,10 +49,10 @@ def fcf_deterioration(curr, prior):
     if not _ok(curr, prior): return None
     if prior.value == 0: return None
     d = (curr.value - prior.value) / abs(prior.value)
-    # 20% of prior +  floor
-    if d <= -0.20 and (prior.value - curr.value) >= 1_000_000:
+    # 20% of prior decline
+    if d <= -0.20:
         return Signal("FREE_CASH_FLOW_DETERIORATION", curr.company, "HIGH", _confidence(curr, prior),
-                      f"FCF fell {abs(d):.1%} (>).", (curr, prior))
+                      f"FCF fell {abs(d):.1%}.", (curr, prior))
     return None
 
 def leverage(curr, prior):

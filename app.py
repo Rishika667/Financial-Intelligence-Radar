@@ -180,7 +180,7 @@ with tab_dashboard:
                             if ctx.get("peer_median") is not None:
                                 pos = ctx.get("position", "Unknown")
                                 st.markdown(f"- **Relative Position:** {pos}")
-                                st.markdown(f"- **Peer Median:** {format_val(ctx.get('peer_median'))}")
+                                st.markdown(f"- **Peer Median:** {format_val(ctx.get('peer_median'), 'multiple' if mapped_metric in ('cash_conversion', 'debt_operating_income', 'liquidity_ratio', 'receivables_revenue_ratio', 'inventory_revenue_ratio') else 'pure')}")
                                 st.markdown(f"- **Coverage:** {ctx.get('availability_state', str(ctx.get('n_peers')) + ' peers')}")
                             else:
                                 st.markdown("Peer context unavailable")
@@ -240,18 +240,31 @@ with tab_research:
             else: st.success("READY")
             
             st.markdown("## 1. Executive Snapshot")
-            all_q_obs = rows(db, "SELECT metric, value, unit, period_end, quality FROM observations WHERE company=? AND period_type='QUARTER' ORDER BY period_end DESC", (ticker,))
+            all_q_obs = rows(db, "SELECT metric, value, unit, period_end, period_type, quality, fiscal_year, fiscal_period FROM observations WHERE company=? AND period_type='QUARTER' ORDER BY period_end DESC", (ticker,))
             
             latest_metrics = {}
+            latest_meta = {}
             for row in all_q_obs:
                 if row["metric"] not in latest_metrics:
-                    latest_metrics[row["metric"]] = row["value"]
+                    latest_metrics[row["metric"]] = row
+                    latest_meta[row["metric"]] = row
+            
+            # Show period metadata
+            ref_row = latest_meta.get("revenue") or (list(latest_meta.values())[0] if latest_meta else None)
+            if ref_row:
+                fy_label = f"FY{ref_row.get('fiscal_year', 'N/A')}" if ref_row.get('fiscal_year') else ""
+                fp_label = ref_row.get('fiscal_period', '') or ''
+                st.caption(f"Latest quarterly data: {ref_row['period_end']} {fy_label} {fp_label} | Quality: {ref_row.get('quality', 'N/A')}")
             
             col1, col2, col3, col4 = st.columns(4)
-            col1.metric("Revenue", "$" + f"{latest_metrics['revenue']:,.0f}" if latest_metrics.get('revenue') is not None else "N/A")
-            col2.metric("Gross Margin", f"{latest_metrics['gross_margin']*100:.1f}%" if latest_metrics.get('gross_margin') is not None else "N/A")
-            col3.metric("Operating Margin", f"{latest_metrics['operating_margin']*100:.1f}%" if latest_metrics.get('operating_margin') is not None else "N/A")
-            col4.metric("Net Income", "$" + f"{latest_metrics['net_income']:,.0f}" if latest_metrics.get('net_income') is not None else "N/A")
+            rev_val = latest_metrics.get("revenue", {}).get("value") if isinstance(latest_metrics.get("revenue"), dict) else latest_metrics.get("revenue")
+            gm_val = latest_metrics.get("gross_margin", {}).get("value") if isinstance(latest_metrics.get("gross_margin"), dict) else latest_metrics.get("gross_margin")
+            om_val = latest_metrics.get("operating_margin", {}).get("value") if isinstance(latest_metrics.get("operating_margin"), dict) else latest_metrics.get("operating_margin")
+            ni_val = latest_metrics.get("net_income", {}).get("value") if isinstance(latest_metrics.get("net_income"), dict) else latest_metrics.get("net_income")
+            col1.metric("Revenue", format_val(rev_val, "USD") if rev_val is not None else "N/A")
+            col2.metric("Gross Margin", format_val(gm_val, "pure") if gm_val is not None else "N/A")
+            col3.metric("Operating Margin", format_val(om_val, "pure") if om_val is not None else "N/A")
+            col4.metric("Net Income", format_val(ni_val, "USD") if ni_val is not None else "N/A")
             
             st.markdown("## 2. Analyst Synthesis")
             synth = synthesize_company(ticker, db)
@@ -301,7 +314,7 @@ with tab_research:
             for s in company_signals:
                 if bool(s.get("suppressed")):
                     with st.expander(f"⚠️ SUPPRESSED: {s['signal_id'].replace('_', ' ').title()}", expanded=False):
-                        st.info(f"**Suppressed Reason:** {s['suppressed_reason']}")
+                        st.info(f"**Suppressed Reason:** {s['suppressed']}")
                 else:
                     ev_str = s.get("evidence", "[]")
                     intel = generate_intelligence(s["signal_id"], ticker, company_meta.get("sector"), ev_str)
@@ -368,7 +381,8 @@ with tab_research:
                         try:
                             for p in json.loads(up):
                                 unavails.add(p)
-                        except: pass
+                        except json.JSONDecodeError:
+                            pass
                 
                 if unavails:
                     for p in sorted(list(unavails)):

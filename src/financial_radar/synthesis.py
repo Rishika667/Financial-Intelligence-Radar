@@ -4,23 +4,36 @@ from .models import Observation, DataQuality
 
 def format_val(val, unit="USD"):
     if val is None: return "unavailable"
-    if unit == "USD":
-        if abs(val) >= 1_000_000_000:
-            return f"${val/1_000_000_000:,.1f}B".replace("$-", "-$")
-        elif abs(val) >= 1_000_000:
-            return f"${val/1_000_000:,.1f}M".replace("$-", "-$")
-        else:
-            return f"${val:,.0f}".replace("$-", "-$")
-    elif unit == "shares":
-        if abs(val) >= 1_000_000_000:
-            return f"{val/1_000_000_000:.1f}B"
-        elif abs(val) >= 1_000_000:
-            return f"{val/1_000_000:.1f}M"
-        else:
-            return f"{val:,.0f}"
-    elif unit == "pure":
+    if unit in ("pure", "%"):
         return f"{val*100:.1f}%"
-    return str(val)
+    elif unit in ("multiple", "x"):
+        return f"{val:.2f}x"
+    elif unit == "shares":
+        if abs(val) >= 1_000_000_000: return f"{val/1_000_000_000:.1f}B"
+        elif abs(val) >= 1_000_000: return f"{val/1_000_000:.1f}M"
+        else: return f"{val:,.0f}"
+    else:
+        # Currency formatting
+        sym = ""
+        if unit == "USD": sym = "$"
+        elif unit == "EUR": sym = "€"
+        elif unit == "GBP": sym = "£"
+        elif unit == "JPY": sym = "¥"
+        
+        if abs(val) >= 1_000_000_000:
+            res = f"{sym}{val/1_000_000_000:,.1f}B"
+        elif abs(val) >= 1_000_000:
+            res = f"{sym}{val/1_000_000:,.1f}M"
+        else:
+            # For small values < 1M, show decimals if it's very small
+            if abs(val) < 1000 and val != int(val):
+                res = f"{sym}{val:,.2f}"
+            else:
+                res = f"{sym}{val:,.0f}"
+                
+        if val < 0:
+            return res.replace(f"{sym}-", f"-{sym}")
+        return res
 
 def synthesize_company(ticker, c):
     """

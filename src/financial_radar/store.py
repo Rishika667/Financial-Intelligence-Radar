@@ -77,7 +77,7 @@ def connect(db_path="financial_radar.sqlite"):
     # Migrate peer_context table
     p_cols = [r["name"] for r in c.execute("PRAGMA table_info(peer_context)")]
     if "position" not in p_cols:
-        c.execute("ALTER TABLE peer_context ADD COLUMN position INTEGER")
+        c.execute("ALTER TABLE peer_context ADD COLUMN position TEXT")
         c.execute("ALTER TABLE peer_context ADD COLUMN coverage_count INTEGER")
         c.execute("ALTER TABLE peer_context ADD COLUMN total_peer_count INTEGER")
         if "coverage_ratio" not in p_cols:

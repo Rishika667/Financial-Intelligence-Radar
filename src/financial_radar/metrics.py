@@ -148,18 +148,18 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
             
         # Cash Conversion
         if ocf and ni and ni.value and ni.value > 0 and ocf.unit == ni.unit:
-            derived.append(_derive("cash_conversion", ocf.value / ni.value, "pure", [ocf, ni]))
+            derived.append(_derive("cash_conversion", ocf.value / ni.value, "multiple", [ocf, ni]))
             
         # Debt / Operating Income
         debt = get_instant("debt", pend, req_unit)
         if debt and oi and oi.value and oi.value > 0 and debt.unit == oi.unit:
-            derived.append(_derive("debt_operating_income", debt.value / oi.value, "pure", [debt, oi]))
+            derived.append(_derive("debt_operating_income", debt.value / oi.value, "multiple", [debt, oi]))
             
         # Liquidity (Cash / Current Liabilities)
         cash = get_instant("cash_and_equivalents", pend, req_unit)
         cl = get_instant("current_liabilities", pend, req_unit)
         if cash and cl and cl.value and cl.value > 0 and cash.unit == cl.unit:
-            derived.append(_derive("liquidity_ratio", cash.value / cl.value, "pure", [cash, cl]))
+            derived.append(_derive("liquidity_ratio", cash.value / cl.value, "multiple", [cash, cl]))
             
         # Receivables / Revenue
         ar = get_instant("accounts_receivable", pend, req_unit)

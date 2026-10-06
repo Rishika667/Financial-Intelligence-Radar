@@ -44,34 +44,11 @@ def filing_index(submissions, cik):
             "accessionNumber": acc,
             "form": r.get("form", [""])[i],
             "filingDate": r.get("filingDate", [""])[i],
-            "source_url": f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{acc.replace('-', '')}/{r.get('primaryDocument', [''])[i]}",
+            "source_url": f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{acc.replace('-', '')}/{(r.get('primaryDocument', [])[i] if i < len(r.get('primaryDocument', [])) else '')}",
         }
     return out
 
 
-def _ratio(a, b, name):
-    """Compute a derived ratio observation.
-
-    Uses unit="pure" for dimensionless ratios so the _ok() currency
-    compatibility gate correctly excludes them from monetary unit checks.
-    """
-    from .models import Observation, DataQuality
-
-    valid = (
-        a.company == b.company
-        and a.unit == b.unit
-        and a.period_end == b.period_end
-        and a.period_type == b.period_type
-        and a.comparable
-        and b.comparable
-        and a.value is not None
-    )
-
-    if not valid or b.value in (None, 0):
-        return Observation(
-            a.company, name, None, "pure", a.period_end, a.period_type,
-            DataQuality.CALCULATION_INVALID, comparable=False,
-        )
     return Observation(
         a.company, name, a.value / b.value, "pure", a.period_end,
         a.period_type, DataQuality.DERIVED, a.provenance + b.provenance,
@@ -138,13 +115,6 @@ def evaluate(company, items, sector="Unknown"):
     valid.extend(cluster([s for s in valid if not s.suppressed_reason and s.severity in ('HIGH', 'MEDIUM', 'LOW')]))
     return valid
 
-def compute_peer_context(company, observations, peer_groups_path="config/sp500_representative_51_2026.json"):
-    """Compute peer context for a company using configured peer groups."""
-    try:
-        pg = load_peer_groups(peer_groups_path)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return {"group_id": None, "contexts": [], "version": None}
-    return peer_context_for_company(company, observations, pg)
 
 
 
@@ -264,9 +234,6 @@ def _extract_events_from_submissions(ticker, filings, c, client):
     return count
 
 
-def ingest_events(company, filing, text, c):
-    """Ingest events from filing document text."""
-    save_events(c, extract_events(company["ticker"], filing, text))
 
 
 def refresh_peer_contexts(c, active_tickers):

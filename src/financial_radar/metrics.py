@@ -83,23 +83,25 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
     """
     derived = []
     
-    # Group by (period_end, period_type)
-    groups: Dict[Tuple[date, str], Dict[str, Observation]] = {}
+    # Group by (period_end, period_type, period_start, unit, fiscal_year, fiscal_period)
+    groups = {}
     for o in observations:
-        key = (o.period_end, o.period_type)
+        key = (o.period_end, o.period_type, getattr(o, "period_start", None), o.unit, getattr(o, "fiscal_year", None), getattr(o, "fiscal_period", None))
         if key not in groups:
             groups[key] = {}
         groups[key][o.metric] = o
         
-    # Helper to retrieve an INSTANT metric matching the period_end
-    def get_instant(m_name, pend):
-        if (pend, "INSTANT") in groups:
-            return groups[(pend, "INSTANT")].get(m_name)
+    def get_instant(m_name, pend, required_unit):
+        # Search all obs for INSTANT match
+        for o in observations:
+            if o.period_type == "INSTANT" and o.period_end == pend and o.metric == m_name and o.unit == required_unit:
+                return o
         return None
         
-    for (pend, pt), metrics in groups.items():
+    for key_tuple, metrics in groups.items():
+        pend, pt, pstart, req_unit, fy, fp = key_tuple
         if pt == "INSTANT":
-            continue # We derive ratios from the PERIOD metrics (QUARTER/ANNUAL) combined with INSTANT metrics
+            continue
             
         company = next(iter(metrics.values())).company
         
@@ -149,23 +151,23 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
             derived.append(_derive("cash_conversion", ocf.value / ni.value, "pure", [ocf, ni]))
             
         # Debt / Operating Income
-        debt = get_instant("debt", pend)
+        debt = get_instant("debt", pend, req_unit)
         if debt and oi and oi.value and oi.value > 0 and debt.unit == oi.unit:
             derived.append(_derive("debt_operating_income", debt.value / oi.value, "pure", [debt, oi]))
             
         # Liquidity (Cash / Current Liabilities)
-        cash = get_instant("cash_and_equivalents", pend)
-        cl = get_instant("current_liabilities", pend)
+        cash = get_instant("cash_and_equivalents", pend, req_unit)
+        cl = get_instant("current_liabilities", pend, req_unit)
         if cash and cl and cl.value and cl.value > 0 and cash.unit == cl.unit:
             derived.append(_derive("liquidity_ratio", cash.value / cl.value, "pure", [cash, cl]))
             
         # Receivables / Revenue
-        ar = get_instant("accounts_receivable", pend)
+        ar = get_instant("accounts_receivable", pend, req_unit)
         if ar and rev and rev.value and rev.value > 0 and ar.unit == rev.unit:
             derived.append(_derive("receivables_revenue_ratio", ar.value / rev.value, "pure", [ar, rev]))
             
         # Inventory / Revenue
-        inv = get_instant("inventory", pend)
+        inv = get_instant("inventory", pend, req_unit)
         if inv and rev and rev.value and rev.value > 0 and inv.unit == rev.unit:
             derived.append(_derive("inventory_revenue_ratio", inv.value / rev.value, "pure", [inv, rev]))
             

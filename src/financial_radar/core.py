@@ -19,12 +19,22 @@ def derive_standalone_quarter(ytd, prior_ytd):
     days = (ytd.period_end - prior_ytd.period_end).days
     
     fiscal_match = False
-    if cfy and pfy:
+    if cfy and pfy and cfp and pfp:
         if cfy == pfy:
-            fiscal_match = True
-    else:
-        if 80 <= days <= 105:
-            fiscal_match = True
+            if ytd.period_type == "YTD_6M" and cfp == "Q2" and pfp == "Q1":
+                fiscal_match = True
+            elif ytd.period_type == "YTD_9M" and cfp == "Q3" and pfp == "Q2":
+                fiscal_match = True
+            elif ytd.period_type == "ANNUAL" and cfp == "FY" and pfp == "Q3":
+                fiscal_match = True
+    elif cfy and pfy and cfy == pfy:
+        fiscal_match = True
+    elif (not cfp) or (not pfp):
+        if cfy and pfy and cfy != pfy:
+            fiscal_match = False
+        else:
+            if 80 <= days <= 105:
+                fiscal_match = True
             
     valid = (
         ytd.value is not None

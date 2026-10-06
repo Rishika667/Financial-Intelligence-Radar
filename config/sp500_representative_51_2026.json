@@ -357,6 +357,22 @@
             "sector": "Information Technology",
             "cik": "0001045810",
             "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "AMD",
+            "cik": "0000002488",
+            "name": "Advanced Micro Devices, Inc.",
+            "gics_sector": "Information Technology",
+            "gics_industry": "Semiconductors",
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
+        },
+        {
+            "ticker": "PFE",
+            "cik": "0000078003",
+            "name": "Pfizer Inc.",
+            "gics_sector": "Health Care",
+            "gics_industry": "Pharmaceuticals",
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
         }
     ],
     "peer_groups": [

@@ -80,8 +80,10 @@ def connect(db_path="financial_radar.sqlite"):
         c.execute("ALTER TABLE peer_context ADD COLUMN position INTEGER")
         c.execute("ALTER TABLE peer_context ADD COLUMN coverage_count INTEGER")
         c.execute("ALTER TABLE peer_context ADD COLUMN total_peer_count INTEGER")
-        c.execute("ALTER TABLE peer_context ADD COLUMN coverage_ratio REAL")
-        c.execute("ALTER TABLE peer_context ADD COLUMN availability_state TEXT")
+        if "coverage_ratio" not in p_cols:
+            c.execute("ALTER TABLE peer_context ADD COLUMN coverage_ratio REAL")
+        if "availability_state" not in p_cols:
+            c.execute("ALTER TABLE peer_context ADD COLUMN availability_state TEXT")
 
     return c
 

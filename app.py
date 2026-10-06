@@ -18,7 +18,8 @@ st.set_page_config(page_title="Financial Intelligence Radar", layout="wide", ini
 st.title("Financial Intelligence Radar")
 st.caption("Public-disclosure intelligence for analyst attention — not investment advice.")
 
-db = connect()
+db_path = os.environ.get("DB_PATH", "financial_radar.sqlite")
+db = connect(db_path)
 try:
     universe = load_universe()
 except FileNotFoundError:

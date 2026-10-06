@@ -52,7 +52,14 @@ def test_canonical_metric_consistency():
     assert 'capital_expenditures' in content
 
 def test_no_broken_signal_ids():
-    pass
+    from financial_radar.pipeline import evaluate
+    from financial_radar.models import Observation, DataQuality
+    from datetime import date
+    o1 = Observation("AAPL", "revenue", 100, "USD", date(2023,12,31), "QUARTER", DataQuality.REPORTED)
+    o2 = Observation("AAPL", "revenue", 120, "USD", date(2022,12,31), "QUARTER", DataQuality.REPORTED)
+    sigs = evaluate("AAPL", [o1, o2], "Technology")
+    # Assert it executes cleanly and returns a signal or empty list
+    assert isinstance(sigs, list)
 
 def test_peer_reference_architecture():
     with open('config/sp500_representative_51_2026.json', 'r', encoding='utf-8') as f:

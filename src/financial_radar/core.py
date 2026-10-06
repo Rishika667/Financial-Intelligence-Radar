@@ -10,6 +10,22 @@ def pct_change(current, prior):
 
 def derive_standalone_quarter(ytd, prior_ytd):
     required_prior_type = {"YTD_6M": "QUARTER", "YTD_9M": "YTD_6M", "ANNUAL": "YTD_9M"}
+    
+    cfy = getattr(ytd, "fiscal_year", None)
+    cfp = getattr(ytd, "fiscal_period", None)
+    pfy = getattr(prior_ytd, "fiscal_year", None)
+    pfp = getattr(prior_ytd, "fiscal_period", None)
+    
+    days = (ytd.period_end - prior_ytd.period_end).days
+    
+    fiscal_match = False
+    if cfy and pfy:
+        if cfy == pfy:
+            fiscal_match = True
+    else:
+        if 80 <= days <= 105:
+            fiscal_match = True
+            
     valid = (
         ytd.value is not None
         and prior_ytd.value is not None
@@ -17,35 +33,50 @@ def derive_standalone_quarter(ytd, prior_ytd):
         and ytd.metric == prior_ytd.metric
         and ytd.unit == prior_ytd.unit
         and required_prior_type.get(ytd.period_type) == prior_ytd.period_type
-        and 80 <= (ytd.period_end - prior_ytd.period_end).days <= 100
+        and fiscal_match
         and ytd.comparable
         and prior_ytd.comparable
     )
+
     if not valid:
         return Observation(
-            ytd.company, ytd.metric, None, ytd.unit, ytd.period_end, "QUARTER",
-            DataQuality.CALCULATION_INVALID, comparable=False,
-            comparability_reason="Invalid YTD contexts"
+            company=ytd.company,
+            metric=ytd.metric,
+            value=None,
+            unit=ytd.unit,
+            period_end=ytd.period_end,
+            period_type="QUARTER",
+            quality=DataQuality.CALCULATION_INVALID,
+            comparable=False,
+            comparability_reason="Invalid derivation inputs",
+            provenance=tuple(),
         )
+
     fp = None
     if ytd.period_type == "YTD_6M": fp = "Q2"
     elif ytd.period_type == "YTD_9M": fp = "Q3"
     elif ytd.period_type == "ANNUAL": fp = "Q4"
+    
     return Observation(
-        ytd.company, ytd.metric, ytd.value - prior_ytd.value, ytd.unit,
-        ytd.period_end, "QUARTER", DataQuality.DERIVED,
-        ytd.provenance + prior_ytd.provenance,
+        company=ytd.company, 
+        metric=ytd.metric, 
+        value=ytd.value - prior_ytd.value, 
+        unit=ytd.unit,
+        period_end=ytd.period_end, 
+        period_type="QUARTER", 
+        quality=DataQuality.DERIVED,
+        provenance=ytd.provenance + prior_ytd.provenance,
         derived_from=(f"{ytd.metric} {ytd.period_end.isoformat()} {ytd.period_type}", f"{prior_ytd.metric} {prior_ytd.period_end.isoformat()} {prior_ytd.period_type}"),
         period_start=prior_ytd.period_end + timedelta(days=1),
         fiscal_year=ytd.fiscal_year,
         fiscal_period=fp
     )
 
-
+def _derive_fcf(ocf, capex):
     return Observation(
-        ocf.company, "free_cash_flow", ocf.value - abs(capex.value), ocf.unit,
-        ocf.period_end, ocf.period_type, DataQuality.DERIVED,
-        ocf.provenance + capex.provenance,
+        company=ocf.company, metric="free_cash_flow", value=ocf.value - abs(capex.value), unit=ocf.unit,
+        period_end=ocf.period_end, period_type=ocf.period_type, quality=DataQuality.DERIVED,
+        provenance=ocf.provenance + capex.provenance,
         derived_from=(f"operating_cash_flow {ocf.period_end.isoformat()} {ocf.period_type}", f"capex {capex.period_end.isoformat()} {capex.period_type}"),
         period_start=ocf.period_start
     )

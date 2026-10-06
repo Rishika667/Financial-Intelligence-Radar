@@ -6,11 +6,11 @@ def format_val(val, unit="USD"):
     if val is None: return "unavailable"
     if unit == "USD":
         if abs(val) >= 1_000_000_000:
-            return f"B" if val >= 0 else f"-B"
+            return f"${val/1_000_000_000:,.1f}B".replace("$-", "-$")
         elif abs(val) >= 1_000_000:
-            return f"M" if val >= 0 else f"-M"
+            return f"${val/1_000_000:,.1f}M".replace("$-", "-$")
         else:
-            return f"" if val >= 0 else f"-"
+            return f"${val:,.0f}".replace("$-", "-$")
     elif unit == "shares":
         if abs(val) >= 1_000_000_000:
             return f"{val/1_000_000_000:.1f}B"

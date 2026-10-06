@@ -49,40 +49,6 @@ def filing_index(submissions, cik):
     return out
 
 
-def _latest(items, metric, pt):
-    """Sort relevant observations descending by period_end."""
-    x = [
-        o
-        for o in items
-        if o.metric == metric
-        and o.period_type == pt
-        and o.value is not None
-    ]
-    return sorted(x, key=lambda o: o.period_end, reverse=True)
-
-
-def _comparable_pair(items, metric, pt):
-    """Select the latest observation and its prior-year counterpart.
-
-    The signal gate, rather than selection, owns comparability decisions so an
-    invalid prior can produce an explicit suppressed signal instead of being
-    silently replaced by an older period.
-    """
-    observations = _latest(items, metric, pt)
-    if not observations:
-        return None, None
-    current = observations[0]
-    prior = next(
-        (
-            candidate
-            for candidate in observations[1:]
-            if 350 <= (current.period_end - candidate.period_end).days <= 380
-        ),
-        None,
-    )
-    return current, prior
-
-
 def _ratio(a, b, name):
     """Compute a derived ratio observation.
 
@@ -115,80 +81,62 @@ def _ratio(a, b, name):
 
 
 def evaluate(company, items, sector="Unknown"):
-    """Evaluate signals consuming canonical derived metrics."""
-    from .metrics import derive_analytical_metrics, get_comparison_pair
-    # items already contains derived metrics now, but just in case, we can rely on items
-    all_obs = items
-    
     out = []
+    
+    # Sector Policy Definition
+    SECTOR_POLICY = {
+        "RECEIVABLES_REVENUE_DIVERGENCE": {"Financials": "Receivables/Revenue Divergence is suppressed for financial institutions."},
+        "INVENTORY_SALES_DIVERGENCE": {"Financials": "Inventory Divergence is suppressed for financial institutions because inventory dynamics are generally not applicable."},
+        "FREE_CASH_FLOW_DETERIORATION": {"Financials": "Free Cash Flow is suppressed for financial institutions because operating cash flow represents changes in operating assets (loans/deposits)."},
+        "DEBT_OPERATING_INCOME_DETERIORATION": {"Financials": "Debt/Operating Income is suppressed for financial institutions because debt is raw material, not just capital structure."},
+        "LIQUIDITY_COMPRESSION": {"Financials": "Corporate liquidity ratios (Current/Quick) are suppressed for financial institutions."},
+        "GROSS_MARGIN_COMPRESSION": {"Financials": "Gross Margin is suppressed for financial institutions."}
+    }
+    
+    def pair(m):
+        from .metrics import get_comparison_pair
+        return get_comparison_pair(items, m, "QUARTER", "yoy")
 
-    def pair(m, pt="QUARTER"):
-        return get_comparison_pair(all_obs, m, pt, "yoy")
-        
-    def pair_instant(m):
-        return get_comparison_pair(all_obs, m, "INSTANT", "yoy")
+    def _execute_signal(signal_id, func, curr, prior):
+        if not curr or not prior: return None
+        if signal_id in SECTOR_POLICY and sector in SECTOR_POLICY[signal_id]:
+            from .models import Signal
+            exp = SECTOR_POLICY[signal_id][sector]
+            return Signal(signal_id, company, "UNKNOWN", "LOW", exp, (), suppressed_reason=f"Sector Context ({sector})")
+        return func(curr, prior)
 
-    def _suppress(id):
-        from .models import Signal
-        if "DEBT" in id:
-            exp = "Debt/Operating Income is suppressed for financial institutions because the metric is not directly comparable with non-financial corporate capital structures."
-        elif "INVENTORY" in id:
-            exp = "Inventory Divergence is suppressed for financial institutions because inventory dynamics are generally not applicable."
-        elif "RECEIVABLES" in id:
-            exp = "Receivables/Revenue Divergence is suppressed for financial institutions."
-        elif "GROSS" in id:
-            exp = "Gross Margin is suppressed for financial institutions."
-        else:
-            exp = "Not applicable to Financials sector."
-        return Signal(id, company, "UNKNOWN", "LOW", exp, (), suppressed_reason="Sector Context (Financials)")
-
-    if sector == "Financials":
-        out.append(_suppress("RECEIVABLES_REVENUE_DIVERGENCE"))
-        out.append(_suppress("INVENTORY_SALES_DIVERGENCE"))
-        out.append(_suppress("FREE_CASH_FLOW_DETERIORATION"))
-        out.append(_suppress("DEBT_OPERATING_INCOME_DETERIORATION"))
-        out.append(_suppress("LIQUIDITY_COMPRESSION"))
-        out.append(_suppress("GROSS_MARGIN_COMPRESSION"))
+    from .signals import divergence, gross_margin_compression, operating_margin_deterioration, cash_conversion, fcf_deterioration, leverage, liquidity, dilution, cluster
 
     ar_rev, par_rev = pair("receivables_revenue_ratio")
-    if sector != "Financials" and ar_rev and par_rev:
-        out.append(divergence("RECEIVABLES_REVENUE_DIVERGENCE", ar_rev, par_rev))
-            
+    out.append(_execute_signal("RECEIVABLES_REVENUE_DIVERGENCE", lambda c, p: divergence("RECEIVABLES_REVENUE_DIVERGENCE", c, p), ar_rev, par_rev))
+        
     inv_rev, pinv_rev = pair("inventory_revenue_ratio")
-    if sector != "Financials" and inv_rev and pinv_rev:
-        out.append(divergence("INVENTORY_SALES_DIVERGENCE", inv_rev, pinv_rev))
-
+    out.append(_execute_signal("INVENTORY_SALES_DIVERGENCE", lambda c, p: divergence("INVENTORY_SALES_DIVERGENCE", c, p), inv_rev, pinv_rev))
+        
     gm, pgm = pair("gross_margin")
-    if sector != "Financials" and gm and pgm:
-        out.append(gross_margin_compression(gm, pgm))
+    out.append(_execute_signal("GROSS_MARGIN_COMPRESSION", gross_margin_compression, gm, pgm))
 
     om, pom = pair("operating_margin")
-    if om and pom:
-        out.append(operating_margin_deterioration(om, pom))
-
-    cc, pcc = pair("cash_conversion")
-    if cc and pcc:
-        out.append(cash_conversion(cc, pcc))
+    out.append(_execute_signal("OPERATING_MARGIN_DETERIORATION", operating_margin_deterioration, om, pom))
 
     fcf, pfcf = pair("free_cash_flow")
-    if sector != "Financials" and fcf and pfcf:
-        out.append(fcf_deterioration(fcf, pfcf))
+    out.append(_execute_signal("FREE_CASH_FLOW_DETERIORATION", fcf_deterioration, fcf, pfcf))
+
+    conv, pconv = pair("cash_conversion")
+    out.append(_execute_signal("EARNINGS_CASH_CONVERSION_DETERIORATION", cash_conversion, conv, pconv))
 
     lev, plev = pair("debt_operating_income")
-    if sector != "Financials" and lev and plev:
-        out.append(leverage(lev, plev))
+    out.append(_execute_signal("DEBT_OPERATING_INCOME_DETERIORATION", leverage, lev, plev))
 
     liq, pliq = pair("liquidity_ratio")
-    if sector != "Financials" and liq and pliq:
-        out.append(liquidity(liq, pliq))
+    out.append(_execute_signal("LIQUIDITY_COMPRESSION", liquidity, liq, pliq))
 
-    shares, pshares = pair("share_count")
-    if shares and pshares:
-        out.append(dilution(shares, pshares))
+    sh, psh = pair("share_count")
+    out.append(_execute_signal("SHARE_COUNT_DILUTION", dilution, sh, psh))
 
-    out = [x for x in out if x]
-    return out + cluster(out)
-
+    valid = [s for s in out if s is not None]
+    valid.extend(cluster([s for s in valid if not s.suppressed_reason and s.severity in ('HIGH', 'MEDIUM', 'LOW')]))
+    return valid
 
 def compute_peer_context(company, observations, peer_groups_path="config/sp500_representative_51_2026.json"):
     """Compute peer context for a company using configured peer groups."""
@@ -198,6 +146,30 @@ def compute_peer_context(company, observations, peer_groups_path="config/sp500_r
         return {"group_id": None, "contexts": [], "version": None}
     return peer_context_for_company(company, observations, pg)
 
+
+
+def deduplicate_observations(obs: list) -> list:
+    from .models import DataQuality
+    quality_rank = {
+        DataQuality.AMENDED: 5,
+        DataQuality.RESTATED: 4,
+        DataQuality.REPORTED: 3,
+        DataQuality.DERIVED: 2,
+        DataQuality.NOT_REPORTED: 1
+    }
+    
+    dedup = {}
+    for o in obs:
+        key = (o.company, o.metric, o.period_end, o.period_type, o.unit, getattr(o, 'period_start', None))
+        if key not in dedup:
+            dedup[key] = o
+        else:
+            existing = dedup[key]
+            eq = quality_rank.get(existing.quality, 0)
+            nq = quality_rank.get(o.quality, 0)
+            if nq > eq:
+                dedup[key] = o
+    return list(dedup.values())
 
 def ingest_company(client, c, company):
     """Full ingestion: SEC fetch -> normalize -> signals -> peers -> persist."""
@@ -232,29 +204,7 @@ def ingest_company(client, c, company):
     derived = derive_analytical_metrics(obs)
     obs.extend(derived)
     
-    # Enforce data model precedence: AMENDED > REPORTED > DERIVED > NOT_REPORTED
-    from .models import DataQuality
-    quality_rank = {
-        DataQuality.AMENDED: 4,
-        DataQuality.RESTATED: 4,
-        DataQuality.REPORTED: 3,
-        DataQuality.DERIVED: 2,
-        DataQuality.NOT_REPORTED: 1
-    }
-    
-    dedup = {}
-    for o in obs:
-        key = (o.company, o.metric, o.period_end, o.period_type, o.unit)
-        if key not in dedup:
-            dedup[key] = o
-        else:
-            existing = dedup[key]
-            eq = quality_rank.get(existing.quality, 0)
-            nq = quality_rank.get(o.quality, 0)
-            if nq > eq:
-                dedup[key] = o
-                
-    obs = list(dedup.values())
+    obs = deduplicate_observations(obs)
     
     save_observations(c, obs)
     from .store import save_filings
@@ -403,7 +353,7 @@ def calculate_data_readiness(ticker, c):
     
     valid_metrics = set()
     for o in obs:
-        if o['value'] is not None and o['quality'] in ('REPORTED', 'DERIVED') and o['comparable'] == 1 and o['provenance'] and o['provenance'] != "[]":
+        if o['value'] is not None and o['quality'] in ('REPORTED', 'DERIVED', 'AMENDED', 'RESTATED') and o['comparable'] == 1 and o['provenance'] and o['provenance'] != "[]":
             valid_metrics.add(o['metric'])
             
     missing = core - valid_metrics

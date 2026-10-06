@@ -1,7 +1,7 @@
-﻿# FINAL RELEASE AUDIT
+# GAP CLOSURE & ANALYTICAL TRUTH AUDIT
 
 HEAD SHA:
-a2e1d054f15d78a9c3b88fe42b7891bb (latest local representation)
+652ce6fa5d3481ca2aa37dd39b261a407f085d03 (plus uncommitted Phase 1-3 fixes)
 
 Execution:
 PASS
@@ -13,7 +13,7 @@ Compile:
 PASS
 
 Pytest:
-73 passed / 0 failed / 1 skipped
+81 passed / 0 failed / 1 skipped
 
 Release test:
 PASS
@@ -27,26 +27,23 @@ JPM PASS
 Universe:
 51/51 PASS
 
-CI:
-PASS
-
 Canonical analytical metrics:
-PASS
+PASS (Base + Derived, fully enforced)
 
 Comparison engine:
-PASS
+PASS (Fiscal semantics authoritative, date windows strictly fallback)
 
 Provenance:
-PASS
+PASS (Survives AMENDED/REPORTED deduplication and persistence)
 
 Peer reference universe:
-PASS
+PASS (Explicitly handles unavailable coverage)
 
 Attention Queue:
-PASS
+PASS (Portfolio exposure and weight render correctly)
 
 Research Mode:
-PASS
+PASS (Separated charts by unit type)
 
 Portfolio integration:
 PASS
@@ -54,11 +51,7 @@ PASS
 SEC evidence:
 PASS
 
-README:
-PASS
-
-Final audit:
-PASS
-
 Remaining material issues:
-None. All data paths, peer contexts, signals, and end-to-end evidence chains are deterministically driven from the local SEC golden JSON fixtures with 100% test coverage for required features.
+- GAP-01: SEC Multi-Period Scale (10+) remains open for M6.
+- GAP-05: True Banking Analytical Metrics (NIM/CET1) are deferred; currently banks suppress generic corporate metrics safely.
+- GAP-08: 1-Click SEC Evidence Trace remains open for M5.

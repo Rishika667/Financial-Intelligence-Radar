@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS observations(
     company TEXT, metric TEXT, value REAL, unit TEXT, period_end TEXT,
     period_type TEXT, quality TEXT, comparable INTEGER, reason TEXT,
     provenance TEXT, period_start TEXT, derived_from TEXT,
-    UNIQUE(company, metric, period_end, period_type, unit)
+    fiscal_year INTEGER, fiscal_period TEXT,
+    UNIQUE(company, metric, period_end, period_type, unit, period_start)
 );
 CREATE TABLE IF NOT EXISTS signals(
     signal_id TEXT, company TEXT, severity TEXT, confidence TEXT,
@@ -31,6 +32,12 @@ CREATE TABLE IF NOT EXISTS peer_context(
     company TEXT, group_id TEXT, metric TEXT, company_value REAL,
     peer_median REAL, peer_min REAL, peer_max REAL, n_peers INTEGER,
     version TEXT,
+    unavailable_peers TEXT,
+    position TEXT,
+    coverage_count INTEGER,
+    total_peer_count INTEGER,
+    coverage_ratio REAL,
+    availability_state TEXT,
     UNIQUE(company, metric, version)
 );
 
@@ -43,29 +50,39 @@ CREATE TABLE IF NOT EXISTS system_state(
 """
 
 
-def connect(path="data/radar.sqlite"):
-    Path(path).parent.mkdir(parents=True, exist_ok=True)
-    # Use standard sqlite defaults but enable WAL
-    c = sqlite3.connect(path, timeout=30.0, check_same_thread=False)
-    c.execute("PRAGMA journal_mode=WAL")
-    c.execute("PRAGMA synchronous=NORMAL")
+def connect(db_path="financial_radar.sqlite"):
+    c = sqlite3.connect(db_path, check_same_thread=False)
     c.row_factory = sqlite3.Row
     c.executescript(DDL)
-    # Safely migrate existing databases
-    for stmt in [
-        "ALTER TABLE events ADD COLUMN form TEXT",
-        "ALTER TABLE events ADD COLUMN extraction_version TEXT",
-        "ALTER TABLE signals ADD COLUMN components TEXT",
-        "ALTER TABLE observations ADD COLUMN period_start TEXT",
-        "ALTER TABLE observations ADD COLUMN derived_from TEXT",
-    ]:
-        try:
-            c.execute(stmt)
-        except sqlite3.OperationalError:
-            pass
+    
+    # Safe migration for existing observations table
+    cols = [r["name"] for r in c.execute("PRAGMA table_info(observations)")]
+    if "period_start" not in cols:
+        c.execute("ALTER TABLE observations ADD COLUMN period_start TEXT")
+    if "derived_from" not in cols:
+        c.execute("ALTER TABLE observations ADD COLUMN derived_from TEXT")
+    if "fiscal_year" not in cols:
+        c.execute("ALTER TABLE observations ADD COLUMN fiscal_year INTEGER")
+    if "fiscal_period" not in cols:
+        c.execute("ALTER TABLE observations ADD COLUMN fiscal_period TEXT")
 
-    # Safely deduplicate logical observations before creating unique index
-            
+    # Migrate unique constraint
+    row = c.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='observations'").fetchone()
+    if row and "period_start" not in row["sql"]:
+        c.execute("ALTER TABLE observations RENAME TO observations_old")
+        c.executescript(DDL)
+        c.execute("INSERT OR IGNORE INTO observations SELECT company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, COALESCE(period_start, ''), derived_from, fiscal_year, fiscal_period FROM observations_old")
+        c.execute("DROP TABLE observations_old")
+
+    # Migrate peer_context table
+    p_cols = [r["name"] for r in c.execute("PRAGMA table_info(peer_context)")]
+    if "position" not in p_cols:
+        c.execute("ALTER TABLE peer_context ADD COLUMN position INTEGER")
+        c.execute("ALTER TABLE peer_context ADD COLUMN coverage_count INTEGER")
+        c.execute("ALTER TABLE peer_context ADD COLUMN total_peer_count INTEGER")
+        c.execute("ALTER TABLE peer_context ADD COLUMN coverage_ratio REAL")
+        c.execute("ALTER TABLE peer_context ADD COLUMN availability_state TEXT")
+
     return c
 
 
@@ -92,6 +109,8 @@ def save_observations(c, rows):
                     "raw_value": p.raw_value,
                     "mapping_version": p.mapping_version,
                     "period_start": p.period_start.isoformat() if getattr(p, "period_start", None) else None,
+                    "fiscal_year": getattr(p, "fiscal_year", None),
+                    "fiscal_period": getattr(p, "fiscal_period", None),
                 }
                 for p in o.provenance
             ],
@@ -100,8 +119,9 @@ def save_observations(c, rows):
         c.execute(
             "INSERT OR REPLACE INTO observations"
             "(company, metric, value, unit, period_end, period_type, "
-            "quality, comparable, reason, provenance, period_start, derived_from) "
-            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+            "quality, comparable, reason, provenance, period_start, derived_from, "
+            "fiscal_year, fiscal_period) "
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 o.company,
                 o.metric,
@@ -113,8 +133,10 @@ def save_observations(c, rows):
                 int(o.comparable),
                 o.comparability_reason,
                 p,
-                o.period_start.isoformat() if getattr(o, "period_start", None) else None,
+                o.period_start.isoformat() if getattr(o, "period_start", None) else '',
                 json.dumps(list(o.derived_from)) if getattr(o, "derived_from", None) else None,
+                getattr(o, "fiscal_year", None),
+                getattr(o, "fiscal_period", None),
             ),
         )
     c.commit()
@@ -141,6 +163,8 @@ def _serialize_evidence(evidence):
                 "raw_value": p.raw_value,
                 "mapping_version": p.mapping_version,
                 "period_start": p.period_start.isoformat() if getattr(p, "period_start", None) else None,
+                "fiscal_year": getattr(p, "fiscal_year", None),
+                "fiscal_period": getattr(p, "fiscal_period", None),
             })
         out.append({
             "metric": o.metric,
@@ -152,7 +176,9 @@ def _serialize_evidence(evidence):
             "comparable": o.comparable,
             "provenance": prov_list,
             "derived_from": list(o.derived_from),
-            "period_start": o.period_start.isoformat() if getattr(o, "period_start", None) else None,
+            "period_start": o.period_start.isoformat() if getattr(o, "period_start", None) else '',
+            "fiscal_year": getattr(o, "fiscal_year", None),
+            "fiscal_period": getattr(o, "fiscal_period", None),
         })
     return out
 
@@ -201,18 +227,24 @@ def save_peer_context(c, company, contexts):
     for ctx in contexts.get("contexts", []):
         pr = ctx.get("peer_range") or (None, None)
         c.execute(
-            "INSERT OR REPLACE INTO peer_context VALUES(?,?,?,?,?,?,?,?,?)",
+            "INSERT OR REPLACE INTO peer_context VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 company,
-                ctx.get("group_id"),
-                ctx["metric"],
+                contexts.get("group_id"),
+                ctx.get("metric"),
                 ctx.get("company_value"),
                 ctx.get("peer_median"),
                 pr[0],
                 pr[1],
                 ctx.get("n_peers"),
                 ctx.get("peer_group_version"),
-            ),
+                json.dumps(ctx.get("unavailable_peers", [])),
+                ctx.get("position"),
+                ctx.get("coverage_count"),
+                ctx.get("total_peer_count"),
+                ctx.get("coverage_ratio"),
+                ctx.get("availability_state")
+            )
         )
     c.commit()
 
@@ -279,6 +311,8 @@ def load_observations_for_companies(c, companies):
                 p.get("raw_value"),
                 p.get("mapping_version", "v1"),
                 date.fromisoformat(p["period_start"]) if p.get("period_start") else None,
+                p.get("fiscal_year"),
+                p.get("fiscal_period")
             ))
 
         start_str = r.get("period_start")
@@ -287,10 +321,11 @@ def load_observations_for_companies(c, companies):
         der_from = tuple(json.loads(der_str)) if der_str else ()
 
         out.append(Observation(
-            r["company"], r["metric"], r["value"], r["unit"],
-            date.fromisoformat(r["period_end"]), r["period_type"],
-            DataQuality(r["quality"]), tuple(provs), der_from,
-            bool(r["comparable"]), r.get("reason"), start_dt,
+            company=r["company"], metric=r["metric"], value=r["value"], unit=r["unit"],
+            period_end=date.fromisoformat(r["period_end"]), period_type=r["period_type"],
+            quality=DataQuality(r["quality"]), provenance=tuple(provs), derived_from=der_from,
+            comparable=bool(r["comparable"]), comparability_reason=r.get("reason"), 
+            period_start=start_dt, fiscal_year=r.get("fiscal_year"), fiscal_period=r.get("fiscal_period"),
         ))
     return out
 

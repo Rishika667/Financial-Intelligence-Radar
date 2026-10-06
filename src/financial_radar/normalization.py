@@ -191,40 +191,40 @@ def extract_companyfacts(company, cik, payload, filings):
             ))
 
     # 5. Derive Standalone Quarters from YTD
+    def find_ytd(obs_list, o, req_type):
+        for c in obs_list:
+            if c.period_type != req_type or c.unit != o.unit:
+                continue
+            cfy = getattr(o, "fiscal_year", None)
+            cfp = getattr(o, "fiscal_period", None)
+            pfy = getattr(c, "fiscal_year", None)
+            pfp = getattr(c, "fiscal_period", None)
+            if cfy and pfy and cfp and pfp:
+                if cfy == pfy:
+                    if req_type == "QUARTER" and cfp in ("Q2", "H1") and pfp == "Q1": return c
+                    if req_type == "YTD_6M" and cfp == "Q3" and pfp in ("Q2", "H1"): return c
+                    if req_type == "YTD_9M" and cfp == "FY" and pfp == "Q3": return c
+                continue
+            if 80 <= (o.period_end - c.period_end).days <= 100:
+                return c
+        return None
+
     for metric, obs_list in obs_map.items():
         for o in obs_list:
             if o.period_type == "YTD_6M":
-                q1 = next(
-                    (c for c in obs_list
-                     if c.period_type == "QUARTER"
-                     and c.unit == o.unit
-                     and 80 <= (o.period_end - c.period_end).days <= 100),
-                    None,
-                )
+                q1 = find_ytd(obs_list, o, "QUARTER")
                 if q1:
                     derived = derive_standalone_quarter(o, q1)
                     if derived.value is not None:
                         out.append(derived)
             elif o.period_type == "YTD_9M":
-                ytd6 = next(
-                    (c for c in obs_list
-                     if c.period_type == "YTD_6M"
-                     and c.unit == o.unit
-                     and 80 <= (o.period_end - c.period_end).days <= 100),
-                    None,
-                )
+                ytd6 = find_ytd(obs_list, o, "YTD_6M")
                 if ytd6:
                     derived = derive_standalone_quarter(o, ytd6)
                     if derived.value is not None:
                         out.append(derived)
             elif o.period_type == "ANNUAL":
-                ytd9 = next(
-                    (c for c in obs_list
-                     if c.period_type == "YTD_9M"
-                     and c.unit == o.unit
-                     and 80 <= (o.period_end - c.period_end).days <= 100),
-                    None,
-                )
+                ytd9 = find_ytd(obs_list, o, "YTD_9M")
                 if ytd9:
                     derived = derive_standalone_quarter(o, ytd9)
                     if derived.value is not None:

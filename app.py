@@ -12,7 +12,7 @@ from financial_radar.pipeline import load_universe, ingest_company, refresh_peer
 from financial_radar.core import SECClient
 from financial_radar.intelligence import generate_intelligence
 from financial_radar.models import ReadinessState
-from financial_radar.synthesis import synthesize_company
+from financial_radar.synthesis import synthesize_company, format_val
 
 st.set_page_config(page_title="Financial Intelligence Radar", layout="wide", initial_sidebar_state="expanded")
 st.title("Financial Intelligence Radar")
@@ -145,26 +145,79 @@ with tab_dashboard:
         st.info("No active companies.")
     else:
         placeholders = ",".join("?" * len(active_tickers))
-        signals = rows(db, f"SELECT s.*, p.weight, p.exposure FROM signals s LEFT JOIN portfolio p ON s.company = p.ticker WHERE s.company IN ({placeholders}) AND s.suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MODERATE' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC", active_tickers)
+        signals = rows(db, f"SELECT s.*, p.weight, p.exposure FROM signals s LEFT JOIN portfolio p ON s.company = p.ticker WHERE s.company IN ({placeholders}) AND s.suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MEDIUM' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC", active_tickers)
         if signals:
             for s in signals:
-                sev_color = "red" if s["severity"] == "HIGH" else "orange" if s["severity"] == "MODERATE" else "blue"
+                sev_color = "red" if s["severity"] == "HIGH" else "orange" if s["severity"] == "MEDIUM" else "blue"
                 with st.expander(f"[{s['severity']}] {s['company']} - {s['signal_id']} (Confidence: {s['confidence']})"):
                     st.markdown(f"**Explanation:** {s['explanation']}")
                     st.markdown(f"**Investigation:** Review {s['signal_id']} alongside latest 10-Q/10-K disclosures.")
                     
                     if s.get("weight") is not None and s.get("exposure") is not None:
-                        st.markdown(f"**Portfolio Context:** Weight: {s['weight']*100:.2f}%, Exposure: ")
+                        st.markdown(f"**Portfolio Context:** Weight: {s['weight']*100:.2f}%, Exposure: {format_val(s['exposure'])}")
                     else:
                         st.markdown("**Portfolio Context:** Not held")
-                    st.markdown("### Evidence")
+                        
+                    # Peer Context mapping
+                    metric_map = {
+                        "GROSS_MARGIN_COMPRESSION": "gross_margin",
+                        "OPERATING_MARGIN_DETERIORATION": "operating_margin",
+                        "EARNINGS_CASH_CONVERSION_DETERIORATION": "cash_conversion",
+                        "FREE_CASH_FLOW_DETERIORATION": "free_cash_flow",
+                        "DEBT_OPERATING_INCOME_DETERIORATION": "debt_operating_income",
+                        "LIQUIDITY_COMPRESSION": "liquidity_ratio",
+                        "SHARE_COUNT_DILUTION": "share_count",
+                        "RECEIVABLES_REVENUE_DIVERGENCE": "receivables_revenue_ratio",
+                        "INVENTORY_SALES_DIVERGENCE": "inventory_revenue_ratio"
+                    }
+                    mapped_metric = metric_map.get(s['signal_id'])
+                    if mapped_metric:
+                        peer_ctx = rows(db, "SELECT * FROM peer_context WHERE company=? AND metric=?", (s['company'], mapped_metric))
+                        if peer_ctx:
+                            ctx = peer_ctx[0]
+                            st.markdown("### Peer Context")
+                            if ctx.get("peer_median") is not None:
+                                pos = ctx.get("position", "Unknown")
+                                st.markdown(f"- **Relative Position:** {pos}")
+                                st.markdown(f"- **Peer Median:** {format_val(ctx.get('peer_median'))}")
+                                st.markdown(f"- **Coverage:** {ctx.get('availability_state', str(ctx.get('n_peers')) + ' peers')}")
+                            else:
+                                st.markdown("Peer context unavailable")
+
+                    st.markdown("### Evidence Summary")
 
                     if s["evidence"]:
                         try:
                             ev_data = json.loads(s["evidence"])
-                            st.json(ev_data)
-                        except:
-                            st.write(s["evidence"])
+                            for ev_idx, ev_item in enumerate(ev_data):
+                                metric = ev_item.get("metric", "Unknown")
+                                val = ev_item.get("value")
+                                f_val = format_val(val, ev_item.get("unit", "USD"))
+                                pend = ev_item.get("period_end", "")
+                                ptype = ev_item.get("period_type", "")
+                                fper = ev_item.get("fiscal_period", "N/A")
+                                
+                                st.markdown(f"**{metric.upper()}** - {f_val} ({pend} {ptype} - FY{ev_item.get('fiscal_year', 'N/A')} {fper})")
+                                
+                                provs = ev_item.get("provenance", [])
+                                if provs:
+                                    st.markdown("#### SEC Source")
+                                    for p in provs:
+                                        acc = p.get("accession", "N/A")
+                                        form = p.get("form", "N/A")
+                                        fdate = p.get("filing_date", "N/A")
+                                        concept = p.get("concept", "N/A")
+                                        url = p.get("source_url", "")
+                                        
+                                        st.markdown(f"- **Form:** {form} | **Filed:** {fdate} | **Accession:** {acc} | **Concept:** {concept}")
+                                        if url and url != "#":
+                                            st.markdown(f"[Open SEC Filing]({url})")
+                                        else:
+                                            st.markdown("*SEC source unavailable*")
+                                else:
+                                    st.markdown("*SEC source unavailable*")
+                        except Exception as e:
+                            st.error(f"Failed to parse evidence: {e}")
         else:
             st.success("No actionable deterioration signals detected.")
 
@@ -239,7 +292,7 @@ with tab_research:
     
             
             st.markdown("## 4. Signals & Evidence")
-            company_signals = rows(db, "SELECT * FROM signals WHERE company=? ORDER BY CASE WHEN suppressed IS NOT NULL THEN 5 WHEN severity = 'HIGH' THEN 1 WHEN severity = 'MODERATE' THEN 2 WHEN severity = 'LOW' THEN 3 ELSE 4 END ASC", (ticker,))
+            company_signals = rows(db, "SELECT * FROM signals WHERE company=? ORDER BY CASE WHEN suppressed IS NOT NULL THEN 5 WHEN severity = 'HIGH' THEN 1 WHEN severity = 'MEDIUM' THEN 2 WHEN severity = 'LOW' THEN 3 ELSE 4 END ASC", (ticker,))
             for s in company_signals:
                 if bool(s.get("suppressed")):
                     with st.expander(f"⚠️ SUPPRESSED: {s['signal_id'].replace('_', ' ').title()}", expanded=False):
@@ -253,12 +306,45 @@ with tab_research:
                         st.write("**Evidence Trail:**")
                         try:
                             ev_json = json.loads(ev_str)
-                            for ev_item in ev_json:
-                                prov = ev_item.get("provenance", [])
-                                if prov:
-                                    p = prov[0]
-                                    st.caption(f"OBSERVATION: {ev_item.get('metric')} = {ev_item.get('value')} | SEC Source: [EDGAR]({p.get('source_url', '#')})")
-                        except: pass
+                            if len(ev_json) >= 2:
+                                curr = ev_json[0]
+                                prior = ev_json[1]
+                                
+                                st.markdown("##### CURRENT OBSERVATION")
+                                st.markdown(f"- **Metric:** {curr.get('metric')} | **Value:** {format_val(curr.get('value'), curr.get('unit'))} | **Unit:** {curr.get('unit')}")
+                                st.markdown(f"- **Period:** {curr.get('period_end')} ({curr.get('period_type')}) | **Fiscal:** FY{curr.get('fiscal_year', 'N/A')} {curr.get('fiscal_period', 'N/A')} | **Quality:** {curr.get('quality')}")
+                                
+                                st.markdown("##### PRIOR OBSERVATION")
+                                st.markdown(f"- **Metric:** {prior.get('metric')} | **Value:** {format_val(prior.get('value'), prior.get('unit'))} | **Unit:** {prior.get('unit')}")
+                                st.markdown(f"- **Period:** {prior.get('period_end')} ({prior.get('period_type')}) | **Fiscal:** FY{prior.get('fiscal_year', 'N/A')} {prior.get('fiscal_period', 'N/A')} | **Quality:** {prior.get('quality')}")
+                            elif len(ev_json) == 1:
+                                curr = ev_json[0]
+                                st.markdown("##### CURRENT OBSERVATION")
+                                st.markdown(f"- **Metric:** {curr.get('metric')} | **Value:** {format_val(curr.get('value'), curr.get('unit'))} | **Unit:** {curr.get('unit')}")
+                                st.markdown(f"- **Period:** {curr.get('period_end')} ({curr.get('period_type')}) | **Fiscal:** FY{curr.get('fiscal_year', 'N/A')} {curr.get('fiscal_period', 'N/A')} | **Quality:** {curr.get('quality')}")
+
+                            for ev_idx, ev_item in enumerate(ev_json):
+                                derived = ev_item.get("derived_from")
+                                if derived and isinstance(derived, list) and len(derived) > 0:
+                                    st.markdown(f"**DERIVATION ({ev_item.get('metric')}):** {', '.join(derived)}")
+
+                                provs = ev_item.get("provenance", [])
+                                if provs:
+                                    st.markdown(f"**SOURCE ({ev_item.get('metric')}):**")
+                                    for p in provs:
+                                        acc = p.get("accession", "N/A")
+                                        form = p.get("form", "N/A")
+                                        fdate = p.get("filing_date", "N/A")
+                                        concept = p.get("concept", "N/A")
+                                        raw = p.get("raw_value")
+                                        url = p.get("source_url", "")
+                                        st.markdown(f"- **Concept:** {concept} | **Raw:** {raw} | **Accession:** {acc} | **Form:** {form} | **Filed:** {fdate}")
+                                        if url and url != '#':
+                                            st.markdown(f"  - [Open SEC Filing]({url})")
+                                        else:
+                                            st.markdown("  - *SEC source unavailable*")
+                        except Exception as e:
+                            st.error(f"Failed to parse evidence trail: {e}")
             
             st.markdown("## 5. Peer Context")
             
@@ -267,3 +353,18 @@ with tab_research:
                 st.info("Insufficient peer coverage.")
             else:
                 st.dataframe(pd.DataFrame(peers_obs), hide_index=True, use_container_width=True)
+                
+                # Extract all unavailable peers
+                unavails = set()
+                for row in peers_obs:
+                    up = row.get("unavailable_peers")
+                    if up:
+                        import json
+                        try:
+                            for p in json.loads(up):
+                                unavails.add(p)
+                        except: pass
+                
+                if unavails:
+                    for p in sorted(list(unavails)):
+                        st.warning(f"{p} Peer coverage unavailable")

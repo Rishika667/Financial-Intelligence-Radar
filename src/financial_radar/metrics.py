@@ -30,6 +30,8 @@ def get_comparison_pair(
     for candidate in valid_obs:
         if candidate == current:
             continue
+        if candidate.company != current.company:
+            continue
         if candidate.period_end >= current.period_end:
             continue
         if candidate.unit != current.unit:
@@ -86,7 +88,7 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
     # Group by (period_end, period_type, period_start, unit, fiscal_year, fiscal_period)
     groups = {}
     for o in observations:
-        key = (o.period_end, o.period_type, getattr(o, "period_start", None), o.unit, getattr(o, "fiscal_year", None), getattr(o, "fiscal_period", None))
+        key = (o.company, o.period_end, o.period_type, getattr(o, "period_start", None), o.unit, getattr(o, "fiscal_year", None), getattr(o, "fiscal_period", None))
         if key not in groups:
             groups[key] = {}
         groups[key][o.metric] = o
@@ -94,16 +96,16 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
     def get_instant(m_name, pend, required_unit):
         # Search all obs for INSTANT match
         for o in observations:
-            if o.period_type == "INSTANT" and o.period_end == pend and o.metric == m_name and o.unit == required_unit:
+            if o.company == company and o.period_type == "INSTANT" and o.period_end == pend and o.metric == m_name and o.unit == required_unit:
                 return o
         return None
         
     for key_tuple, metrics in groups.items():
-        pend, pt, pstart, req_unit, fy, fp = key_tuple
+        company, pend, pt, pstart, req_unit, fy, fp = key_tuple
         if pt == "INSTANT":
             continue
             
-        company = next(iter(metrics.values())).company
+        
         
         # Helper to create derived obs
         def _derive(metric_name: str, value: float, unit: str, bases: List[Observation], quality=DataQuality.DERIVED):

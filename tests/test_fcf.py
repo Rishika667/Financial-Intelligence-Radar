@@ -1,4 +1,4 @@
-﻿import pytest
+import pytest
 from datetime import date
 from financial_radar.metrics import derive_analytical_metrics
 from financial_radar.models import Observation, DataQuality, Provenance

@@ -11,10 +11,9 @@ def test_standalone_quarter_fiscal_semantics():
     q1 = Observation("A", "revenue", 400, "USD", date(2024,3,1), "QUARTER", DataQuality.REPORTED, (p,), fiscal_year=2024)
     
     q2 = derive_standalone_quarter(ytd, q1)
-    assert q2.value == 600
-    assert getattr(q2, "fiscal_year", None) == 2024
-    assert getattr(q2, "fiscal_period", None) == "Q2"
-    
+    assert q2.value is None
+    assert q2.quality == DataQuality.CALCULATION_INVALID
+            
     # Missing fiscal year -> falls back to date, should fail if days > 105
     ytd2 = Observation("B", "revenue", 1000, "USD", date(2024,6,30), "YTD_6M", DataQuality.REPORTED, (p,))
     q1_2 = Observation("B", "revenue", 400, "USD", date(2024,3,1), "QUARTER", DataQuality.REPORTED, (p,))

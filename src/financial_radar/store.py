@@ -55,6 +55,11 @@ def connect(db_path="financial_radar.sqlite"):
     c.row_factory = sqlite3.Row
     c.executescript(DDL)
     
+# Grab original SQL to check if it's the legacy schema
+    row = c.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='observations'").fetchone()
+    old_sql = row["sql"] if row else ""
+    needs_rebuild = "unit, period_start" not in old_sql and "UNIQUE(company" not in old_sql
+
     # Safe migration for existing observations table
     cols = [r["name"] for r in c.execute("PRAGMA table_info(observations)")]
     if "period_start" not in cols:
@@ -65,13 +70,21 @@ def connect(db_path="financial_radar.sqlite"):
         c.execute("ALTER TABLE observations ADD COLUMN fiscal_year INTEGER")
     if "fiscal_period" not in cols:
         c.execute("ALTER TABLE observations ADD COLUMN fiscal_period TEXT")
+    if "reason" not in cols:
+        c.execute("ALTER TABLE observations ADD COLUMN reason TEXT")
 
-    # Migrate unique constraint
-    row = c.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='observations'").fetchone()
-    if row and "period_start" not in row["sql"]:
+    if needs_rebuild:
+        # Create temp table, copy data, replace
+        c.execute("CREATE TABLE observations_new AS SELECT * FROM observations WHERE 0")
+        c.execute("DROP TABLE observations_new")
+        # Rename old to old, create new with DDL, copy
         c.execute("ALTER TABLE observations RENAME TO observations_old")
         c.executescript(DDL)
-        c.execute("INSERT OR IGNORE INTO observations SELECT company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, COALESCE(period_start, ''), derived_from, fiscal_year, fiscal_period FROM observations_old")
+        # Note: DDL creates new observations table
+        
+        # Now copy. The columns in observations_old match the newly added ones
+        # We need to list them explicitly to match the new schema order or just insert by name
+        c.execute("INSERT OR IGNORE INTO observations (company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, period_start, derived_from, fiscal_year, fiscal_period) SELECT company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, COALESCE(period_start, ''), derived_from, fiscal_year, fiscal_period FROM observations_old")
         c.execute("DROP TABLE observations_old")
 
     # Migrate peer_context table

@@ -33,7 +33,7 @@ def o(m, v):
 
 
 def test_mismatched_period_end_ratio_calculation():
-    from financial_radar.pipeline import _ratio
+    from financial_radar.metrics import derive_analytical_metrics
 
     gp = Observation(
         "ABC", "gross_profit", 50, "USD",
@@ -43,14 +43,16 @@ def test_mismatched_period_end_ratio_calculation():
         "ABC", "revenue", 100, "USD",
         date(2025, 3, 31), "QUARTER", DataQuality.REPORTED,
     )
-    ratio = _ratio(gp, rev, "gross_margin")
-    assert ratio.value is None
-    assert ratio.quality == DataQuality.CALCULATION_INVALID
-    assert ratio.comparable is False
+    
+    # Passing both into derivation should NOT yield a gross margin for Q2
+    # because they have different period ends and won't group together.
+    derived = derive_analytical_metrics([gp, rev])
+    has_gm = any(o.metric == "gross_margin" for o in derived)
+    assert not has_gm, "Should not derive ratio from mismatched period ends"
 
 
 def test_mismatched_currency_ratio_calculation():
-    from financial_radar.pipeline import _ratio
+    from financial_radar.metrics import derive_analytical_metrics
 
     gp = Observation(
         "ABC", "gross_profit", 50, "EUR",
@@ -60,10 +62,12 @@ def test_mismatched_currency_ratio_calculation():
         "ABC", "revenue", 100, "USD",
         date(2025, 6, 30), "QUARTER", DataQuality.REPORTED,
     )
-    ratio = _ratio(gp, rev, "gross_margin")
-    assert ratio.value is None
-    assert ratio.quality == DataQuality.CALCULATION_INVALID
-    assert ratio.comparable is False
+    
+    # Passing both into derivation should NOT yield a gross margin
+    # because they have different units and unit is in the grouping key.
+    derived = derive_analytical_metrics([gp, rev])
+    has_gm = any(o.metric == "gross_margin" for o in derived)
+    assert not has_gm, "Should not derive ratio from mismatched currencies"
 
 
 def test_store_and_watchlist(tmp_path):
@@ -374,3 +378,24 @@ def test_observation_with_period_start_roundtrip(tmp_path):
     assert loaded[0].period_start == date(2025, 4, 1)
     assert loaded[0].metric == "revenue"
     assert loaded[0].value == 100
+
+def test_readiness_stale_data(tmp_path):
+    c = connect(tmp_path / "stale.sqlite")
+    save_watchlist(c, [{"ticker": "ABC", "cik": "1", "active": True}])
+    p = _prov()
+    
+    # Old annual data
+    o1 = Observation("ABC", "revenue", 100, "USD", date(2020, 12, 31), "ANNUAL", DataQuality.REPORTED, (p,))
+    o2 = Observation("ABC", "net_income", 10, "USD", date(2020, 12, 31), "ANNUAL", DataQuality.REPORTED, (p,))
+    o3 = Observation("ABC", "operating_income", 20, "USD", date(2020, 12, 31), "ANNUAL", DataQuality.REPORTED, (p,))
+    o4 = Observation("ABC", "operating_cash_flow", 30, "USD", date(2020, 12, 31), "ANNUAL", DataQuality.REPORTED, (p,))
+    o5 = Observation("ABC", "cash_and_equivalents", 40, "USD", date(2020, 12, 31), "ANNUAL", DataQuality.REPORTED, (p,))
+    
+    save_observations(c, [o1, o2, o3, o4, o5])
+    
+    from financial_radar.pipeline import calculate_data_readiness
+    from financial_radar.models import ReadinessState
+    
+    state, msg = calculate_data_readiness("ABC", c)
+    assert state == ReadinessState.NOT_READY
+    assert "quarterly" in msg.lower()

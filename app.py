@@ -27,13 +27,40 @@ except FileNotFoundError:
     st.stop()
 
 universe_map = {c["ticker"]: c for c in universe}
+try:
+    peer_refs = json.loads(open("config/sp500_representative_51_2026.json").read()).get("peer_references", [])
+    for c in peer_refs:
+        universe_map[c["ticker"]] = c
+except: pass
 
 active_tickers = sorted({r["ticker"] for r in rows(db, "SELECT ticker FROM watchlist WHERE active=1")})
 user_agent = os.environ.get("SEC_USER_AGENT", "")
 
 def test_sec_connectivity(ua):
-    results = {'USER_AGENT_CONFIGURED': False, 'SEC_REACHABLE': False, 'SUBMISSIONS_REACHABLE': False, 'XBRL_REACHABLE': False}
-    if not ua or len(ua) < 5: return results
+    results = {'USER_AGENT_CONFIGURED': False, 'SEC_REACHABLE': False, 'SUBMISSIONS_REACHABLE': False, 'XBRL_REACHABLE': False, 'ERRORS': []}
+    if not ua or len(ua) < 5: 
+        results['ERRORS'].append("Invalid or missing SEC_USER_AGENT environment variable")
+        return results
+    results['USER_AGENT_CONFIGURED'] = True
+    headers = {'User-Agent': ua, 'Accept-Encoding': 'gzip, deflate'}
+    
+    import requests
+    try:
+        r1 = requests.get('https://www.sec.gov/', headers=headers, timeout=5)
+        r1.raise_for_status()
+        results['SEC_REACHABLE'] = True
+        
+        r2 = requests.get('https://data.sec.gov/submissions/CIK0000320193.json', headers=headers, timeout=5)
+        r2.raise_for_status()
+        results['SUBMISSIONS_REACHABLE'] = True
+        
+        r3 = requests.get('https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json', headers=headers, timeout=5)
+        r3.raise_for_status()
+        results['XBRL_REACHABLE'] = True
+    except requests.exceptions.RequestException as e:
+        results['ERRORS'].append(f"Network or protocol error: {e}")
+        
+    return results
     results['USER_AGENT_CONFIGURED'] = True
     headers = {'User-Agent': ua}
     try:
@@ -180,7 +207,20 @@ with tab_dashboard:
                             if ctx.get("peer_median") is not None:
                                 pos = ctx.get("position", "Unknown")
                                 st.markdown(f"- **Relative Position:** {pos}")
-                                st.markdown(f"- **Peer Median:** {format_val(ctx.get('peer_median'), 'multiple' if mapped_metric in ('cash_conversion', 'debt_operating_income', 'liquidity_ratio', 'receivables_revenue_ratio', 'inventory_revenue_ratio') else 'pure')}")
+                                unit_map = {
+                                    "gross_margin": "pure", "operating_margin": "pure",
+                                    "cash_conversion": "multiple", "debt_operating_income": "multiple", "liquidity_ratio": "multiple",
+                                    "receivables_revenue_ratio": "pure", "inventory_revenue_ratio": "pure",
+                                    "share_count": "shares", "free_cash_flow": s.get("unit", "USD") # We don't have unit in peer_context, but we have it in evidence, but it's not easily accessible here. Let's use USD fallback.
+                                }
+                                pm_unit = unit_map.get(mapped_metric, "USD")
+                                if mapped_metric == "free_cash_flow" and s.get("evidence"):
+                                    try:
+                                        import json
+                                        ev_json = json.loads(s["evidence"])
+                                        if ev_json: pm_unit = ev_json[0].get("unit", "USD")
+                                    except: pass
+                                st.markdown(f"- **Peer Median:** {format_val(ctx.get('peer_median'), pm_unit)}")
                                 st.markdown(f"- **Coverage:** {ctx.get('availability_state', str(ctx.get('n_peers')) + ' peers')}")
                             else:
                                 st.markdown("Peer context unavailable")

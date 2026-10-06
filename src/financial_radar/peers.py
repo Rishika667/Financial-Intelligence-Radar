@@ -34,7 +34,15 @@ def peer_context(company, metric, observations, members):
             "peer_group_version": None, "unavailable_peers": members
         }
         
-    anchor = sorted(own_obs, key=lambda x: x.period_end)[-1]
+# Anchor to the latest QUARTER observation, as analyst signals are quarterly-driven
+    q_obs = [o for o in own_obs if o.period_type == "QUARTER"]
+    if not q_obs:
+        return {
+            "metric": metric, "available": False, "company_value": None,
+            "peer_median": None, "peer_range": None, "n_peers": 0,
+            "peer_group_version": None, "unavailable_peers": members
+        }
+    anchor = sorted(q_obs, key=lambda x: x.period_end)[-1]
     cfy = getattr(anchor, "fiscal_year", None)
     cfp = getattr(anchor, "fiscal_period", None)
     

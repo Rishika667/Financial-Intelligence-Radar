@@ -318,9 +318,16 @@ def calculate_data_readiness(ticker, c):
         
     core = {'revenue', 'net_income', 'operating_income', 'operating_cash_flow', 'cash_and_equivalents'}
     
+    # Must have recent QUARTERLY evidence
+    q_obs = [o for o in obs if o['period_type'] == 'QUARTER']
+    if not q_obs:
+        return ReadinessState.NOT_READY, "No quarterly observations found."
+        
+    max_q_end = max([o['period_end'] for o in q_obs])
+    
     valid_metrics = set()
-    for o in obs:
-        if o['value'] is not None and o['quality'] in ('REPORTED', 'DERIVED', 'AMENDED', 'RESTATED') and o['comparable'] == 1 and o['provenance'] and o['provenance'] != "[]":
+    for o in q_obs:
+        if o['period_end'] == max_q_end and o['value'] is not None and o['quality'] in ('REPORTED', 'DERIVED', 'AMENDED', 'RESTATED') and o['comparable'] == 1 and o['provenance'] and o['provenance'] != "[]":
             valid_metrics.add(o['metric'])
             
     missing = core - valid_metrics

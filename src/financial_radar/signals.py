@@ -95,16 +95,31 @@ def cluster(out):
     for (company, period), sigs in by_company_period.items():
         if len(sigs) >= 3:
             obs_set = set()
+            has_medium_conf = False
             for sig in sigs:
+                if getattr(sig, "confidence", "HIGH") != "HIGH":
+                    has_medium_conf = True
                 for o in sig.evidence:
                     obs_set.add(o)
+                    
+            # Sort evidence deterministically
+            from datetime import date
+            obs_list = sorted(list(obs_set), key=lambda x: (
+                x.company, 
+                x.metric, 
+                x.period_end, 
+                getattr(x, "period_start", None) or date.min
+            ))
+            
+            cluster_conf = "MEDIUM" if has_medium_conf else "HIGH"
+            
             clusters.append(Signal(
                 "MULTI_FACTOR_DETERIORATION_CLUSTER", 
                 company, 
                 "HIGH", 
-                "HIGH",
+                cluster_conf,
                 f"Detected {len(sigs)} concurrent warnings in period {period.isoformat()}.", 
-                tuple(obs_set), 
-                component_signal_ids=tuple(s.signal_id for s in sigs)
+                tuple(obs_list), 
+                component_signal_ids=tuple(sorted(list(set(s.signal_id for s in sigs))))
             ))
     return clusters

@@ -123,14 +123,7 @@ def evaluate(company, items, sector="Unknown"):
 
 
 def deduplicate_observations(obs: list) -> list:
-    from .models import DataQuality
-    quality_rank = {
-        DataQuality.AMENDED: 5,
-        DataQuality.RESTATED: 4,
-        DataQuality.REPORTED: 3,
-        DataQuality.DERIVED: 2,
-        DataQuality.NOT_REPORTED: 1
-    }
+    from .models import DataQuality, QUALITY_RANK
     
     dedup = {}
     for o in obs:
@@ -139,8 +132,8 @@ def deduplicate_observations(obs: list) -> list:
             dedup[key] = o
         else:
             existing = dedup[key]
-            eq = quality_rank.get(existing.quality, 0)
-            nq = quality_rank.get(o.quality, 0)
+            eq = QUALITY_RANK.get(existing.quality, 0)
+            nq = QUALITY_RANK.get(o.quality, 0)
             if nq > eq:
                 dedup[key] = o
     return list(dedup.values())
@@ -287,13 +280,16 @@ def validate_portfolio_csv(df, universe_tickers):
         df["shares"] = df["shares"].astype(float)
         df["weight"] = df["weight"].astype(float)
         df["cost_basis"] = df["cost_basis"].astype(float)
+        df["exposure"] = df["exposure"].astype(float)
     except ValueError:
         return False, "Numeric columns contain invalid non-numeric data."
         
-    if df.isna().any().any():
-        return False, "CSV contains NaN or blank values."
+    import numpy as np
+    if df.isna().any().any() or np.isinf(df[["shares", "weight", "cost_basis", "exposure"]]).any().any():
+        return False, "CSV contains NaN, infinity, or blank values."
         
     if (df["shares"] <= 0).any():
+        
         return False, "Column 'shares' cannot be zero or negative."
         
     if (df["cost_basis"] <= 0).any():

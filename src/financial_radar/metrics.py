@@ -1,6 +1,6 @@
 from typing import List, Optional, Tuple, Dict
 from datetime import date
-from .models import Observation, DataQuality
+from .models import Observation, DataQuality, QUALITY_RANK
 
 def get_comparison_pair(
     observations: List[Observation],
@@ -23,7 +23,7 @@ def get_comparison_pair(
     if not valid_obs:
         return None, None
         
-    valid_obs.sort(key=lambda x: (x.period_end, getattr(x, "period_start", None) or date.min, getattr(x, "quality", DataQuality.REPORTED).name), reverse=True)
+    valid_obs.sort(key=lambda x: (x.period_end, getattr(x, "period_start", None) or date.min, QUALITY_RANK.get(getattr(x, "quality", DataQuality.REPORTED), 0)), reverse=True)
     current = current_obs if current_obs is not None else valid_obs[0]
     
     prior = None

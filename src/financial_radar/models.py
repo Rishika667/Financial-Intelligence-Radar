@@ -68,3 +68,13 @@ class Signal:
     @property
     def actionable(self):
         return self.suppressed_reason is None
+
+
+QUALITY_RANK = {
+    DataQuality.AMENDED: 5,
+    DataQuality.RESTATED: 4,
+    DataQuality.REPORTED: 3,
+    DataQuality.DERIVED: 2,
+    DataQuality.NOT_REPORTED: 1,
+    DataQuality.CALCULATION_INVALID: 0,
+}

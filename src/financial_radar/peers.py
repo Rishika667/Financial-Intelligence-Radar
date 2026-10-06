@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 from statistics import median
-from .models import DataQuality
+from .models import DataQuality, QUALITY_RANK
 
 def load_peer_groups(universe_path="config/sp500_representative_51_2026.json"):
     try:
@@ -42,7 +42,7 @@ def peer_context(company, metric, observations, members):
             "peer_median": None, "peer_range": None, "n_peers": 0,
             "peer_group_version": None, "unavailable_peers": members
         }
-    anchor = sorted(q_obs, key=lambda x: (x.period_end, x.period_start or "", getattr(x, "quality", None).name if getattr(x, "quality", None) else ""))[-1]
+    anchor = sorted(q_obs, key=lambda x: (x.period_end, getattr(x, "period_start", None) or "", QUALITY_RANK.get(getattr(x, "quality", None), 0)))[-1]
     cfy = getattr(anchor, "fiscal_year", None)
     cfp = getattr(anchor, "fiscal_period", None)
     
@@ -60,6 +60,7 @@ def peer_context(company, metric, observations, members):
         ]
         
         match = None
+        p_obs.sort(key=lambda x: (x.period_end, getattr(x, "period_start", None) or "", QUALITY_RANK.get(getattr(x, "quality", None), 0)), reverse=True)
         for o in p_obs:
             pfy = getattr(o, "fiscal_year", None)
             pfp = getattr(o, "fiscal_period", None)

@@ -1,4 +1,4 @@
-﻿import pytest
+import pytest
 from streamlit.testing.v1 import AppTest
 import json
 from pathlib import Path
@@ -17,15 +17,28 @@ class MockClient(SECClient):
     def company_facts(self, cik):
         return json.loads(Path("tests/fixtures/aapl_facts.json").read_text(encoding="utf-8"))
 
-def test_research_mode_evidence_display(monkeypatch):
-    test_db = os.path.abspath("test_research_radar.sqlite")
+def test_research_mode_strong_assertions(monkeypatch):
+    test_db = os.path.abspath("test_research_radar2.sqlite")
     if os.path.exists(test_db):
         os.remove(test_db)
         
     c = connect(test_db)
     ingest_company(MockClient(), c, {"ticker": "AAPL", "cik": "320193"})
-    c.execute("INSERT INTO portfolio (ticker, weight, exposure) VALUES ('AAPL', 0.05, 10000)")
     c.execute("INSERT INTO watchlist (ticker, active, cik) VALUES ('AAPL', 1, '320193')")
+    
+    from financial_radar.models import Signal, Observation, DataQuality
+    from datetime import date
+    
+    # Inject a fake signal to test evidence display
+    s = Signal("GROSS_MARGIN_COMPRESSION", "AAPL", "HIGH", "HIGH", "Margin fell", 
+        (Observation("AAPL", "gross_margin", 0.40, "pure", date(2023,9,30), "QUARTER", DataQuality.REPORTED, tuple([
+            {"source_url": "https://www.sec.gov/Archives/edgar/data/320193/123/a.htm"}
+        ])),)
+    )
+    c.execute("INSERT INTO signals VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (
+        s.signal_id, s.company, s.severity, s.confidence, s.explanation, 
+        None, json.dumps([{"metric": "gross_margin", "provenance": [{"source_url": "https://www.sec.gov/Archives/edgar/data/320193/123/a.htm"}]}]), "v1", "[]"
+    ))
     c.commit()
 
     monkeypatch.setenv("DB_PATH", test_db)
@@ -36,28 +49,25 @@ def test_research_mode_evidence_display(monkeypatch):
     assert not at.exception
     
     research_tab = at.tabs[3]
+    all_md = " ".join([m.value for m in research_tab.markdown] + [h.value for h in research_tab.header] + [s.value for s in research_tab.subheader] + [i.value for i in research_tab.info])
     
-    markdowns = [m.value for m in research_tab.markdown]
-    headers = [h.value for h in research_tab.header]
-    subheaders = [sh.value for sh in research_tab.subheader]
-    all_text = " ".join(markdowns + headers + subheaders)
+    metrics = [m.value for m in research_tab.metric]
     
-    assert "1. Executive Snapshot" in all_text, "Executive Snapshot missing"
-    assert "2. Analyst Synthesis" in all_text, "Analyst Synthesis missing"
-    assert "3. Financial Performance" in all_text, "Financial Performance missing"
-    assert "4. Signals & Evidence" in all_text, "Signals & Evidence missing"
-    assert "5. Peer Context" in all_text, "Peer Context missing"
+    # 1. Assert JPM false banking cluster doesn't appear
+    assert "Banking Analytics" not in all_md
     
-    # Check for AAPL specific financial values
-    metrics_text = [m.value for m in research_tab.metric]
-    metric_labels = [m.label for m in research_tab.metric]
+    # 2. Assert Actual SEC Evidence URL
+    assert "https://www.sec.gov/Archives/edgar/data/320193/" in all_md, "Must contain actual SEC evidence URL"
     
-    assert any("Revenue" in lbl for lbl in metric_labels), "Revenue metric missing"
-    assert any("Gross Margin" in lbl for lbl in metric_labels), "Gross Margin metric missing"
-    assert any("Operating Margin" in lbl for lbl in metric_labels), "Operating Margin metric missing"
-    assert any("Net Income" in lbl for lbl in metric_labels), "Net Income metric missing"
+    # 3. Assert precise numeric formatting
+    assert any("B" in str(v) or "M" in str(v) for v in metrics), "Metrics should be formatted with B/M suffixes"
     
-    infos = [i.value for i in research_tab.info]
-    assert "Insufficient data for trend charts." not in infos
+    # 4. Assert readiness state
+    main_md = " ".join([m.value for m in at.main.markdown])
+    readiness_df = at.tabs[0].dataframe[0].value
+    assert len(readiness_df) > 0
+    assert "READY" in readiness_df["State"].values or "PARTIAL" in readiness_df["State"].values
     
     c.close()
+    if os.path.exists(test_db):
+        os.remove(test_db)

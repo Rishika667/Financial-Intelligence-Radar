@@ -190,8 +190,9 @@ def extract_companyfacts(company, cik, payload, filings):
                 comparability_reason="No accepted standard XBRL concept",
             ))
 
-    # 5. Derive Standalone Quarters from YTD
+# 5. Derive Standalone Quarters from YTD
     def find_ytd(obs_list, o, req_type):
+        candidates = []
         for c in obs_list:
             if c.period_type != req_type or c.unit != o.unit:
                 continue
@@ -199,15 +200,29 @@ def extract_companyfacts(company, cik, payload, filings):
             cfp = getattr(o, "fiscal_period", None)
             pfy = getattr(c, "fiscal_year", None)
             pfp = getattr(c, "fiscal_period", None)
+            
+            is_match = False
             if cfy and pfy and cfp and pfp:
                 if cfy == pfy:
-                    if req_type == "QUARTER" and cfp in ("Q2", "H1") and pfp == "Q1": return c
-                    if req_type == "YTD_6M" and cfp == "Q3" and pfp in ("Q2", "H1"): return c
-                    if req_type == "YTD_9M" and cfp == "FY" and pfp == "Q3": return c
-                continue
-            if 80 <= (o.period_end - c.period_end).days <= 100:
-                return c
-        return None
+                    if req_type == "QUARTER" and cfp in ("Q2", "H1") and pfp == "Q1": is_match = True
+                    if req_type == "YTD_6M" and cfp == "Q3" and pfp in ("Q2", "H1"): is_match = True
+                    if req_type == "YTD_9M" and cfp == "FY" and pfp == "Q3": is_match = True
+            elif 80 <= (o.period_end - c.period_end).days <= 100:
+                is_match = True
+                
+            if is_match:
+                candidates.append(c)
+                
+        if not candidates:
+            return None
+            
+        from .models import QUALITY_RANK
+        candidates.sort(key=lambda x: (
+            QUALITY_RANK.get(getattr(x, "quality", None), 0),
+            x.period_end,
+            getattr(x, "period_start", None) or date.min
+        ), reverse=True)
+        return candidates[0]
 
     for metric, obs_list in obs_map.items():
         for o in obs_list:

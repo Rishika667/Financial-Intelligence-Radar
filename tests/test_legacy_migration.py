@@ -92,7 +92,60 @@ def test_legacy_migration_partial_and_coexist():
 def test_legacy_migration_partial_peer_context():
     import os
     import sqlite3
-    from financial_radar.store import connect
+    from financial_radar.store import connect, save_peer_context
+    if os.path.exists("test_legacy_peer.db"):
+        os.remove("test_legacy_peer.db")
+        
+    c = sqlite3.connect("test_legacy_peer.db")
+    # Genuinely legacy peer_context (missing 5 columns)
+    c.execute("CREATE TABLE peer_context(company TEXT, group_id TEXT, metric TEXT, company_value REAL, peer_median REAL, peer_min REAL, peer_max REAL, n_peers INTEGER, version TEXT, unavailable_peers TEXT, PRIMARY KEY(company, metric))")
+    c.execute("INSERT INTO peer_context VALUES ('AAPL', 'G1', 'revenue', 100, 110, 100, 120, 5, 'v1', '[]')")
+    c.commit()
+    c.close()
+    
+    # Reopen with production connect (runs migration)
+    db = connect("test_legacy_peer.db")
+    
+    # Save using CURRENT production API
+    save_peer_context(db, 'AAPL', {
+        'group_id': 'G1',
+        'contexts': [{
+            'metric': 'revenue',
+            'company_value': 105,
+            'peer_median': 115,
+            'peer_range': (105, 125),
+            'n_peers': 6,
+            'peer_group_version': 'v2',
+            'unavailable_peers': ['X'],
+            'position': 'BOTTOM_QUARTILE',
+            'coverage_count': 6,
+            'total_peer_count': 7,
+            'coverage_ratio': 0.85,
+            'availability_state': 'PARTIAL'
+        }]
+    })
+    
+    # Reload the row
+    res = db.execute("SELECT * FROM peer_context WHERE company='AAPL' AND metric='revenue'").fetchall()
+    
+    assert len(res) == 1
+    row = dict(res[0])
+    
+    # Verify all new values survive correctly
+    assert row["position"] == "BOTTOM_QUARTILE"
+    assert row["coverage_count"] == 6
+    assert row["coverage_ratio"] == 0.85
+    assert row["availability_state"] == "PARTIAL"
+    assert row["company_value"] == 105
+    
+    db.close()
+    
+    # Reopen a second time to verify idempotence
+    db2 = connect("test_legacy_peer.db")
+    res2 = db2.execute("SELECT * FROM peer_context WHERE company='AAPL' AND metric='revenue'").fetchall()
+    assert len(res2) == 1
+    db2.close()
+    
     if os.path.exists("test_legacy_peer.db"):
         os.remove("test_legacy_peer.db")
         

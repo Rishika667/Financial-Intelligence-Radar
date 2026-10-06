@@ -550,3 +550,145 @@ def test_cluster_integrity_period_isolation():
     s5 = Signal("E", "AAPL", "HIGH", "HIGH", "e", (o_q1,))
     res2 = cluster([s1, s2, s5])
     assert len(res2) == 1, "Should cluster when 3 valid in same period"
+
+def test_cluster_evidence_and_confidence():
+    from financial_radar.signals import cluster
+    from financial_radar.models import Signal, Observation, DataQuality
+    from datetime import date
+    
+    q1 = date(2023, 3, 31)
+    
+    # 3 signals, 1 has MEDIUM confidence (due to DERIVED)
+    o_q1_a = Observation("AAPL", "rev", 10, "USD", q1, "QUARTER", DataQuality.REPORTED, tuple())
+    o_q1_b = Observation("AAPL", "margin", 10, "USD", q1, "QUARTER", DataQuality.DERIVED, tuple())
+    o_q1_c = Observation("AAPL", "fcf", 10, "USD", q1, "QUARTER", DataQuality.REPORTED, tuple())
+    
+    s1 = Signal("A", "AAPL", "HIGH", "HIGH", "a", (o_q1_a,))
+    s2 = Signal("B", "AAPL", "MEDIUM", "MEDIUM", "b", (o_q1_b,))
+    s3 = Signal("C", "AAPL", "HIGH", "HIGH", "c", (o_q1_c,))
+    
+    res = cluster([s1, s2, s3])
+    assert len(res) == 1
+    cl = res[0]
+    
+    assert cl.confidence == "MEDIUM", "Cluster must inherit MEDIUM confidence if any component is MEDIUM"
+    
+    # Check deterministic ordering by metric (fcf, margin, rev)
+    ev_metrics = [o.metric for o in cl.evidence]
+    assert ev_metrics == ["fcf", "margin", "rev"], "Evidence must be sorted deterministically"
+    
+    # Reverse input, should be identical
+    res2 = cluster([s3, s2, s1])
+    cl2 = res2[0]
+    assert cl2.confidence == "MEDIUM"
+    ev_metrics2 = [o.metric for o in cl2.evidence]
+    assert ev_metrics2 == ["fcf", "margin", "rev"]
+
+def test_cluster_all_high_confidence():
+    from financial_radar.signals import cluster
+    from financial_radar.models import Signal, Observation, DataQuality
+    from datetime import date
+    
+    q1 = date(2023, 3, 31)
+    
+    o_q1 = Observation("AAPL", "rev", 10, "USD", q1, "QUARTER", DataQuality.REPORTED, tuple())
+    s1 = Signal("A", "AAPL", "HIGH", "HIGH", "a", (o_q1,))
+    s2 = Signal("B", "AAPL", "MEDIUM", "HIGH", "b", (o_q1,))
+    s3 = Signal("C", "AAPL", "HIGH", "HIGH", "c", (o_q1,))
+    
+    res = cluster([s1, s2, s3])
+    assert len(res) == 1
+    assert res[0].confidence == "HIGH"
+
+def test_portfolio_numeric_validation():
+    import pandas as pd
+    import numpy as np
+    from financial_radar.pipeline import validate_portfolio_csv
+    
+    univ = ["AAPL", "MSFT"]
+    
+    def check(df, should_pass):
+        is_valid, _ = validate_portfolio_csv(df, univ)
+        assert is_valid == should_pass
+        
+    # Baseline valid
+    check(pd.DataFrame({"ticker": ["AAPL"], "shares": [10], "weight": [1.0], "cost_basis": [100], "exposure": [1000]}), True)
+    
+    # NaN
+    check(pd.DataFrame({"ticker": ["AAPL"], "shares": [np.nan], "weight": [1.0], "cost_basis": [100], "exposure": [1000]}), False)
+    
+    # inf
+    check(pd.DataFrame({"ticker": ["AAPL"], "shares": [10], "weight": [np.inf], "cost_basis": [100], "exposure": [1000]}), False)
+    
+    # -inf
+    check(pd.DataFrame({"ticker": ["AAPL"], "shares": [10], "weight": [1.0], "cost_basis": [-np.inf], "exposure": [1000]}), False)
+    
+    # string 'inf'
+    check(pd.DataFrame({"ticker": ["AAPL"], "shares": ["inf"], "weight": [1.0], "cost_basis": [100], "exposure": [1000]}), False)
+    
+    # Negative shares
+    check(pd.DataFrame({"ticker": ["AAPL"], "shares": [-10], "weight": [1.0], "cost_basis": [100], "exposure": [1000]}), False)
+    
+    # Zero shares
+    check(pd.DataFrame({"ticker": ["AAPL"], "shares": [0], "weight": [1.0], "cost_basis": [100], "exposure": [1000]}), False)
+    
+    # Weight > 1
+    check(pd.DataFrame({"ticker": ["AAPL"], "shares": [10], "weight": [1.1], "cost_basis": [100], "exposure": [1000]}), False)
+    
+    # Weight sum != 1
+    check(pd.DataFrame({"ticker": ["AAPL"], "shares": [10], "weight": [0.5], "cost_basis": [100], "exposure": [1000]}), False)
+    
+    # Invalid ticker
+    check(pd.DataFrame({"ticker": ["INVALID"], "shares": [10], "weight": [1.0], "cost_basis": [100], "exposure": [1000]}), False)
+
+def test_explicit_readiness_policy():
+    import sqlite3
+    import os
+    from datetime import date
+    from financial_radar.pipeline import calculate_data_readiness
+    from financial_radar.models import ReadinessState, Observation, DataQuality
+    from financial_radar.store import connect, save_observations, save_signals
+    
+    if os.path.exists("test_readiness.db"): os.remove("test_readiness.db")
+    db = connect("test_readiness.db")
+    
+    # Empty -> NOT_READY
+    state, _ = calculate_data_readiness("AAPL", db)
+    assert state == ReadinessState.NOT_READY
+    
+    # ANNUAL only -> NOT_READY
+    o1 = Observation("AAPL", "revenue", 100, "USD", date(2022,12,31), "ANNUAL", DataQuality.REPORTED, tuple([Provenance("1", "url", date(2023,1,1), "10-Q", "rev", datetime.now(), 100)]))
+    save_observations(db, [o1])
+    state, _ = calculate_data_readiness("AAPL", db)
+    assert state == ReadinessState.NOT_READY
+    
+    # Ingestion failed -> FAILED
+    from financial_radar.models import Signal
+    save_signals(db, [Signal("INGESTION_FAILED", "AAPL", "HIGH", "HIGH", "fail", tuple())])
+    state, _ = calculate_data_readiness("AAPL", db)
+    assert state == ReadinessState.FAILED
+    db.execute("DELETE FROM signals")
+    db.commit()
+    
+    # Missing core -> PARTIAL
+    o2 = Observation("AAPL", "revenue", 100, "USD", date(2023,3,31), "QUARTER", DataQuality.REPORTED, tuple([Provenance("1", "url", date(2023,1,1), "10-Q", "rev", datetime.now(), 100)]), comparable=True)
+    save_observations(db, [o2])
+    state, msg = calculate_data_readiness("AAPL", db)
+    assert state == ReadinessState.PARTIAL
+    
+    # Non-comparable -> NOT_READY (since only revenue is there and it's invalid)
+    db.execute("UPDATE observations SET comparable=0")
+    db.commit()
+    state, _ = calculate_data_readiness("AAPL", db)
+    assert state == ReadinessState.NOT_READY
+    
+    # All core -> READY
+    db.execute("UPDATE observations SET comparable=1")
+    core_metrics = ['net_income', 'operating_income', 'operating_cash_flow', 'cash_and_equivalents']
+    core_obs = [Observation("AAPL", m, 100, "USD", date(2023,3,31), "QUARTER", DataQuality.REPORTED, tuple([Provenance("1", "url", date(2023,1,1), "10-Q", "rev", datetime.now(), 100)]), comparable=True) for m in core_metrics]
+    save_observations(db, core_obs)
+    state, _ = calculate_data_readiness("AAPL", db)
+    assert state == ReadinessState.READY
+    
+    db.close()
+    if os.path.exists("test_readiness.db"): os.remove("test_readiness.db")

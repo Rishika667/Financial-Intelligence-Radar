@@ -201,28 +201,31 @@ def extract_companyfacts(company, cik, payload, filings):
             pfy = getattr(c, "fiscal_year", None)
             pfp = getattr(c, "fiscal_period", None)
             
-            is_match = False
+            fiscal_match = False
+            date_match = False
+            
             if cfy and pfy and cfp and pfp:
                 if cfy == pfy:
-                    if req_type == "QUARTER" and cfp in ("Q2", "H1") and pfp == "Q1": is_match = True
-                    if req_type == "YTD_6M" and cfp == "Q3" and pfp in ("Q2", "H1"): is_match = True
-                    if req_type == "YTD_9M" and cfp == "FY" and pfp == "Q3": is_match = True
+                    if req_type == "QUARTER" and cfp in ("Q2", "H1") and pfp == "Q1": fiscal_match = True
+                    if req_type == "YTD_6M" and cfp == "Q3" and pfp in ("Q2", "H1"): fiscal_match = True
+                    if req_type == "YTD_9M" and cfp == "FY" and pfp == "Q3": fiscal_match = True
             elif 80 <= (o.period_end - c.period_end).days <= 100:
-                is_match = True
+                date_match = True
                 
-            if is_match:
-                candidates.append(c)
+            if fiscal_match or date_match:
+                candidates.append((c, fiscal_match))
                 
         if not candidates:
             return None
             
         from .models import QUALITY_RANK
         candidates.sort(key=lambda x: (
-            QUALITY_RANK.get(getattr(x, "quality", None), 0),
-            x.period_end,
-            getattr(x, "period_start", None) or date.min
+            x[1], # is_fiscal
+            QUALITY_RANK.get(getattr(x[0], "quality", None), 0),
+            x[0].period_end,
+            getattr(x[0], "period_start", None) or date.min
         ), reverse=True)
-        return candidates[0]
+        return candidates[0][0]
 
     for metric, obs_list in obs_map.items():
         for o in obs_list:

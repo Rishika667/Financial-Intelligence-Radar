@@ -26,18 +26,13 @@ def get_comparison_pair(
     valid_obs.sort(key=lambda x: (x.period_end, getattr(x, "period_start", None) or date.min, QUALITY_RANK.get(getattr(x, "quality", DataQuality.REPORTED), 0)), reverse=True)
     current = current_obs if current_obs is not None else valid_obs[0]
     
-    prior = None
+    candidates = []
     for candidate in valid_obs:
-        if candidate == current:
-            continue
-        if candidate.company != current.company:
-            continue
-        if candidate.period_end >= current.period_end:
-            continue
-        if candidate.unit != current.unit:
-            continue
+        if candidate == current: continue
+        if candidate.company != current.company: continue
+        if candidate.period_end >= current.period_end: continue
+        if candidate.unit != current.unit: continue
             
-        # Fiscal semantics first
         cfy = getattr(current, "fiscal_year", None)
         cfp = getattr(current, "fiscal_period", None)
         pfy = getattr(candidate, "fiscal_year", None)
@@ -45,38 +40,50 @@ def get_comparison_pair(
         
         days_diff = (current.period_end - candidate.period_end).days
         
+        fiscal_match = False
+        date_match = False
+        
         if cfy and pfy and cfp and pfp:
-            is_match = False
-            if mode == "yoy":
-                if cfy == pfy + 1 and cfp == pfp:
-                    is_match = True
-            elif mode == "annual":
-                if cfy == pfy + 1 and cfp == "FY" and pfp == "FY":
-                    is_match = True
+            if mode == "yoy" and cfy == pfy + 1 and cfp == pfp:
+                fiscal_match = True
+            elif mode == "annual" and cfy == pfy + 1 and cfp == "FY" and pfp == "FY":
+                fiscal_match = True
             elif mode == "sequential":
                 if "Q" in cfp and "Q" in pfp:
                     if (cfy == pfy and int(cfp.replace("Q", "")) == int(pfp.replace("Q", "")) + 1):
-                        is_match = True
+                        fiscal_match = True
                     elif cfy == pfy + 1 and cfp == "Q1" and pfp == "Q4":
-                        is_match = True
+                        fiscal_match = True
                 elif cfp == "H1" and pfp == "FY" and cfy == pfy + 1:
-                    is_match = True
-            
-            if is_match:
-                prior = candidate
-                break
-            else:
-                continue # STRICTLY enforce fiscal semantics if both present
-
-        # Fallback to date boundaries ONLY if fiscal info is missing
-        if mode in ("yoy", "annual") and (350 <= days_diff <= 380):
-            prior = candidate
-            break
-        elif mode == "sequential" and (80 <= days_diff <= 100):
-            prior = candidate
-            break
+                    fiscal_match = True
+        
+        if not (cfy and pfy and cfp and pfp):
+            if mode in ("yoy", "annual") and (350 <= days_diff <= 380):
+                date_match = True
+            elif mode == "sequential" and (80 <= days_diff <= 100):
+                date_match = True
                 
-    return current, prior
+        if fiscal_match or date_match:
+            candidates.append({
+                "obs": candidate,
+                "is_fiscal": fiscal_match,
+                "quality_rank": QUALITY_RANK.get(getattr(candidate, "quality", DataQuality.REPORTED), 0),
+                "period_end": candidate.period_end,
+                "period_start": getattr(candidate, "period_start", None) or date.min
+            })
+            
+    if not candidates:
+        return current, None
+        
+    candidates.sort(key=lambda x: (
+        x["is_fiscal"],
+        x["quality_rank"],
+        x["period_end"],
+        x["period_start"]
+    ), reverse=True)
+    
+    return current, candidates[0]["obs"]
+
 
 def derive_analytical_metrics(observations: List[Observation]) -> List[Observation]:
     """

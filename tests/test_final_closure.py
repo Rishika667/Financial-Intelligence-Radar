@@ -346,3 +346,52 @@ def test_quality_rank_hierarchy():
     assert QUALITY_RANK[DataQuality.REPORTED] > QUALITY_RANK[DataQuality.DERIVED]
     assert QUALITY_RANK[DataQuality.DERIVED] > QUALITY_RANK[DataQuality.NOT_REPORTED]
     assert QUALITY_RANK[DataQuality.NOT_REPORTED] > QUALITY_RANK[DataQuality.CALCULATION_INVALID]
+
+def test_semantic_fiscal_match_preferred_over_date_heuristic():
+    """
+    A candidate that is a true fiscal match but lower quality MUST beat a 
+    candidate that lacks fiscal info and only matches via date heuristics.
+    """
+    from financial_radar.metrics import get_comparison_pair
+    from financial_radar.models import Observation, DataQuality, Provenance
+    from datetime import date
+    
+    current = Observation("AAPL", "rev", 100, "USD", date(2023,12,31), "QUARTER", DataQuality.REPORTED, (),
+                          period_start=date(2023,10,1), fiscal_year=2024, fiscal_period="Q1")
+                          
+    # Candidate A: high quality (AMENDED) but no fiscal info. Falls into the 350-380 day date bucket.
+    cand_a = Observation("AAPL", "rev", 90, "USD", date(2022,12,31), "QUARTER", DataQuality.AMENDED, (),
+                         period_start=date(2022,10,1), fiscal_year=None, fiscal_period=None)
+                         
+    # Candidate B: low quality (REPORTED or DERIVED) but perfect fiscal info.
+    cand_b = Observation("AAPL", "rev", 95, "USD", date(2022,12,31), "QUARTER", DataQuality.REPORTED, (),
+                         period_start=date(2022,10,1), fiscal_year=2023, fiscal_period="Q1")
+                         
+    # Test forward order
+    curr, prior_fwd = get_comparison_pair([current, cand_a, cand_b], "rev", "QUARTER", mode="yoy", current_obs=current)
+    assert prior_fwd == cand_b, "Fiscal match must be preferred over date match, regardless of quality"
+    
+    # Test reverse order
+    curr, prior_rev = get_comparison_pair([current, cand_b, cand_a], "rev", "QUARTER", mode="yoy", current_obs=current)
+    assert prior_rev == cand_b, "Fiscal match must be preferred over date match, regardless of input order"
+
+
+def test_quantitative_intelligence_narratives():
+    """
+    Research Mode must format precise quantitative explanations for 
+    cash conversion, FCF, and liquidity deterioration.
+    """
+    from financial_radar.intelligence import generate_intelligence
+    import json
+    
+    ev_conv = json.dumps([{"value": 0.5}, {"value": 1.2}])
+    res_conv = generate_intelligence("EARNINGS_CASH_CONVERSION_DETERIORATION", "AAPL", "Tech", ev_conv)
+    assert "declined from 120.0% to 50.0%" in res_conv.get("what_changed", "")
+    
+    ev_fcf = json.dumps([{"value": -1000000, "unit": "USD"}, {"value": 5000000, "unit": "USD"}])
+    res_fcf = generate_intelligence("FREE_CASH_FLOW_DETERIORATION", "AAPL", "Tech", ev_fcf)
+    assert "fell from $5.0M to -$1.0M" in res_fcf.get("what_changed", "")
+    
+    ev_liq = json.dumps([{"value": 0.8}, {"value": 1.5}])
+    res_liq = generate_intelligence("LIQUIDITY_COMPRESSION", "AAPL", "Tech", ev_liq)
+    assert "fell from 1.50x to 0.80x" in res_liq.get("what_changed", "")

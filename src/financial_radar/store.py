@@ -88,10 +88,44 @@ def connect(db_path="financial_radar.sqlite"):
         c.execute("DROP TABLE observations_old")
 
     # Migrate peer_context table
+    row_pc = c.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='peer_context'").fetchone()
+    old_pc_sql = row_pc["sql"] if row_pc else ""
+    needs_pc_rebuild = "UNIQUE(company, metric, version)" not in old_pc_sql
+
     p_cols = [r["name"] for r in c.execute("PRAGMA table_info(peer_context)")]
-    for col, col_type in [("position", "TEXT"), ("coverage_count", "INTEGER"), ("total_peer_count", "INTEGER"), ("coverage_ratio", "REAL"), ("availability_state", "TEXT")]:
+    
+    # Safely add any missing new columns first so old table has them for the INSERT copy
+    expected_new_cols = [
+        ("position", "TEXT"), ("coverage_count", "INTEGER"),
+        ("total_peer_count", "INTEGER"), ("coverage_ratio", "REAL"),
+        ("availability_state", "TEXT"), ("group_id", "TEXT"), 
+        ("company_value", "REAL"), ("peer_median", "REAL"), 
+        ("peer_min", "REAL"), ("peer_max", "REAL"), 
+        ("n_peers", "INTEGER"), ("version", "TEXT"), 
+        ("unavailable_peers", "TEXT")
+    ]
+    for col, col_type in expected_new_cols:
         if col not in p_cols:
             c.execute(f"ALTER TABLE peer_context ADD COLUMN {col} {col_type}")
+
+    if needs_pc_rebuild and old_pc_sql:
+        # Save old data, recreate schema, restore data
+        c.execute("ALTER TABLE peer_context RENAME TO peer_context_old")
+        c.executescript(DDL)
+        # Select explicit columns that exist in the new schema
+        # If the old table had them, they were added above if missing.
+        c.execute("""
+            INSERT OR IGNORE INTO peer_context (
+                company, group_id, metric, company_value, peer_median, peer_min, peer_max, 
+                n_peers, version, unavailable_peers, position, coverage_count, 
+                total_peer_count, coverage_ratio, availability_state
+            ) SELECT 
+                company, group_id, metric, company_value, peer_median, peer_min, peer_max, 
+                n_peers, version, unavailable_peers, position, coverage_count, 
+                total_peer_count, coverage_ratio, availability_state 
+            FROM peer_context_old
+        """)
+        c.execute("DROP TABLE peer_context_old")
 
     return c
 

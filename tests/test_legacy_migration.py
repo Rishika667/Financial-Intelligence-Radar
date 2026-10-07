@@ -115,7 +115,7 @@ def test_legacy_migration_partial_peer_context():
             'peer_median': 115,
             'peer_range': (105, 125),
             'n_peers': 6,
-            'peer_group_version': 'v2',
+            'peer_group_version': 'v1',
             'unavailable_peers': ['X'],
             'position': 'BOTTOM_QUARTILE',
             'coverage_count': 6,

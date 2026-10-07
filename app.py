@@ -27,11 +27,15 @@ except FileNotFoundError:
     st.stop()
 
 universe_map = {c["ticker"]: c for c in universe}
+import logging
+logger = logging.getLogger(__name__)
+
 try:
     peer_refs = json.loads(open("config/sp500_representative_51_2026.json").read()).get("peer_references", [])
     for c in peer_refs:
         universe_map[c["ticker"]] = c
-except: pass
+except (FileNotFoundError, json.JSONDecodeError) as e:
+    logger.warning("Could not load peer_references from config/sp500_representative_51_2026.json: %s", e)
 
 active_tickers = sorted({r["ticker"] for r in rows(db, "SELECT ticker FROM watchlist WHERE active=1")})
 user_agent = os.environ.get("SEC_USER_AGENT", "")
@@ -118,8 +122,7 @@ with tab_setup:
                         status_list.append({"Company": ticker, "Status": "SUCCESS", "Message": ""})
                         success_count += 1
                     except Exception as e:
-                        import traceback
-                        traceback.print_exc()
+                        logger.error("Ingestion failed for %s: %s", ticker, e, exc_info=True)
                         status_list.append({"Company": ticker, "Status": "FAILED", "Message": str(e)})
                     progress.progress((i + 1) / len(ingest_list))
                 

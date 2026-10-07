@@ -257,6 +257,17 @@ def refresh_peer_contexts(c, active_tickers):
         save_peer_context(c, t, peer_ctx)
 
 def validate_portfolio_csv(df, universe_tickers):
+    """
+    Validates the user-provided portfolio CSV.
+    
+    BUSINESS CONTRACT:
+    - 'shares', 'weight', 'cost_basis', and 'exposure' must be finite numbers.
+    - 'exposure' is explicitly treated as a USER-SUPPLIED arbitrary value (e.g., 
+      beta-adjusted, gross dollar, or risk-weighted). The system DOES NOT derive 
+      or mathematically validate exposure against (shares * cost_basis) to allow 
+      for flexible institutional use-cases. It merely validates that it is a 
+      well-formed positive number.
+    """
     if df.empty:
         return False, "CSV is empty."
         
@@ -289,11 +300,13 @@ def validate_portfolio_csv(df, universe_tickers):
         return False, "CSV contains NaN, infinity, or blank values."
         
     if (df["shares"] <= 0).any():
-        
         return False, "Column 'shares' cannot be zero or negative."
         
     if (df["cost_basis"] <= 0).any():
         return False, "Column 'cost_basis' cannot be zero or negative."
+        
+    if (df["exposure"] <= 0).any():
+        return False, "Column 'exposure' cannot be zero or negative."
         
     if (df["weight"] <= 0).any() or (df["weight"] > 1).any():
         return False, "Column 'weight' must be between 0 and 1."

@@ -32,6 +32,13 @@ def generate_intelligence(signal_id, company, sector, evidence_str):
                 what = f"Diluted share count increased by {pct:.1f}% from {format_val(prev, 'shares')} to {format_val(curr, 'shares')}."
             elif "DEBT" in signal_id:
                 what = f"Debt/operating-income increased from {prev:.2f}x to {curr:.2f}x."
+            elif signal_id == "EARNINGS_CASH_CONVERSION_DETERIORATION":
+                what = f"Cash conversion declined from {prev*100:.1f}% to {curr*100:.1f}%, indicating lower operating cash generation relative to net income."
+            elif signal_id == "FREE_CASH_FLOW_DETERIORATION":
+                from financial_radar.synthesis import format_val
+                what = f"Free cash flow fell from {format_val(prev, ev[1].get('unit', 'USD'))} to {format_val(curr, ev[0].get('unit', 'USD'))}."
+            elif signal_id == "LIQUIDITY_COMPRESSION":
+                what = f"Liquidity ratio fell from {prev:.2f}x to {curr:.2f}x, indicating reduced short-term coverage."
 
     if signal_id == "RECEIVABLES_REVENUE_DIVERGENCE":
         return {

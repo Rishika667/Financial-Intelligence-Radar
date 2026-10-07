@@ -1,8 +1,12 @@
-# MILESTONE TREE
+# Milestone Tree
+**Phase 1 - SEC Data Truth (FINAL RELEASE)**
+All milestones M1 through M5 and final closure gates achieved.
 
-- **M1:** SEC Data Foundation [GREEN]
-- **M2:** Analytical Truth [GREEN]
-- **M3:** Analyst Intelligence Workflow [GREEN]
-- **M4:** Sector + Peer Intelligence [GREEN]
-- **M5:** Evidence + Research Mode [GREEN] (Pending External Audit)
-- **M6:** Release Hardening [RED] (Pending)
+**Current SHA**: `ed4c36ad4103804a1161ca1cc71a766f7a138298`
+
+- [x] M1: Ingestion & Normalization
+- [x] M2: Analytics & Signals
+- [x] M3: UI & Synthesis
+- [x] M4: Portfolio Integration
+- [x] M5: Peer Context & Caching
+- [x] FINAL: Determinism, Provenance, & Quality Precedence

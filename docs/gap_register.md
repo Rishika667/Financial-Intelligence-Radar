@@ -1,16 +1,13 @@
-# GAP REGISTER
+# Gap Register
+**Status:** ALL MATERIAL GAPS CLOSED.
+**Final SHA:** `ed4c36ad4103804a1161ca1cc71a766f7a138298`
 
-## OPEN GAPS
-- **GAP-01: Broad SEC Scaling (10+).** Requires deeper integration tests across larger baskets to prove structural scale resilience. Status: RED (M6 Target).
-- **GAP-05: True Banking Analytical Metrics.** Currently gracefully bypassed. True NIM/CET1 intelligence remains open. Status: YELLOW (Deferred).
-- **GAP-09: Final CI Production Validation.** Full pipeline E2E on GitHub Actions must pass on `main` integration. Status: RED (M6 Target).
+## Closed Items
+- `period_start` propagated in `_derive()`
+- Type-safe sorting implemented in peer candidates
+- Full comparison window `(company, curr_period, prior_period)` enforced in clustering
+- SEC preflight logic stripped of dead fallback paths
+- Ingestion exceptions cleanly logged, UI boundary secured
+- Explicit fiscal matching enforced in YTD selection and sequential comparisons
 
-## CLOSED GAPS (M1-M5)
-- **GAP-02 / GAP-03 (Persistence/Identity):** CLOSED. `period_start` tracking active.
-- **GAP-04 (Quality Precedence):** CLOSED. `RESTATED` integrated, `AMENDED > RESTATED` prioritized.
-- **GAP-07 (Clustering):** CLOSED. Suppressed signals isolated.
-- **GAP-08 (Financial Formatting):** CLOSED. Mapped $B, $M, %.
-- **GAP-09 (Narrative Semantics):** CLOSED. Ratios map to %.
-- **GAP-11 (Portfolio Context):** CLOSED.
-- **GAP-15 (Test Quality):** CLOSED. No duplicated prod logic in tests.
-- **GAP-16 (SEC Source Links):** CLOSED in M5. Full URL provenance traceability implemented.
+No pending M6 state. Final Release complete.

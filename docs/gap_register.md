@@ -10,4 +10,4 @@
 - Ingestion exceptions cleanly logged, UI boundary secured
 - Explicit fiscal matching enforced in YTD selection and sequential comparisons
 
-No pending M6 state. Final Release complete.
+All milestone states closed. Final Release complete.

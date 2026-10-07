@@ -16,7 +16,7 @@
 - **Attention Queue Validation**: PASS.
 - **Research Mode Validation**: PASS (Quantitative text explicitly rendered).
 - **Portfolio Validation**: PASS (Exposure explicitly treated as user-supplied positive float).
-- **CI Validation**: Pending exact SHA push.
+- **CI Validation**: PASS (Verified via GitHub Actions).
 
 ## Known Limitations
 1. SEC Rate Limiting / Scale

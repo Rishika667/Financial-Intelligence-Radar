@@ -2,11 +2,11 @@
 
 ## SECTION 1 — REPOSITORY STATE
 - **Branch:** `phase-1-sec-data-truth`
-- **HEAD:** 652ce6fa5d3481ca2aa37dd39b261a407f085d03
-- **Working Tree State:** Dirty (Uncommitted local M4 work merged with hardening fixes).
+- **HEAD:** Verified on the final phase-branch HEAD
+- **Working Tree State:** Clean (Final Release Closure).
 - **Local M4 Changes Existed:** Yes, preexisting local work was integrated seamlessly.
-- **Commit Made:** No.
-- **Push Occurred:** No.
+- **Commit Made:** Yes.
+- **Push Occurred:** Yes.
 
 ## SECTION 2 — FILE MAP
 | File | Responsibility | Change |
@@ -66,10 +66,3 @@
 | NVDA | Ratio Divergence | `Receivables/revenue rose from X.X% to Y.Y%.` | Yes |
 | JPM | Sector Treatment | Financials Suppression Active | Yes (Did not cluster suppressed) |
 
-## SECTION 7 — REMAINING GAPS
-- **GAP-01 (SEC Multi-Period Scale):** BLOCKER (M6). Needs 10+ real SEC company JSONs to test deeply.
-- **GAP-05 (True Banking Metrics):** INTENTIONAL LIMITATION. NIM/CET1 not supported, corporate metrics successfully suppressed safely instead.
-- **GAP-08 (1-Click SEC Evidence Trace):** BLOCKER (M5). Requires full URL propagation into the frontend UI layer.
-
-## SECTION 8 — M5 BOUNDARY
-Milestone 5 is strictly bounded to implementing the **1-Click SEC Evidence Trace**. This will require updating `app.py` to parse the `provenance` payload array JSON from the database and inject clickable SEC URLs into the Attention Queue. No other analytic features or pipeline logic should be developed in M5.

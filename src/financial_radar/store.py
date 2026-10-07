@@ -55,10 +55,16 @@ def connect(db_path="financial_radar.sqlite"):
     c.row_factory = sqlite3.Row
     c.executescript(DDL)
     
-# Grab original SQL to check if it's the legacy schema
-    row = c.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='observations'").fetchone()
-    old_sql = row["sql"] if row else ""
-    needs_rebuild = "UNIQUE(company, metric, period_end, period_type, unit, period_start)" not in old_sql
+    def has_exact_unique_index(table_name, expected_cols):
+        for r in c.execute(f"PRAGMA index_list({table_name})").fetchall():
+            if r["unique"]:
+                idx_name = r["name"]
+                cols = [ci["name"] for ci in c.execute(f"PRAGMA index_info({idx_name})").fetchall()]
+                if cols == expected_cols:
+                    return True
+        return False
+        
+    needs_rebuild = not has_exact_unique_index("observations", ["company", "metric", "period_end", "period_type", "unit", "period_start"])
 
     # Safe migration for existing observations table
     cols = [r["name"] for r in c.execute("PRAGMA table_info(observations)")]
@@ -88,9 +94,7 @@ def connect(db_path="financial_radar.sqlite"):
         c.execute("DROP TABLE observations_old")
 
     # Migrate peer_context table
-    row_pc = c.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='peer_context'").fetchone()
-    old_pc_sql = row_pc["sql"] if row_pc else ""
-    needs_pc_rebuild = "UNIQUE(company, metric, version)" not in old_pc_sql
+    needs_pc_rebuild = not has_exact_unique_index("peer_context", ["company", "metric", "version"])
 
     p_cols = [r["name"] for r in c.execute("PRAGMA table_info(peer_context)")]
     
@@ -108,7 +112,7 @@ def connect(db_path="financial_radar.sqlite"):
         if col not in p_cols:
             c.execute(f"ALTER TABLE peer_context ADD COLUMN {col} {col_type}")
 
-    if needs_pc_rebuild and old_pc_sql:
+    if needs_pc_rebuild:
         # Save old data, recreate schema, restore data
         c.execute("ALTER TABLE peer_context RENAME TO peer_context_old")
         c.executescript(DDL)

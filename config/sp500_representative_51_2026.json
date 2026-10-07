@@ -1,435 +1,435 @@
 {
-  "version": "sp500_representative_51_2026",
-  "companies": [
-    {
-      "ticker": "AAPL",
-      "cik": "0000320193",
-      "sector": "Information Technology",
-      "name": "Apple Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "MSFT",
-      "cik": "0000789019",
-      "sector": "Information Technology",
-      "name": "Microsoft Corporation",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "GOOGL",
-      "cik": "0001652044",
-      "sector": "Communication Services",
-      "name": "Alphabet Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "AMZN",
-      "cik": "0001018724",
-      "sector": "Consumer Discretionary",
-      "name": "Amazon.com, Inc.",
-      "universe_type": "PEER_REFERENCE_UNIVERSE"
-    },
-    {
-      "ticker": "META",
-      "cik": "0001326801",
-      "sector": "Communication Services",
-      "name": "Meta Platforms, Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "TSLA",
-      "cik": "0001318605",
-      "sector": "Consumer Discretionary",
-      "name": "Tesla, Inc.",
-      "universe_type": "PEER_REFERENCE_UNIVERSE"
-    },
-    {
-      "ticker": "JNJ",
-      "cik": "0000200406",
-      "sector": "Health Care",
-      "name": "Johnson & Johnson",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "JPM",
-      "cik": "0000019617",
-      "sector": "Financials",
-      "name": "JPMorgan Chase & Co.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "V",
-      "cik": "0001403161",
-      "sector": "Financials",
-      "name": "Visa Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "UNH",
-      "cik": "0000731766",
-      "sector": "Health Care",
-      "name": "UnitedHealth Group Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "PG",
-      "cik": "0000080424",
-      "sector": "Consumer Staples",
-      "name": "Procter & Gamble Co.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "XOM",
-      "cik": "0000034088",
-      "sector": "Energy",
-      "name": "Exxon Mobil Corporation",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "MA",
-      "cik": "0001141391",
-      "sector": "Financials",
-      "name": "Mastercard Incorporated",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "HD",
-      "cik": "0000354950",
-      "sector": "Consumer Discretionary",
-      "name": "The Home Depot, Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "CVX",
-      "cik": "0000093410",
-      "sector": "Energy",
-      "name": "Chevron Corporation",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "ABBV",
-      "cik": "0001551152",
-      "sector": "Health Care",
-      "name": "AbbVie Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "LLY",
-      "cik": "0000059478",
-      "sector": "Health Care",
-      "name": "Eli Lilly and Company",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "MRK",
-      "cik": "0000064978",
-      "sector": "Health Care",
-      "name": "Merck & Co., Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "PEP",
-      "cik": "0000077476",
-      "sector": "Consumer Staples",
-      "name": "PepsiCo, Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "KO",
-      "cik": "0000021344",
-      "sector": "Consumer Staples",
-      "name": "The Coca-Cola Company",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "BAC",
-      "cik": "0000070858",
-      "sector": "Financials",
-      "name": "Bank of America Corporation",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "AVGO",
-      "cik": "0001730165",
-      "sector": "Information Technology",
-      "name": "Broadcom Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "TMO",
-      "cik": "0000097745",
-      "sector": "Health Care",
-      "name": "Thermo Fisher Scientific Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "COST",
-      "cik": "0000909832",
-      "sector": "Consumer Staples",
-      "name": "Costco Wholesale Corporation",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "CSCO",
-      "cik": "0000858877",
-      "sector": "Information Technology",
-      "name": "Cisco Systems, Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "MCD",
-      "cik": "0000063908",
-      "sector": "Consumer Discretionary",
-      "name": "McDonalds Corporation",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "ABT",
-      "cik": "0000001800",
-      "sector": "Health Care",
-      "name": "Abbott Laboratories",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "CRM",
-      "cik": "0001108524",
-      "sector": "Information Technology",
-      "name": "Salesforce, Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "WFC",
-      "cik": "0000072971",
-      "sector": "Financials",
-      "name": "Wells Fargo Company",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "DIS",
-      "cik": "0001744489",
-      "sector": "Communication Services",
-      "name": "The Walt Disney Company",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "LIN",
-      "cik": "0001707925",
-      "sector": "Materials",
-      "name": "Linde plc",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "DHR",
-      "cik": "0000313616",
-      "sector": "Health Care",
-      "name": "Danaher Corporation",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "TXN",
-      "cik": "0000097476",
-      "sector": "Information Technology",
-      "name": "Texas Instruments Incorporated",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "PM",
-      "cik": "0001413329",
-      "sector": "Consumer Staples",
-      "name": "Philip Morris International Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "VZ",
-      "cik": "0000732712",
-      "sector": "Communication Services",
-      "name": "Verizon Communications Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "NEE",
-      "cik": "0000037472",
-      "sector": "Utilities",
-      "name": "NextEra Energy, Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "RTX",
-      "cik": "0000101829",
-      "sector": "Industrials",
-      "name": "RTX Corporation",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "MS",
-      "cik": "0000895421",
-      "sector": "Financials",
-      "name": "Morgan Stanley",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "HON",
-      "cik": "0000773840",
-      "sector": "Industrials",
-      "name": "Honeywell International Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "INTC",
-      "cik": "0000050863",
-      "sector": "Information Technology",
-      "name": "Intel Corporation",
-      "universe_type": "PEER_REFERENCE_UNIVERSE"
-    },
-    {
-      "ticker": "QCOM",
-      "cik": "0000804328",
-      "sector": "Information Technology",
-      "name": "QUALCOMM Incorporated",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "BMY",
-      "cik": "0000014272",
-      "sector": "Health Care",
-      "name": "Bristol-Myers Squibb Company",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "UNP",
-      "cik": "0000100885",
-      "sector": "Industrials",
-      "name": "Union Pacific Corporation",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "C",
-      "cik": "0000831001",
-      "sector": "Financials",
-      "name": "Citigroup Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "LOW",
-      "cik": "0000060667",
-      "sector": "Consumer Discretionary",
-      "name": "Lowes Companies, Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "IBM",
-      "cik": "0000051143",
-      "sector": "Information Technology",
-      "name": "International Business Machines",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "AMGN",
-      "cik": "0000318154",
-      "sector": "Health Care",
-      "name": "Amgen Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "BA",
-      "cik": "0000012927",
-      "sector": "Industrials",
-      "name": "The Boeing Company",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "CAT",
-      "cik": "0000018230",
-      "sector": "Industrials",
-      "name": "Caterpillar Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "SPGI",
-      "cik": "0000064040",
-      "sector": "Financials",
-      "name": "S&P Global Inc.",
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "ticker": "NVDA",
-      "name": "NVIDIA Corporation",
-      "sector": "Information Technology",
-      "cik": "0001045810",
-      "universe_type": "APPLICATION_UNIVERSE"
-    }
-  ],
-  "peer_groups": [
-    {
-      "peer_group_id": "mega_cap_tech",
-      "rationale": "Mega-cap diversified technology and software",
-      "members": [
-        "AAPL",
-        "MSFT",
-        "GOOGL",
-        "META",
-        "AMZN"
-      ],
-      "universe_type": "APPLICATION_UNIVERSE"
-    },
-    {
-      "peer_group_id": "semiconductors",
-      "rationale": "Large-cap semiconductor and hardware",
-      "members": [
-        "NVDA",
-        "AMD",
-        "INTC"
-      ],
-      "universe_type": "PEER_REFERENCE_UNIVERSE"
-    },
-    {
-      "peer_group_id": "large_banks",
-      "rationale": "Systemically important financial institutions",
-      "members": [
-        "JPM",
-        "BAC",
-        "C",
-        "WFC"
-      ],
-      "universe_type": "PEER_REFERENCE_UNIVERSE"
-    },
-    {
-      "peer_group_id": "healthcare_majors",
-      "rationale": "Diversified healthcare and pharmaceuticals",
-      "members": [
-        "JNJ",
-        "PFE",
-        "UNH"
-      ],
-      "universe_type": "PEER_REFERENCE_UNIVERSE"
-    },
-    {
-      "peer_group_id": "energy_majors",
-      "rationale": "Integrated energy and petroleum",
-      "members": [
-        "XOM",
-        "CVX"
-      ],
-      "universe_type": "PEER_REFERENCE_UNIVERSE"
-    }
-  ],
-  "peer_group_version": "v1",
-  "peer_references": [
-    {
-      "ticker": "AMD",
-      "cik": "0000002488",
-      "name": "Advanced Micro Devices, Inc.",
-      "gics_sector": "Information Technology",
-      "gics_industry": "Semiconductors",
-      "universe_type": "PEER_REFERENCE_UNIVERSE"
-    },
-    {
-      "ticker": "PFE",
-      "cik": "0000078003",
-      "name": "Pfizer Inc.",
-      "gics_sector": "Health Care",
-      "gics_industry": "Pharmaceuticals",
-      "universe_type": "PEER_REFERENCE_UNIVERSE"
-    }
-  ]
+    "version": "sp500_representative_51_2026",
+    "companies": [
+        {
+            "ticker": "AAPL",
+            "cik": "0000320193",
+            "sector": "Information Technology",
+            "name": "Apple Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "MSFT",
+            "cik": "0000789019",
+            "sector": "Information Technology",
+            "name": "Microsoft Corporation",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "GOOGL",
+            "cik": "0001652044",
+            "sector": "Communication Services",
+            "name": "Alphabet Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "AMZN",
+            "cik": "0001018724",
+            "sector": "Consumer Discretionary",
+            "name": "Amazon.com, Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "META",
+            "cik": "0001326801",
+            "sector": "Communication Services",
+            "name": "Meta Platforms, Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "TSLA",
+            "cik": "0001318605",
+            "sector": "Consumer Discretionary",
+            "name": "Tesla, Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "JNJ",
+            "cik": "0000200406",
+            "sector": "Health Care",
+            "name": "Johnson & Johnson",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "JPM",
+            "cik": "0000019617",
+            "sector": "Financials",
+            "name": "JPMorgan Chase & Co.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "V",
+            "cik": "0001403161",
+            "sector": "Financials",
+            "name": "Visa Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "UNH",
+            "cik": "0000731766",
+            "sector": "Health Care",
+            "name": "UnitedHealth Group Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "PG",
+            "cik": "0000080424",
+            "sector": "Consumer Staples",
+            "name": "Procter & Gamble Co.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "XOM",
+            "cik": "0000034088",
+            "sector": "Energy",
+            "name": "Exxon Mobil Corporation",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "MA",
+            "cik": "0001141391",
+            "sector": "Financials",
+            "name": "Mastercard Incorporated",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "HD",
+            "cik": "0000354950",
+            "sector": "Consumer Discretionary",
+            "name": "The Home Depot, Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "CVX",
+            "cik": "0000093410",
+            "sector": "Energy",
+            "name": "Chevron Corporation",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "ABBV",
+            "cik": "0001551152",
+            "sector": "Health Care",
+            "name": "AbbVie Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "LLY",
+            "cik": "0000059478",
+            "sector": "Health Care",
+            "name": "Eli Lilly and Company",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "MRK",
+            "cik": "0000064978",
+            "sector": "Health Care",
+            "name": "Merck & Co., Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "PEP",
+            "cik": "0000077476",
+            "sector": "Consumer Staples",
+            "name": "PepsiCo, Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "KO",
+            "cik": "0000021344",
+            "sector": "Consumer Staples",
+            "name": "The Coca-Cola Company",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "BAC",
+            "cik": "0000070858",
+            "sector": "Financials",
+            "name": "Bank of America Corporation",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "AVGO",
+            "cik": "0001730165",
+            "sector": "Information Technology",
+            "name": "Broadcom Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "TMO",
+            "cik": "0000097745",
+            "sector": "Health Care",
+            "name": "Thermo Fisher Scientific Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "COST",
+            "cik": "0000909832",
+            "sector": "Consumer Staples",
+            "name": "Costco Wholesale Corporation",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "CSCO",
+            "cik": "0000858877",
+            "sector": "Information Technology",
+            "name": "Cisco Systems, Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "MCD",
+            "cik": "0000063908",
+            "sector": "Consumer Discretionary",
+            "name": "McDonalds Corporation",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "ABT",
+            "cik": "0000001800",
+            "sector": "Health Care",
+            "name": "Abbott Laboratories",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "CRM",
+            "cik": "0001108524",
+            "sector": "Information Technology",
+            "name": "Salesforce, Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "WFC",
+            "cik": "0000072971",
+            "sector": "Financials",
+            "name": "Wells Fargo Company",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "DIS",
+            "cik": "0001744489",
+            "sector": "Communication Services",
+            "name": "The Walt Disney Company",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "LIN",
+            "cik": "0001707925",
+            "sector": "Materials",
+            "name": "Linde plc",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "DHR",
+            "cik": "0000313616",
+            "sector": "Health Care",
+            "name": "Danaher Corporation",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "TXN",
+            "cik": "0000097476",
+            "sector": "Information Technology",
+            "name": "Texas Instruments Incorporated",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "PM",
+            "cik": "0001413329",
+            "sector": "Consumer Staples",
+            "name": "Philip Morris International Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "VZ",
+            "cik": "0000732712",
+            "sector": "Communication Services",
+            "name": "Verizon Communications Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "NEE",
+            "cik": "0000037472",
+            "sector": "Utilities",
+            "name": "NextEra Energy, Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "RTX",
+            "cik": "0000101829",
+            "sector": "Industrials",
+            "name": "RTX Corporation",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "MS",
+            "cik": "0000895421",
+            "sector": "Financials",
+            "name": "Morgan Stanley",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "HON",
+            "cik": "0000773840",
+            "sector": "Industrials",
+            "name": "Honeywell International Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "INTC",
+            "cik": "0000050863",
+            "sector": "Information Technology",
+            "name": "Intel Corporation",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "QCOM",
+            "cik": "0000804328",
+            "sector": "Information Technology",
+            "name": "QUALCOMM Incorporated",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "BMY",
+            "cik": "0000014272",
+            "sector": "Health Care",
+            "name": "Bristol-Myers Squibb Company",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "UNP",
+            "cik": "0000100885",
+            "sector": "Industrials",
+            "name": "Union Pacific Corporation",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "C",
+            "cik": "0000831001",
+            "sector": "Financials",
+            "name": "Citigroup Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "LOW",
+            "cik": "0000060667",
+            "sector": "Consumer Discretionary",
+            "name": "Lowes Companies, Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "IBM",
+            "cik": "0000051143",
+            "sector": "Information Technology",
+            "name": "International Business Machines",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "AMGN",
+            "cik": "0000318154",
+            "sector": "Health Care",
+            "name": "Amgen Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "BA",
+            "cik": "0000012927",
+            "sector": "Industrials",
+            "name": "The Boeing Company",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "CAT",
+            "cik": "0000018230",
+            "sector": "Industrials",
+            "name": "Caterpillar Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "SPGI",
+            "cik": "0000064040",
+            "sector": "Financials",
+            "name": "S&P Global Inc.",
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "ticker": "NVDA",
+            "name": "NVIDIA Corporation",
+            "sector": "Information Technology",
+            "cik": "0001045810",
+            "universe_type": "APPLICATION_UNIVERSE"
+        }
+    ],
+    "peer_groups": [
+        {
+            "peer_group_id": "mega_cap_tech",
+            "rationale": "Mega-cap diversified technology and software",
+            "members": [
+                "AAPL",
+                "MSFT",
+                "GOOGL",
+                "META",
+                "AMZN"
+            ],
+            "universe_type": "APPLICATION_UNIVERSE"
+        },
+        {
+            "peer_group_id": "semiconductors",
+            "rationale": "Large-cap semiconductor and hardware",
+            "members": [
+                "NVDA",
+                "AMD",
+                "INTC"
+            ],
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
+        },
+        {
+            "peer_group_id": "large_banks",
+            "rationale": "Systemically important financial institutions",
+            "members": [
+                "JPM",
+                "BAC",
+                "C",
+                "WFC"
+            ],
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
+        },
+        {
+            "peer_group_id": "healthcare_majors",
+            "rationale": "Diversified healthcare and pharmaceuticals",
+            "members": [
+                "JNJ",
+                "PFE",
+                "UNH"
+            ],
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
+        },
+        {
+            "peer_group_id": "energy_majors",
+            "rationale": "Integrated energy and petroleum",
+            "members": [
+                "XOM",
+                "CVX"
+            ],
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
+        }
+    ],
+    "peer_group_version": "v1",
+    "peer_references": [
+        {
+            "ticker": "AMD",
+            "cik": "0000002488",
+            "name": "Advanced Micro Devices, Inc.",
+            "gics_sector": "Information Technology",
+            "gics_industry": "Semiconductors",
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
+        },
+        {
+            "ticker": "PFE",
+            "cik": "0000078003",
+            "name": "Pfizer Inc.",
+            "gics_sector": "Health Care",
+            "gics_industry": "Pharmaceuticals",
+            "universe_type": "PEER_REFERENCE_UNIVERSE"
+        }
+    ]
 }

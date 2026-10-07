@@ -395,3 +395,63 @@ def test_quantitative_intelligence_narratives():
     ev_liq = json.dumps([{"value": 0.8}, {"value": 1.5}])
     res_liq = generate_intelligence("LIQUIDITY_COMPRESSION", "AAPL", "Tech", ev_liq)
     assert "fell from 1.50x to 0.80x" in res_liq.get("what_changed", "")
+
+def test_provenance_determinism_no_typeerror():
+    """
+    Growth provenance must sort deterministically even if accessions are mixed types
+    (e.g., int vs str). It must not fall back to input ordering.
+    """
+    from financial_radar.metrics import derive_analytical_metrics
+    from financial_radar.models import Observation, DataQuality, Provenance
+    from datetime import date
+    
+    # Create two observations for yoy growth
+    prov1 = Provenance(accession=123, source_url="", filing_date=date(2023,1,1), form="10-K", concept="", raw_value=100, retrieval_timestamp=date(2024,1,1), mapping_version='1')
+    prov2 = Provenance(accession="000123-23-0001", source_url="", filing_date=date(2024,1,1), form="10-K", concept="", raw_value=110, retrieval_timestamp=date(2024,1,1), mapping_version='1')
+    
+    o1 = Observation("AAPL", "revenue", 100, "USD", date(2023,12,31), "ANNUAL", DataQuality.REPORTED, (prov1,),
+                     period_start=date(2023,1,1), fiscal_year=2023, fiscal_period="FY")
+    o2 = Observation("AAPL", "revenue", 110, "USD", date(2024,12,31), "ANNUAL", DataQuality.REPORTED, (prov2,),
+                     period_start=date(2024,1,1), fiscal_year=2024, fiscal_period="FY")
+                     
+    # Even though one accession is an int and the other is a string,
+    # the sort key should convert both to str and sort stably without throwing TypeError.
+    # We will test two different input orders. Both should yield the same provenance order.
+    
+    res1 = derive_analytical_metrics([o1, o2])
+    res2 = derive_analytical_metrics([o2, o1])
+    
+    g1 = [r for r in res1 if r.metric == "revenue_growth_yoy"][0]
+    g2 = [r for r in res2 if r.metric == "revenue_growth_yoy"][0]
+    
+    accs1 = [p.accession for p in g1.provenance]
+    accs2 = [p.accession for p in g2.provenance]
+    
+    assert accs1 == accs2, "Provenance sorting must be identical regardless of input order"
+    assert str(accs1[0]) < str(accs1[1]), "Provenance must be sorted by stringified accession"
+
+
+def test_51_company_semantics():
+    """
+    The primary companies array must contain exactly 51 APPLICATION_UNIVERSE companies.
+    Peer-only companies (e.g. AMD, PFE) must be in peer_references.
+    """
+    import json
+    
+    with open("config/sp500_representative_51_2026.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+        
+    main_companies = data.get("companies", [])
+    assert len(main_companies) == 51, "Must have exactly 51 primary companies"
+    
+    for c in main_companies:
+        assert c.get("universe_type") == "APPLICATION_UNIVERSE", f"Company {c['ticker']} in main array must be APPLICATION_UNIVERSE"
+        
+    peer_refs = data.get("peer_references", [])
+    assert len(peer_refs) > 0, "Must have separate peer references array"
+    
+    # Check that AMD/PFE are not in the main array
+    main_tickers = [c["ticker"] for c in main_companies]
+    assert "AMD" not in main_tickers, "AMD should be a peer reference, not in main array"
+    assert "PFE" not in main_tickers, "PFE should be a peer reference, not in main array"
+

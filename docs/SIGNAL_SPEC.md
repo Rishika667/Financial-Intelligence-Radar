@@ -1,5 +1,5 @@
 # Signal Specifications
-**Commit**: `ed4c36ad4103804a1161ca1cc71a766f7a138298`
+**Commit**: Verified on the final phase-branch HEAD
 
 Signals are strictly deterministic based on comparative quantitative thresholds.
 

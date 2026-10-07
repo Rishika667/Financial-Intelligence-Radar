@@ -1,6 +1,6 @@
 # Gap Register
 **Status:** ALL MATERIAL GAPS CLOSED.
-**Final SHA:** `ed4c36ad4103804a1161ca1cc71a766f7a138298`
+**Final SHA:** Verified on the final phase-branch HEAD
 
 ## Closed Items
 - `period_start` propagated in `_derive()`

@@ -202,23 +202,28 @@ with tab_dashboard:
                             ctx = peer_ctx[0]
                             st.markdown("### Peer Context")
                             if ctx.get("peer_median") is not None:
-                                pos = ctx.get("position", "Unknown")
-                                st.markdown(f"- **Relative Position:** {pos}")
                                 unit_map = {
                                     "gross_margin": "pure", "operating_margin": "pure",
                                     "cash_conversion": "multiple", "debt_operating_income": "multiple", "liquidity_ratio": "multiple",
                                     "receivables_revenue_ratio": "pure", "inventory_revenue_ratio": "pure",
-                                    "share_count": "shares", "free_cash_flow": s.get("unit", "USD") # We don't have unit in peer_context, but we have it in evidence, but it's not easily accessible here. Let's use USD fallback.
+                                    "share_count": "shares", "free_cash_flow": ""
                                 }
-                                pm_unit = unit_map.get(mapped_metric, "USD")
+                                pm_unit = unit_map.get(mapped_metric, "")
                                 if mapped_metric == "free_cash_flow" and s.get("evidence"):
                                     try:
-                                        import json
                                         ev_json = json.loads(s["evidence"])
-                                        if ev_json: pm_unit = ev_json[0].get("unit", "USD")
-                                    except: pass
+                                        if ev_json: pm_unit = ev_json[0].get("unit", "")
+                                    except json.JSONDecodeError as e:
+                                        logger.warning("Failed to decode evidence for %s: %s", s['company'], e)
+                                        
+                                pos = ctx.get("position", "Unknown")
+                                cov = f"{ctx.get('coverage_count', ctx.get('n_peers'))}/{ctx.get('total_peer_count', ctx.get('n_peers'))}"
+                                
+                                st.markdown(f"- **Metric:** {mapped_metric.replace('_', ' ').title()}")
+                                st.markdown(f"- **Company Value:** {format_val(ctx.get('company_value'), pm_unit)}")
                                 st.markdown(f"- **Peer Median:** {format_val(ctx.get('peer_median'), pm_unit)}")
-                                st.markdown(f"- **Coverage:** {ctx.get('availability_state', str(ctx.get('n_peers')) + ' peers')}")
+                                st.markdown(f"- **Position:** {pos.replace('_', ' ').title()}")
+                                st.markdown(f"- **Coverage:** {cov} peers")
                             else:
                                 st.markdown("Peer context unavailable")
 
@@ -305,8 +310,8 @@ with tab_research:
             ni_val = latest_metrics.get("net_income", {}).get("value") if isinstance(latest_metrics.get("net_income"), dict) else latest_metrics.get("net_income")
 
             # We need to find units for rev_val and ni_val
-            rev_unit = next((o['unit'] for o in all_q_obs if o['metric'] == 'revenue' and o['period_end'] == (ref_row['period_end'] if ref_row else '')), "USD")
-            ni_unit = next((o['unit'] for o in all_q_obs if o['metric'] == 'net_income' and o['period_end'] == (ref_row['period_end'] if ref_row else '')), "USD")
+            rev_unit = next((o['unit'] for o in all_q_obs if o['metric'] == 'revenue' and o['period_end'] == (ref_row['period_end'] if ref_row else '')), "")
+            ni_unit = next((o['unit'] for o in all_q_obs if o['metric'] == 'net_income' and o['period_end'] == (ref_row['period_end'] if ref_row else '')), "")
             
             col1.metric("Revenue", format_val(rev_val, rev_unit) if rev_val is not None else "N/A")
             col2.metric("Gross Margin", format_val(gm_val, "pure") if gm_val is not None else "N/A")

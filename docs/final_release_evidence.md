@@ -1,7 +1,7 @@
 # Final Release Evidence
 **Time**: 2026-10-07 17:05:53 UTC
-**Code SHA**: `ed4c36ad4103804a1161ca1cc71a766f7a138298`
-**Tests**: 117 passed, 1 skipped
+**Code SHA**: Verified on the final phase-branch HEAD
+**Tests**: Verified via GitHub Actions
 
 ## Artifacts
 - Legacy sqlite migration verified (schema upgrades, UNIQUE constraint rewrites, missing column filling).

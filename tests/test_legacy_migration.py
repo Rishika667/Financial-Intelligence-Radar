@@ -167,3 +167,48 @@ def test_legacy_migration_partial_peer_context():
     db.close()
     if os.path.exists("test_legacy_peer.db"):
         os.remove("test_legacy_peer.db")
+
+def test_legacy_migration_index_rebuild():
+    """
+    Migration must rebuild table if UNIQUE constraint doesn't perfectly match
+    the modern identity, even if *some* UNIQUE constraint exists.
+    """
+    import os
+    import sqlite3
+    from financial_radar.store import connect
+    
+    if os.path.exists("test_idx.db"): os.remove("test_idx.db")
+    
+    c = sqlite3.connect("test_idx.db")
+    c.execute("""CREATE TABLE observations(
+        company TEXT, metric TEXT, value REAL, unit TEXT, period_end TEXT, 
+        period_type TEXT, quality TEXT, comparable INTEGER, reason TEXT, 
+        provenance TEXT, period_start TEXT, derived_from TEXT, 
+        fiscal_year INTEGER, fiscal_period TEXT,
+        UNIQUE(company, metric) -- Wrong unique constraint!
+    )""")
+    c.execute("INSERT INTO observations (company, metric, value) VALUES ('AAPL', 'revenue', 100)")
+    c.commit()
+    c.close()
+    
+    # Run migration
+    db = connect("test_idx.db")
+    
+    # Verify exact unique index is now present
+    def has_exact_unique_index(db, table_name, expected_cols):
+        for r in db.execute(f"PRAGMA index_list({table_name})").fetchall():
+            if r["unique"]:
+                idx_name = r["name"]
+                cols = [ci["name"] for ci in db.execute(f"PRAGMA index_info({idx_name})").fetchall()]
+                if cols == expected_cols:
+                    return True
+        return False
+        
+    assert has_exact_unique_index(db, "observations", ["company", "metric", "period_end", "period_type", "unit", "period_start"]), "Observations should have been rebuilt to the correct index"
+    
+    res = db.execute("SELECT * FROM observations").fetchall()
+    assert len(res) == 1
+    assert dict(res[0])["value"] == 100
+    
+    db.close()
+    if os.path.exists("test_idx.db"): os.remove("test_idx.db")

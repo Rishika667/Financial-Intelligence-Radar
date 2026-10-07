@@ -101,13 +101,16 @@ def cluster(out):
         if not s.evidence:
             continue
         evd_sorted = sorted(s.evidence, key=lambda x: x.period_end)
-        curr_period = evd_sorted[-1].period_end
-        # Prior period: oldest evidence end — distinguishes comparison windows
-        prior_period = evd_sorted[0].period_end
-        by_window[(s.company, curr_period, prior_period)].append(s)
+        curr_obs = evd_sorted[-1]
+        prior_obs = evd_sorted[0]
+        curr_period = curr_obs.period_end
+        prior_period = prior_obs.period_end
+        curr_type = curr_obs.period_type
+        curr_start = getattr(curr_obs, "period_start", None)
+        by_window[(s.company, curr_period, prior_period, curr_type, curr_start)].append(s)
 
     clusters = []
-    for (company, curr_period, prior_period), sigs in by_window.items():
+    for (company, curr_period, prior_period, curr_type, curr_start), sigs in by_window.items():
         if len(sigs) >= 3:
             obs_set = set()
             has_medium_conf = False

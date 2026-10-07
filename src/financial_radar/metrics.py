@@ -194,10 +194,8 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
                     curr_prov = list(getattr(curr, "provenance", ()))
                     prior_prov = list(getattr(prior, "provenance", ()))
                     combined_prov = curr_prov + [p for p in prior_prov if p not in curr_prov]
-                    try:
-                        combined_prov = sorted(combined_prov, key=lambda p: getattr(p, "accession", "") or "")
-                    except TypeError:
-                        pass
+                    # Sort securely with a forced str coercion so mixed types never raise TypeError
+                    combined_prov = sorted(combined_prov, key=lambda p: str(getattr(p, "accession", "") or ""))
                     derived.append(Observation(
                         company=curr.company,
                         metric=f"{m}_growth_yoy",

@@ -64,5 +64,5 @@ def test_no_broken_signal_ids():
 def test_peer_reference_architecture():
     with open('config/sp500_representative_51_2026.json', 'r', encoding='utf-8') as f:
         data = json.load(f)
-    assert any(c.get('universe_type') == 'PEER_REFERENCE_UNIVERSE' for c in data['companies'])
+    assert all(c.get('universe_type') == 'APPLICATION_UNIVERSE' for c in data['companies'])
     assert any(c.get('universe_type') == 'APPLICATION_UNIVERSE' for c in data['companies'])

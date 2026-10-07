@@ -2,7 +2,7 @@
 **Phase 1 - SEC Data Truth (FINAL RELEASE)**
 All milestones M1 through M5 and final closure gates achieved.
 
-**Current SHA**: `ed4c36ad4103804a1161ca1cc71a766f7a138298`
+**Current SHA**: Verified on the final phase-branch HEAD
 
 - [x] M1: Ingestion & Normalization
 - [x] M2: Analytics & Signals

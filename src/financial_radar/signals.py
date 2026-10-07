@@ -81,18 +81,33 @@ def dilution(curr, prior):
     return None
 
 def cluster(out):
+    """
+    Group non-suppressed signals into multi-factor clusters.
+
+    Cluster identity = (company, current_period_end, prior_period_end).
+    Signals with different comparison windows MUST NOT cluster together
+    even when their current period_end is the same.
+
+    Confidence: HIGH only when all components are HIGH; MEDIUM otherwise.
+    Evidence ordering is deterministic: sorted by (company, metric, period_end, period_start).
+    """
     valid = [s for s in out if not s.suppressed_reason and s.severity in ("HIGH", "MEDIUM", "LOW")]
-    
+
     from collections import defaultdict
-    by_company_period = defaultdict(list)
-    
+    from datetime import date as _date
+    by_window = defaultdict(list)
+
     for s in valid:
-        if not s.evidence: continue
-        curr = sorted(s.evidence, key=lambda x: x.period_end)[-1]
-        by_company_period[(s.company, curr.period_end)].append(s)
-        
+        if not s.evidence:
+            continue
+        evd_sorted = sorted(s.evidence, key=lambda x: x.period_end)
+        curr_period = evd_sorted[-1].period_end
+        # Prior period: oldest evidence end — distinguishes comparison windows
+        prior_period = evd_sorted[0].period_end
+        by_window[(s.company, curr_period, prior_period)].append(s)
+
     clusters = []
-    for (company, period), sigs in by_company_period.items():
+    for (company, curr_period, prior_period), sigs in by_window.items():
         if len(sigs) >= 3:
             obs_set = set()
             has_medium_conf = False
@@ -101,25 +116,24 @@ def cluster(out):
                     has_medium_conf = True
                 for o in sig.evidence:
                     obs_set.add(o)
-                    
-            # Sort evidence deterministically
-            from datetime import date
+
+            # Deterministic evidence ordering
             obs_list = sorted(list(obs_set), key=lambda x: (
-                x.company, 
-                x.metric, 
-                x.period_end, 
-                getattr(x, "period_start", None) or date.min
+                x.company,
+                x.metric,
+                x.period_end,
+                getattr(x, "period_start", None) or _date.min
             ))
-            
+
             cluster_conf = "MEDIUM" if has_medium_conf else "HIGH"
-            
+
             clusters.append(Signal(
-                "MULTI_FACTOR_DETERIORATION_CLUSTER", 
-                company, 
-                "HIGH", 
+                "MULTI_FACTOR_DETERIORATION_CLUSTER",
+                company,
+                "HIGH",
                 cluster_conf,
-                f"Detected {len(sigs)} concurrent warnings in period {period.isoformat()}.", 
-                tuple(obs_list), 
+                f"Detected {len(sigs)} concurrent warnings in period {curr_period.isoformat()}.",
+                tuple(obs_list),
                 component_signal_ids=tuple(sorted(list(set(s.signal_id for s in sigs))))
             ))
     return clusters

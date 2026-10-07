@@ -107,7 +107,7 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
             
         
         
-        # Helper to create derived obs
+        # Helper to create derived obs — always propagates period_start from the period group key
         def _derive(metric_name: str, value: float, unit: str, bases: List[Observation], quality=DataQuality.DERIVED):
             primary = bases[0] if bases else None
             return Observation(
@@ -121,6 +121,7 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
                 provenance=sum((b.provenance for b in bases), ()),
                 derived_from=tuple(b.metric for b in bases),
                 comparable=all(b.comparable for b in bases),
+                period_start=pstart,  # propagate from the period group key
                 fiscal_year=getattr(primary, "fiscal_year", None) if primary else None,
                 fiscal_period=getattr(primary, "fiscal_period", None) if primary else None
             )
@@ -182,6 +183,14 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
                 _, prior = get_comparison_pair(all_obs, m, pt, "annual" if pt == "ANNUAL" else "yoy", current_obs=curr)
                 if prior and prior.value and prior.value != 0:
                     val = (curr.value - prior.value) / prior.value
+                    # Deterministic provenance: dedup then sort by accession to preserve stable ordering
+                    curr_prov = list(getattr(curr, "provenance", ()))
+                    prior_prov = list(getattr(prior, "provenance", ()))
+                    combined_prov = curr_prov + [p for p in prior_prov if p not in curr_prov]
+                    try:
+                        combined_prov = sorted(combined_prov, key=lambda p: getattr(p, "accession", "") or "")
+                    except TypeError:
+                        pass
                     derived.append(Observation(
                         company=curr.company,
                         metric=f"{m}_growth_yoy",
@@ -190,7 +199,7 @@ def derive_analytical_metrics(observations: List[Observation]) -> List[Observati
                         period_end=curr.period_end,
                         period_type=curr.period_type,
                         quality=DataQuality.DERIVED,
-                        provenance=tuple(set(list(getattr(curr, "provenance", ())) + list(getattr(prior, "provenance", ())))),
+                        provenance=tuple(combined_prov),
                         derived_from=(curr.metric,),
                         comparable=curr.comparable and prior.comparable,
                         period_start=curr.period_start,

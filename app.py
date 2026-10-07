@@ -61,38 +61,8 @@ def test_sec_connectivity(ua):
         results['ERRORS'].append(f"Network or protocol error: {e}")
         
     return results
-    results['USER_AGENT_CONFIGURED'] = True
-    headers = {'User-Agent': ua, 'Accept-Encoding': 'gzip, deflate'}
-    
-    import requests
-    try:
-        r1 = requests.get('https://www.sec.gov/', headers=headers, timeout=5)
-        r1.raise_for_status()
-        results['SEC_REACHABLE'] = True
-        
-        r2 = requests.get('https://data.sec.gov/submissions/CIK0000320193.json', headers=headers, timeout=5)
-        r2.raise_for_status()
-        results['SUBMISSIONS_REACHABLE'] = True
-        
-        r3 = requests.get('https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json', headers=headers, timeout=5)
-        r3.raise_for_status()
-        results['XBRL_REACHABLE'] = True
-    except requests.exceptions.RequestException as e:
-        results['ERRORS'].append(f"Network or protocol error: {e}")
-        
-    return results
-    results['USER_AGENT_CONFIGURED'] = True
-    headers = {'User-Agent': ua}
-    try:
-        if requests.get('https://www.sec.gov/', headers=headers, timeout=5).status_code == 200:
-            results['SEC_REACHABLE'] = True
-        if requests.get('https://data.sec.gov/submissions/CIK0000320193.json', headers=headers, timeout=5).status_code == 200:
-            results['SUBMISSIONS_REACHABLE'] = True
-        if requests.get('https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json', headers=headers, timeout=5).status_code == 200:
-            results['XBRL_REACHABLE'] = True
-    except Exception:
-        pass
-    return results
+
+
 
 tab_setup, tab_portfolio, tab_dashboard, tab_research = st.tabs([
     "Setup & Preflight", "Portfolio Sync", "Attention Queue", "Research Mode"

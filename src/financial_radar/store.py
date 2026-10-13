@@ -81,6 +81,7 @@ def connect(db_path="financial_radar.sqlite"):
 
     c.executescript(DDL)
     
+    # Check if migration is needed
     def has_exact_unique_index(table_name, expected_cols):
         for r in c.execute(f"PRAGMA index_list({table_name})").fetchall():
             if r["unique"]:
@@ -89,72 +90,110 @@ def connect(db_path="financial_radar.sqlite"):
                 if cols == expected_cols:
                     return True
         return False
-        
-    try:
-        needs_rebuild = not has_exact_unique_index("observations", ["company", "metric", "period_end", "period_type", "unit", "period_start"])
 
-        # Safe migration for existing observations table
-        cols = [r["name"] for r in c.execute("PRAGMA table_info(observations)")]
-        if "period_start" not in cols:
-            c.execute("ALTER TABLE observations ADD COLUMN period_start TEXT")
-        if "derived_from" not in cols:
-            c.execute("ALTER TABLE observations ADD COLUMN derived_from TEXT")
-        if "fiscal_year" not in cols:
-            c.execute("ALTER TABLE observations ADD COLUMN fiscal_year INTEGER")
-        if "fiscal_period" not in cols:
-            c.execute("ALTER TABLE observations ADD COLUMN fiscal_period TEXT")
-        if "reason" not in cols:
-            c.execute("ALTER TABLE observations ADD COLUMN reason TEXT")
+    obs_cols = [r["name"] for r in c.execute("PRAGMA table_info(observations)")]
+    missing_obs_cols = [col for col in ["period_start", "derived_from", "fiscal_year", "fiscal_period", "reason"] if col not in obs_cols]
+    needs_obs_rebuild = not has_exact_unique_index("observations", ["company", "metric", "period_end", "period_type", "unit", "period_start"])
+    needs_obs_migration = bool(missing_obs_cols) or needs_obs_rebuild
 
-        if needs_rebuild:
-            # Create temp table, copy data, replace
-            c.execute("CREATE TABLE observations_new AS SELECT * FROM observations WHERE 0")
-            c.execute("DROP TABLE observations_new")
-            # Rename old to old, create new with DDL, copy
-            c.execute("ALTER TABLE observations RENAME TO observations_old")
-            c.executescript(DDL)
-            c.execute("INSERT OR IGNORE INTO observations (company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, period_start, derived_from, fiscal_year, fiscal_period) SELECT company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, COALESCE(period_start, ''), derived_from, fiscal_year, fiscal_period FROM observations_old")
-            c.execute("DROP TABLE observations_old")
+    p_cols = [r["name"] for r in c.execute("PRAGMA table_info(peer_context)")]
+    expected_new_cols = [
+        ("position", "TEXT"), ("coverage_count", "INTEGER"),
+        ("total_peer_count", "INTEGER"), ("coverage_ratio", "REAL"),
+        ("availability_state", "TEXT"), ("group_id", "TEXT"), 
+        ("company_value", "REAL"), ("peer_median", "REAL"), 
+        ("peer_min", "REAL"), ("peer_max", "REAL"), 
+        ("n_peers", "INTEGER"), ("version", "TEXT"), 
+        ("unavailable_peers", "TEXT")
+    ]
+    missing_pc_cols = [col for col, _ in expected_new_cols if col not in p_cols]
+    needs_pc_rebuild = not has_exact_unique_index("peer_context", ["company", "metric", "version"])
+    needs_pc_migration = bool(missing_pc_cols) or needs_pc_rebuild
 
-        # Migrate peer_context table
-        needs_pc_rebuild = not has_exact_unique_index("peer_context", ["company", "metric", "version"])
+    if needs_obs_migration or needs_pc_migration:
+        old_isolation = c.isolation_level
+        c.isolation_level = None  # Manual transaction control: disable Python's implicit commits
+        try:
+            c.execute("BEGIN IMMEDIATE")
 
-        p_cols = [r["name"] for r in c.execute("PRAGMA table_info(peer_context)")]
-        
-        expected_new_cols = [
-            ("position", "TEXT"), ("coverage_count", "INTEGER"),
-            ("total_peer_count", "INTEGER"), ("coverage_ratio", "REAL"),
-            ("availability_state", "TEXT"), ("group_id", "TEXT"), 
-            ("company_value", "REAL"), ("peer_median", "REAL"), 
-            ("peer_min", "REAL"), ("peer_max", "REAL"), 
-            ("n_peers", "INTEGER"), ("version", "TEXT"), 
-            ("unavailable_peers", "TEXT")
-        ]
-        for col, col_type in expected_new_cols:
-            if col not in p_cols:
-                c.execute(f"ALTER TABLE peer_context ADD COLUMN {col} {col_type}")
+            # 1. Observations migration
+            if missing_obs_cols:
+                for col in missing_obs_cols:
+                    col_type = "INTEGER" if col == "fiscal_year" else "TEXT"
+                    c.execute(f"ALTER TABLE observations ADD COLUMN {col} {col_type}")
 
-        if needs_pc_rebuild:
-            c.execute("ALTER TABLE peer_context RENAME TO peer_context_old")
-            c.executescript(DDL)
-            c.execute("""
-                INSERT OR IGNORE INTO peer_context (
-                    company, group_id, metric, company_value, peer_median, peer_min, peer_max, 
-                    n_peers, version, unavailable_peers, position, coverage_count, 
-                    total_peer_count, coverage_ratio, availability_state
-                ) SELECT 
-                    company, group_id, metric, company_value, peer_median, peer_min, peer_max, 
-                    n_peers, version, unavailable_peers, position, coverage_count, 
-                    total_peer_count, coverage_ratio, availability_state 
-                FROM peer_context_old
-            """)
-            c.execute("DROP TABLE peer_context_old")
+            if needs_obs_rebuild:
+                c.execute("""
+                    CREATE TABLE observations_migrating (
+                        company TEXT, metric TEXT, value REAL, unit TEXT, period_end TEXT,
+                        period_type TEXT, quality TEXT, comparable INTEGER, reason TEXT,
+                        provenance TEXT, period_start TEXT, derived_from TEXT,
+                        fiscal_year INTEGER, fiscal_period TEXT,
+                        UNIQUE(company, metric, period_end, period_type, unit, period_start)
+                    )
+                """)
+                c.execute("""
+                    INSERT OR IGNORE INTO observations_migrating (
+                        company, metric, value, unit, period_end, period_type, quality,
+                        comparable, reason, provenance, period_start, derived_from,
+                        fiscal_year, fiscal_period
+                    ) SELECT 
+                        company, metric, value, unit, period_end, period_type, quality,
+                        comparable, reason, provenance, COALESCE(period_start, ''), derived_from,
+                        fiscal_year, fiscal_period 
+                    FROM observations
+                """)
+                c.execute("DROP TABLE observations")
+                c.execute("ALTER TABLE observations_migrating RENAME TO observations")
 
-        c.commit()
-    except Exception as e:
-        c.rollback()
-        logger.error("Migration failed, rolled back: %s", e)
-        raise
+            # 2. Peer context migration
+            if missing_pc_cols:
+                for col, col_type in expected_new_cols:
+                    if col in missing_pc_cols:
+                        c.execute(f"ALTER TABLE peer_context ADD COLUMN {col} {col_type}")
+
+            if needs_pc_rebuild:
+                c.execute("""
+                    CREATE TABLE peer_context_migrating (
+                        company TEXT, group_id TEXT, metric TEXT, company_value REAL,
+                        peer_median REAL, peer_min REAL, peer_max REAL, n_peers INTEGER,
+                        version TEXT, unavailable_peers TEXT, position TEXT,
+                        coverage_count INTEGER, total_peer_count INTEGER,
+                        coverage_ratio REAL, availability_state TEXT,
+                        UNIQUE(company, metric, version)
+                    )
+                """)
+                c.execute("""
+                    INSERT OR IGNORE INTO peer_context_migrating (
+                        company, group_id, metric, company_value, peer_median, peer_min, peer_max, 
+                        n_peers, version, unavailable_peers, position, coverage_count, 
+                        total_peer_count, coverage_ratio, availability_state
+                    ) SELECT 
+                        company, group_id, metric, company_value, peer_median, peer_min, peer_max, 
+                        n_peers, version, unavailable_peers, position, coverage_count, 
+                        total_peer_count, coverage_ratio, availability_state 
+                    FROM peer_context
+                """)
+                c.execute("DROP TABLE peer_context")
+                c.execute("ALTER TABLE peer_context_migrating RENAME TO peer_context")
+
+            c.execute("COMMIT")
+        except Exception as e:
+            try:
+                c.execute("ROLLBACK")
+            except Exception as rollback_err:
+                logger.error("Rollback failed: %s", rollback_err)
+            logger.error("Migration failed, transaction rolled back cleanly: %s", e)
+            try:
+                c.close()
+            except Exception:
+                pass
+            raise
+        finally:
+            try:
+                c.isolation_level = old_isolation
+            except Exception:
+                pass
 
     return c
 
@@ -420,10 +459,11 @@ VALID_REVIEW_STATUSES = {"NEW", "ACKNOWLEDGED", "UNDER_REVIEW", "DISMISSED", "EX
 
 def generate_alert_fingerprint(company, signal_id, evidence=None, version="v1"):
     """Generate a stable, deterministic alert fingerprint incorporating company,
-    signal_id, rule version, and relevant comparison-period evidence.
+    signal_id, rule version, and relevant comparison-period evidence including canonical
+    values, units, quality, and accession provenance.
     """
     import hashlib
-    period_keys = []
+    evidence_items = []
     if evidence:
         ev_items = evidence
         if isinstance(ev_items, str):
@@ -435,21 +475,50 @@ def generate_alert_fingerprint(company, signal_id, evidence=None, version="v1"):
             for item in ev_items:
                 if isinstance(item, dict):
                     m = item.get("metric", "")
-                    pe = item.get("period_end", "")
-                    pt = item.get("period_type", "")
-                    fy = item.get("fiscal_year", "")
-                    fp = item.get("fiscal_period", "")
-                    period_keys.append(f"{m}_{pe}_{pt}_{fy}_{fp}")
+                    pe = str(item.get("period_end", ""))
+                    pt = str(item.get("period_type", ""))
+                    fy = str(item.get("fiscal_year", ""))
+                    fp = str(item.get("fiscal_period", ""))
+                    u = str(item.get("unit", ""))
+                    q = item.get("quality", "")
+                    q_str = getattr(q, "value", str(q)) if q is not None else ""
+                    val = item.get("value")
+                    val_str = f"{float(val):.8g}" if (val is not None and isinstance(val, (int, float))) else ("None" if val is None else str(val))
+                    prov = item.get("provenance")
                 elif hasattr(item, "metric"):
                     m = getattr(item, "metric", "")
                     pe = str(getattr(item, "period_end", ""))
                     pt = getattr(item, "period_type", "")
                     fy = str(getattr(item, "fiscal_year", ""))
                     fp = str(getattr(item, "fiscal_period", ""))
-                    period_keys.append(f"{m}_{pe}_{pt}_{fy}_{fp}")
+                    u = str(getattr(item, "unit", ""))
+                    q = getattr(item, "quality", None)
+                    q_str = getattr(q, "value", str(q)) if q is not None else ""
+                    val = getattr(item, "value", None)
+                    val_str = f"{float(val):.8g}" if (val is not None and isinstance(val, (int, float))) else ("None" if val is None else str(val))
+                    prov = getattr(item, "provenance", None)
+                else:
+                    continue
 
-    period_str = "|".join(sorted(set(period_keys)))
-    raw = f"{company}:{signal_id}:{version}:{period_str}"
+                accs = []
+                if prov:
+                    if isinstance(prov, str):
+                        try:
+                            prov = json.loads(prov)
+                        except Exception:
+                            prov = []
+                    if isinstance(prov, (list, tuple)):
+                        for p in prov:
+                            if isinstance(p, dict) and p.get("accession"):
+                                accs.append(str(p["accession"]))
+                            elif hasattr(p, "accession") and p.accession:
+                                accs.append(str(p.accession))
+                accs_str = ",".join(sorted(set(accs)))
+
+                evidence_items.append(f"{m}_{pe}_{pt}_{fy}_{fp}_val:{val_str}_u:{u}_q:{q_str}_acc:{accs_str}")
+
+    evidence_str = "|".join(sorted(set(evidence_items)))
+    raw = f"{company}:{signal_id}:{version}:{evidence_str}"
     digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
     return f"{company}_{signal_id}_{digest}"
 

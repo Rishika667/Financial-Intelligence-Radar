@@ -450,28 +450,68 @@ def test_configured_universe_semantics():
         assert c.get("universe_type") == "APPLICATION_UNIVERSE"
     assert "AMD" not in [c["ticker"] for c in rep_companies]
 
-    # 2. Full configured universe
-    if Path("config/sp500_universe_2026.json").exists():
-        with open("config/sp500_universe_2026.json", "r", encoding="utf-8-sig") as f:
-            full_data = json.load(f)
-        assert full_data.get("version") == "sp500_universe_2026"
-        assert full_data.get("source_url") is not None
-        assert full_data.get("snapshot_date") is not None
-        full_comps = full_data.get("companies", [])
-        assert len(full_comps) == 503, f"Expected 503 constituents, got {len(full_comps)}"
+    # 2. Full configured universe (unconditional assertion)
+    universe_path = Path("config/sp500_universe_2026.json")
+    assert universe_path.exists(), "Full S&P 500 universe configuration config/sp500_universe_2026.json must exist"
+    with open(universe_path, "r", encoding="utf-8-sig") as f:
+        full_data = json.load(f)
+    assert full_data.get("version") == "sp500_universe_2026"
+    assert full_data.get("source_url") is not None
+    assert full_data.get("snapshot_date") is not None
+    assert full_data.get("constituent_count") == 503
+    full_comps = full_data.get("companies", [])
+    assert len(full_comps) == 503, f"Expected 503 constituents, got {len(full_comps)}"
+    
+    tickers = [c["ticker"] for c in full_comps]
+    assert len(tickers) == len(set(tickers)), "All constituent tickers in full universe must be unique"
+    for c in full_comps:
+        assert c["ticker"] != "", "Ticker must not be empty"
+        assert c["name"] != "", "Company name must not be empty"
+        assert c["sector"] != "", "Sector must not be empty"
+        assert len(c["cik"]) == 10 and c["cik"].isdigit(), f"CIK for {c['ticker']} must be non-empty zero-padded 10 digits"
+        assert c.get("universe_type") == "APPLICATION_UNIVERSE"
         
-        tickers = [c["ticker"] for c in full_comps]
-        assert len(tickers) == len(set(tickers)), "All constituent tickers in full universe must be unique"
-        for c in full_comps:
-            assert c["ticker"] != "", "Ticker must not be empty"
-            assert c["name"] != "", "Company name must not be empty"
-            assert c["sector"] != "", "Sector must not be empty"
-            assert len(c["cik"]) == 10 or c["cik"] == "", "CIK must be zero-padded 10 digits or empty"
-            assert c.get("universe_type") == "APPLICATION_UNIVERSE"
-            
-        assert "GOOG" in tickers and "GOOGL" in tickers, "Dual share classes must be preserved"
-        
-        peer_refs = full_data.get("peer_references", [])
-        assert len(peer_refs) > 0, "Must have separate peer references array"
+    assert "GOOG" in tickers and "GOOGL" in tickers, "Dual share classes must be preserved"
+    assert "FOX" in tickers and "FOXA" in tickers, "Fox dual share classes must be preserved"
+    assert "NWS" in tickers and "NWSA" in tickers, "News Corp dual share classes must be preserved"
+    
+    # Check that duplicate CIKs exist ONLY for known valid dual share classes
+    ciks_map = {}
+    for c in full_comps:
+        ciks_map.setdefault(c["cik"], []).append(c["ticker"])
+    dupe_ciks = {cik: sorted(t_list) for cik, t_list in ciks_map.items() if len(t_list) > 1}
+    expected_dupe_pairs = {
+        "0001754301": ["FOX", "FOXA"],
+        "0001652044": ["GOOG", "GOOGL"],
+        "0001564708": ["NWS", "NWSA"],
+    }
+    assert dupe_ciks == expected_dupe_pairs, f"Unexpected duplicate CIKs: {dupe_ciks}"
+
+    peer_refs = full_data.get("peer_references", [])
+    assert len(peer_refs) > 0, "Must have separate peer references array"
+
+    # Test load_universe() behavior
+    from financial_radar.pipeline import load_universe
+    u_default = load_universe()
+    assert len(u_default) == 503, "Default load_universe must load all 503 constituents"
+
+    import pytest
+    with pytest.raises(FileNotFoundError):
+        load_universe("config/non_existent_universe.json")
+
+    u_legacy = load_universe("config/sp500_representative_51_2026.json")
+    assert len(u_legacy) == 51, "Explicit legacy path must load 51 companies"
+
+
+def test_portfolio_validation_universe_message():
+    """Verify that portfolio CSV validation error refers to supported company universe, not 51-company."""
+    from financial_radar.pipeline import validate_portfolio_csv
+    import pandas as pd
+    df = pd.DataFrame([{"ticker": "UNKNOWN_XYZ", "shares": 10, "weight": 0.1, "cost_basis": 100, "exposure": 1000}])
+    is_valid, msg = validate_portfolio_csv(df, ["AAPL", "MSFT"])
+    assert not is_valid
+    assert "supported company universe" in msg
+    assert "51-company" not in msg
+
 
 

@@ -80,29 +80,51 @@ def test_ten_company_pipeline_multi_period_ingestion():
     stored_comps = {r["company"] for r in rows(c, "SELECT DISTINCT company FROM observations")}
     assert len(stored_comps) == 10, f"All 10 companies must be present in observations: {stored_comps}"
 
-    # Multi-period coverage check: check that companies have observations across multiple fiscal periods
+    # Multi-period coverage check: exactly 9 of the 10 companies exhibit multi-year observations in fixture data
     multi_period_comps = rows(c, "SELECT company, COUNT(DISTINCT fiscal_year) as fy_count FROM observations WHERE fiscal_year IS NOT NULL GROUP BY company HAVING fy_count >= 2")
-    assert len(multi_period_comps) >= 6, "At least 6 companies must exhibit multi-year observations in fixture data"
+    expected_multi_year = {"AAPL", "AMZN", "GOOGL", "JNJ", "META", "MSFT", "NVDA", "TSLA", "XOM"}
+    actual_multi_year = {r["company"] for r in multi_period_comps}
+    assert actual_multi_year == expected_multi_year, f"Expected multi-year companies {expected_multi_year}, got {actual_multi_year}"
+    assert len(multi_period_comps) == 9, f"Exactly 9 companies must exhibit multi-year observations, got {len(multi_period_comps)}"
 
 
 def test_fiscal_matching_and_incomparable_period_handling():
-    """Verify strict fiscal comparison matching and suppression of invalid periods."""
+    """Verify strict fiscal comparison matching, exact values, and suppression of incomparable periods."""
     from financial_radar.store import load_observations_for_companies
     c = connect(":memory:")
     client = MultiCompanyMockSECClient()
+
+    # 1. Test 5 companies with verified, unconditional quarterly YoY comparison pairs
+    yoy_cases = [
+        {"ticker": "AMZN", "cik": "0001018724", "sector": "Consumer Discretionary", "quarter": "Q2", "fy_curr": 2026, "fy_prior": 2025, "val_curr": 200606000000.0, "val_prior": 147977000000.0},
+        {"ticker": "META", "cik": "0001326801", "sector": "Communication Services", "quarter": "Q2", "fy_curr": 2026, "fy_prior": 2025, "val_curr": 60801000000.0, "val_prior": 39071000000.0},
+        {"ticker": "TSLA", "cik": "0001318605", "sector": "Consumer Discretionary", "quarter": "Q2", "fy_curr": 2026, "fy_prior": 2025, "val_curr": 28236000000.0, "val_prior": 25500000000.0},
+        {"ticker": "JNJ",  "cik": "0000200406", "sector": "Health Care",             "quarter": "Q2", "fy_curr": 2026, "fy_prior": 2025, "val_curr": 25310000000.0, "val_prior": 22447000000.0},
+        {"ticker": "XOM",  "cik": "0000034088", "sector": "Energy",                  "quarter": "Q1", "fy_curr": 2026, "fy_prior": 2025, "val_curr": 85138000000.0, "val_prior": 83083000000.0},
+    ]
+
+    for case in yoy_cases:
+        ingest_company(client, c, {"ticker": case["ticker"], "cik": case["cik"], "sector": case["sector"]})
+        obs = load_observations_for_companies(c, [case["ticker"]])
+        curr, prior = get_comparison_pair(obs, "revenue", "QUARTER", mode="yoy")
+
+        # Unconditional existence and alignment assertion
+        assert curr is not None, f"Expected valid current observation for {case['ticker']}"
+        assert prior is not None, f"Expected valid prior observation for {case['ticker']}"
+        assert curr.fiscal_year == prior.fiscal_year + 1 == case["fy_curr"], f"Fiscal year mismatch for {case['ticker']}"
+        assert curr.fiscal_period == prior.fiscal_period == case["quarter"], f"Fiscal quarter mismatch for {case['ticker']}"
+        assert curr.period_type == prior.period_type == "QUARTER", f"Period type mismatch for {case['ticker']}"
+        assert curr.value == case["val_curr"], f"Expected current revenue {case['val_curr']} for {case['ticker']}, got {curr.value}"
+        assert prior.value == case["val_prior"], f"Expected prior revenue {case['val_prior']} for {case['ticker']}, got {prior.value}"
+
+    # 2. Test incomplete/incomparable periods: MSFT lacks a matching quarterly prior frame, so prior must be None
     ingest_company(client, c, {"ticker": "MSFT", "cik": "0000789019", "sector": "Information Technology"})
-
     msft_obs = load_observations_for_companies(c, ["MSFT"])
-    assert len(msft_obs) > 0
+    m_curr, m_prior = get_comparison_pair(msft_obs, "revenue", "QUARTER", mode="yoy")
+    assert m_curr is not None, "MSFT has current quarter observation"
+    assert m_prior is None, "MSFT must withhold comparison when prior fiscal frame does not match"
 
-    # Test comparison pair matching for revenue
-    curr, prior = get_comparison_pair(msft_obs, "revenue", "QUARTER", mode="yoy")
-    if curr and prior:
-        assert curr.fiscal_year == prior.fiscal_year + 1, "YoY matching must have FY_t == FY_{t-1} + 1"
-        assert curr.fiscal_period == prior.fiscal_period, "YoY matching must match exact fiscal quarter"
-        assert curr.period_type == prior.period_type == "QUARTER", "Period types must not be mixed"
-
-    # Incomparable periods: attempt matching with an invalid mode or empty set returns None
+    # 3. Incomparable periods: attempt matching with empty set returns (None, None)
     c_none, p_none = get_comparison_pair([], "revenue", "QUARTER", mode="yoy")
     assert c_none is None and p_none is None, "Empty observations must return None without raising"
 
@@ -132,17 +154,23 @@ def test_provenance_and_derivation_lineage_preservation():
 
 
 def test_sector_policy_suppression_financials():
-    """Verify that corporate metrics are properly suppressed for Financials (JPM) without crashing."""
+    """Verify that corporate metrics are properly suppressed for Financials (JPM) unconditionally."""
+    from datetime import date
+    from financial_radar.models import Observation, DataQuality
+    from financial_radar.pipeline import evaluate
+
     c = connect(":memory:")
     client = MultiCompanyMockSECClient()
     ingest_company(client, c, {"ticker": "JPM", "cik": "0000019617", "sector": "Financials"})
 
-    jpm_signals = rows(c, "SELECT signal_id, suppressed FROM signals WHERE company='JPM'")
-    # Must have executed without exception
-    assert isinstance(jpm_signals, list)
+    # Synthetic observations for corporate metrics evaluated under sector='Financials'
+    synth_obs = [
+        Observation("JPM", "gross_margin", 0.40, "pure", date(2025, 1, 1), "QUARTER", DataQuality.REPORTED, tuple(), comparable=True, fiscal_year=2025, fiscal_period="Q1"),
+        Observation("JPM", "gross_margin", 0.50, "pure", date(2024, 1, 1), "QUARTER", DataQuality.REPORTED, tuple(), comparable=True, fiscal_year=2024, fiscal_period="Q1"),
+    ]
+    sigs = evaluate("JPM", synth_obs, sector="Financials")
+    gm_sig = next((s for s in sigs if s.signal_id == "GROSS_MARGIN_COMPRESSION"), None)
+    assert gm_sig is not None, "Expected GROSS_MARGIN_COMPRESSION to be evaluated"
+    assert gm_sig.severity == "UNKNOWN", "Suppressed corporate signal must have UNKNOWN severity"
+    assert gm_sig.suppressed_reason == "Sector Context (Financials)", "Suppressed signal must document explicit rationale"
 
-    # Corporate signals that were evaluated must carry suppressed reason
-    suppressed = [s for s in jpm_signals if s["suppressed"] is not None]
-    if suppressed:
-        for s in suppressed:
-            assert len(s["suppressed"]) > 0, "Suppressed signal must document explicit rationale"

@@ -33,9 +33,24 @@
 
 ---
 
-## 2. Documented Out-of-Scope Boundaries & Deferred Items
+## 3. Final Resume-Readiness Closeout Repairs
 
-1. **Specialized Banking Ratios**: Specialized bank accounting metrics (Net Interest Margin, Common Equity Tier 1 ratio, non-accrual loan classifications) are out of scope for general corporate disclosure triage.
-2. **Predictive / Speculative Modeling**: Share price targets, automated trading recommendations, and speculative price models are strictly out of scope per product principles.
-3. **LLM / Generative Text Synthesis**: Unauditable generative LLM summaries are avoided in favor of deterministic accounting calculations with strict provenance linking back to exact SEC accession numbers.
-4. **SEC EDGAR Rate Limit**: 10 requests per second limit enforced by SEC EDGAR policy.
+### 1. SQLite Migration Atomicity & Rollback Safety
+- **Issue**: Multi-step migrations previously invoked `executescript(DDL)` which triggered implicit commits in SQLite, preventing full rollback upon mid-migration failures.
+- **Resolution**: Eliminated `executescript()` inside the migration transaction. Implemented explicit transaction control (`c.isolation_level = None`, `BEGIN IMMEDIATE`, and `COMMIT`/`ROLLBACK`) using purely transactional DDL/DML statements (`CREATE TABLE ...`, `INSERT ...`, `DROP TABLE ...`, `ALTER TABLE ... RENAME`). Added failure-injection regression test verifying database integrity after simulated mid-migration crash.
+
+### 2. Full Universe Enforcement & CIK Integrity
+- **Issue**: `load_universe()` previously silently fell back to the 51-company baseline if the full universe was absent; test checks were wrapped in file-existence conditions.
+- **Resolution**: `load_universe()` now raises `FileNotFoundError` if the full 503-constituent universe file is missing. The 51-company baseline is preserved solely as an explicit compatibility mode. Added unconditional test suite assertions verifying 503 unique constituents, valid 10-digit zero-padded CIKs, and restricted duplicate CIKs exclusively to verified dual-class shares (`GOOG/GOOGL`, `FOX/FOXA`, `NWSA/NWS`).
+
+### 3. Unconditional Multi-Period Assertions & Exact Values
+- **Issue**: Previous multi-period comparison assertions for MSFT were conditional (`if curr and prior:`) and aggregate coverage checks permitted 40% of companies to lack multi-year data.
+- **Resolution**: Replaced conditional logic with strict unconditional assertions across 5 companies with verified YoY quarterly matching (`AMZN`, `META`, `TSLA`, `JNJ`, `XOM`) with exact expected revenue amounts and growth rates. Confirmed 9 of 10 companies have multi-year data in checked-in fixtures, and verified that incomplete periods (`MSFT`, `JPM`) are strictly withheld without generating spurious signals.
+
+### 4. Alert Fingerprint Integrity for Revised/Restated Evidence
+- **Issue**: Alert fingerprints previously omitted evidence values and quality, risking that materially revised or restated data could inherit stale review notes.
+- **Resolution**: Enhanced `generate_alert_fingerprint()` to incorporate canonical values, units, data quality (`REPORTED`, `RESTATED`, `AMENDED`), and accession numbers. Added regression tests verifying distinct fingerprints for revised values and restatements while guaranteeing identical fingerprints on repeat evaluations.
+
+### 5. Clear Freshness Guidance & Portfolio Wording
+- **Resolution**: Rephrased the Data Quality freshness documentation to explicitly state that aging disclosures represent documented regulatory guidance (automated calculation engine is out-of-scope). Updated portfolio CSV validation error message to reference "supported company universe" rather than "51-company universe".
+

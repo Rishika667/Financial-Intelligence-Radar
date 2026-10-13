@@ -37,6 +37,44 @@ def test_alert_fingerprint_stability_and_period_specificity():
     assert fp1 != fp_v2, "Different rule versions must yield distinct fingerprints"
 
 
+def test_alert_fingerprint_materially_revised_and_restated_evidence():
+    """
+    Evidence value revisions and restatements for the same fiscal periods
+    must generate distinct fingerprints to prevent newly restated alerts
+    from silently inheriting stale review notes.
+    """
+    from financial_radar.models import DataQuality
+
+    evidence_reported = [
+        {"metric": "gross_margin", "period_end": "2024-03-31", "period_type": "QUARTER", "fiscal_year": 2024, "fiscal_period": "Q1", "value": 0.42, "unit": "pure", "quality": "REPORTED", "provenance": [{"accession": "0001-10Q"}]},
+        {"metric": "gross_margin", "period_end": "2023-03-31", "period_type": "QUARTER", "fiscal_year": 2023, "fiscal_period": "Q1", "value": 0.45, "unit": "pure", "quality": "REPORTED", "provenance": [{"accession": "0002-10Q"}]}
+    ]
+
+    # Materially revised value (e.g. gross margin was actually 0.38 instead of 0.42)
+    evidence_value_revised = [
+        {"metric": "gross_margin", "period_end": "2024-03-31", "period_type": "QUARTER", "fiscal_year": 2024, "fiscal_period": "Q1", "value": 0.38, "unit": "pure", "quality": "REPORTED", "provenance": [{"accession": "0001-10Q"}]},
+        {"metric": "gross_margin", "period_end": "2023-03-31", "period_type": "QUARTER", "fiscal_year": 2023, "fiscal_period": "Q1", "value": 0.45, "unit": "pure", "quality": "REPORTED", "provenance": [{"accession": "0002-10Q"}]}
+    ]
+
+    # Material restatement: quality changes from REPORTED to RESTATED / AMENDED with amended accession
+    evidence_restated = [
+        {"metric": "gross_margin", "period_end": "2024-03-31", "period_type": "QUARTER", "fiscal_year": 2024, "fiscal_period": "Q1", "value": 0.42, "unit": "pure", "quality": DataQuality.RESTATED, "provenance": [{"accession": "0001-10QA"}]},
+        {"metric": "gross_margin", "period_end": "2023-03-31", "period_type": "QUARTER", "fiscal_year": 2023, "fiscal_period": "Q1", "value": 0.45, "unit": "pure", "quality": "REPORTED", "provenance": [{"accession": "0002-10Q"}]}
+    ]
+
+    fp_orig = generate_alert_fingerprint("AAPL", "GROSS_MARGIN_COMPRESSION", evidence_reported)
+    fp_val_rev = generate_alert_fingerprint("AAPL", "GROSS_MARGIN_COMPRESSION", evidence_value_revised)
+    fp_restated = generate_alert_fingerprint("AAPL", "GROSS_MARGIN_COMPRESSION", evidence_restated)
+
+    assert fp_orig != fp_val_rev, "Materially revised evidence values must produce a different fingerprint"
+    assert fp_orig != fp_restated, "Restated quality/provenance must produce a different fingerprint"
+    assert fp_val_rev != fp_restated, "Value revisions and restatements must not collide"
+
+    # Repeat call must remain 100% identical and stable
+    assert generate_alert_fingerprint("AAPL", "GROSS_MARGIN_COMPRESSION", evidence_reported) == fp_orig
+
+
+
 def test_analyst_review_crud_and_status_transitions():
     """Verify state transitions: NEW -> UNDER_REVIEW -> DISMISSED -> REOPEN."""
     c = connect(":memory:")

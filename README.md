@@ -13,10 +13,10 @@ Financial Intelligence Radar extracts, normalizes, and analyzes official SEC EDG
 ### Key Capabilities
 
 - **100% SEC Authoritative Data**: Ingests directly from public SEC EDGAR APIs (Submissions and Company Facts XBRL). Zero paid API keys, zero third-party data aggregators.
-- **Full S&P 500 Constituent Universe**: 503 constituents mapped with authoritative CIKs, GICS sectors, and sub-industries (`config/sp500_universe_2026.json`, snapshot date: 2026-10-13). Representative 51-company baseline preserved (`config/sp500_representative_51_2026.json`).
+- **Full S&P 500 Constituent Universe**: 503 constituents mapped with authoritative 10-digit CIKs, sectors, and sub-industries (`config/sp500_universe_2026.json`, snapshot date: 2026-10-13, sourced from public Wikipedia constituent data cross-referenced with SEC EDGAR). Representative 51-company baseline preserved as an explicit compatibility mode (`config/sp500_representative_51_2026.json`).
 - **Research Mode for All Supported Companies**: Search and analyze any company in the S&P 500 universe. Companies not yet ingested display a clean `NOT-YET-LOADED` state with on-demand single-company SEC fetching.
 - **Persistent Analyst Reviews**: Track triage status for surfaced signals (`NEW`, `ACKNOWLEDGED`, `UNDER_REVIEW`, `DISMISSED`, `EXPECTED`, `RESOLVED`) with persistent reviewer notes and deterministic alert fingerprints stored in SQLite.
-- **Data Quality & Refresh Monitoring**: Dedicated tab featuring universe-wide readiness breakdowns (`READY`, `PARTIAL`, `NOT_READY`), persistent refresh audit logs, metric-level data availability diagnostics, peer coverage integrity checks, and regulatory freshness rules.
+- **Data Quality & Refresh Monitoring**: Dedicated tab featuring universe-wide readiness breakdowns (`READY`, `PARTIAL`, `NOT_READY`), persistent refresh audit logs, metric-level data availability diagnostics, peer coverage integrity checks, and regulatory freshness guidelines.
 - **10-Company Multi-Period Golden Fixtures**: Offline test fixtures for 10 prominent companies across diverse sectors (AAPL, MSFT, NVDA, JPM, AMZN, GOOGL, META, TSLA, JNJ, XOM) enabling 100% offline, deterministic CI testing.
 - **Strict Data Quality Precedence**: `AMENDED` / `RESTATED` > `REPORTED` > `DERIVED`. Never turns missing disclosure facts into zero.
 - **Fiscal-Period Reconstruction**: Enforces strict quarter-vs-quarter and annual-vs-annual comparisons. Standalone quarters are derived from YTD disclosures with exact math, never mixed with annual or YTD durations.
@@ -109,3 +109,6 @@ Financial Intelligence Radar
 2. **SEC Rate Limiting**: SEC EDGAR enforces a maximum rate of 10 requests per second. The application strictly adheres to this limit.
 3. **Specialized Banking Metrics**: Does not model bank-specific regulatory ratios (e.g., Net Interest Margin, CET1 capital ratios, loan-loss provisioning semantics).
 4. **Deterministic Rules Only**: All signals are generated via deterministic accounting calculations and rule-based thresholds; no probabilistic LLM/AI narrative generation is used.
+5. **Freshness Guidance (Documented Standard)**: The application documents regulatory filing deadlines (10-Q within 40-45 days, 10-K within 60-90 days, >180 days aging expectation); automated calculation of stale flags is documented guidance rather than an automated calculation engine.
+6. **Constituent Provenance**: The 503-constituent universe is derived from a recorded public snapshot (Wikipedia S&P 500 constituent table cross-referenced with SEC EDGAR CIKs) as of 2026-10-13, not an official direct subscription feed from S&P Dow Jones Indices.
+

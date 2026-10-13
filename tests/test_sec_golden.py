@@ -66,12 +66,13 @@ def test_real_sec_ingestion_e2e():
     comps_in_db = rows(c, "SELECT DISTINCT company FROM observations")
     assert len(comps_in_db) == 10, f"Expected 10 distinct companies in observations, got {len(comps_in_db)}"
 
-    # Verify provenance preserved (accession, source_url)
-    prov_samples = rows(c, "SELECT provenance FROM observations WHERE provenance != '[]' LIMIT 10")
-    assert len(prov_samples) > 0
-    for ps in prov_samples:
-        p_list = json.loads(ps['provenance'])
-        assert len(p_list) > 0
-        assert p_list[0]['accession'] != ""
-        assert "sec.gov" in p_list[0]['source_url']
+    # Verify provenance preserved across companies with reported metrics (excluding JPM financial institution)
+    corporate_comps = [comp for comp in companies if comp["ticker"] != "JPM"]
+    for comp in corporate_comps:
+        p_rows = rows(c, "SELECT provenance FROM observations WHERE company=? AND provenance != '[]' LIMIT 2", (comp["ticker"],))
+        assert len(p_rows) > 0, f"Expected non-empty provenance for {comp['ticker']}"
+        p_list = json.loads(p_rows[0]['provenance'])
+        assert len(p_list) > 0, f"Expected provenance entries for {comp['ticker']}"
+        assert p_list[0]['accession'] != "", f"Expected non-empty accession for {comp['ticker']}"
+        assert "sec.gov" in p_list[0]['source_url'], f"Expected SEC source URL for {comp['ticker']}"
 

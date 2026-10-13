@@ -2,23 +2,24 @@
 
 **Date of Audit**: 2026-10-13  
 **Repository**: `Rishika667/Financial-Intelligence-Radar`  
-**Working Branch**: `phase-final-mvp-closure`  
-**Baseline HEAD**: `204837742d5f19e6a1576bc0ef075734e5bb204f`  
+**Working Branch**: `phase-final-resume-readiness`  
+**Starting Baseline HEAD**: `9967bf386e986f00f3a8c58b9a047f20dc4cf946`  
+**Historical Main CI Run**: `38420436005` (134 passed in 7.79s)  
 **Execution Environment**: Remote GitHub Actions CI (Ubuntu, Python 3.11) & Windows Local Checkout  
 
 ---
 
-## 1. Audit Summary by Workstream
+## 1. Audit Summary by Workstream & Reliability Closeout
 
-| Workstream | Scope | Status | Evidence |
+| Workstream / Focus | Scope | Status | Evidence |
 | :--- | :--- | :--- | :--- |
-| **A: Searchable Universe** | Full 503-constituent S&P 500 snapshot with CIK mappings & curated peers | **PASS** | `config/sp500_universe_2026.json`, tests in `test_final_closure.py` |
+| **A: Searchable Universe** | Full 503-constituent S&P 500 snapshot with authoritative CIKs, dual share classes & explicit legacy mode | **PASS** | `config/sp500_universe_2026.json`, tests in `test_final_closure.py` |
 | **B: Research Mode** | Full-universe selector, `NOT-YET-LOADED` state, on-demand SEC fetching | **PASS** | `app.py` Tab 3, `tests/test_research_mode.py`, `tests/test_app.py` |
-| **C: Analyst Reviews** | Persistent triage status (`NEW` to `RESOLVED`), notes, alert fingerprints | **PASS** | `src/financial_radar/store.py`, `tests/test_analyst_reviews_and_data_quality.py` |
-| **D: Data Quality Tab** | Dedicated tab: readiness, metrics diagnostics, peer coverage, audit log | **PASS** | `app.py` Tab 4, `tests/test_analyst_reviews_and_data_quality.py` |
-| **E: 10-Company Fixtures**| Multi-period SEC golden fixtures across Tech, Health, Energy, Finance, Consumer | **PASS** | 10 companies, `tests/test_sec_multi_period_fixtures.py`, `tests/test_sec_golden.py` |
-| **F: Hardening & Migrations**| Multi-probe Preflight, WAL mode, rollback-safe schema migrations | **PASS** | `app.py`, `src/financial_radar/store.py`, `tests/test_legacy_migration.py` |
-| **G: Truth in Reporting** | Documentation reconciled across README, gap register, and audit files | **PASS** | `README.md`, `docs/gap_register.md`, `final_release_audit.md` |
+| **C: Analyst Reviews** | Persistent triage status, review notes, strengthened alert fingerprints with canonical evidence values | **PASS** | `src/financial_radar/store.py`, `tests/test_analyst_reviews_and_data_quality.py` |
+| **D: Data Quality Tab** | Dedicated tab: readiness, metrics diagnostics, peer coverage, audit log, documented freshness guidance | **PASS** | `app.py` Tab 4, `tests/test_analyst_reviews_and_data_quality.py` |
+| **E: 10-Company Fixtures**| Multi-period SEC golden fixtures; unconditional YoY comparison assertions with exact figures | **PASS** | 10 companies, `tests/test_sec_multi_period_fixtures.py`, `tests/test_sec_golden.py` |
+| **F: Hardening & Migrations**| Truly atomic SQLite migrations without `executescript()`; failure-injection rollback regression test | **PASS** | `src/financial_radar/store.py`, `tests/test_legacy_migration.py` |
+| **G: Truth in Reporting** | Documentation reconciled across README, gap register, and audit files with exact limits noted | **PASS** | `README.md`, `docs/gap_register.md`, `final_release_audit.md` |
 
 ---
 

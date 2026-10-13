@@ -263,3 +263,69 @@ def test_concurrent_connections_and_wal_mode(tmp_path):
     c1.close()
     c2.close()
 
+
+def test_migration_failure_injection_atomicity(tmp_path):
+    """
+    Failure-injection regression test:
+    Force a controlled failure midway through migration (during observations_migrating copy)
+    and verify that the transaction cleanly rolls back, leaving the original legacy schema,
+    table names, and observations data intact and fully usable.
+    """
+    import unittest.mock as mock
+    db_file = str(tmp_path / "test_migration_failure.db")
+
+    # 1. Create a legacy database with legacy schema and sample observations
+    raw_conn = sqlite3.connect(db_file)
+    raw_conn.execute("""
+        CREATE TABLE observations(
+            company TEXT, metric TEXT, value REAL, unit TEXT, period_end TEXT, period_type TEXT,
+            quality TEXT, provenance TEXT, derived_from TEXT, comparable INTEGER,
+            PRIMARY KEY(company, metric, period_end, period_type)
+        )
+    """)
+    raw_conn.execute("INSERT INTO observations VALUES ('AAPL', 'revenue', 100, 'USD', '2023-12-31', 'QUARTER', 'REPORTED', '', '', 1)")
+    raw_conn.execute("INSERT INTO observations VALUES ('MSFT', 'revenue', 200, 'USD', '2023-12-31', 'QUARTER', 'REPORTED', '', '', 1)")
+    raw_conn.commit()
+    raw_conn.close()
+
+    # 2. Use a custom connection factory that raises an error during observations_migrating insert
+    class FailingConnection(sqlite3.Connection):
+        def execute(self, sql, *args, **kwargs):
+            if "INSERT OR IGNORE INTO observations_migrating" in sql:
+                raise sqlite3.OperationalError("Simulated disk error or constraint crash during migration copy")
+            return super().execute(sql, *args, **kwargs)
+
+    real_sqlite_connect = sqlite3.connect
+
+    def failing_connect(*args, **kwargs):
+        kwargs["factory"] = FailingConnection
+        return real_sqlite_connect(*args, **kwargs)
+
+    with mock.patch("financial_radar.store.sqlite3.connect", side_effect=failing_connect):
+        with pytest.raises(sqlite3.OperationalError, match="Simulated disk error"):
+            connect(db_file)
+
+    # 3. Verify that the rollback was genuinely atomic:
+    # - Original observations table still exists with its original schema and rows
+    # - Temporary observations_migrating table does NOT exist
+    # - Database is still usable for reads and queries
+    verify_conn = sqlite3.connect(db_file)
+    verify_conn.row_factory = sqlite3.Row
+
+    tables = [r["name"] for r in verify_conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()]
+    assert "observations" in tables, "Original observations table must still exist after rollback"
+    assert "observations_migrating" not in tables, "Temporary migration table must not remain"
+
+    rows_obs = verify_conn.execute("SELECT * FROM observations ORDER BY company").fetchall()
+    assert len(rows_obs) == 2, "Original legacy rows must remain completely intact"
+    assert rows_obs[0]["company"] == "AAPL" and rows_obs[0]["value"] == 100
+    assert rows_obs[1]["company"] == "MSFT" and rows_obs[1]["value"] == 200
+
+    # Verify that the database is still usable for writes
+    verify_conn.execute("INSERT INTO observations VALUES ('NVDA', 'revenue', 300, 'USD', '2023-12-31', 'QUARTER', 'REPORTED', '', '', 1)")
+    verify_conn.commit()
+    count = verify_conn.execute("SELECT count(*) as c FROM observations").fetchone()["c"]
+    assert count == 3, "Database must remain usable after rollback"
+    verify_conn.close()
+
+

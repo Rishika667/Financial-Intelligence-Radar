@@ -1,7 +1,9 @@
 {
     "version":  "sp500_universe_2026",
-    "source":  "datasets/s-and-p-500-companies (Wikipedia S\u0026P 500 Constituent Table)",
+    "source":  "datasets/s-and-p-500-companies (Wikipedia S&P 500 Constituent Table)",
     "source_url":  "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/refs/heads/main/data/constituents.csv",
+    "source_description":  "Public constituent dataset derived from the Wikipedia S&P 500 constituent table cross-referenced with SEC EDGAR CIK mappings. Not an official S&P Dow Jones Indices feed.",
+    "validation_method":  "Deterministic cross-referencing against SEC EDGAR CIK mappings; unique ticker validation; zero-padded 10-digit CIK validation; preservation of verified dual-class share pairs (GOOG/GOOGL, FOX/FOXA, NWSA/NWS).",
     "snapshot_date":  "2026-10-13",
     "constituent_count":  503,
     "companies":  [

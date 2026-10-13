@@ -5,11 +5,11 @@ from .models import DataQuality, QUALITY_RANK
 
 def load_peer_groups(universe_path=None):
     if universe_path is None:
-        universe_path = "config/sp500_universe_2026.json" if Path("config/sp500_universe_2026.json").exists() else "config/sp500_representative_51_2026.json"
-    try:
-        data = json.loads(Path(universe_path).read_text(encoding="utf-8-sig"))
-    except FileNotFoundError:
-        return {"version": "unknown", "groups": []}
+        universe_path = "config/sp500_universe_2026.json"
+    p = Path(universe_path)
+    if not p.exists():
+        raise FileNotFoundError(f"Universe configuration file not found: {universe_path}")
+    data = json.loads(p.read_text(encoding="utf-8-sig"))
     return {
         "version": data.get("peer_group_version", "v1"),
         "groups": data.get("peer_groups", [])

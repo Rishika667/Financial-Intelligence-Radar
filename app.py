@@ -623,12 +623,12 @@ with tab_data_quality:
     else:
         st.info("No peer context records computed yet.")
         
-    # 6. Freshness Rules Documentation
-    st.markdown("### 5. Regulatory Freshness & Integrity Rules")
+    # 5. Regulatory Freshness & Integrity Guidelines
+    st.markdown("### 5. Regulatory Freshness & Integrity Guidelines")
     st.markdown("""
     - **10-Q Quarterly Filing Window**: Mandated by the SEC within 40 calendar days (Large Accelerated Filer) or 45 days (Non-accelerated) following fiscal quarter end.
     - **10-K Annual Filing Window**: Mandated within 60 calendar days (Large Accelerated Filer), 75 days (Accelerated), or 90 days following fiscal year end.
-    - **Stale Disclosure Rule**: Filings older than 180 calendar days without a subsequent quarterly update are flagged as stale.
+    - **Freshness Guidance (Documented Standard)**: Regulatory expectation is that disclosures older than 180 calendar days without a subsequent quarterly update represent aging disclosures (documented analyst guidance; automated stale-tag engine is currently out-of-scope).
     - **Zero Missing Data Protection**: In accordance with system durability invariants, missing line items or XBRL tags are **never** coerced to zero or interpolated.
     - **Fiscal Semantic Precedence**: Year-over-Year (YoY) and sequential comparisons strictly enforce matching fiscal durations (`QUARTER` to `QUARTER`, `ANNUAL` to `ANNUAL`). YTD durations (`YTD_6M`, `YTD_9M`) are never compared directly against standalone quarters.
     """)

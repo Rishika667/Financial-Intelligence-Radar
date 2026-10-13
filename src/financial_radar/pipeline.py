@@ -33,8 +33,14 @@ LEGACY_UNIVERSE_PATH = "config/sp500_representative_51_2026.json"
 
 def load_universe(path=None):
     if path is None:
-        path = DEFAULT_UNIVERSE_PATH if Path(DEFAULT_UNIVERSE_PATH).exists() else LEGACY_UNIVERSE_PATH
-    return json.loads(Path(path).read_text(encoding="utf-8-sig"))["companies"]
+        path = DEFAULT_UNIVERSE_PATH
+    p = Path(path)
+    if not p.exists():
+        raise FileNotFoundError(
+            f"Required universe configuration file not found: {path}. "
+            "Full S&P 500 universe configuration is required for application coverage."
+        )
+    return json.loads(p.read_text(encoding="utf-8-sig"))["companies"]
 
 
 
@@ -292,7 +298,7 @@ def validate_portfolio_csv(df, universe_tickers):
         
     for t in df["ticker"]:
         if t not in universe_tickers:
-            return False, f"Ticker {t} is not in the 51-company universe."
+            return False, f"Ticker {t} is not in the supported company universe."
             
     try:
         df["shares"] = df["shares"].astype(float)

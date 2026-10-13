@@ -336,7 +336,6 @@ with tab_research:
         "Select Company for Research",
         options=universe_tickers,
         index=default_ticker_idx,
-        format_func=lambda x: f"{x} - {universe_map.get(x, {}).get('name', 'Unknown')} ({universe_map.get(x, {}).get('sector', 'Unknown')})",
         key="res_company_select"
     )
     company_meta = universe_map.get(ticker, {"ticker": ticker, "cik": ""})

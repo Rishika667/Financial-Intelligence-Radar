@@ -1,4 +1,4 @@
-﻿{
+{
     "version":  "sp500_universe_2026",
     "source":  "datasets/s-and-p-500-companies (Wikipedia S\u0026P 500 Constituent Table)",
     "source_url":  "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/refs/heads/main/data/constituents.csv",

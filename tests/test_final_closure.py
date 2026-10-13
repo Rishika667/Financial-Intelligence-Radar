@@ -452,7 +452,7 @@ def test_configured_universe_semantics():
 
     # 2. Full configured universe
     if Path("config/sp500_universe_2026.json").exists():
-        with open("config/sp500_universe_2026.json", "r", encoding="utf-8") as f:
+        with open("config/sp500_universe_2026.json", "r", encoding="utf-8-sig") as f:
             full_data = json.load(f)
         assert full_data.get("version") == "sp500_universe_2026"
         assert full_data.get("source_url") is not None

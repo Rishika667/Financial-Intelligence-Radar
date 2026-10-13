@@ -34,7 +34,7 @@ LEGACY_UNIVERSE_PATH = "config/sp500_representative_51_2026.json"
 def load_universe(path=None):
     if path is None:
         path = DEFAULT_UNIVERSE_PATH if Path(DEFAULT_UNIVERSE_PATH).exists() else LEGACY_UNIVERSE_PATH
-    return json.loads(Path(path).read_text(encoding="utf-8"))["companies"]
+    return json.loads(Path(path).read_text(encoding="utf-8-sig"))["companies"]
 
 
 

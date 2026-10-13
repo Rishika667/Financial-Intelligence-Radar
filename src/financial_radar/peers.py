@@ -3,7 +3,9 @@ from pathlib import Path
 from statistics import median
 from .models import DataQuality, QUALITY_RANK
 
-def load_peer_groups(universe_path="config/sp500_representative_51_2026.json"):
+def load_peer_groups(universe_path=None):
+    if universe_path is None:
+        universe_path = "config/sp500_universe_2026.json" if Path("config/sp500_universe_2026.json").exists() else "config/sp500_representative_51_2026.json"
     try:
         data = json.loads(Path(universe_path).read_text(encoding="utf-8"))
     except FileNotFoundError:

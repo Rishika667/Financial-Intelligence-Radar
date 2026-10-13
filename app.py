@@ -7,7 +7,12 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime
 
-from financial_radar.store import connect, rows, save_watchlist, save_portfolio
+from financial_radar.store import (
+    connect, rows, save_watchlist, save_portfolio,
+    save_analyst_review, get_analyst_review, get_all_analyst_reviews,
+    generate_alert_fingerprint, save_refresh_history, get_refresh_history,
+    get_latest_refresh_time, VALID_REVIEW_STATUSES
+)
 from financial_radar.pipeline import load_universe, ingest_company, refresh_peer_contexts, calculate_data_readiness, validate_portfolio_csv
 from financial_radar.core import SECClient
 from financial_radar.intelligence import generate_intelligence
@@ -23,53 +28,66 @@ db = connect(db_path)
 try:
     universe = load_universe()
 except FileNotFoundError:
-    st.error("config/sp500_representative_51_2026.json not found. Cannot load company universe.")
+    st.error("Universe configuration not found. Cannot load company universe.")
     st.stop()
 
 universe_map = {c["ticker"]: c for c in universe}
 import logging
 logger = logging.getLogger(__name__)
 
-try:
-    peer_refs = json.loads(open("config/sp500_representative_51_2026.json").read()).get("peer_references", [])
-    for c in peer_refs:
-        universe_map[c["ticker"]] = c
-except (FileNotFoundError, json.JSONDecodeError) as e:
-    logger.warning("Could not load peer_references from config/sp500_representative_51_2026.json: %s", e)
+for cfg_candidate in ("config/sp500_universe_2026.json", "config/sp500_representative_51_2026.json"):
+    if os.path.exists(cfg_candidate):
+        try:
+            peer_refs = json.loads(open(cfg_candidate, encoding="utf-8").read()).get("peer_references", [])
+            for c in peer_refs:
+                if c["ticker"] not in universe_map:
+                    universe_map[c["ticker"]] = c
+            break
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            logger.warning("Could not load peer_references from %s: %s", cfg_candidate, e)
 
 active_tickers = sorted({r["ticker"] for r in rows(db, "SELECT ticker FROM watchlist WHERE active=1")})
 user_agent = os.environ.get("SEC_USER_AGENT", "")
 
 def test_sec_connectivity(ua):
     results = {'USER_AGENT_CONFIGURED': False, 'SEC_REACHABLE': False, 'SUBMISSIONS_REACHABLE': False, 'XBRL_REACHABLE': False, 'ERRORS': []}
-    if not ua or len(ua) < 5: 
-        results['ERRORS'].append("Invalid or missing SEC_USER_AGENT environment variable")
+    if not ua or len(ua.strip()) < 5 or "@" not in ua: 
+        results['ERRORS'].append("Invalid or missing SEC_USER_AGENT. It must identify an operator and contact email.")
         return results
     results['USER_AGENT_CONFIGURED'] = True
     headers = {'User-Agent': ua, 'Accept-Encoding': 'gzip, deflate'}
     
     import requests
+    # 1. Test SEC homepage reachability
     try:
         r1 = requests.get('https://www.sec.gov/', headers=headers, timeout=5)
         r1.raise_for_status()
         results['SEC_REACHABLE'] = True
+    except requests.exceptions.RequestException as e:
+        results['ERRORS'].append(f"SEC home-page unreachable: {e}")
         
+    # 2. Test SEC submissions endpoint reachability independently
+    try:
         r2 = requests.get('https://data.sec.gov/submissions/CIK0000320193.json', headers=headers, timeout=5)
         r2.raise_for_status()
         results['SUBMISSIONS_REACHABLE'] = True
+    except requests.exceptions.RequestException as e:
+        results['ERRORS'].append(f"SEC submissions endpoint unreachable: {e}")
         
+    # 3. Test SEC XBRL companyfacts endpoint reachability independently
+    try:
         r3 = requests.get('https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json', headers=headers, timeout=5)
         r3.raise_for_status()
         results['XBRL_REACHABLE'] = True
     except requests.exceptions.RequestException as e:
-        results['ERRORS'].append(f"Network or protocol error: {e}")
+        results['ERRORS'].append(f"SEC XBRL companyfacts endpoint unreachable: {e}")
         
     return results
 
 
 
-tab_setup, tab_portfolio, tab_dashboard, tab_research = st.tabs([
-    "Setup & Preflight", "Portfolio Sync", "Attention Queue", "Research Mode"
+tab_setup, tab_portfolio, tab_dashboard, tab_research, tab_data_quality = st.tabs([
+    "Setup & Preflight", "Portfolio Sync", "Attention Queue", "Research Mode", "Data Quality & Refresh"
 ])
 
 with tab_setup:
@@ -86,7 +104,6 @@ with tab_setup:
         with st.spinner("Testing SEC endpoints..."):
             res = test_sec_connectivity(user_agent)
             st.json(res)
-            # Success means the 4 booleans are True (and ERRORS can be empty)
             success = all([res.get(k) for k in ('USER_AGENT_CONFIGURED', 'SEC_REACHABLE', 'SUBMISSIONS_REACHABLE', 'XBRL_REACHABLE')])
             if success:
                 st.success("All SEC preflight checks passed.")
@@ -107,7 +124,7 @@ with tab_setup:
                 ingest_list = list(active_tickers)
                 if include_peers:
                     from financial_radar.peers import load_peer_groups, find_peer_group
-                    pg = load_peer_groups("config/sp500_representative_51_2026.json")
+                    pg = load_peer_groups()
                     for t in active_tickers:
                         gid, peers = find_peer_group(t, pg)
                         for p in peers:
@@ -118,11 +135,13 @@ with tab_setup:
                 for i, ticker in enumerate(ingest_list):
                     if ticker not in universe_map: continue
                     try:
-                        ingest_company(client, db, universe_map[ticker])
+                        res_ingest = ingest_company(client, db, universe_map[ticker])
+                        save_refresh_history(db, ticker, "SUCCESS", observations_count=res_ingest.get("observations", 0), signals_count=res_ingest.get("signals", 0), refresh_type="MONITORED_BATCH")
                         status_list.append({"Company": ticker, "Status": "SUCCESS", "Message": ""})
                         success_count += 1
                     except Exception as e:
                         logger.error("Ingestion failed for %s: %s", ticker, e, exc_info=True)
+                        save_refresh_history(db, ticker, "FAILED", error_message=str(e), refresh_type="MONITORED_BATCH")
                         status_list.append({"Company": ticker, "Status": "FAILED", "Message": str(e)})
                     progress.progress((i + 1) / len(ingest_list))
                 
@@ -169,19 +188,51 @@ with tab_dashboard:
     if not active_tickers:
         st.info("No active companies.")
     else:
+        all_reviews = get_all_analyst_reviews(db)
         placeholders = ",".join("?" * len(active_tickers))
         signals = rows(db, f"SELECT s.*, p.weight, p.exposure FROM signals s LEFT JOIN portfolio p ON s.company = p.ticker WHERE s.company IN ({placeholders}) AND s.suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MEDIUM' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC", active_tickers)
         if signals:
+            aq_filter = st.radio(
+                "Filter Alerts by Review Status:",
+                ["Active Alerts (New / Under Review / Acknowledged)", "All Alerts", "Resolved / Dismissed / Expected"],
+                horizontal=True,
+                key="aq_status_filter"
+            )
+            visible_count = 0
             for s in signals:
-                sev_color = "red" if s["severity"] == "HIGH" else "orange" if s["severity"] == "MEDIUM" else "blue"
-                with st.expander(f"[{s['severity']}] {s['company']} - {s['signal_id']} (Confidence: {s['confidence']})"):
-                    st.markdown(f"**Explanation:** {s['explanation']}")
+                fprint = generate_alert_fingerprint(s['company'], s['signal_id'], s.get('evidence'), s.get('version', 'v1'))
+                rev = all_reviews.get(fprint)
+                status_val = rev["status"] if rev else "NEW"
+                note_val = rev["note"] if rev and rev["note"] else ""
+                updated_val = rev["updated_at"] if rev else None
+                
+                if aq_filter.startswith("Active") and status_val in ("DISMISSED", "EXPECTED", "RESOLVED"):
+                    continue
+                if aq_filter.startswith("Resolved") and status_val not in ("DISMISSED", "EXPECTED", "RESOLVED"):
+                    continue
+                visible_count += 1
+                
+                port_ctx_str = f"**Portfolio Context:** Weight: {s['weight']*100:.2f}%, Exposure: {format_val(s['exposure'])}" if s.get("weight") is not None and s.get("exposure") is not None else "**Portfolio Context:** Not held"
+                with st.expander(f"[{s['severity']}] {s['company']} - {s['signal_id']} (Confidence: {s['confidence']}) - [{status_val}]"):
+                    st.markdown(f"{port_ctx_str} | **Explanation:** {s['explanation']}")
                     st.markdown(f"**Investigation:** Review {s['signal_id']} alongside latest 10-Q/10-K disclosures.")
                     
-                    if s.get("weight") is not None and s.get("exposure") is not None:
-                        st.markdown(f"**Portfolio Context:** Weight: {s['weight']*100:.2f}%, Exposure: {format_val(s['exposure'])}")
-                    else:
-                        st.markdown("**Portfolio Context:** Not held")
+                    st.markdown(f"**Review Status:** `{status_val}`" + (f" *(Last saved: {updated_val[:19].replace('T', ' ')})*" if updated_val else ""))
+                    if note_val:
+                        st.info(f"**Analyst Note:** {note_val}")
+                    
+                    with st.form(key=f"review_form_{fprint}"):
+                        st.markdown("##### Analyst Review Action")
+                        c_stat, c_note = st.columns([1, 2])
+                        stat_opts = ["NEW", "ACKNOWLEDGED", "UNDER_REVIEW", "DISMISSED", "EXPECTED", "RESOLVED"]
+                        idx_stat = stat_opts.index(status_val) if status_val in stat_opts else 0
+                        chosen_stat = c_stat.selectbox("Status", stat_opts, index=idx_stat, key=f"sel_stat_{fprint}")
+                        new_note = c_note.text_input("Investigation Note", value=note_val, key=f"note_inp_{fprint}", placeholder="Add research thesis or dismissal rationale...")
+                        if st.form_submit_button("Save Review"):
+                            save_analyst_review(db, fprint, s['company'], s['signal_id'], chosen_stat, new_note)
+                            st.success(f"Review saved for {s['company']} - {s['signal_id']}.")
+                            time.sleep(0.5)
+                            st.rerun()
                         
                     # Peer Context mapping
                     metric_map = {
@@ -261,17 +312,59 @@ with tab_dashboard:
                                     st.markdown("*SEC source unavailable*")
                         except Exception as e:
                             st.error(f"Failed to parse evidence: {e}")
+            if visible_count == 0:
+                st.info("No signals matching the selected review status filter.")
         else:
             st.success("No actionable deterioration signals detected.")
 
 with tab_research:
-    if not active_tickers:
-        st.info("No active companies.")
+    universe_tickers = [u["ticker"] for u in universe]
+    all_obs_comps = {r["company"] for r in rows(db, "SELECT DISTINCT company FROM observations")}
+    default_ticker_idx = 0
+    if active_tickers:
+        for at in active_tickers:
+            if at in universe_tickers:
+                default_ticker_idx = universe_tickers.index(at)
+                break
+    elif all_obs_comps:
+        for oc in all_obs_comps:
+            if oc in universe_tickers:
+                default_ticker_idx = universe_tickers.index(oc)
+                break
+
+    ticker = st.selectbox(
+        "Select Company for Research",
+        options=universe_tickers,
+        index=default_ticker_idx,
+        format_func=lambda x: f"{x} - {universe_map.get(x, {}).get('name', 'Unknown')} ({universe_map.get(x, {}).get('sector', 'Unknown')})",
+        key="res_company_select"
+    )
+    company_meta = universe_map.get(ticker, {"ticker": ticker, "cik": ""})
+    st.header(f"{ticker} - {company_meta.get('name', 'Unknown')} ({company_meta.get('sector', 'Unknown')})")
+    
+    obs_count = rows(db, "SELECT count(*) as c FROM observations WHERE company=?", (ticker,))[0]["c"]
+    
+    if obs_count == 0:
+        st.info(f"NOT-YET-LOADED: No historical SEC disclosure data is currently loaded for {ticker} ({company_meta.get('name', 'Unknown')}).")
+        st.markdown("This company is part of the supported universe. You can retrieve its disclosures on demand using the action below.")
+        if not user_agent:
+            st.warning("Cannot fetch data: SEC_USER_AGENT is not configured. Configure SEC_USER_AGENT to enable on-demand SEC ingestion.")
+        else:
+            if st.button(f"Fetch SEC Disclosure Data for {ticker}", key=f"fetch_single_{ticker}"):
+                with st.spinner(f"Ingesting SEC filings and company facts for {ticker}..."):
+                    try:
+                        client = SECClient(user_agent)
+                        res_ing = ingest_company(client, db, company_meta)
+                        refresh_peer_contexts(db, [ticker])
+                        save_refresh_history(db, ticker, "SUCCESS", observations_count=res_ing.get("observations", 0), signals_count=res_ing.get("signals", 0), refresh_type="SINGLE_RESEARCH")
+                        st.success(f"Successfully ingested {res_ing.get('observations', 0)} observations for {ticker}!")
+                        time.sleep(1)
+                        st.rerun()
+                    except Exception as e:
+                        logger.error("Single-company fetch failed for %s: %s", ticker, e, exc_info=True)
+                        save_refresh_history(db, ticker, "FAILED", error_message=str(e), refresh_type="SINGLE_RESEARCH")
+                        st.error(f"Failed to fetch SEC data for {ticker}: {e}")
     else:
-        ticker = st.selectbox("Select Company for Research", active_tickers)
-        company_meta = universe_map.get(ticker, {})
-        st.header(f"{ticker} - {company_meta.get('name', 'Unknown')} ({company_meta.get('sector', 'Unknown')})")
-        
         r_state, r_msg = calculate_data_readiness(ticker, db)
         if r_state == ReadinessState.NOT_READY:
             st.error(f"NOT READY: {r_msg}")
@@ -333,7 +426,7 @@ with tab_research:
             if all_q_obs:
                 df_trends = pd.DataFrame(all_q_obs).sort_values("period_end")
                 
-# Chart A: Monetary performance
+                # Chart A: Monetary performance
                 df_a = df_trends[df_trends["metric"].isin(["revenue", "net_income", "operating_cash_flow", "free_cash_flow"])]
                 if not df_a.empty:
                     units_a = df_a["unit"].unique()
@@ -443,3 +536,100 @@ with tab_research:
                 if unavails:
                     for p in sorted(list(unavails)):
                         st.warning(f"{p} Peer coverage unavailable")
+
+with tab_data_quality:
+    st.subheader("Data Quality & Refresh Monitoring")
+    
+    # 1. High-level metric summary
+    all_companies_with_obs = sorted(list({r["company"] for r in rows(db, "SELECT DISTINCT company FROM observations")}))
+    total_obs = rows(db, "SELECT count(*) as c FROM observations")[0]["c"]
+    total_signals = rows(db, "SELECT count(*) as c FROM signals")[0]["c"]
+    latest_refresh = get_latest_refresh_time(db)
+    
+    col1, col2, col3, col4, col5 = st.columns(5)
+    col1.metric("Supported Universe", len(universe))
+    col2.metric("Active Monitored", len(active_tickers))
+    col3.metric("Companies with Data", len(all_companies_with_obs))
+    col4.metric("Total Observations", f"{total_obs:,}")
+    col5.metric("Latest Refresh", latest_refresh[:19].replace("T", " ") if latest_refresh else "Never")
+    
+    # 2. Data Readiness Breakdown
+    st.markdown("### 1. Monitored & Researched Companies Readiness")
+    target_readiness_tickers = sorted(list(set(active_tickers + all_companies_with_obs)))
+    if not target_readiness_tickers:
+        st.info("No companies currently monitored or loaded.")
+    else:
+        readiness_records = []
+        state_counts = {"READY": 0, "PARTIAL": 0, "NOT_READY": 0, "FAILED": 0}
+        for t in target_readiness_tickers:
+            r_state, r_msg = calculate_data_readiness(t, db)
+            st_str = r_state.value if hasattr(r_state, "value") else str(r_state)
+            state_counts[st_str] = state_counts.get(st_str, 0) + 1
+            readiness_records.append({
+                "Company": t,
+                "Name": universe_map.get(t, {}).get("name", "Unknown"),
+                "Sector": universe_map.get(t, {}).get("sector", "Unknown"),
+                "State": st_str,
+                "Details": r_msg,
+                "Monitored": "Yes" if t in active_tickers else "No"
+            })
+            
+        r_col1, r_col2, r_col3, r_col4 = st.columns(4)
+        r_col1.metric("Ready", state_counts.get("READY", 0))
+        r_col2.metric("Partial", state_counts.get("PARTIAL", 0))
+        r_col3.metric("Not Ready", state_counts.get("NOT_READY", 0))
+        r_col4.metric("Failed", state_counts.get("FAILED", 0))
+        
+        st.dataframe(pd.DataFrame(readiness_records), use_container_width=True, hide_index=True)
+        
+    # 3. Refresh Audit History
+    st.markdown("### 2. Persisted Refresh History")
+    ref_history = get_refresh_history(db, limit=50)
+    if not ref_history:
+        st.info("No data refreshes have been recorded yet.")
+    else:
+        df_ref = pd.DataFrame(ref_history)[["id", "timestamp", "ticker", "status", "observations_count", "signals_count", "refresh_type", "error_message"]]
+        st.dataframe(df_ref, use_container_width=True, hide_index=True)
+        
+    # 4. Core Metrics & Fiscal Comparison Diagnostics
+    st.markdown("### 3. Core Financial Metrics Diagnostic")
+    core_metrics = ["revenue", "gross_margin", "operating_income", "net_income", "operating_cash_flow", "free_cash_flow"]
+    if all_companies_with_obs:
+        diag_rows = []
+        for t in all_companies_with_obs:
+            sector = universe_map.get(t, {}).get("sector", "Unknown")
+            obs_t = rows(db, "SELECT DISTINCT metric FROM observations WHERE company=? AND period_type='QUARTER'", (t,))
+            present_m = {r["metric"] for r in obs_t}
+            missing_m = [m for m in core_metrics if m not in present_m]
+            
+            supps = rows(db, "SELECT signal_id, suppressed FROM signals WHERE company=? AND suppressed IS NOT NULL", (t,))
+            supp_info = "; ".join([f"{s['signal_id']}: {s['suppressed']}" for s in supps]) if supps else "None"
+            
+            diag_rows.append({
+                "Company": t,
+                "Sector": sector,
+                "Quarterly Metrics Present": len(present_m),
+                "Missing Core Metrics": ", ".join(missing_m) if missing_m else "All Core Present",
+                "Comparison Suppressions": supp_info
+            })
+        st.dataframe(pd.DataFrame(diag_rows), use_container_width=True, hide_index=True)
+    else:
+        st.info("No financial observations present in database.")
+        
+    # 5. Peer Coverage & Unavailability
+    st.markdown("### 4. Peer Coverage Integrity")
+    peer_rows = rows(db, "SELECT company, metric, n_peers, coverage_count, total_peer_count, availability_state, unavailable_peers FROM peer_context ORDER BY company, metric")
+    if peer_rows:
+        st.dataframe(pd.DataFrame(peer_rows), use_container_width=True, hide_index=True)
+    else:
+        st.info("No peer context records computed yet.")
+        
+    # 6. Freshness Rules Documentation
+    st.markdown("### 5. Regulatory Freshness & Integrity Rules")
+    st.markdown("""
+    - **10-Q Quarterly Filing Window**: Mandated by the SEC within 40 calendar days (Large Accelerated Filer) or 45 days (Non-accelerated) following fiscal quarter end.
+    - **10-K Annual Filing Window**: Mandated within 60 calendar days (Large Accelerated Filer), 75 days (Accelerated), or 90 days following fiscal year end.
+    - **Stale Disclosure Rule**: Filings older than 180 calendar days without a subsequent quarterly update are flagged as stale.
+    - **Zero Missing Data Protection**: In accordance with system durability invariants, missing line items or XBRL tags are **never** coerced to zero or interpolated.
+    - **Fiscal Semantic Precedence**: Year-over-Year (YoY) and sequential comparisons strictly enforce matching fiscal durations (`QUARTER` to `QUARTER`, `ANNUAL` to `ANNUAL`). YTD durations (`YTD_6M`, `YTD_9M`) are never compared directly against standalone quarters.
+    """)

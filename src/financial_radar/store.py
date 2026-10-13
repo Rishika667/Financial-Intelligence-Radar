@@ -47,12 +47,38 @@ CREATE TABLE IF NOT EXISTS portfolio(
 CREATE TABLE IF NOT EXISTS system_state(
     key TEXT PRIMARY KEY, value TEXT
 );
+CREATE TABLE IF NOT EXISTS analyst_reviews(
+    fingerprint TEXT PRIMARY KEY,
+    company TEXT NOT NULL,
+    signal_id TEXT NOT NULL,
+    status TEXT NOT NULL,
+    note TEXT,
+    updated_at TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS refresh_history(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    timestamp TEXT NOT NULL,
+    ticker TEXT NOT NULL,
+    status TEXT NOT NULL,
+    observations_count INTEGER DEFAULT 0,
+    signals_count INTEGER DEFAULT 0,
+    error_message TEXT,
+    refresh_type TEXT DEFAULT 'MONITORED_BATCH'
+);
 """
 
 
 def connect(db_path="financial_radar.sqlite"):
-    c = sqlite3.connect(db_path, check_same_thread=False)
+    c = sqlite3.connect(db_path, check_same_thread=False, timeout=30.0)
     c.row_factory = sqlite3.Row
+    if db_path != ":memory:":
+        try:
+            c.execute("PRAGMA journal_mode=WAL;")
+            c.execute("PRAGMA busy_timeout=30000;")
+        except sqlite3.Error as e:
+            logger.warning("Could not set WAL/busy_timeout on %s: %s", db_path, e)
+
     c.executescript(DDL)
     
     def has_exact_unique_index(table_name, expected_cols):
@@ -64,72 +90,71 @@ def connect(db_path="financial_radar.sqlite"):
                     return True
         return False
         
-    needs_rebuild = not has_exact_unique_index("observations", ["company", "metric", "period_end", "period_type", "unit", "period_start"])
+    try:
+        needs_rebuild = not has_exact_unique_index("observations", ["company", "metric", "period_end", "period_type", "unit", "period_start"])
 
-    # Safe migration for existing observations table
-    cols = [r["name"] for r in c.execute("PRAGMA table_info(observations)")]
-    if "period_start" not in cols:
-        c.execute("ALTER TABLE observations ADD COLUMN period_start TEXT")
-    if "derived_from" not in cols:
-        c.execute("ALTER TABLE observations ADD COLUMN derived_from TEXT")
-    if "fiscal_year" not in cols:
-        c.execute("ALTER TABLE observations ADD COLUMN fiscal_year INTEGER")
-    if "fiscal_period" not in cols:
-        c.execute("ALTER TABLE observations ADD COLUMN fiscal_period TEXT")
-    if "reason" not in cols:
-        c.execute("ALTER TABLE observations ADD COLUMN reason TEXT")
+        # Safe migration for existing observations table
+        cols = [r["name"] for r in c.execute("PRAGMA table_info(observations)")]
+        if "period_start" not in cols:
+            c.execute("ALTER TABLE observations ADD COLUMN period_start TEXT")
+        if "derived_from" not in cols:
+            c.execute("ALTER TABLE observations ADD COLUMN derived_from TEXT")
+        if "fiscal_year" not in cols:
+            c.execute("ALTER TABLE observations ADD COLUMN fiscal_year INTEGER")
+        if "fiscal_period" not in cols:
+            c.execute("ALTER TABLE observations ADD COLUMN fiscal_period TEXT")
+        if "reason" not in cols:
+            c.execute("ALTER TABLE observations ADD COLUMN reason TEXT")
 
-    if needs_rebuild:
-        # Create temp table, copy data, replace
-        c.execute("CREATE TABLE observations_new AS SELECT * FROM observations WHERE 0")
-        c.execute("DROP TABLE observations_new")
-        # Rename old to old, create new with DDL, copy
-        c.execute("ALTER TABLE observations RENAME TO observations_old")
-        c.executescript(DDL)
-        # Note: DDL creates new observations table
+        if needs_rebuild:
+            # Create temp table, copy data, replace
+            c.execute("CREATE TABLE observations_new AS SELECT * FROM observations WHERE 0")
+            c.execute("DROP TABLE observations_new")
+            # Rename old to old, create new with DDL, copy
+            c.execute("ALTER TABLE observations RENAME TO observations_old")
+            c.executescript(DDL)
+            c.execute("INSERT OR IGNORE INTO observations (company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, period_start, derived_from, fiscal_year, fiscal_period) SELECT company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, COALESCE(period_start, ''), derived_from, fiscal_year, fiscal_period FROM observations_old")
+            c.execute("DROP TABLE observations_old")
+
+        # Migrate peer_context table
+        needs_pc_rebuild = not has_exact_unique_index("peer_context", ["company", "metric", "version"])
+
+        p_cols = [r["name"] for r in c.execute("PRAGMA table_info(peer_context)")]
         
-        # Now copy. The columns in observations_old match the newly added ones
-        # We need to list them explicitly to match the new schema order or just insert by name
-        c.execute("INSERT OR IGNORE INTO observations (company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, period_start, derived_from, fiscal_year, fiscal_period) SELECT company, metric, value, unit, period_end, period_type, quality, comparable, reason, provenance, COALESCE(period_start, ''), derived_from, fiscal_year, fiscal_period FROM observations_old")
-        c.execute("DROP TABLE observations_old")
+        expected_new_cols = [
+            ("position", "TEXT"), ("coverage_count", "INTEGER"),
+            ("total_peer_count", "INTEGER"), ("coverage_ratio", "REAL"),
+            ("availability_state", "TEXT"), ("group_id", "TEXT"), 
+            ("company_value", "REAL"), ("peer_median", "REAL"), 
+            ("peer_min", "REAL"), ("peer_max", "REAL"), 
+            ("n_peers", "INTEGER"), ("version", "TEXT"), 
+            ("unavailable_peers", "TEXT")
+        ]
+        for col, col_type in expected_new_cols:
+            if col not in p_cols:
+                c.execute(f"ALTER TABLE peer_context ADD COLUMN {col} {col_type}")
 
-    # Migrate peer_context table
-    needs_pc_rebuild = not has_exact_unique_index("peer_context", ["company", "metric", "version"])
+        if needs_pc_rebuild:
+            c.execute("ALTER TABLE peer_context RENAME TO peer_context_old")
+            c.executescript(DDL)
+            c.execute("""
+                INSERT OR IGNORE INTO peer_context (
+                    company, group_id, metric, company_value, peer_median, peer_min, peer_max, 
+                    n_peers, version, unavailable_peers, position, coverage_count, 
+                    total_peer_count, coverage_ratio, availability_state
+                ) SELECT 
+                    company, group_id, metric, company_value, peer_median, peer_min, peer_max, 
+                    n_peers, version, unavailable_peers, position, coverage_count, 
+                    total_peer_count, coverage_ratio, availability_state 
+                FROM peer_context_old
+            """)
+            c.execute("DROP TABLE peer_context_old")
 
-    p_cols = [r["name"] for r in c.execute("PRAGMA table_info(peer_context)")]
-    
-    # Safely add any missing new columns first so old table has them for the INSERT copy
-    expected_new_cols = [
-        ("position", "TEXT"), ("coverage_count", "INTEGER"),
-        ("total_peer_count", "INTEGER"), ("coverage_ratio", "REAL"),
-        ("availability_state", "TEXT"), ("group_id", "TEXT"), 
-        ("company_value", "REAL"), ("peer_median", "REAL"), 
-        ("peer_min", "REAL"), ("peer_max", "REAL"), 
-        ("n_peers", "INTEGER"), ("version", "TEXT"), 
-        ("unavailable_peers", "TEXT")
-    ]
-    for col, col_type in expected_new_cols:
-        if col not in p_cols:
-            c.execute(f"ALTER TABLE peer_context ADD COLUMN {col} {col_type}")
-
-    if needs_pc_rebuild:
-        # Save old data, recreate schema, restore data
-        c.execute("ALTER TABLE peer_context RENAME TO peer_context_old")
-        c.executescript(DDL)
-        # Select explicit columns that exist in the new schema
-        # If the old table had them, they were added above if missing.
-        c.execute("""
-            INSERT OR IGNORE INTO peer_context (
-                company, group_id, metric, company_value, peer_median, peer_min, peer_max, 
-                n_peers, version, unavailable_peers, position, coverage_count, 
-                total_peer_count, coverage_ratio, availability_state
-            ) SELECT 
-                company, group_id, metric, company_value, peer_median, peer_min, peer_max, 
-                n_peers, version, unavailable_peers, position, coverage_count, 
-                total_peer_count, coverage_ratio, availability_state 
-            FROM peer_context_old
-        """)
-        c.execute("DROP TABLE peer_context_old")
+        c.commit()
+    except Exception as e:
+        c.rollback()
+        logger.error("Migration failed, rolled back: %s", e)
+        raise
 
     return c
 
@@ -388,3 +413,101 @@ def save_portfolio(c, rows):
 
 def load_portfolio(c):
     return rows(c, "SELECT * FROM portfolio")
+
+
+VALID_REVIEW_STATUSES = {"NEW", "ACKNOWLEDGED", "UNDER_REVIEW", "DISMISSED", "EXPECTED", "RESOLVED"}
+
+
+def generate_alert_fingerprint(company, signal_id, evidence=None, version="v1"):
+    """Generate a stable, deterministic alert fingerprint incorporating company,
+    signal_id, rule version, and relevant comparison-period evidence.
+    """
+    import hashlib
+    period_keys = []
+    if evidence:
+        ev_items = evidence
+        if isinstance(ev_items, str):
+            try:
+                ev_items = json.loads(ev_items)
+            except Exception:
+                ev_items = []
+        if isinstance(ev_items, (list, tuple)):
+            for item in ev_items:
+                if isinstance(item, dict):
+                    m = item.get("metric", "")
+                    pe = item.get("period_end", "")
+                    pt = item.get("period_type", "")
+                    fy = item.get("fiscal_year", "")
+                    fp = item.get("fiscal_period", "")
+                    period_keys.append(f"{m}_{pe}_{pt}_{fy}_{fp}")
+                elif hasattr(item, "metric"):
+                    m = getattr(item, "metric", "")
+                    pe = str(getattr(item, "period_end", ""))
+                    pt = getattr(item, "period_type", "")
+                    fy = str(getattr(item, "fiscal_year", ""))
+                    fp = str(getattr(item, "fiscal_period", ""))
+                    period_keys.append(f"{m}_{pe}_{pt}_{fy}_{fp}")
+
+    period_str = "|".join(sorted(set(period_keys)))
+    raw = f"{company}:{signal_id}:{version}:{period_str}"
+    digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+    return f"{company}_{signal_id}_{digest}"
+
+
+def save_analyst_review(c, fingerprint, company, signal_id, status, note=None):
+    """Save or update an analyst review record transactionally."""
+    if status not in VALID_REVIEW_STATUSES:
+        raise ValueError(f"Invalid review status '{status}'. Must be one of {VALID_REVIEW_STATUSES}")
+
+    from datetime import datetime
+    now = datetime.utcnow().isoformat()
+    existing = rows(c, "SELECT * FROM analyst_reviews WHERE fingerprint=?", (fingerprint,))
+    if existing:
+        c.execute(
+            "UPDATE analyst_reviews SET status=?, note=?, updated_at=? WHERE fingerprint=?",
+            (status, note, now, fingerprint),
+        )
+    else:
+        c.execute(
+            "INSERT INTO analyst_reviews (fingerprint, company, signal_id, status, note, updated_at, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (fingerprint, company, signal_id, status, note, now, now),
+        )
+    c.commit()
+
+
+def get_analyst_review(c, fingerprint):
+    r = rows(c, "SELECT * FROM analyst_reviews WHERE fingerprint=?", (fingerprint,))
+    return r[0] if r else None
+
+
+def get_analyst_reviews_for_company(c, company):
+    return rows(c, "SELECT * FROM analyst_reviews WHERE company=? ORDER BY updated_at DESC", (company,))
+
+
+def get_all_analyst_reviews(c):
+    return {r["fingerprint"]: r for r in rows(c, "SELECT * FROM analyst_reviews")}
+
+
+def save_refresh_history(c, ticker, status, observations_count=0, signals_count=0, error_message=None, refresh_type="MONITORED_BATCH"):
+    """Record an ingestion / refresh run in the persistent audit trail."""
+    from datetime import datetime
+    now = datetime.utcnow().isoformat()
+    c.execute(
+        "INSERT INTO refresh_history (timestamp, ticker, status, observations_count, signals_count, error_message, refresh_type) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (now, ticker, status, observations_count, signals_count, error_message, refresh_type),
+    )
+    c.commit()
+
+
+def get_refresh_history(c, limit=50, ticker=None):
+    if ticker:
+        return rows(c, "SELECT * FROM refresh_history WHERE ticker=? ORDER BY id DESC LIMIT ?", (ticker, limit))
+    return rows(c, "SELECT * FROM refresh_history ORDER BY id DESC LIMIT ?", (limit,))
+
+
+def get_latest_refresh_time(c):
+    r = rows(c, "SELECT timestamp FROM refresh_history WHERE status='SUCCESS' ORDER BY id DESC LIMIT 1")
+    return r[0]["timestamp"] if r else None
+

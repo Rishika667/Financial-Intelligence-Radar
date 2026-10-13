@@ -79,3 +79,41 @@ def test_research_mode_strong_assertions(monkeypatch):
         except PermissionError:
             pass
 
+
+def test_research_mode_unmonitored_universe_company(monkeypatch):
+    test_db = os.path.abspath("test_research_unmonitored.sqlite")
+    if os.path.exists(test_db):
+        try:
+            os.remove(test_db)
+        except PermissionError:
+            pass
+
+    c = connect(test_db)
+    # Only AAPL in watchlist
+    c.execute("INSERT INTO watchlist (ticker, active, cik) VALUES ('AAPL', 1, '0000320193')")
+    c.commit()
+
+    monkeypatch.setenv("DB_PATH", test_db)
+    os.environ["DB_PATH"] = test_db
+
+    at = AppTest.from_file("../app.py", default_timeout=30)
+    at.run()
+    assert not at.exception
+
+    # Select MSFT in Research Tab which is in universe but NOT loaded in DB
+    research_tab = at.tabs[3]
+    assert "MSFT" in research_tab.selectbox[0].options
+    research_tab.selectbox[0].set_value("MSFT").run()
+    assert not at.exception
+
+    all_info = [i.value for i in research_tab.info]
+    assert any("NOT-YET-LOADED" in inf for inf in all_info), "Expected NOT-YET-LOADED message for unmonitored company"
+
+    c.close()
+    if os.path.exists(test_db):
+        try:
+            os.remove(test_db)
+        except PermissionError:
+            pass
+
+

@@ -1,4 +1,4 @@
-﻿import pytest
+import pytest
 import sqlite3
 import sys
 sys.path.append("src")
@@ -212,3 +212,54 @@ def test_legacy_migration_index_rebuild():
     
     db.close()
     if os.path.exists("test_idx.db"): os.remove("test_idx.db")
+
+
+def test_legacy_migration_analyst_reviews_and_refresh_history(tmp_path):
+    """Legacy DBs missing analyst_reviews or refresh_history must be migrated cleanly without destroying data."""
+    db_file = str(tmp_path / "test_legacy_reviews.db")
+    c = sqlite3.connect(db_file)
+    c.execute("CREATE TABLE watchlist (ticker TEXT PRIMARY KEY, cik TEXT, active INTEGER, metadata TEXT)")
+    c.execute("INSERT INTO watchlist VALUES ('AAPL', '0000320193', 1, '{}')")
+    c.commit()
+    c.close()
+
+    # Connect with production connect()
+    db = connect(db_file)
+    tables = [r["name"] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()]
+    assert "analyst_reviews" in tables
+    assert "refresh_history" in tables
+
+    # Subsequent writes to both old and new tables succeed
+    from financial_radar.store import save_analyst_review, save_refresh_history, get_analyst_review
+    save_analyst_review(db, "FP1", "AAPL", "GROSS_MARGIN_COMPRESSION", "UNDER_REVIEW", "Test Note")
+    save_refresh_history(db, "AAPL", "SUCCESS", 50, 1)
+
+    assert get_analyst_review(db, "FP1")["status"] == "UNDER_REVIEW"
+    db.close()
+
+
+def test_concurrent_connections_and_wal_mode(tmp_path):
+    """Multiple concurrent connections must read and write without locking errors."""
+    db_file = str(tmp_path / "test_concurrency.db")
+    c1 = connect(db_file)
+    c2 = connect(db_file)
+
+    # Insert on c1
+    c1.execute("INSERT INTO watchlist (ticker, cik, active, metadata) VALUES ('AAPL', '0000320193', 1, '{}')")
+    c1.commit()
+
+    # Read on c2
+    rows_c2 = c2.execute("SELECT * FROM watchlist WHERE ticker='AAPL'").fetchall()
+    assert len(rows_c2) == 1
+
+    # Concurrent write on c2
+    from financial_radar.store import save_refresh_history
+    save_refresh_history(c2, "AAPL", "SUCCESS", observations_count=100)
+
+    # Read back on c1
+    ref_c1 = c1.execute("SELECT * FROM refresh_history WHERE ticker='AAPL'").fetchall()
+    assert len(ref_c1) == 1
+
+    c1.close()
+    c2.close()
+

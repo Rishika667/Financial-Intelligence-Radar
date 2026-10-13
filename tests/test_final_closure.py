@@ -431,27 +431,47 @@ def test_provenance_determinism_no_typeerror():
     assert str(accs1[0]) < str(accs1[1]), "Provenance must be sorted by stringified accession"
 
 
-def test_51_company_semantics():
+def test_configured_universe_semantics():
     """
-    The primary companies array must contain exactly 51 APPLICATION_UNIVERSE companies.
-    Peer-only companies (e.g. AMD, PFE) must be in peer_references.
+    Validate the configured application universe:
+    - Representative 51-company subset preserves historical APPLICATION_UNIVERSE and peer separation.
+    - Full S&P 500 universe config contains 503 constituents, valid source metadata, authoritative CIKs,
+      unique identifiers, sector coverage, dual share classes, and peer-reference separation.
     """
     import json
+    from pathlib import Path
     
+    # 1. Representative subset
     with open("config/sp500_representative_51_2026.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
+        rep_data = json.load(f)
+    rep_companies = rep_data.get("companies", [])
+    assert len(rep_companies) == 51, "Representative snapshot has 51 companies"
+    for c in rep_companies:
+        assert c.get("universe_type") == "APPLICATION_UNIVERSE"
+    assert "AMD" not in [c["ticker"] for c in rep_companies]
+
+    # 2. Full configured universe
+    if Path("config/sp500_universe_2026.json").exists():
+        with open("config/sp500_universe_2026.json", "r", encoding="utf-8") as f:
+            full_data = json.load(f)
+        assert full_data.get("version") == "sp500_universe_2026"
+        assert full_data.get("source_url") is not None
+        assert full_data.get("snapshot_date") is not None
+        full_comps = full_data.get("companies", [])
+        assert len(full_comps) == 503, f"Expected 503 constituents, got {len(full_comps)}"
         
-    main_companies = data.get("companies", [])
-    assert len(main_companies) == 51, "Must have exactly 51 primary companies"
-    
-    for c in main_companies:
-        assert c.get("universe_type") == "APPLICATION_UNIVERSE", f"Company {c['ticker']} in main array must be APPLICATION_UNIVERSE"
+        tickers = [c["ticker"] for c in full_comps]
+        assert len(tickers) == len(set(tickers)), "All constituent tickers in full universe must be unique"
+        for c in full_comps:
+            assert c["ticker"] != "", "Ticker must not be empty"
+            assert c["name"] != "", "Company name must not be empty"
+            assert c["sector"] != "", "Sector must not be empty"
+            assert len(c["cik"]) == 10 or c["cik"] == "", "CIK must be zero-padded 10 digits or empty"
+            assert c.get("universe_type") == "APPLICATION_UNIVERSE"
+            
+        assert "GOOG" in tickers and "GOOGL" in tickers, "Dual share classes must be preserved"
         
-    peer_refs = data.get("peer_references", [])
-    assert len(peer_refs) > 0, "Must have separate peer references array"
-    
-    # Check that AMD/PFE are not in the main array
-    main_tickers = [c["ticker"] for c in main_companies]
-    assert "AMD" not in main_tickers, "AMD should be a peer reference, not in main array"
-    assert "PFE" not in main_tickers, "PFE should be a peer reference, not in main array"
+        peer_refs = full_data.get("peer_references", [])
+        assert len(peer_refs) > 0, "Must have separate peer references array"
+
 

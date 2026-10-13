@@ -27,8 +27,15 @@ logger = logging.getLogger(__name__)
 FORMS = {"10-K", "10-Q", "8-K", "20-F", "6-K", "10-K/A", "10-Q/A", "8-K/A"}
 
 
-def load_universe(path="config/sp500_representative_51_2026.json"):
-    return json.loads(Path(path).read_text())["companies"]
+DEFAULT_UNIVERSE_PATH = "config/sp500_universe_2026.json"
+LEGACY_UNIVERSE_PATH = "config/sp500_representative_51_2026.json"
+
+
+def load_universe(path=None):
+    if path is None:
+        path = DEFAULT_UNIVERSE_PATH if Path(DEFAULT_UNIVERSE_PATH).exists() else LEGACY_UNIVERSE_PATH
+    return json.loads(Path(path).read_text(encoding="utf-8"))["companies"]
+
 
 
 def filing_index(submissions, cik):
@@ -239,7 +246,7 @@ def refresh_peer_contexts(c, active_tickers):
     
     from .store import load_observations_for_companies, clear_peer_context, save_peer_context
     from .peers import load_peer_groups, peer_context_for_company
-    pg = load_peer_groups("config/sp500_representative_51_2026.json")
+    pg = load_peer_groups()
     
     # Need to load observations for all peers of active tickers, not just active tickers
     tickers_to_load = set(active_tickers)

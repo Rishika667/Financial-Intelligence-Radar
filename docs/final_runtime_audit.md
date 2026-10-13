@@ -26,3 +26,4 @@ All functional workstreams (A through G) are implemented and verified against st
 - [x] Multi-probe Preflight connectivity check (homepage, submissions, facts) and operator email validation
 - [x] SQLite WAL mode, 30s busy timeout, and transaction rollback protection on migrations
 - [x] Reconciled documentation with truth in reporting
+- [x] Remote GitHub Actions CI validation passed (Run ID: 38419768356, 134 passed, 0 failed)

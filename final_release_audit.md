@@ -94,18 +94,24 @@
 
 ## 4. Automated CI Run Evidence
 
-- **GitHub Actions Run ID**: `38419768356`
-- **Run URL**: https://github.com/Rishika667/Financial-Intelligence-Radar/actions/runs/38419768356
-- **Commit SHA**: `b09c23ff1db1df754011e7dc02fff0cb60591117`
+### Verified Candidate Run (Resume-Readiness Closeout)
+- **GitHub Actions Run ID**: `38438461093`
+- **Run URL**: https://github.com/Rishika667/Financial-Intelligence-Radar/actions/runs/38438461093
+- **Branch**: `phase-final-resume-readiness`
+- **Commit SHA**: `32667ce7896afb43fb8d60bc407273e593a5afc2`
 - **Status**: `completed`
 - **Conclusion**: `success`
-- **Pytest Output**: `134 passed in 8.90s` (0 failures, 0 errors, 0 skipped)
+- **Pytest Output**: `137 passed in 8.66s` (0 failures, 0 errors, 0 skipped)
 - **Compilation**: `python -m compileall -q src app.py` passed with 0 errors
+
+### Historical Verified Baseline Runs
+- **Run ID `38420436005`** (`main` at `9967bf386e986f00f3a8c58b9a047f20dc4cf946`): `success` (134 passed in 7.79s)
+- **Run ID `38419768356`** (`b09c23ff1db1df754011e7dc02fff0cb60591117`): `success` (134 passed in 8.90s)
 
 ---
 
 ## 5. Release Verdict
 
-**VERDICT: ACCEPTANCE GATES MET — MVP RELEASE VERIFIED**  
-All mandatory acceptance gates for Financial Intelligence Radar have passed with independent remote CI verification.
+**VERDICT: ACCEPTANCE GATES MET — FINAL RESUME-READINESS CLOSEOUT VERIFIED**  
+All mandatory acceptance gates, reliability fixes, atomicity guarantees, and regression suites for Financial Intelligence Radar have passed with independent remote CI verification.
 

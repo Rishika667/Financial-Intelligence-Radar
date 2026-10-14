@@ -73,13 +73,13 @@ def synthesize_company(ticker, c):
     if gm and prevgm and gm.value is not None and prevgm.value is not None:
         change = gm.value - prevgm.value
         direction = "increased" if change > 0 else "decreased"
-        synthesis["observed"].append(f"Gross margin {direction} {abs(change)*100:.1f} points YoY to {format_val(gm.value, gm.unit)} from {format_val(prevgm.value, prevgm.unit)}.")
+        synthesis["observed"].append(f"Gross margin {direction} {abs(change)*100:.1f} percentage points YoY to {format_val(gm.value, gm.unit)} from {format_val(prevgm.value, prevgm.unit)}.")
         
     if om and prevom and om.value is not None and prevom.value is not None:
         change = om.value - prevom.value
         direction = "increased" if change > 0 else "decreased"
         if change < 0: om_down = True
-        synthesis["observed"].append(f"Operating margin {direction} {abs(change)*100:.1f} points YoY to {format_val(om.value, om.unit)} from {format_val(prevom.value, prevom.unit)}.")
+        synthesis["observed"].append(f"Operating margin {direction} {abs(change)*100:.1f} percentage points YoY to {format_val(om.value, om.unit)} from {format_val(prevom.value, prevom.unit)}.")
 
     if ocf and prevocf and ocf.value is not None and prevocf.value and prevocf.value != 0:
         change = (ocf.value - prevocf.value) / abs(prevocf.value)

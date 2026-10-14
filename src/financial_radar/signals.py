@@ -15,8 +15,10 @@ def divergence(signal_id, curr, prior):
     d = curr.value - prior.value
     if d >= 0.15:
         sev = "HIGH" if d >= 0.30 else "MEDIUM"
+        metric_name = "Receivables/revenue ratio" if "RECEIVABLES" in signal_id else ("Inventory/sales ratio" if "INVENTORY" in signal_id else "Ratio")
+        pp = d * 100
         return Signal(signal_id, curr.company, sev, _confidence(curr, prior),
-                      f"Ratio increased from {prior.value:.1%} to {curr.value:.1%}.", (curr, prior))
+                      f"{metric_name} increased by {pp:.1f} percentage points from {prior.value:.1%} to {curr.value:.1%}.", (curr, prior))
     return None
 
 def gross_margin_compression(curr, prior):
@@ -24,8 +26,9 @@ def gross_margin_compression(curr, prior):
     d = curr.value - prior.value
     if d <= -0.03:
         sev = "HIGH" if d <= -0.06 else "MEDIUM"
+        pp = abs(d) * 100
         return Signal("GROSS_MARGIN_COMPRESSION", curr.company, sev, _confidence(curr, prior),
-                      f"Gross margin fell from {prior.value:.1%} to {curr.value:.1%}.", (curr, prior))
+                      f"Gross margin fell by {pp:.1f} percentage points from {prior.value:.1%} to {curr.value:.1%}.", (curr, prior))
     return None
 
 def operating_margin_deterioration(curr, prior):
@@ -33,8 +36,9 @@ def operating_margin_deterioration(curr, prior):
     d = curr.value - prior.value
     if d <= -0.03:
         sev = "HIGH" if d <= -0.06 else "MEDIUM"
+        pp = abs(d) * 100
         return Signal("OPERATING_MARGIN_DETERIORATION", curr.company, sev, _confidence(curr, prior),
-                      f"Operating margin fell from {prior.value:.1%} to {curr.value:.1%}.", (curr, prior))
+                      f"Operating margin fell by {pp:.1f} percentage points from {prior.value:.1%} to {curr.value:.1%}.", (curr, prior))
     return None
 
 def cash_conversion(curr, prior):
@@ -42,7 +46,7 @@ def cash_conversion(curr, prior):
     d = curr.value - prior.value
     if d <= -0.2:
         return Signal("EARNINGS_CASH_CONVERSION_DETERIORATION", curr.company, "HIGH" if d <= -0.4 else "MEDIUM", _confidence(curr, prior),
-                      f"Cash conversion fell from {prior.value:.1f}x to {curr.value:.1f}x.", (curr, prior))
+                      f"Cash conversion fell from {prior.value:.2f}x to {curr.value:.2f}x.", (curr, prior))
     return None
 
 def fcf_deterioration(curr, prior):

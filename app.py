@@ -15,7 +15,7 @@ from financial_radar.store import (
 )
 from financial_radar.pipeline import load_universe, ingest_company, refresh_peer_contexts, calculate_data_readiness, validate_portfolio_csv
 from financial_radar.core import SECClient
-from financial_radar.intelligence import generate_intelligence
+from financial_radar.intelligence import generate_intelligence, resolve_evidence_pair
 from financial_radar.models import ReadinessState
 from financial_radar.synthesis import synthesize_company, format_val
 
@@ -473,16 +473,15 @@ with tab_research:
                         try:
                             ev_json = json.loads(ev_str)
                             if len(ev_json) >= 2:
-                                curr = ev_json[0]
-                                prior = ev_json[1]
-                                
-                                st.markdown("##### CURRENT OBSERVATION")
-                                st.markdown(f"- **Metric:** {curr.get('metric')} | **Value:** {format_val(curr.get('value'), curr.get('unit'))} | **Unit:** {curr.get('unit')}")
-                                st.markdown(f"- **Period:** {curr.get('period_end')} ({curr.get('period_type')}) | **Fiscal:** FY{curr.get('fiscal_year', 'N/A')} {curr.get('fiscal_period', 'N/A')} | **Quality:** {curr.get('quality')}")
-                                
-                                st.markdown("##### PRIOR OBSERVATION")
-                                st.markdown(f"- **Metric:** {prior.get('metric')} | **Value:** {format_val(prior.get('value'), prior.get('unit'))} | **Unit:** {prior.get('unit')}")
-                                st.markdown(f"- **Period:** {prior.get('period_end')} ({prior.get('period_type')}) | **Fiscal:** FY{prior.get('fiscal_year', 'N/A')} {prior.get('fiscal_period', 'N/A')} | **Quality:** {prior.get('quality')}")
+                                curr, prior = resolve_evidence_pair(ev_json)
+                                if curr and prior:
+                                    st.markdown("##### CURRENT OBSERVATION")
+                                    st.markdown(f"- **Metric:** {curr.get('metric')} | **Value:** {format_val(curr.get('value'), curr.get('unit'))} | **Unit:** {curr.get('unit')}")
+                                    st.markdown(f"- **Period:** {curr.get('period_end')} ({curr.get('period_type')}) | **Fiscal:** FY{curr.get('fiscal_year', 'N/A')} {curr.get('fiscal_period', 'N/A')} | **Quality:** {curr.get('quality')}")
+                                    
+                                    st.markdown("##### PRIOR OBSERVATION")
+                                    st.markdown(f"- **Metric:** {prior.get('metric')} | **Value:** {format_val(prior.get('value'), prior.get('unit'))} | **Unit:** {prior.get('unit')}")
+                                    st.markdown(f"- **Period:** {prior.get('period_end')} ({prior.get('period_type')}) | **Fiscal:** FY{prior.get('fiscal_year', 'N/A')} {prior.get('fiscal_period', 'N/A')} | **Quality:** {prior.get('quality')}")
                             elif len(ev_json) == 1:
                                 curr = ev_json[0]
                                 st.markdown("##### CURRENT OBSERVATION")

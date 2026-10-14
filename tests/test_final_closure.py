@@ -386,7 +386,7 @@ def test_quantitative_intelligence_narratives():
     
     ev_conv = json.dumps([{"value": 0.5}, {"value": 1.2}])
     res_conv = generate_intelligence("EARNINGS_CASH_CONVERSION_DETERIORATION", "AAPL", "Tech", ev_conv)
-    assert "declined from 120.0% to 50.0%" in res_conv.get("what_changed", "")
+    assert "declined from 1.20x to 0.50x" in res_conv.get("what_changed", "")
     
     ev_fcf = json.dumps([{"value": -1000000, "unit": "USD"}, {"value": 5000000, "unit": "USD"}])
     res_fcf = generate_intelligence("FREE_CASH_FLOW_DETERIORATION", "AAPL", "Tech", ev_fcf)

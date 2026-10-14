@@ -97,8 +97,10 @@ class SECClient:
             try:
                 r = self.s.get(url, timeout=30)
                 self.last = time.monotonic()
-                if r.status_code in (429, 500, 502, 503, 504) and attempt < max_retries:
-                    retry_after = r.headers.get("Retry-After")
+                status_code = getattr(r, "status_code", 200)
+                if status_code in (429, 500, 502, 503, 504) and attempt < max_retries:
+                    headers = getattr(r, "headers", {})
+                    retry_after = headers.get("Retry-After") if hasattr(headers, "get") else None
                     wait_sec = None
                     if retry_after:
                         try:
@@ -110,7 +112,8 @@ class SECClient:
                     wait_sec = min(wait_sec, 10.0)
                     time.sleep(wait_sec)
                     continue
-                r.raise_for_status()
+                if hasattr(r, "raise_for_status"):
+                    r.raise_for_status()
                 payload = r.json()
                 target = self.raw / key
                 target.parent.mkdir(parents=True, exist_ok=True)

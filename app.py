@@ -614,16 +614,22 @@ with tab_research:
                                                     st.markdown(f"  - [Open SEC Filing]({url})")
                                                 else:
                                                     st.markdown("  - *SEC source unavailable*")
-                            elif len(ev_json) >= 2:
-                                curr, prior = resolve_evidence_pair(ev_json)
-                                if curr and prior:
+                            else:
+                                if len(ev_json) >= 2:
+                                    curr, prior = resolve_evidence_pair(ev_json)
+                                    if curr and prior:
+                                        st.markdown("##### CURRENT OBSERVATION")
+                                        st.markdown(f"- **Metric:** {curr.get('metric')} | **Value:** {format_val(curr.get('value'), curr.get('unit'))} | **Unit:** {curr.get('unit')}")
+                                        st.markdown(f"- **Period:** {curr.get('period_end')} ({curr.get('period_type')}) | **Fiscal:** FY{curr.get('fiscal_year', 'N/A')} {curr.get('fiscal_period', 'N/A')} | **Quality:** {curr.get('quality')}")
+                                        
+                                        st.markdown("##### PRIOR OBSERVATION")
+                                        st.markdown(f"- **Metric:** {prior.get('metric')} | **Value:** {format_val(prior.get('value'), prior.get('unit'))} | **Unit:** {prior.get('unit')}")
+                                        st.markdown(f"- **Period:** {prior.get('period_end')} ({prior.get('period_type')}) | **Fiscal:** FY{prior.get('fiscal_year', 'N/A')} {prior.get('fiscal_period', 'N/A')} | **Quality:** {prior.get('quality')}")
+                                elif len(ev_json) == 1:
+                                    curr = ev_json[0]
                                     st.markdown("##### CURRENT OBSERVATION")
                                     st.markdown(f"- **Metric:** {curr.get('metric')} | **Value:** {format_val(curr.get('value'), curr.get('unit'))} | **Unit:** {curr.get('unit')}")
                                     st.markdown(f"- **Period:** {curr.get('period_end')} ({curr.get('period_type')}) | **Fiscal:** FY{curr.get('fiscal_year', 'N/A')} {curr.get('fiscal_period', 'N/A')} | **Quality:** {curr.get('quality')}")
-                                    
-                                    st.markdown("##### PRIOR OBSERVATION")
-                                    st.markdown(f"- **Metric:** {prior.get('metric')} | **Value:** {format_val(prior.get('value'), prior.get('unit'))} | **Unit:** {prior.get('unit')}")
-                                    st.markdown(f"- **Period:** {prior.get('period_end')} ({prior.get('period_type')}) | **Fiscal:** FY{prior.get('fiscal_year', 'N/A')} {prior.get('fiscal_period', 'N/A')} | **Quality:** {prior.get('quality')}")
 
                                 for ev_idx, ev_item in enumerate(ev_json):
                                     derived = ev_item.get("derived_from")
@@ -645,11 +651,6 @@ with tab_research:
                                                 st.markdown(f"  - [Open SEC Filing]({url})")
                                             else:
                                                 st.markdown("  - *SEC source unavailable*")
-                            elif len(ev_json) == 1:
-                                curr = ev_json[0]
-                                st.markdown("##### CURRENT OBSERVATION")
-                                st.markdown(f"- **Metric:** {curr.get('metric')} | **Value:** {format_val(curr.get('value'), curr.get('unit'))} | **Unit:** {curr.get('unit')}")
-                                st.markdown(f"- **Period:** {curr.get('period_end')} ({curr.get('period_type')}) | **Fiscal:** FY{curr.get('fiscal_year', 'N/A')} {curr.get('fiscal_period', 'N/A')} | **Quality:** {curr.get('quality')}")
                         except Exception as e:
                             st.error(f"Failed to parse evidence trail: {e}")
             

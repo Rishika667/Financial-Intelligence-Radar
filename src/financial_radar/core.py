@@ -89,18 +89,40 @@ class SECClient:
         self.delay = min_interval_seconds
         self.last = 0
 
-    def get_json(self, url, key):
-        pause = self.delay - (time.monotonic() - self.last)
-        if pause > 0:
-            time.sleep(pause)
-        r = self.s.get(url, timeout=30)
-        self.last = time.monotonic()
-        r.raise_for_status()
-        payload = r.json()
-        target = self.raw / key
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-        return payload
+    def get_json(self, url, key, max_retries=3):
+        for attempt in range(max_retries + 1):
+            pause = self.delay - (time.monotonic() - self.last)
+            if pause > 0:
+                time.sleep(pause)
+            try:
+                r = self.s.get(url, timeout=30)
+                self.last = time.monotonic()
+                if r.status_code in (429, 500, 502, 503, 504) and attempt < max_retries:
+                    retry_after = r.headers.get("Retry-After")
+                    wait_sec = None
+                    if retry_after:
+                        try:
+                            wait_sec = float(retry_after)
+                        except (ValueError, TypeError):
+                            wait_sec = None
+                    if wait_sec is None or wait_sec <= 0:
+                        wait_sec = (2 ** attempt) * 0.5
+                    wait_sec = min(wait_sec, 10.0)
+                    time.sleep(wait_sec)
+                    continue
+                r.raise_for_status()
+                payload = r.json()
+                target = self.raw / key
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+                return payload
+            except requests.exceptions.RequestException as e:
+                if attempt >= max_retries:
+                    raise
+                status = getattr(getattr(e, "response", None), "status_code", None)
+                if status is not None and status not in (429, 500, 502, 503, 504):
+                    raise
+                time.sleep(min((2 ** attempt) * 0.5, 10.0))
 
     def company_facts(self, cik):
         return self.get_json(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{int(cik):010d}.json", f"companyfacts/CIK{int(cik):010d}.json")

@@ -6,6 +6,12 @@ An evidence-first, zero-cost SEC disclosure intelligence and analyst-triage appl
 
 ---
 
+### Deployment Status
+- **Source Repository:** [https://github.com/Rishika667/Financial-Intelligence-Radar](https://github.com/Rishika667/Financial-Intelligence-Radar)
+- **Hosted Streamlit Application:** *Deployment pending* (Follow the step-by-step instructions in [docs/STREAMLIT_DEPLOYMENT.md](docs/STREAMLIT_DEPLOYMENT.md) to launch on Streamlit Community Cloud)
+
+---
+
 ## 1. Product Overview
 
 Financial Intelligence Radar extracts, normalizes, and analyzes official SEC EDGAR disclosures (10-K, 10-Q, 8-K) to surface material financial shifts, margin compression, cash flow divergence, and executive turnover.

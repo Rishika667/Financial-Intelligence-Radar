@@ -85,6 +85,53 @@ def _obs_to_dict(item):
     return d
 
 
+def group_cluster_evidence_by_metric(evidence):
+    """
+    Groups multi-factor cluster evidence observations by metric so each metric
+    is displayed with its own current and prior observation without cross-metric pairing.
+
+    Accepts:
+    - a JSON string representing a list of observations/dicts
+    - a list or tuple of dicts or Observation objects
+
+    Returns:
+    dict: {metric_name: {"current": obs_dict, "prior": obs_dict, "observations": [obs_dicts]}}
+    """
+    ev = []
+    if isinstance(evidence, str):
+        try:
+            if evidence.strip():
+                ev = json.loads(evidence)
+        except Exception:
+            return {}
+    elif isinstance(evidence, (list, tuple)):
+        ev = list(evidence)
+    else:
+        return {}
+
+    from collections import defaultdict
+    by_metric = defaultdict(list)
+    for item in ev:
+        d = _obs_to_dict(item) if not isinstance(item, dict) else dict(item)
+        m = d.get("metric", "unknown")
+        by_metric[m].append(d)
+
+    grouped = {}
+    for m, items in by_metric.items():
+        if len(items) >= 2:
+            c, p = resolve_evidence_pair(items)
+        elif len(items) == 1:
+            c, p = items[0], None
+        else:
+            c, p = None, None
+        grouped[m] = {
+            "current": c,
+            "prior": p,
+            "observations": items
+        }
+    return grouped
+
+
 def generate_intelligence(signal_id, company, sector, evidence_str):
     curr_item, prior_item = resolve_evidence_pair(evidence_str)
 
@@ -107,27 +154,30 @@ def generate_intelligence(signal_id, company, sector, evidence_str):
             elif "DIVERGENCE" in signal_id:
                 if "RECEIVABLES" in signal_id or curr_item.get("metric") == "receivables_revenue_ratio":
                     metric_name = "Receivables/revenue ratio"
+                    divergence_context = "This may reflect a change in the balance-sheet measure, revenue, or both; investigate the underlying disclosures."
                 elif "INVENTORY" in signal_id or curr_item.get("metric") == "inventory_sales_ratio":
                     metric_name = "Inventory/sales ratio"
+                    divergence_context = "This may reflect a change in inventory levels, sales, or both; investigate the underlying disclosures."
                 else:
                     raw_m = curr_item.get("metric")
                     metric_name = raw_m.replace("_", " ").title() if raw_m else "Divergence ratio"
+                    divergence_context = "This may reflect changes in numerator, denominator, or both; investigate the underlying disclosures."
 
                 unit = curr_item.get("unit", "")
                 if unit in ("pure", "%", ""):
                     diff_pp = abs(curr - prev) * 100
                     if curr > prev:
-                        what = f"{metric_name} increased by {diff_pp:.1f} percentage points from {prev*100:.1f}% to {curr*100:.1f}%."
+                        what = f"{metric_name} increased by {diff_pp:.1f} percentage points from {prev*100:.1f}% to {curr*100:.1f}%. {divergence_context}"
                     elif curr < prev:
-                        what = f"{metric_name} decreased by {diff_pp:.1f} percentage points from {prev*100:.1f}% to {curr*100:.1f}%."
+                        what = f"{metric_name} decreased by {diff_pp:.1f} percentage points from {prev*100:.1f}% to {curr*100:.1f}%. {divergence_context}"
                     else:
                         what = f"{metric_name} was unchanged at {curr*100:.1f}%."
                 else:
                     from financial_radar.synthesis import format_val
                     if curr > prev:
-                        what = f"{metric_name} grew to {format_val(curr, unit)} compared to {format_val(prev, unit)} in prior period."
+                        what = f"{metric_name} grew to {format_val(curr, unit)} compared to {format_val(prev, unit)} in prior period. {divergence_context}"
                     elif curr < prev:
-                        what = f"{metric_name} declined to {format_val(curr, unit)} compared to {format_val(prev, unit)} in prior period."
+                        what = f"{metric_name} declined to {format_val(curr, unit)} compared to {format_val(prev, unit)} in prior period. {divergence_context}"
                     else:
                         what = f"{metric_name} was unchanged at {format_val(curr, unit)}."
 
@@ -276,13 +326,29 @@ def generate_intelligence(signal_id, company, sector, evidence_str):
             ]
         }
     elif signal_id == "MULTI_FACTOR_DETERIORATION_CLUSTER":
+        ev_items = []
+        if isinstance(evidence_str, str) and evidence_str.strip():
+            try:
+                ev_items = json.loads(evidence_str)
+            except Exception:
+                pass
+        elif isinstance(evidence_str, (list, tuple)):
+            ev_items = list(evidence_str)
+
+        grouped = group_cluster_evidence_by_metric(ev_items) if ev_items else {}
+        if grouped:
+            metric_names = [m.replace('_', ' ').title() for m in grouped.keys()]
+            cluster_what = f"Simultaneous deterioration detected across {len(grouped)} fundamental metrics ({', '.join(metric_names)}) in the same comparison window."
+        else:
+            cluster_what = "3 or more fundamental deterioration signals fired simultaneously across distinct operational and financial metrics."
+
         return {
             "title": "Multi-Factor Deterioration Cluster",
-            "what_changed": what if what != "Metric triggered predefined deterioration thresholds." else "3 or more fundamental deterioration signals fired simultaneously.",
-            "why_it_matters": "Multiple fundamental deterioration signals observed simultaneously suggest correlated operational or financial friction, warranting comprehensive cross-statement review rather than isolated metric analysis.",
+            "what_changed": cluster_what,
+            "why_it_matters": "Multiple fundamental deterioration signals observed simultaneously suggest correlated operational or financial friction, warranting comprehensive cross-statement review rather than isolated metric analysis. Do not treat individual metrics within the cluster as a single two-point comparison.",
             "investigate": [
                 "Review the comprehensive earnings release and 10-Q/10-K disclosures.",
-                "Check management guidance and strategic updates.",
+                "Check management guidance and strategic updates across individual metrics.",
                 "Assess cumulative impact on liquidity, leverage, and covenant compliance."
             ]
         }

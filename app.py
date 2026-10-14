@@ -15,13 +15,23 @@ from financial_radar.store import (
 )
 from financial_radar.pipeline import load_universe, ingest_company, refresh_peer_contexts, calculate_data_readiness, validate_portfolio_csv
 from financial_radar.core import SECClient
-from financial_radar.intelligence import generate_intelligence, resolve_evidence_pair
+from financial_radar.intelligence import generate_intelligence, resolve_evidence_pair, group_cluster_evidence_by_metric
 from financial_radar.models import ReadinessState
 from financial_radar.synthesis import synthesize_company, format_val
+from financial_radar.config import get_sec_user_agent, is_public_demo_mode, validate_user_agent
 
 st.set_page_config(page_title="Financial Intelligence Radar", layout="wide", initial_sidebar_state="expanded")
 st.title("Financial Intelligence Radar")
 st.caption("Public-disclosure intelligence for analyst attention — not investment advice.")
+
+user_agent = get_sec_user_agent()
+public_demo = is_public_demo_mode()
+
+if public_demo:
+    st.info("ℹ️ **Public Demo Mode Active:** Visitor-specific portfolio holdings, notes, and monitored selections are isolated to your browser session to protect visitor privacy.")
+
+if not user_agent:
+    st.warning("⚠️ **Live SEC Ingestion Unavailable:** `SEC_USER_AGENT` is not configured. The dashboard is running in read-only analysis mode on cached disclosures. To enable live SEC ingestion, configure `SEC_USER_AGENT` in Streamlit Community Cloud Secrets (e.g., `SEC_USER_AGENT = \"Your Name your.email@example.com\"`) or set the `SEC_USER_AGENT` environment variable.")
 
 db_path = os.environ.get("DB_PATH", "financial_radar.sqlite")
 db = connect(db_path)
@@ -46,13 +56,16 @@ for cfg_candidate in ("config/sp500_universe_2026.json", "config/sp500_represent
         except (FileNotFoundError, json.JSONDecodeError) as e:
             logger.warning("Could not load peer_references from %s: %s", cfg_candidate, e)
 
-active_tickers = sorted({r["ticker"] for r in rows(db, "SELECT ticker FROM watchlist WHERE active=1")})
-user_agent = os.environ.get("SEC_USER_AGENT", "")
+db_active_tickers = sorted({r["ticker"] for r in rows(db, "SELECT ticker FROM watchlist WHERE active=1")})
+if public_demo and "monitored_tickers" in st.session_state:
+    active_tickers = st.session_state["monitored_tickers"]
+else:
+    active_tickers = db_active_tickers
 
 def test_sec_connectivity(ua):
     results = {'USER_AGENT_CONFIGURED': False, 'SEC_REACHABLE': False, 'SUBMISSIONS_REACHABLE': False, 'XBRL_REACHABLE': False, 'ERRORS': []}
-    if not ua or len(ua.strip()) < 5 or "@" not in ua: 
-        results['ERRORS'].append("Invalid or missing SEC_USER_AGENT. It must identify an operator and contact email.")
+    if not validate_user_agent(ua): 
+        results['ERRORS'].append("Invalid or missing SEC_USER_AGENT. It must identify an operator and contact email (e.g., 'AnalystName analyst@example.com').")
         return results
     results['USER_AGENT_CONFIGURED'] = True
     headers = {'User-Agent': ua, 'Accept-Encoding': 'gzip, deflate'}
@@ -92,10 +105,16 @@ tab_setup, tab_portfolio, tab_dashboard, tab_research, tab_data_quality = st.tab
 
 with tab_setup:
     st.subheader("1. Company Selection")
+    if public_demo:
+        st.caption("🔒 Public Demo Mode: Monitored company selections are saved to your current browser session and will not alter the global watchlist.")
     selected_tickers = st.multiselect("Select Companies to Monitor:", options=[u["ticker"] for u in universe], default=active_tickers, format_func=lambda x: f"{x} - {universe_map[x].get('name', 'Unknown')} ({universe_map[x].get('sector', 'Unknown')})")
     if st.button("Save Monitored Companies"):
-        save_watchlist(db, [{"ticker": t, "cik": universe_map[t].get("cik", ""), "active": (t in selected_tickers)} for t in universe_map.keys()])
-        st.success("Monitored companies saved!")
+        if public_demo:
+            st.session_state["monitored_tickers"] = selected_tickers
+            st.success("Monitored companies saved for your session!")
+        else:
+            save_watchlist(db, [{"ticker": t, "cik": universe_map[t].get("cik", ""), "active": (t in selected_tickers)} for t in universe_map.keys()])
+            st.success("Monitored companies saved!")
         time.sleep(1)
         st.rerun()
 
@@ -170,6 +189,8 @@ with tab_setup:
 
 with tab_portfolio:
     st.subheader("Portfolio Sync")
+    if public_demo:
+        st.info("🔒 **Public Demo Mode Active:** Uploaded portfolio holdings are scoped strictly to your current browser session. They are not stored in the shared database or visible to other visitors.")
     uploaded_file = st.file_uploader("Upload Portfolio Holdings (CSV)", type=["csv"])
     if uploaded_file is not None:
         try:
@@ -178,8 +199,13 @@ with tab_portfolio:
             if not is_valid: st.error(f"Validation failed: {err_msg}")
             else:
                 if st.button("Apply Portfolio"):
-                    save_portfolio(db, df_port.to_dict(orient="records"))
-                    st.success("Portfolio saved.")
+                    if public_demo:
+                        records = df_port.to_dict(orient="records")
+                        st.session_state["session_portfolio"] = {r["ticker"]: r for r in records}
+                        st.success(f"Portfolio saved to your session ({len(records)} positions).")
+                    else:
+                        save_portfolio(db, df_port.to_dict(orient="records"))
+                        st.success("Portfolio saved.")
         except Exception as e:
             st.error(f"Failed to process CSV: {e}")
 
@@ -188,7 +214,11 @@ with tab_dashboard:
     if not active_tickers:
         st.info("No active companies.")
     else:
-        all_reviews = get_all_analyst_reviews(db)
+        if public_demo:
+            session_reviews = st.session_state.setdefault("session_reviews", {})
+            all_reviews = {**get_all_analyst_reviews(db), **session_reviews}
+        else:
+            all_reviews = get_all_analyst_reviews(db)
         placeholders = ",".join("?" * len(active_tickers))
         signals = rows(db, f"SELECT s.*, p.weight, p.exposure FROM signals s LEFT JOIN portfolio p ON s.company = p.ticker WHERE s.company IN ({placeholders}) AND s.suppressed IS NULL ORDER BY CASE severity WHEN 'HIGH' THEN 1 WHEN 'MEDIUM' THEN 2 WHEN 'LOW' THEN 3 ELSE 4 END ASC", active_tickers)
         if signals:
@@ -212,7 +242,14 @@ with tab_dashboard:
                     continue
                 visible_count += 1
                 
-                port_ctx_str = f"**Portfolio Context:** Weight: {s['weight']*100:.2f}%, Exposure: {format_val(s['exposure'])}" if s.get("weight") is not None and s.get("exposure") is not None else "**Portfolio Context:** Not held"
+                if public_demo and "session_portfolio" in st.session_state:
+                    sess_pos = st.session_state["session_portfolio"].get(s['company'])
+                    if sess_pos and sess_pos.get("weight") is not None and sess_pos.get("exposure") is not None:
+                        port_ctx_str = f"**Portfolio Context:** Weight: {float(sess_pos['weight'])*100:.2f}%, Exposure: {format_val(float(sess_pos['exposure']))}"
+                    else:
+                        port_ctx_str = "**Portfolio Context:** Not held"
+                else:
+                    port_ctx_str = f"**Portfolio Context:** Weight: {s['weight']*100:.2f}%, Exposure: {format_val(s['exposure'])}" if s.get("weight") is not None and s.get("exposure") is not None else "**Portfolio Context:** Not held"
                 with st.expander(f"[{s['severity']}] {s['company']} - {s['signal_id']} (Confidence: {s['confidence']}) - [{status_val}]"):
                     st.markdown(f"{port_ctx_str} | **Explanation:** {s['explanation']}")
                     st.markdown(f"**Investigation:** Review {s['signal_id']} alongside latest 10-Q/10-K disclosures.")
@@ -223,14 +260,25 @@ with tab_dashboard:
                     
                     with st.form(key=f"review_form_{fprint}"):
                         st.markdown("##### Analyst Review Action")
+                        if public_demo:
+                            st.caption("🔒 Public Demo Mode: Review actions are session-scoped and private to you.")
                         c_stat, c_note = st.columns([1, 2])
                         stat_opts = ["NEW", "ACKNOWLEDGED", "UNDER_REVIEW", "DISMISSED", "EXPECTED", "RESOLVED"]
                         idx_stat = stat_opts.index(status_val) if status_val in stat_opts else 0
                         chosen_stat = c_stat.selectbox("Status", stat_opts, index=idx_stat, key=f"sel_stat_{fprint}")
                         new_note = c_note.text_input("Investigation Note", value=note_val, key=f"note_inp_{fprint}", placeholder="Add research thesis or dismissal rationale...")
                         if st.form_submit_button("Save Review"):
-                            save_analyst_review(db, fprint, s['company'], s['signal_id'], chosen_stat, new_note)
-                            st.success(f"Review saved for {s['company']} - {s['signal_id']}.")
+                            if public_demo:
+                                now_iso = datetime.utcnow().isoformat()
+                                st.session_state.setdefault("session_reviews", {})[fprint] = {
+                                    "status": chosen_stat,
+                                    "note": new_note,
+                                    "updated_at": now_iso
+                                }
+                                st.success(f"Review updated for your session ({s['company']} - {s['signal_id']}).")
+                            else:
+                                save_analyst_review(db, fprint, s['company'], s['signal_id'], chosen_stat, new_note)
+                                st.success(f"Review saved for {s['company']} - {s['signal_id']}.")
                             time.sleep(0.5)
                             st.rerun()
                         
@@ -283,33 +331,79 @@ with tab_dashboard:
                     if s["evidence"]:
                         try:
                             ev_data = json.loads(s["evidence"])
-                            for ev_idx, ev_item in enumerate(ev_data):
-                                metric = ev_item.get("metric", "Unknown")
-                                val = ev_item.get("value")
-                                f_val = format_val(val, ev_item.get("unit", "USD"))
-                                pend = ev_item.get("period_end", "")
-                                ptype = ev_item.get("period_type", "")
-                                fper = ev_item.get("fiscal_period", "N/A")
-                                
-                                st.markdown(f"**{metric.upper()}** - {f_val} ({pend} {ptype} - FY{ev_item.get('fiscal_year', 'N/A')} {fper})")
-                                
-                                provs = ev_item.get("provenance", [])
-                                if provs:
-                                    st.markdown("#### SEC Source")
-                                    for p in provs:
-                                        acc = p.get("accession", "N/A")
-                                        form = p.get("form", "N/A")
-                                        fdate = p.get("filing_date", "N/A")
-                                        concept = p.get("concept", "N/A")
-                                        url = p.get("source_url", "")
-                                        
-                                        st.markdown(f"- **Form:** {form} | **Filed:** {fdate} | **Accession:** {acc} | **Concept:** {concept}")
-                                        if url and url != "#":
-                                            st.markdown(f"[Open SEC Filing]({url})")
-                                        else:
-                                            st.markdown("*SEC source unavailable*")
-                                else:
-                                    st.markdown("*SEC source unavailable*")
+                            if s["signal_id"] == "MULTI_FACTOR_DETERIORATION_CLUSTER":
+                                comp_ids = s.get("component_signal_ids")
+                                if comp_ids:
+                                    if isinstance(comp_ids, str):
+                                        try: comp_ids = json.loads(comp_ids)
+                                        except Exception: pass
+                                    if isinstance(comp_ids, (list, tuple)):
+                                        st.markdown(f"**Component Signals ({len(comp_ids)} concurrent):** " + ", ".join(f"`{c.replace('_', ' ').title()}`" for c in comp_ids))
+
+                                grouped = group_cluster_evidence_by_metric(ev_data)
+                                for metric_name, m_info in grouped.items():
+                                    st.markdown(f"#### Metric: {metric_name.replace('_', ' ').title()}")
+                                    curr_o = m_info.get("current")
+                                    prior_o = m_info.get("prior")
+                                    if curr_o and prior_o:
+                                        col_c, col_p = st.columns(2)
+                                        with col_c:
+                                            st.markdown("##### Current Observation")
+                                            st.markdown(f"- **Value:** {format_val(curr_o.get('value'), curr_o.get('unit'))} | **Unit:** {curr_o.get('unit')}")
+                                            st.markdown(f"- **Period:** {curr_o.get('period_end')} ({curr_o.get('period_type')}) | **Fiscal:** FY{curr_o.get('fiscal_year', 'N/A')} {curr_o.get('fiscal_period', 'N/A')}")
+                                            st.markdown(f"- **Quality:** {curr_o.get('quality')}")
+                                        with col_p:
+                                            st.markdown("##### Prior Observation")
+                                            st.markdown(f"- **Value:** {format_val(prior_o.get('value'), prior_o.get('unit'))} | **Unit:** {prior_o.get('unit')}")
+                                            st.markdown(f"- **Period:** {prior_o.get('period_end')} ({prior_o.get('period_type')}) | **Fiscal:** FY{prior_o.get('fiscal_year', 'N/A')} {prior_o.get('fiscal_period', 'N/A')}")
+                                            st.markdown(f"- **Quality:** {prior_o.get('quality')}")
+                                    elif curr_o:
+                                        st.markdown("##### Current Observation")
+                                        st.markdown(f"- **Value:** {format_val(curr_o.get('value'), curr_o.get('unit'))} | **Unit:** {curr_o.get('unit')}")
+                                        st.markdown(f"- **Period:** {curr_o.get('period_end')} ({curr_o.get('period_type')}) | **Fiscal:** FY{curr_o.get('fiscal_year', 'N/A')} {curr_o.get('fiscal_period', 'N/A')}")
+                                        st.markdown(f"- **Quality:** {curr_o.get('quality')}")
+
+                                    for obs in m_info.get("observations", []):
+                                        provs = obs.get("provenance", [])
+                                        if provs:
+                                            st.markdown(f"**SEC Sources ({obs.get('period_end', '')}):**")
+                                            for p in provs:
+                                                acc = p.get("accession", "N/A")
+                                                form = p.get("form", "N/A")
+                                                fdate = p.get("filing_date", "N/A")
+                                                concept = p.get("concept", "N/A")
+                                                url = p.get("source_url", "")
+                                                st.markdown(f"- **Form:** {form} | **Filed:** {fdate} | **Accession:** {acc} | **Concept:** {concept}")
+                                                if url and url != "#":
+                                                    st.markdown(f"  [Open SEC Filing]({url})")
+                            else:
+                                for ev_idx, ev_item in enumerate(ev_data):
+                                    metric = ev_item.get("metric", "Unknown")
+                                    val = ev_item.get("value")
+                                    f_val = format_val(val, ev_item.get("unit", "USD"))
+                                    pend = ev_item.get("period_end", "")
+                                    ptype = ev_item.get("period_type", "")
+                                    fper = ev_item.get("fiscal_period", "N/A")
+                                    
+                                    st.markdown(f"**{metric.upper()}** - {f_val} ({pend} {ptype} - FY{ev_item.get('fiscal_year', 'N/A')} {fper})")
+                                    
+                                    provs = ev_item.get("provenance", [])
+                                    if provs:
+                                        st.markdown("#### SEC Source")
+                                        for p in provs:
+                                            acc = p.get("accession", "N/A")
+                                            form = p.get("form", "N/A")
+                                            fdate = p.get("filing_date", "N/A")
+                                            concept = p.get("concept", "N/A")
+                                            url = p.get("source_url", "")
+                                            
+                                            st.markdown(f"- **Form:** {form} | **Filed:** {fdate} | **Accession:** {acc} | **Concept:** {concept}")
+                                            if url and url != "#":
+                                                st.markdown(f"[Open SEC Filing]({url})")
+                                            else:
+                                                st.markdown("*SEC source unavailable*")
+                                    else:
+                                        st.markdown("*SEC source unavailable*")
                         except Exception as e:
                             st.error(f"Failed to parse evidence: {e}")
             if visible_count == 0:
@@ -472,7 +566,55 @@ with tab_research:
                         st.write("**Evidence Trail:**")
                         try:
                             ev_json = json.loads(ev_str)
-                            if len(ev_json) >= 2:
+                            if s["signal_id"] == "MULTI_FACTOR_DETERIORATION_CLUSTER":
+                                comp_ids = s.get("component_signal_ids")
+                                if comp_ids:
+                                    if isinstance(comp_ids, str):
+                                        try: comp_ids = json.loads(comp_ids)
+                                        except Exception: pass
+                                    if isinstance(comp_ids, (list, tuple)):
+                                        st.markdown(f"**Component Signals ({len(comp_ids)} concurrent):** " + ", ".join(f"`{c.replace('_', ' ').title()}`" for c in comp_ids))
+
+                                grouped = group_cluster_evidence_by_metric(ev_json)
+                                for metric_name, m_info in grouped.items():
+                                    st.markdown(f"#### Metric: {metric_name.replace('_', ' ').title()}")
+                                    curr_o = m_info.get("current")
+                                    prior_o = m_info.get("prior")
+                                    if curr_o and prior_o:
+                                        col_c, col_p = st.columns(2)
+                                        with col_c:
+                                            st.markdown("##### Current Observation")
+                                            st.markdown(f"- **Value:** {format_val(curr_o.get('value'), curr_o.get('unit'))} | **Unit:** {curr_o.get('unit')}")
+                                            st.markdown(f"- **Period:** {curr_o.get('period_end')} ({curr_o.get('period_type')}) | **Fiscal:** FY{curr_o.get('fiscal_year', 'N/A')} {curr_o.get('fiscal_period', 'N/A')}")
+                                            st.markdown(f"- **Quality:** {curr_o.get('quality')}")
+                                        with col_p:
+                                            st.markdown("##### Prior Observation")
+                                            st.markdown(f"- **Value:** {format_val(prior_o.get('value'), prior_o.get('unit'))} | **Unit:** {prior_o.get('unit')}")
+                                            st.markdown(f"- **Period:** {prior_o.get('period_end')} ({prior_o.get('period_type')}) | **Fiscal:** FY{prior_o.get('fiscal_year', 'N/A')} {prior_o.get('fiscal_period', 'N/A')}")
+                                            st.markdown(f"- **Quality:** {prior_o.get('quality')}")
+                                    elif curr_o:
+                                        st.markdown("##### Current Observation")
+                                        st.markdown(f"- **Value:** {format_val(curr_o.get('value'), curr_o.get('unit'))} | **Unit:** {curr_o.get('unit')}")
+                                        st.markdown(f"- **Period:** {curr_o.get('period_end')} ({curr_o.get('period_type')}) | **Fiscal:** FY{curr_o.get('fiscal_year', 'N/A')} {curr_o.get('fiscal_period', 'N/A')}")
+                                        st.markdown(f"- **Quality:** {curr_o.get('quality')}")
+
+                                    for obs in m_info.get("observations", []):
+                                        provs = obs.get("provenance", [])
+                                        if provs:
+                                            st.markdown(f"**SOURCE ({obs.get('metric')} - {obs.get('period_end', '')}):**")
+                                            for p in provs:
+                                                acc = p.get("accession", "N/A")
+                                                form = p.get("form", "N/A")
+                                                fdate = p.get("filing_date", "N/A")
+                                                concept = p.get("concept", "N/A")
+                                                raw = p.get("raw_value")
+                                                url = p.get("source_url", "")
+                                                st.markdown(f"- **Concept:** {concept} | **Raw:** {raw} | **Accession:** {acc} | **Form:** {form} | **Filed:** {fdate}")
+                                                if url and url != '#':
+                                                    st.markdown(f"  - [Open SEC Filing]({url})")
+                                                else:
+                                                    st.markdown("  - *SEC source unavailable*")
+                            elif len(ev_json) >= 2:
                                 curr, prior = resolve_evidence_pair(ev_json)
                                 if curr and prior:
                                     st.markdown("##### CURRENT OBSERVATION")
@@ -482,32 +624,32 @@ with tab_research:
                                     st.markdown("##### PRIOR OBSERVATION")
                                     st.markdown(f"- **Metric:** {prior.get('metric')} | **Value:** {format_val(prior.get('value'), prior.get('unit'))} | **Unit:** {prior.get('unit')}")
                                     st.markdown(f"- **Period:** {prior.get('period_end')} ({prior.get('period_type')}) | **Fiscal:** FY{prior.get('fiscal_year', 'N/A')} {prior.get('fiscal_period', 'N/A')} | **Quality:** {prior.get('quality')}")
+
+                                for ev_idx, ev_item in enumerate(ev_json):
+                                    derived = ev_item.get("derived_from")
+                                    if derived and isinstance(derived, list) and len(derived) > 0:
+                                        st.markdown(f"**DERIVATION ({ev_item.get('metric')}):** {', '.join(derived)}")
+
+                                    provs = ev_item.get("provenance", [])
+                                    if provs:
+                                        st.markdown(f"**SOURCE ({ev_item.get('metric')}):**")
+                                        for p in provs:
+                                            acc = p.get("accession", "N/A")
+                                            form = p.get("form", "N/A")
+                                            fdate = p.get("filing_date", "N/A")
+                                            concept = p.get("concept", "N/A")
+                                            raw = p.get("raw_value")
+                                            url = p.get("source_url", "")
+                                            st.markdown(f"- **Concept:** {concept} | **Raw:** {raw} | **Accession:** {acc} | **Form:** {form} | **Filed:** {fdate}")
+                                            if url and url != '#':
+                                                st.markdown(f"  - [Open SEC Filing]({url})")
+                                            else:
+                                                st.markdown("  - *SEC source unavailable*")
                             elif len(ev_json) == 1:
                                 curr = ev_json[0]
                                 st.markdown("##### CURRENT OBSERVATION")
                                 st.markdown(f"- **Metric:** {curr.get('metric')} | **Value:** {format_val(curr.get('value'), curr.get('unit'))} | **Unit:** {curr.get('unit')}")
                                 st.markdown(f"- **Period:** {curr.get('period_end')} ({curr.get('period_type')}) | **Fiscal:** FY{curr.get('fiscal_year', 'N/A')} {curr.get('fiscal_period', 'N/A')} | **Quality:** {curr.get('quality')}")
-
-                            for ev_idx, ev_item in enumerate(ev_json):
-                                derived = ev_item.get("derived_from")
-                                if derived and isinstance(derived, list) and len(derived) > 0:
-                                    st.markdown(f"**DERIVATION ({ev_item.get('metric')}):** {', '.join(derived)}")
-
-                                provs = ev_item.get("provenance", [])
-                                if provs:
-                                    st.markdown(f"**SOURCE ({ev_item.get('metric')}):**")
-                                    for p in provs:
-                                        acc = p.get("accession", "N/A")
-                                        form = p.get("form", "N/A")
-                                        fdate = p.get("filing_date", "N/A")
-                                        concept = p.get("concept", "N/A")
-                                        raw = p.get("raw_value")
-                                        url = p.get("source_url", "")
-                                        st.markdown(f"- **Concept:** {concept} | **Raw:** {raw} | **Accession:** {acc} | **Form:** {form} | **Filed:** {fdate}")
-                                        if url and url != '#':
-                                            st.markdown(f"  - [Open SEC Filing]({url})")
-                                        else:
-                                            st.markdown("  - *SEC source unavailable*")
                         except Exception as e:
                             st.error(f"Failed to parse evidence trail: {e}")
             

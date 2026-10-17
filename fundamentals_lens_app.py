@@ -349,26 +349,32 @@ if selected_page == "Overview":
     
     st.info("ℹ️ **Historical Research Notice:** This application provides historical financial analysis based on audited annual disclosures. It is not a live trading feed, stock price prediction tool, or investment advisory service.")
 
-    # High-level universe statistics
+    # High-level universe statistics computed dynamically from loaded datasets
+    total_comps = len(companies)
+    total_periods = sum(len(facts) for facts in facts_by_ticker.values())
+    total_datapoints = total_periods * 5
+    target_verified_count = sum(1 for c in coverage if c.get("target_period_status_code") == 0)
+    target_pending_count = sum(1 for c in coverage if c.get("target_period_status_code") == 1)
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.markdown("""
+        st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Candidate Universe</div>
-            <div class="kpi-val">15</div>
+            <div class="kpi-val">{total_comps}</div>
             <div class="kpi-delta neu">5 Peer Groups (US & India)</div>
         </div>
         """, unsafe_allow_html=True)
     with col2:
-        st.markdown("""
+        st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Audited Annual Periods</div>
-            <div class="kpi-val">75</div>
+            <div class="kpi-val">{total_periods}</div>
             <div class="kpi-delta pos">5 Consecutive Years Each</div>
         </div>
         """, unsafe_allow_html=True)
     with col3:
-        st.markdown("""
+        st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Primary Source Basis</div>
             <div class="kpi-val">100%</div>
@@ -376,11 +382,11 @@ if selected_page == "Overview":
         </div>
         """, unsafe_allow_html=True)
     with col4:
-        st.markdown("""
+        st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Audited Data Points</div>
-            <div class="kpi-val">375</div>
-            <div class="kpi-delta pos">Line-Item Statement Provenance</div>
+            <div class="kpi-val">{total_datapoints}</div>
+            <div class="kpi-delta pos">{target_verified_count} Target Verified, {target_pending_count} Target Ongoing</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -783,23 +789,37 @@ elif selected_page == "Peer Comparison":
 
     # Side-by-side comparison table
     st.markdown(f"### **Peer Comparison Table: {metric_options[selected_metric]}**")
+    if matrix.get("metric_note"):
+        st.info(f"💡 **Accounting Definition Note:** {matrix['metric_note']}")
     
-    # Build pivoted dataframe
-    all_periods = []
-    if matrix["series"]:
-        all_periods = [pt["fiscal_year_label"] for pt in matrix["series"][0]["data"]]
+    # Build pivoted dataframe safely supporting differing fiscal years
+    period_year_map = {}
+    for s in matrix["series"]:
+        for pt in s["data"]:
+            yr = pt.get("fiscal_year")
+            lbl = pt.get("fiscal_year_label")
+            if yr is not None and lbl:
+                period_year_map[yr] = lbl
 
-    pivot_data = {"Fiscal Period": all_periods}
+    sorted_yrs = sorted(period_year_map.keys())
+    all_period_labels = [period_year_map[y] for y in sorted_yrs]
+
+    pivot_data = {"Fiscal Period": all_period_labels}
     for s in matrix["series"]:
         col_name = f"{s['ticker']} ({s['company_name']})"
         if s.get("is_suppressed"):
-            pivot_data[col_name] = [f"Suppressed ({s.get('suppress_reason')})"] * len(all_periods)
+            pivot_data[col_name] = [f"Suppressed ({s.get('suppress_reason')})"] * len(all_period_labels)
         else:
+            series_points = {pt["fiscal_year"]: pt["value"] for pt in s["data"]}
             val_fmt = "{:.1f}" if use_indexing else "{:,.1f}"
-            pivot_data[col_name] = [
-                f"{val_fmt.format(pt['value'])} {unit_label}" if pt["value"] is not None else "—"
-                for pt in s["data"]
-            ]
+            col_vals = []
+            for y in sorted_yrs:
+                val = series_points.get(y)
+                if val is not None:
+                    col_vals.append(f"{val_fmt.format(val)} {unit_label}")
+                else:
+                    col_vals.append("— (Not Reported / Pending)")
+            pivot_data[col_name] = col_vals
 
     df_pivot = pd.DataFrame(pivot_data)
     st.dataframe(df_pivot, hide_index=True, use_container_width=True)
@@ -844,7 +864,8 @@ elif selected_page == "Data Integrity & Methodology":
     for c in companies:
         entry = coverage_map.get(c.ticker, {})
         status_code = entry.get("target_period_status_code", 1)
-        status_desc = "VERIFIED INCLUDED" if status_code == 0 else "PERIOD ONGOING / PENDING 10-K"
+        status_desc = entry.get("target_period_status_desc", "VERIFIED INCLUDED" if status_code == 0 else "PERIOD ONGOING / PENDING 10-K")
+        overall_status = entry.get("overall_coverage_status", "5_PERIODS_VERIFIED")
         
         cov_rows.append({
             "Ticker": c.ticker,
@@ -855,7 +876,7 @@ elif selected_page == "Data Integrity & Methodology":
             "Latest Verified": entry.get("latest_verified_period", "N/A"),
             "Target Horizon": entry.get("target_horizon_period", "N/A"),
             "Target Status": status_desc,
-            "Overall Status": "FULLY_SOURCED_5_PERIODS"
+            "Overall Status": overall_status
         })
     df_cov = pd.DataFrame(cov_rows)
     st.dataframe(df_cov, hide_index=True, use_container_width=True)

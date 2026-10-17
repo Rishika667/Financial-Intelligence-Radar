@@ -2,7 +2,12 @@ import pytest
 import copy
 from fundamentals_lens.models import Company, FinancialFact, ValidationStatus
 from fundamentals_lens.validator import FundamentalsValidator
-from fundamentals_lens.data_loader import load_companies, load_financial_facts, load_source_register
+from fundamentals_lens.data_loader import (
+    load_companies, 
+    load_financial_facts, 
+    load_source_register,
+    load_coverage_report
+)
 
 
 @pytest.fixture
@@ -10,18 +15,19 @@ def canonical_dataset():
     companies = load_companies()
     facts = load_financial_facts()
     sources = load_source_register()
-    return companies, facts, sources
+    coverage = load_coverage_report()
+    return companies, facts, sources, coverage
 
 
 def test_validator_canonical_dataset_all_pass(canonical_dataset):
-    companies, facts, sources = canonical_dataset
+    companies, facts, sources, coverage = canonical_dataset
     facts_by_ticker = {}
     for f in facts:
         facts_by_ticker.setdefault(f.ticker, []).append(f)
         
     for c in companies:
         company_facts = facts_by_ticker[c.ticker]
-        results = FundamentalsValidator.validate_company_dataset(c, company_facts, sources)
+        results = FundamentalsValidator.validate_company_dataset(c, company_facts, sources, coverage=coverage)
         assert len(results) >= 7, f"Expected at least 7 validation gates evaluated for {c.ticker}"
         
         for r in results:
@@ -29,7 +35,7 @@ def test_validator_canonical_dataset_all_pass(canonical_dataset):
 
 
 def test_validator_gate_period_completeness_failure(canonical_dataset):
-    companies, facts, _ = canonical_dataset
+    companies, facts, *rest = canonical_dataset
     company = companies[0]
     company_facts = [f for f in facts if f.ticker == company.ticker]
     
@@ -48,7 +54,7 @@ def test_validator_gate_period_completeness_failure(canonical_dataset):
 
 
 def test_validator_gate_unit_consistency_failure(canonical_dataset):
-    companies, facts, _ = canonical_dataset
+    companies, facts, *rest = canonical_dataset
     company = companies[0]
     company_facts = copy.deepcopy([f for f in facts if f.ticker == company.ticker])
     
@@ -67,7 +73,7 @@ def test_validator_gate_unit_consistency_failure(canonical_dataset):
 
 
 def test_validator_gate_duplicate_observations_failure(canonical_dataset):
-    companies, facts, _ = canonical_dataset
+    companies, facts, *rest = canonical_dataset
     company = companies[0]
     company_facts = copy.deepcopy([f for f in facts if f.ticker == company.ticker])
     
@@ -80,7 +86,7 @@ def test_validator_gate_duplicate_observations_failure(canonical_dataset):
 
 
 def test_validator_gate_non_coercion_to_zero_failure(canonical_dataset):
-    companies, facts, _ = canonical_dataset
+    companies, facts, *rest = canonical_dataset
     company = companies[0]
     company_facts = copy.deepcopy([f for f in facts if f.ticker == company.ticker])
     
@@ -92,7 +98,7 @@ def test_validator_gate_non_coercion_to_zero_failure(canonical_dataset):
 
 
 def test_validator_gate_source_provenance_failure_and_unverified(canonical_dataset):
-    companies, facts, _ = canonical_dataset
+    companies, facts, *rest = canonical_dataset
     company = companies[0]
     
     # 1. Missing URL
@@ -115,7 +121,7 @@ def test_validator_gate_source_provenance_failure_and_unverified(canonical_datas
 
 
 def test_validator_gate_arithmetic_invariants_failure(canonical_dataset):
-    companies, facts, _ = canonical_dataset
+    companies, facts, *rest = canonical_dataset
     company = companies[0]
     corrupted_facts = copy.deepcopy([f for f in facts if f.ticker == company.ticker])
     
@@ -129,7 +135,7 @@ def test_validator_gate_arithmetic_invariants_failure(canonical_dataset):
 
 
 def test_validator_gate_anomaly_scanning_warning(canonical_dataset):
-    companies, facts, _ = canonical_dataset
+    companies, facts, *rest = canonical_dataset
     company = companies[0]
     anomaly_facts = copy.deepcopy([f for f in facts if f.ticker == company.ticker])
     

@@ -156,10 +156,22 @@ class PeerComparisonEngine:
         else:
             unit_display = group_meta.standard_unit if is_single_currency else "Local Currencies"
 
+        metric_note = None
+        if metric_name == "operating_income":
+            metric_note = (
+                "Accounting Definition Note: US peers report US GAAP Operating Income; Indian IT peers report Ind AS EBIT; "
+                "Indian FMCG and Auto peers report Profit Before Exceptional Items (PBEI). Direct rankings should account for these standards."
+            )
+        elif metric_name == "capital_expenditure":
+            metric_note = (
+                "Accounting Definition Note: Capex reflects cash outflows for Property, Plant, and Equipment (PPE additions) "
+                "from Investing Activities; certain Indian disclosures include capital work-in-progress (CWIP) or intangible asset additions."
+            )
+
         series_data = []
 
         for c in group_companies:
-            c_facts = facts_by_ticker.get(c.ticker, [])
+            c_facts = sorted(facts_by_ticker.get(c.ticker, []), key=lambda x: x.fiscal_year)
             c_derived = compute_derived_metrics_for_company(c_facts)
             derived_map = {d.fiscal_year: d for d in c_derived}
             facts_map = {f.fiscal_year: f for f in c_facts}
@@ -200,6 +212,7 @@ class PeerComparisonEngine:
             "group_id": group_id,
             "group_name": group_meta.group_name,
             "metric_name": metric_name,
+            "metric_note": metric_note,
             "unit": unit_display,
             "is_single_currency": is_single_currency,
             "currency_code": currency_code,

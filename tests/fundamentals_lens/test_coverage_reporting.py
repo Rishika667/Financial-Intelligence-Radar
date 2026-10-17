@@ -18,8 +18,10 @@ def test_coverage_report_verified_period_count():
     for entry in coverage:
         ticker = entry["ticker"]
         assert entry["verified_period_count"] == 5, f"Ticker {ticker} does not have exactly 5 verified periods"
-        assert len(entry["verified_periods"]) == 5, f"Ticker {ticker} verified_periods list length mismatch"
-        assert entry["overall_coverage_status"] == "FULLY_SOURCED_AND_VALIDATED_5_PERIODS"
+        if entry["target_period_status_code"] == 0:
+            assert entry["overall_coverage_status"] == "5_PERIODS_VERIFIED_TARGET_HORIZON_INCLUDED"
+        elif entry["target_period_status_code"] == 1:
+            assert entry["overall_coverage_status"] == "5_PERIODS_VERIFIED_TARGET_HORIZON_PENDING"
 
 
 def test_coverage_report_honest_target_period_reporting():

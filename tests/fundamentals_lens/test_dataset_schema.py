@@ -82,4 +82,7 @@ def test_coverage_report_structure():
         assert len(entry["verified_periods"]) == 5
         assert entry["target_horizon_period"] in ("FY 2025–26", "FY2026")
         assert entry["target_period_status_code"] in (0, 1, 2)
-        assert entry["overall_coverage_status"] == "FULLY_SOURCED_AND_VALIDATED_5_PERIODS"
+        assert entry["overall_coverage_status"] in (
+            "5_PERIODS_VERIFIED_TARGET_HORIZON_INCLUDED",
+            "5_PERIODS_VERIFIED_TARGET_HORIZON_PENDING"
+        )

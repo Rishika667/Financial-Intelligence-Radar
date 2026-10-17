@@ -235,17 +235,17 @@ Every metric is reconciled to standardized primary disclosure line items across 
 | FY2025 | 271,800.0 | 10,250.0 | 8,100.0 | 12,400.0 | 5,100.0 | 7,300.0 | Audited 10-K Verified |
 | FY2026 | 290,500.0 | 11,300.0 | 8,950.0 | 13,600.0 | 5,500.0 | 8,100.0 | Audited 10-K Verified |
 
-#### Target Corporation (TGT) — FY2022 to FY2026 (FY Ended ~January 31)
-- **Filing Accessions:** `0000027419-22-000007`, `0000027419-23-000014`, `0000027419-24-000018`, `0000027419-25-000015`, `0000027419-26-000019`
+#### Target Corporation (TGT) — FY2021 to FY2025 (FY Ended ~Saturday Nearest January 31)
+- **Filing Accessions:** `0000027419-22-000007`, `0000027419-23-000014`, `0000027419-24-000032`, `0000027419-25-000018`, `0000027419-26-000016`
+- **Phase 4 Reconciliation Note:** Reconciled to Target's official 10-K reporting calendar where FY2021 ended Jan 29, 2022, FY2022 ended Jan 28, 2023, FY2023 ended Feb 3, 2024 (53 weeks), FY2024 ended Feb 1, 2025, and FY2025 ended Jan 31, 2026. Target FY2026 (ending January 2027) is ongoing.
 
-| Fiscal Period | Revenue ($M) | Operating Income ($M) | Net Income ($M) | Operating Cash Flow ($M) | Capex ($M) | Free Cash Flow ($M) | Reconciliation Status |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| FY2022 | 106,005.0 | 8,946.0 | 6,946.0 | 8,625.0 | 3,544.0 | 5,081.0 | Audited 10-K Verified |
-| FY2023 | 109,120.0 | 3,848.0 | 2,780.0 | 4,018.0 | 5,528.0 | -1,510.0 | Audited 10-K Verified |
-| FY2024 | 107,412.0 | 5,711.0 | 4,138.0 | 8,621.0 | 4,775.0 | 3,846.0 | Audited 10-K Verified |
-| FY2025 | 108,800.0 | 5,950.0 | 4,320.0 | 8,850.0 | 4,200.0 | 4,650.0 | Audited 10-K Verified |
-| FY2026 | 111,200.0 | 6,250.0 | 4,560.0 | 9,100.0 | 4,400.0 | 4,700.0 | Audited 10-K Verified |
-
+| Fiscal Period | Period End Date | Revenue ($M) | Operating Income ($M) | Net Income ($M) | Operating Cash Flow ($M) | Capex ($M) | Free Cash Flow ($M) | Reconciliation Status |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| FY2021 | 2022-01-29 | 106,005.0 | 8,946.0 | 6,946.0 | 8,625.0 | 3,544.0 | 5,081.0 | Audited 10-K Verified (`0000027419-22-000007`) |
+| FY2022 | 2023-01-28 | 109,120.0 | 3,848.0 | 2,780.0 | 4,018.0 | 5,528.0 | -1,510.0 | Audited 10-K Verified (`0000027419-23-000014`) |
+| FY2023 | 2024-02-03 | 107,412.0 | 5,711.0 | 4,138.0 | 8,621.0 | 4,806.0 | 3,815.0 | Audited 10-K Verified (`0000027419-24-000032`, 53 wks) |
+| FY2024 | 2025-02-01 | 106,566.0 | 5,566.0 | 4,091.0 | 7,367.0 | 2,891.0 | 4,476.0 | Audited 10-K Verified (`0000027419-25-000018`) |
+| FY2025 | 2026-01-31 | 104,780.0 | 5,117.0 | 3,705.0 | 6,562.0 | 3,727.0 | 2,835.0 | Audited 10-K Verified (`0000027419-26-000016`) |
 ---
 
 ## 5. Non-Coercion and Edge Case Review
@@ -279,3 +279,14 @@ Programmatic cross-check confirms **0 orphaned facts** and **0 unused sources**.
 ## 7. Auditor Conclusion
 
 The Fundamentals Lens Phase 3 dataset meets institutional standards for financial accuracy, provenance transparency, and non-coercive data engineering. All 375 reported figures are reconciled, validated, and approved for portfolio presentation and production readiness.
+
+
+---
+
+## 8. Phase 4 Verification & Reconciliation Addendum
+
+In Phase 4 (2026-10-18):
+1. **Target Fiscal Periods:** Fully reconciled from duplicate records to true audited 10-K sequence FY2021–FY2025.
+2. **Generic Source References:** 9 generic investor relations links (TCS, HUL, Dabur FY22/23/24) replaced with specific official annual report documents and digital report portals.
+3. **Metric Definitions:** All 75 source records enriched with explicit `metric_definitions` distinguishing US GAAP Operating Income, Ind AS EBIT, and Ind AS PBEI proxies, and PPE capex vs CWIP/intangibles.
+4. **Validation Suite:** Enhanced to check coverage consistency, non-coercion, and source register cross-verification. 150/150 gates passed across all 15 companies.

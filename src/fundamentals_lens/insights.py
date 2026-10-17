@@ -45,33 +45,42 @@ class NarrativeEngine:
                 )
             ]
 
+        # Defensive sorting: ensure facts are in chronological order regardless of caller list order
+        sorted_facts = sorted(facts, key=lambda f: f.fiscal_year)
+
+        # Align or compute derived metrics in matching chronological order
         if derived is None:
-            derived = compute_derived_metrics_for_company(facts)
+            sorted_derived = compute_derived_metrics_for_company(sorted_facts)
+        else:
+            derived_map = {d.fiscal_year: d for d in derived}
+            sorted_derived = [derived_map[f.fiscal_year] for f in sorted_facts if f.fiscal_year in derived_map]
+            if len(sorted_derived) != len(sorted_facts):
+                sorted_derived = compute_derived_metrics_for_company(sorted_facts)
 
         insights: List[FinancialInsight] = []
 
         # 1. Revenue Trajectory Insight
-        rev_insight = cls._analyze_revenue_trajectory(facts, derived)
+        rev_insight = cls._analyze_revenue_trajectory(sorted_facts, sorted_derived)
         if rev_insight:
             insights.append(rev_insight)
 
         # 2. Operating Margin & Profitability Insight
-        margin_insight = cls._analyze_margin_trajectory(facts, derived)
+        margin_insight = cls._analyze_margin_trajectory(sorted_facts, sorted_derived)
         if margin_insight:
             insights.append(margin_insight)
 
         # 3. Cash Flow Generation & Free Cash Flow Insight
-        cash_insight = cls._analyze_cash_flow(facts, derived)
+        cash_insight = cls._analyze_cash_flow(sorted_facts, sorted_derived)
         if cash_insight:
             insights.append(cash_insight)
 
         # 4. Earnings Quality & Cash Conversion Insight
-        conv_insight = cls._analyze_cash_conversion(facts, derived)
+        conv_insight = cls._analyze_cash_conversion(sorted_facts, sorted_derived)
         if conv_insight:
             insights.append(conv_insight)
 
         # 5. Capital Intensity & Reinvestment
-        capex_insight = cls._analyze_capital_reinvestment(facts, derived)
+        capex_insight = cls._analyze_capital_reinvestment(sorted_facts, sorted_derived)
         if capex_insight:
             insights.append(capex_insight)
 
@@ -90,31 +99,43 @@ class NarrativeEngine:
         unit = latest_fact.unit
         first_rev = first_fact.revenue
         latest_rev = latest_fact.revenue
-        total_growth_pct = round(((latest_rev - first_rev) / first_rev) * 100.0, 1)
+        
+        # Guard against zero, negative or missing base revenue
+        if first_rev is not None and first_rev > 0:
+            total_growth_pct = round(((latest_rev - first_rev) / first_rev) * 100.0, 1)
+            total_growth_str = f"{total_growth_pct:+.1f}%"
+        else:
+            total_growth_pct = None
+            total_growth_str = "N/A (Non-positive baseline)"
 
         latest_growth = latest_derived.revenue_growth_yoy
         prior_growth = prior_derived.revenue_growth_yoy if prior_derived else None
         growth_str = f"{latest_growth:+.1f}%" if latest_growth is not None else "N/A"
 
-        if latest_growth is not None and latest_growth > 15.0:
+        if latest_growth is None:
+            headline = f"Revenue Disclosed at {latest_rev:,.0f} {unit}"
+            what_changed = f"Consolidated revenue stood at {latest_rev:,.0f} {unit} in {latest_fact.fiscal_year_label}."
+            why_it_matters = "Initial reporting period provides the baseline for future period comparisons."
+            what_to_investigate = "Monitor subsequent audited annual disclosures to evaluate multi-year direction."
+        elif latest_growth > 15.0:
             headline = f"Strong Revenue Expansion ({latest_growth:+.1f}% YoY)"
             what_changed = f"Revenue grew by {latest_growth:+.1f}% in {latest_fact.fiscal_year_label}, expanding from {first_rev:,.0f} {unit} in {first_fact.fiscal_year_label} to {latest_rev:,.0f} {unit} in {latest_fact.fiscal_year_label}."
-            why_it_matters = "Double-digit top-line growth may reflect expanding customer demand, market share gains, price increases, or scope changes such as consolidation."
+            why_it_matters = "Double-digit top-line growth indicates significant business volume expansion, though underlying drivers (organic demand, pricing actions, consolidation, or currency movements) may warrant investigation."
             what_to_investigate = "Determine the balance between organic volume expansion, price realization, foreign exchange effects, and inorganic acquisition contributions."
-        elif latest_growth is not None and latest_growth < 0.0:
-            headline = f"Revenue Contraction Detected ({latest_growth:.1f}% YoY)"
+        elif latest_growth < 0.0:
+            headline = f"Revenue Contraction Detected ({abs(latest_growth):.1f}% YoY)"
             what_changed = f"Top-line revenue contracted by {abs(latest_growth):.1f}% in {latest_fact.fiscal_year_label} to {latest_rev:,.0f} {unit}."
-            why_it_matters = "Top-line contraction can pressure operating leverage and reduce absorption of fixed overheads."
+            why_it_matters = "Top-line contraction can pressure operating leverage and reduce absorption of fixed overheads, warranting detailed inspection of segment demand."
             what_to_investigate = "Check product line segment disclosures, foreign currency translation impacts, and industry cyclicality factors."
         else:
-            headline = f"Moderate Top-Line Growth ({growth_str} YoY)"
-            what_changed = f"Revenue shifted by {growth_str} in {latest_fact.fiscal_year_label}, reflecting a {total_growth_pct:+.1f}% 5-year cumulative change."
-            why_it_matters = "Steady single-digit expansion reflects mature market positioning or stable market share retention."
+            headline = f"Moderate Top-Line Trajectory ({growth_str} YoY)"
+            what_changed = f"Revenue shifted by {growth_str} in {latest_fact.fiscal_year_label}, reflecting a {total_growth_str} 5-year cumulative change."
+            why_it_matters = "Single-digit top-line changes may reflect mature operational scale or market conditions; however, underlying volume versus pricing trends cannot be established from consolidated top-line figures alone and warrant segment investigation."
             what_to_investigate = "Examine geographic and product-mix variations that may diverge from the consolidated growth rate."
 
         evidence = (
             f"5-Year Revenue: {first_rev:,.0f} {unit} ({first_fact.fiscal_year_label}) -> "
-            f"{latest_rev:,.0f} {unit} ({latest_fact.fiscal_year_label}) [{total_growth_pct:+.1f}% overall]. "
+            f"{latest_rev:,.0f} {unit} ({latest_fact.fiscal_year_label}) [{total_growth_str} overall]. "
             f"Latest YoY Growth: {growth_str}."
         )
 
@@ -150,7 +171,7 @@ class NarrativeEngine:
             if margin_delta >= 1.0:
                 headline = f"Operating Margin Expansion (+{margin_delta:.2f} percentage points)"
                 what_changed = f"Operating margin improved from {prior_op_margin:.1f}% in {prior_der.fiscal_year_label} to {curr_op_margin:.1f}% in {latest_der.fiscal_year_label}."
-                why_it_matters = "Margin expansion may suggest operating leverage, lower input costs, favorable pricing, or a shift toward higher-margin products/services."
+                why_it_matters = "Margin expansion may suggest operating leverage, lower input costs, favorable pricing, or product mix shifts, but specific cost causes cannot be confirmed without line-item decomposition."
                 what_to_investigate = "Investigate whether gross margins expanded or whether operating expenses (SG&A/R&D) grew at a slower rate than revenue."
             elif margin_delta <= -1.0:
                 headline = f"Operating Margin Compression ({margin_delta:.2f} percentage points)"
@@ -160,7 +181,7 @@ class NarrativeEngine:
             else:
                 headline = f"Stable Operating Profitability ({curr_op_margin:.1f}% margin)"
                 what_changed = f"Operating margin held steady at {curr_op_margin:.1f}% (change of {margin_delta:+.2f} percentage points YoY)."
-                why_it_matters = "Predictable operating margins highlight disciplined cost control and consistent operational execution."
+                why_it_matters = "Predictable operating margins suggest consistent operational execution; however, underlying gross margins and overhead dynamics may warrant investigation to confirm sustainable cost structures."
                 what_to_investigate = "Compare margin stability against direct peers who may have faced industry-wide cost fluctuations."
             
             evidence = (
@@ -289,7 +310,12 @@ class NarrativeEngine:
 
         capex_intensity = round((latest_fact.capital_expenditure / latest_fact.revenue) * 100.0, 1)
 
-        if capex_intensity >= 15.0:
+        if latest_fact.capital_expenditure == 0.0:
+            headline = "Zero Direct Capital Expenditures Reported"
+            what_changed = f"No cash expenditures for property and equipment additions were reported in {latest_fact.fiscal_year_label} investing cash flows."
+            why_it_matters = "A period without direct capital additions reflects an asset-light operating model or reliance on leased facilities/equipment."
+            what_to_investigate = "Review notes on leases (Ind AS 116 / ASC 842) and intangible asset additions."
+        elif capex_intensity >= 15.0:
             headline = f"High Capital Intensity ({capex_intensity:.1f}% of Revenue)"
             what_changed = f"The business invested {latest_fact.capital_expenditure:,.0f} {unit} into capital assets, representing {capex_intensity:.1f}% of total annual revenue."
             why_it_matters = "High capital reinvestment reflects substantial long-term asset additions (such as datacenter, manufacturing, or vehicle fleet infrastructure) that will influence future depreciation and operating asset capacity."

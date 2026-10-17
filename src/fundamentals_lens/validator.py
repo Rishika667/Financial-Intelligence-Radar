@@ -42,7 +42,7 @@ class FundamentalsValidator:
         results.extend(cls._check_arithmetic_invariants(facts))
         
         # Dimension 5: Coverage & Target Horizon Integrity
-        results.append(cls._check_coverage_integrity(company, coverage))
+        results.append(cls._check_coverage_integrity(company, coverage, facts=facts))
 
         # Dimension 6: Comparability Integrity
         results.append(cls._check_comparability_integrity(company))
@@ -57,17 +57,18 @@ class FundamentalsValidator:
         rule_id = "GATE_PERIOD_COMPLETENESS"
         rule_name = "Five-Period Consecutive Completeness"
         
-        if len(facts) < 5:
+        if len(facts) != 5:
             return ValidationResult(
                 rule_id=rule_id,
                 rule_name=rule_name,
                 status=ValidationStatus.FAIL,
-                message=f"Company {company.ticker} has only {len(facts)} verified periods (requires 5).",
+                message=f"Company {company.ticker} has {len(facts)} verified periods (requires 5 consecutive periods).",
                 details={"actual_periods": [f.fiscal_year_label for f in facts]},
                 dimension="STRUCTURAL"
             )
             
-        sorted_years = sorted([f.fiscal_year for f in facts])
+        sorted_facts = sorted(facts, key=lambda f: f.fiscal_year)
+        sorted_years = [f.fiscal_year for f in sorted_facts]
         # Check consecutive years
         for i in range(1, len(sorted_years)):
             if sorted_years[i] != sorted_years[i-1] + 1:
@@ -84,8 +85,8 @@ class FundamentalsValidator:
             rule_id=rule_id,
             rule_name=rule_name,
             status=ValidationStatus.PASS,
-            message=f"Exactly 5 consecutive annual periods verified for {company.ticker}.",
-            details={"periods": [f.fiscal_year_label for f in facts]},
+            message=f"Exactly 5 consecutive annual periods verified for {company.ticker} ({sorted_facts[0].fiscal_year_label} to {sorted_facts[-1].fiscal_year_label}).",
+            details={"periods": [f.fiscal_year_label for f in sorted_facts]},
             dimension="STRUCTURAL"
         )
 
@@ -132,13 +133,18 @@ class FundamentalsValidator:
         rule_id = "GATE_NO_DUPLICATES"
         rule_name = "Observation Uniqueness"
         
-        seen = set()
+        seen_years = set()
+        seen_dates = set()
         duplicates = []
         for f in facts:
-            key = (f.ticker, f.fiscal_year)
-            if key in seen:
-                duplicates.append(key)
-            seen.add(key)
+            year_key = (f.ticker, f.fiscal_year)
+            date_key = (f.ticker, f.period_end)
+            if year_key in seen_years:
+                duplicates.append(f"Year duplicate: {year_key}")
+            if date_key in seen_dates:
+                duplicates.append(f"Period end duplicate: {date_key}")
+            seen_years.add(year_key)
+            seen_dates.add(date_key)
             
         if duplicates:
             return ValidationResult(
@@ -154,7 +160,7 @@ class FundamentalsValidator:
             rule_id=rule_id,
             rule_name=rule_name,
             status=ValidationStatus.PASS,
-            message="Zero duplicate observation records found; strictly one record per fiscal year.",
+            message="Zero duplicate observation records found; strictly one record per fiscal year and unique period end date.",
             details={"record_count": len(facts)},
             dimension="STRUCTURAL"
         )
@@ -164,13 +170,20 @@ class FundamentalsValidator:
         rule_id = "GATE_NON_COERCION"
         rule_name = "Missing Data Non-Coercion Guard"
         
-        # Verify that revenue, operating cash flow, and capex are non-zero positive/negative as expected
+        # Invariant: Missing values must remain None/missing, never coerced to 0.0.
+        # Zero revenue in mature listed companies is considered suspicious unless documented.
+        # Zero capex is allowed if explicitly supported by primary disclosure notes.
         suspicious_zeros = []
+        disclosed_zeros = []
         for f in facts:
             if f.revenue == 0.0:
-                suspicious_zeros.append((f.fiscal_year_label, "revenue"))
+                if not f.notes or "zero revenue" not in f.notes.lower():
+                    suspicious_zeros.append((f.fiscal_year_label, "revenue (unexplained zero)"))
             if f.capital_expenditure == 0.0:
-                suspicious_zeros.append((f.fiscal_year_label, "capital_expenditure"))
+                if f.notes and ("zero capex" in f.notes.lower() or "no capital expenditure" in f.notes.lower()):
+                    disclosed_zeros.append((f.fiscal_year_label, "capex (disclosed zero)"))
+                else:
+                    suspicious_zeros.append((f.fiscal_year_label, "capital_expenditure (unexplained zero)"))
                 
         if suspicious_zeros:
             return ValidationResult(
@@ -182,32 +195,119 @@ class FundamentalsValidator:
                 dimension="REPORTING_STANDARDS"
             )
             
+        msg = "No suspicious zero coercions detected in primary disclosures."
+        if disclosed_zeros:
+            msg += f" Valid disclosed zeroes verified: {disclosed_zeros}."
+
         return ValidationResult(
             rule_id=rule_id,
             rule_name=rule_name,
             status=ValidationStatus.PASS,
-            message="No suspicious zero coercions detected in primary disclosures.",
-            details={},
+            message=msg,
+            details={"disclosed_zeros": disclosed_zeros},
             dimension="REPORTING_STANDARDS"
         )
 
     @staticmethod
-    def _check_source_provenance(facts: List[FinancialFact], sources: Optional[List[Dict[str, Any]]]) -> List[ValidationResult]:
+    def _check_source_provenance(
+        facts: List[FinancialFact], 
+        sources: Optional[List[Dict[str, Any]]]
+    ) -> List[ValidationResult]:
         results = []
         rule_id = "GATE_SOURCE_PROVENANCE"
         rule_name = "Primary Source Lineage and Traceability"
         
         missing_urls = []
+        generic_urls = []
         missing_locations = []
         unverified_facts = []
-        
+        register_mismatches = []
+
+        generic_url_indicators = ["sec.gov/edgar/browse"]
+
         for f in facts:
             if not f.source_url or not f.source_url.startswith("http"):
                 missing_urls.append(f.fiscal_year_label)
+            for gen in generic_url_indicators:
+                if gen in f.source_url.lower():
+                    generic_urls.append((f.fiscal_year_label, f.source_url))
             if not f.statement_location:
                 missing_locations.append(f.fiscal_year_label)
             if f.verification_status != "VERIFIED":
                 unverified_facts.append(f.fiscal_year_label)
+
+        if missing_urls:
+            results.append(ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.FAIL,
+                message=f"Missing or invalid primary source URLs in periods: {missing_urls}",
+                details={"missing_urls": missing_urls},
+                dimension="SOURCE_LINEAGE"
+            ))
+            return results
+
+        if generic_urls:
+            results.append(ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.FAIL,
+                message=f"Generic search/browse URLs detected instead of specific filing document URLs: {generic_urls}",
+                details={"generic_urls": generic_urls},
+                dimension="SOURCE_LINEAGE"
+            ))
+            return results
+
+        if missing_locations:
+            results.append(ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.FAIL,
+                message=f"Missing statement page or line-item locations in periods: {missing_locations}",
+                details={"missing_locations": missing_locations},
+                dimension="SOURCE_LINEAGE"
+            ))
+            return results
+
+        if unverified_facts:
+            results.append(ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.UNVERIFIED,
+                message=f"Observations not marked as VERIFIED: {unverified_facts}",
+                details={"unverified_facts": unverified_facts},
+                dimension="SOURCE_LINEAGE"
+            ))
+            return results
+
+        if not sources:
+            results.append(ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.UNVERIFIED,
+                message="Source register metadata unprovided; offline provenance lineage unverified.",
+                dimension="SOURCE_LINEAGE"
+            ))
+            return results
+
+        source_map = {(s["ticker"], s["fiscal_year_label"]): s for s in sources}
+        for f in facts:
+            # Cross-verify against source register
+            k = (f.ticker, f.fiscal_year_label)
+            s = source_map.get(k)
+            if not s:
+                register_mismatches.append(f"No source register entry for {k}")
+            else:
+                if f.source_id != s.get("source_id"):
+                    register_mismatches.append(f"{k}: fact source_id '{f.source_id}' != register '{s.get('source_id')}'")
+                if f.source_url != s.get("source_url"):
+                    register_mismatches.append(f"{k}: fact source_url != register source_url")
+                if f.accession_id != s.get("accession_id"):
+                    register_mismatches.append(f"{k}: fact accession_id '{f.accession_id}' != register '{s.get('accession_id')}'")
+                if not s.get("line_item_mappings"):
+                    register_mismatches.append(f"{k}: missing line_item_mappings in source register")
+                if not s.get("metric_definitions"):
+                    register_mismatches.append(f"{k}: missing metric_definitions in source register")
                 
         if missing_urls:
             results.append(ValidationResult(
@@ -218,6 +318,15 @@ class FundamentalsValidator:
                 details={"missing_urls": missing_urls},
                 dimension="SOURCE_LINEAGE"
             ))
+        elif generic_urls:
+            results.append(ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.FAIL,
+                message=f"Generic search/browse URLs detected instead of specific filing document URLs: {generic_urls}",
+                details={"generic_urls": generic_urls},
+                dimension="SOURCE_LINEAGE"
+            ))
         elif missing_locations:
             results.append(ValidationResult(
                 rule_id=rule_id,
@@ -225,6 +334,15 @@ class FundamentalsValidator:
                 status=ValidationStatus.FAIL,
                 message=f"Missing statement page or line-item locations in periods: {missing_locations}",
                 details={"missing_locations": missing_locations},
+                dimension="SOURCE_LINEAGE"
+            ))
+        elif register_mismatches:
+            results.append(ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.FAIL,
+                message=f"Source register alignment mismatches detected: {register_mismatches[:3]}",
+                details={"mismatches": register_mismatches},
                 dimension="SOURCE_LINEAGE"
             ))
         elif unverified_facts:
@@ -241,8 +359,8 @@ class FundamentalsValidator:
                 rule_id=rule_id,
                 rule_name=rule_name,
                 status=ValidationStatus.PASS,
-                message="100% of observations link to primary filings with verified statement locations.",
-                details={"verified_count": len(facts)},
+                message="100% of observations link to primary filings with verified statement locations, valid accession IDs, and exact source register alignment.",
+                details={"verified_count": len(facts), "lineage_note": "Verified against primary document citations and offline accession registry."},
                 dimension="SOURCE_LINEAGE"
             ))
             
@@ -310,19 +428,25 @@ class FundamentalsValidator:
         return results
 
     @staticmethod
-    def _check_coverage_integrity(company: Company, coverage: Optional[List[Dict[str, Any]]]) -> ValidationResult:
+    def _check_coverage_integrity(
+        company: Company, 
+        coverage: Optional[List[Dict[str, Any]]],
+        facts: Optional[List[FinancialFact]] = None
+    ) -> ValidationResult:
         rule_id = "GATE_COVERAGE_INTEGRITY"
         rule_name = "Target Horizon Coverage & Non-Fabrication Audit"
+        
         if not coverage:
             return ValidationResult(
                 rule_id=rule_id,
                 rule_name=rule_name,
-                status=ValidationStatus.PASS,
-                message=f"Coverage metadata unprovided for {company.ticker}; skipped.",
+                status=ValidationStatus.UNVERIFIED,
+                message=f"Coverage metadata unprovided for {company.ticker}; status unverified.",
                 dimension="COVERAGE_INTEGRITY"
             )
-        cov = next((c for c in coverage if c.get("ticker") == company.ticker), None)
-        if not cov:
+            
+        cov_matches = [c for c in coverage if c.get("ticker") == company.ticker]
+        if not cov_matches:
             return ValidationResult(
                 rule_id=rule_id,
                 rule_name=rule_name,
@@ -330,8 +454,23 @@ class FundamentalsValidator:
                 message=f"Missing coverage report entry for {company.ticker}.",
                 dimension="COVERAGE_INTEGRITY"
             )
+        if len(cov_matches) > 1:
+            return ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.FAIL,
+                message=f"Duplicate coverage report entries detected for {company.ticker}.",
+                dimension="COVERAGE_INTEGRITY"
+            )
+            
+        cov = cov_matches[0]
         code = cov.get("target_period_status_code")
         target_period = cov.get("target_horizon_period")
+        claimed_periods = cov.get("verified_periods", [])
+        latest_verified = cov.get("latest_verified_period")
+        status_desc = cov.get("target_period_status_desc", "")
+        overall_status = cov.get("overall_coverage_status", "")
+
         if code not in (0, 1, 2):
             return ValidationResult(
                 rule_id=rule_id,
@@ -340,12 +479,75 @@ class FundamentalsValidator:
                 message=f"Invalid target period status code {code} for {company.ticker}.",
                 dimension="COVERAGE_INTEGRITY"
             )
+
+        # Cross-validate against actual dataset facts
+        if facts:
+            sorted_facts = sorted(facts, key=lambda x: x.fiscal_year)
+            actual_periods = [f.fiscal_year_label for f in sorted_facts]
+            actual_latest = sorted_facts[-1].fiscal_year_label if sorted_facts else None
+
+            if claimed_periods != actual_periods:
+                return ValidationResult(
+                    rule_id=rule_id,
+                    rule_name=rule_name,
+                    status=ValidationStatus.FAIL,
+                    message=f"Coverage verified periods mismatch for {company.ticker}: claimed {claimed_periods} != actual {actual_periods}",
+                    details={"claimed": claimed_periods, "actual": actual_periods},
+                    dimension="COVERAGE_INTEGRITY"
+                )
+
+            if latest_verified != actual_latest:
+                return ValidationResult(
+                    rule_id=rule_id,
+                    rule_name=rule_name,
+                    status=ValidationStatus.FAIL,
+                    message=f"Latest verified period mismatch for {company.ticker}: claimed {latest_verified} != actual {actual_latest}",
+                    details={"claimed_latest": latest_verified, "actual_latest": actual_latest},
+                    dimension="COVERAGE_INTEGRITY"
+                )
+
+            # Validate status semantics
+            if code == 0:
+                if target_period not in actual_periods:
+                    return ValidationResult(
+                        rule_id=rule_id,
+                        rule_name=rule_name,
+                        status=ValidationStatus.FAIL,
+                        message=f"Status code 0 claims target horizon {target_period} is included, but it is not in actual periods for {company.ticker}.",
+                        dimension="COVERAGE_INTEGRITY"
+                    )
+                if overall_status != "5_PERIODS_VERIFIED_TARGET_HORIZON_INCLUDED":
+                    return ValidationResult(
+                        rule_id=rule_id,
+                        rule_name=rule_name,
+                        status=ValidationStatus.FAIL,
+                        message=f"Inconsistent overall status '{overall_status}' for status code 0 on {company.ticker}.",
+                        dimension="COVERAGE_INTEGRITY"
+                    )
+            elif code == 1:
+                if target_period in actual_periods:
+                    return ValidationResult(
+                        rule_id=rule_id,
+                        rule_name=rule_name,
+                        status=ValidationStatus.FAIL,
+                        message=f"Status code 1 claims target horizon {target_period} is pending, but it is already in verified periods for {company.ticker}.",
+                        dimension="COVERAGE_INTEGRITY"
+                    )
+                if overall_status != "5_PERIODS_VERIFIED_TARGET_HORIZON_PENDING":
+                    return ValidationResult(
+                        rule_id=rule_id,
+                        rule_name=rule_name,
+                        status=ValidationStatus.FAIL,
+                        message=f"Inconsistent overall status '{overall_status}' for status code 1 on {company.ticker}.",
+                        dimension="COVERAGE_INTEGRITY"
+                    )
+
         return ValidationResult(
             rule_id=rule_id,
             rule_name=rule_name,
             status=ValidationStatus.PASS,
-            message=f"Target horizon {target_period} transparently documented with status code {code}.",
-            details={"target_period": target_period, "status_code": code},
+            message=f"Coverage verified ({len(claimed_periods)} periods): Target horizon {target_period} status code {code} ({overall_status}).",
+            details=cov,
             dimension="COVERAGE_INTEGRITY"
         )
 

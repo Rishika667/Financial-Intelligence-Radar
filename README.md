@@ -1,20 +1,38 @@
-# Financial Intelligence Radar
+# Financial Intelligence Radar & Fundamentals Lens
 
-An evidence-first, zero-cost SEC disclosure intelligence and analyst-triage application for institutional and fundamental equity research.
+An evidence-first, zero-cost disclosure intelligence and fundamental equity research platform.
 
-> **Disclaimer**: Financial Intelligence Radar is strictly an analyst-triage and disclosure-verification tool. It does **not** provide investment advice, trading recommendations, price forecasts, or automated financial decision-making.
-
----
-
-### Deployment Status
-- **Source Repository:** [https://github.com/Rishika667/Financial-Intelligence-Radar](https://github.com/Rishika667/Financial-Intelligence-Radar)
-- **Hosted Streamlit Application:** *Deployment pending* (Follow the step-by-step instructions in [docs/STREAMLIT_DEPLOYMENT.md](docs/STREAMLIT_DEPLOYMENT.md) to launch on Streamlit Community Cloud)
+> **Disclaimer**: This software is strictly for financial analysis and academic research. It does **not** provide investment advice, trading recommendations, price forecasts, or automated financial decision-making.
 
 ---
 
-## 1. Product Overview
+## 🌟 Featured Product: Fundamentals Lens
+
+**Fundamentals Lens** is the primary, lightweight financial research product in this repository. It provides transparent five-year financial performance exploration, rule-based inquiry ("What changed, why it matters, and what to investigate"), guarded peer comparisons, and one-click research exports without requiring API keys, live data feeds, or database setup.
+
+- **Primary Entry Point:** `fundamentals_lens_app.py`
+- **Architecture:** Zero-Cost, Pure-Python Static Application (Operating budget: ₹0 / $0)
+- **Target Universe:** 15 Global & Indian Leaders across 5 Peer Groups (75 Audited Annual Periods)
+- **Documentation:** [Fundamentals Lens Operational Guide](docs/FUNDAMENTALS_LENS_RELEASE_GUIDE.md) | [Data Foundation Report](docs/FUNDAMENTALS_LENS_DATA_FOUNDATION.md) | [Pivot Architecture Plan](docs/FUNDAMENTALS_LENS_PIVOT_PLAN.md)
+
+### Quick Start (Fundamentals Lens)
+
+```bash
+# 1. Activate environment
+source .venv/bin/activate  # On Linux/macOS
+.venv\Scripts\Activate.ps1 # On Windows
+
+# 2. Run the application
+streamlit run fundamentals_lens_app.py
+```
+*Opens immediately at `http://localhost:8501`. No login, API credentials, or database setup required.*
+
+---
+
+## 🏛️ Legacy Product: Financial Intelligence Radar (Triage Mode)
 
 Financial Intelligence Radar extracts, normalizes, and analyzes official SEC EDGAR disclosures (10-K, 10-Q, 8-K) to surface material financial shifts, margin compression, cash flow divergence, and executive turnover.
+- **Legacy Entry Point:** `app.py` (requires SQLite and SEC User-Agent configuration)
 
 ### Key Capabilities
 

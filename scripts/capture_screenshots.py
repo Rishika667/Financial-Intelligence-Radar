@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 """
-Reproducible Browser Screenshot Capture Script for Fundamentals Lens.
+Reproducible Browser Screenshot Capture Script for Fundamentals Lens (Phase 14 Hardened).
 Starts the Streamlit application and captures desktop and mobile viewport screenshots
-of all four application pages using Chrome DevTools Protocol (CDP) over WebSockets.
+of all application pages using Chrome DevTools Protocol (CDP) over WebSockets.
+
+Hardened Features:
+1. Hard failure on DOM timeout (no silent fallback or unverified captures).
+2. Essential Plotly chart presence and non-zero dimension assertions.
+3. Desktop 1280x900 viewport horizontal fold and overflow verification.
+4. Synchronized export to docs/screenshots/ and conversation artifacts directory.
 """
 
 import sys
@@ -49,27 +55,50 @@ async def send_cdp(ws, method, params=None, msg_id=1):
             return resp.get("result", {})
 
 
-async def verify_dom_landmark(ws, timeout_sec=10):
-    """Polls via CDP Runtime.evaluate to verify essential Streamlit DOM landmarks are mounted."""
+async def verify_dom_and_charts(ws, require_chart=False, timeout_sec=15):
+    """
+    Polls via CDP Runtime.evaluate to verify essential Streamlit DOM landmarks are mounted,
+    and checks chart element presence, dimensions, and horizontal overflow.
+    Fails with TimeoutError if DOM does not mount within timeout.
+    """
     start = time.time()
+    last_geom = {}
+    eval_script = """
+    (() => {
+        const body = Boolean(document.body);
+        const container = Boolean(document.querySelector('[data-testid="stAppViewContainer"]'));
+        const markdowns = document.querySelectorAll('.stMarkdown, [data-testid="stMarkdownContainer"], h1, h2, h3').length;
+        const chart = document.querySelector('[data-testid="stPlotlyChart"], .js-plotly-plot');
+        const scrollW = document.documentElement.scrollWidth;
+        const rect = chart ? chart.getBoundingClientRect() : null;
+        return {
+            dom_ready: body && container && markdowns > 0,
+            chart_mounted: Boolean(chart),
+            chart_width: rect ? Math.round(rect.width) : 0,
+            chart_height: rect ? Math.round(rect.height) : 0,
+            scroll_width: scrollW,
+            has_overflow: scrollW > 1290
+        };
+    })()
+    """
     while time.time() - start < timeout_sec:
         res = await send_cdp(ws, "Runtime.evaluate", {
-            "expression": (
-                "Boolean(document.body && "
-                "document.querySelector('[data-testid=\"stAppViewContainer\"]') && "
-                "document.querySelectorAll('.stMarkdown, [data-testid=\"stMarkdownContainer\"], h1, h2, h3').length > 0)"
-            ),
+            "expression": eval_script,
             "returnByValue": True
         }, msg_id=20)
-        if res.get("result", {}).get("value") is True:
-            return True
+        val = res.get("result", {}).get("value", {})
+        last_geom = val
+        if val.get("dom_ready"):
+            if not require_chart or (val.get("chart_mounted") and val.get("chart_height", 0) > 0):
+                return val
         await asyncio.sleep(0.5)
-    return False
+
+    raise TimeoutError(
+        f"DOM/chart verification timed out after {timeout_sec}s (require_chart={require_chart}, last_geom={last_geom})"
+    )
 
 
-async def capture_page(ws, url, output_path, width=1280, height=900, is_mobile=False, wait_sec=4):
-    import websockets
-
+async def capture_page(ws, url, output_path, width=1280, height=900, is_mobile=False, require_chart=False, wait_sec=4):
     # Set viewport
     await send_cdp(ws, "Emulation.setDeviceMetricsOverride", {
         "width": width,
@@ -82,10 +111,11 @@ async def capture_page(ws, url, output_path, width=1280, height=900, is_mobile=F
     await send_cdp(ws, "Page.navigate", {"url": url}, msg_id=11)
     await asyncio.sleep(wait_sec)
 
-    # DOM landmark verification
-    dom_ready = await verify_dom_landmark(ws, timeout_sec=8)
-    if not dom_ready:
-        print(f"Warning: DOM landmark verification timed out for {url}, capturing anyway...")
+    # DOM landmark and chart verification with hard assertion
+    geom = await verify_dom_and_charts(ws, require_chart=require_chart, timeout_sec=15)
+
+    if width >= 1280 and geom.get("has_overflow"):
+        print(f"  [LAYOUT WARNING] Horizontal overflow detected: {geom.get('scroll_width')}px > 1280px")
 
     # Capture screenshot
     res = await send_cdp(ws, "Page.captureScreenshot", {"format": "png"}, msg_id=12)
@@ -93,8 +123,9 @@ async def capture_page(ws, url, output_path, width=1280, height=900, is_mobile=F
 
     with open(output_path, "wb") as f:
         f.write(img_data)
-    landmark_status = "DOM verified" if dom_ready else "DOM timeout"
-    print(f"Captured: {output_path.name} ({width}x{height}, {len(img_data):,} bytes, {landmark_status})")
+
+    chart_info = f", chart={geom['chart_width']}x{geom['chart_height']}" if require_chart else ""
+    print(f"Captured: {output_path.name} ({width}x{height}, {len(img_data):,} bytes, DOM verified{chart_info})")
 
 
 async def run_capture_pipeline():
@@ -179,56 +210,57 @@ async def run_capture_pipeline():
             await send_cdp(ws, "Page.enable", msg_id=1)
 
             await asyncio.sleep(2)  # Initial Streamlit websocket connection stabilization
-            # 1. Page 1: Overview Desktop
+
+            # 1. Page 1: Overview Desktop (with chart)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Overview",
                 OUTPUT_DIR / "01_overview_desktop.png",
-                width=1280, height=900, is_mobile=False, wait_sec=6
+                width=1280, height=900, is_mobile=False, require_chart=True, wait_sec=6
             )
 
-            # 2. Page 2: Company Analysis Desktop
+            # 2. Page 2: Company Analysis Desktop (with chart)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Company+Analysis",
                 OUTPUT_DIR / "02_company_analysis_desktop.png",
-                width=1280, height=950, is_mobile=False, wait_sec=4
+                width=1280, height=950, is_mobile=False, require_chart=True, wait_sec=4
             )
 
-            # 3. Page 3: Peer Comparison Desktop
+            # 3. Page 3: Peer Comparison Desktop (with chart)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Peer+Comparison",
                 OUTPUT_DIR / "03_peer_comparison_desktop.png",
-                width=1280, height=950, is_mobile=False, wait_sec=4
+                width=1280, height=950, is_mobile=False, require_chart=True, wait_sec=4
             )
 
-            # 4. Page 4: Price & Technical Analysis Desktop
+            # 4. Page 4: Price & Technical Analysis Desktop (with chart)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Price+%26+Technical+Analysis",
                 OUTPUT_DIR / "04_technical_analysis_desktop.png",
-                width=1280, height=900, is_mobile=False, wait_sec=4
+                width=1280, height=900, is_mobile=False, require_chart=True, wait_sec=4
             )
 
-            # 5. Page 5: Data Integrity Desktop
+            # 5. Page 5: Data Integrity Desktop (tables and expanders)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Data+Integrity+%26+Methodology",
                 OUTPUT_DIR / "05_data_integrity_desktop.png",
-                width=1280, height=950, is_mobile=False, wait_sec=4
+                width=1280, height=950, is_mobile=False, require_chart=False, wait_sec=4
             )
 
-            # 6. Page 2: Company Analysis Mobile View
+            # 6. Page 2: Company Analysis Mobile View (390x844)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Company+Analysis",
                 OUTPUT_DIR / "06_company_analysis_mobile.png",
-                width=390, height=844, is_mobile=True, wait_sec=4
+                width=390, height=844, is_mobile=True, require_chart=True, wait_sec=4
             )
 
-            # 7. Page 4: Price & Technical Analysis Mobile View
+            # 7. Page 4: Price & Technical Analysis Mobile View (390x844)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Price+%26+Technical+Analysis",
                 OUTPUT_DIR / "07_technical_analysis_mobile.png",
-                width=390, height=844, is_mobile=True, wait_sec=4
+                width=390, height=844, is_mobile=True, require_chart=True, wait_sec=4
             )
 
-        print("\nAll 7 visual QA screenshots successfully captured into docs/screenshots/!")
+        print("\nAll 7 visual QA screenshots successfully captured into docs/screenshots/ with full DOM and chart validation!")
         ret = 0
     except Exception as e:
         print(f"Error during screenshot capture: {e}")

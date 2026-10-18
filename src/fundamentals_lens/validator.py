@@ -928,11 +928,27 @@ class FundamentalsValidator:
             return results
 
         evidence_map = {}
+        evidence_keys = set()
+        evidence_dups = []
         for reg in evidence_register:
             key = (reg.get("ticker"), reg.get("fiscal_year_label"))
+            if key in evidence_keys:
+                evidence_dups.append(f"Duplicate evidence register entry for {key}")
+            evidence_keys.add(key)
             evidence_map[key] = reg
             yr_key = (reg.get("ticker"), reg.get("fiscal_year"))
             evidence_map[yr_key] = reg
+
+        if evidence_dups:
+            results.append(ValidationResult(
+                rule_id="GATE_FACT_EVIDENCE_ALIGNMENT",
+                rule_name="Fact-to-Evidence Exact Alignment",
+                status=ValidationStatus.FAIL,
+                message=f"Duplicate evidence register entries detected: {evidence_dups[:3]}",
+                details={"duplicate_errors": evidence_dups},
+                dimension="SOURCE_LINEAGE"
+            ))
+            return results
 
         if discrepancies is None:
             try:
@@ -1058,16 +1074,16 @@ class FundamentalsValidator:
                         disc_note = m_ev.get("discrepancy_note", "")
                         if not disc_note or "DISC-" not in disc_note:
                             tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: RECONCILED_WITH_DOCUMENTED_ADJUSTMENT requires explicit discrepancy ledger citation")
-                        # Strict Discrepancy Matching Guard: reported_value must match approved discrepancy amount exactly
-                        matched_disc = None
-                        for d in (discrepancies or []):
-                            if d.get("ticker") == f.ticker and d.get("metric") == m:
-                                d_lbl = d.get("fiscal_year_label", "")
-                                if d_lbl == f.fiscal_year_label or str(f.fiscal_year) in d_lbl:
-                                    approved_rep = d.get("primary_reported_value") if d.get("primary_reported_value") is not None else d.get("reported_value")
-                                    if approved_rep is not None and abs(float(rep_val) - float(approved_rep)) < 0.001:
-                                        matched_disc = d
-                                        break
+                        from .reconciliation import find_matching_approved_discrepancy
+                        matched_disc = find_matching_approved_discrepancy(
+                            ticker=f.ticker,
+                            metric_key=m,
+                            fiscal_year=f.fiscal_year,
+                            fiscal_year_label=f.fiscal_year_label,
+                            reported_val=float(rep_val),
+                            canonical_val=float(canon_val),
+                            discrepancy_ledger=discrepancies or []
+                        )
                         if not matched_disc:
                             tier_errors.append(
                                 f"{f.ticker} {f.fiscal_year_label} {m}: Reported value {rep_val} does not match any approved discrepancy in ledger (unapproved discrepancy delta)"
@@ -1150,9 +1166,33 @@ class FundamentalsValidator:
             ))
         else:
             obs_map = {}
+            obs_keys = set()
+            obs_ids = set()
+            source_obs_dups = []
             for obs in source_observations:
+                oid = obs.get("observation_id")
+                if oid and oid in obs_ids:
+                    source_obs_dups.append(f"Duplicate observation_id: '{oid}'")
+                if oid:
+                    obs_ids.add(oid)
+
+                k = (obs.get("ticker"), obs.get("fiscal_year"), obs.get("metric_name"))
+                if k in obs_keys:
+                    source_obs_dups.append(f"Duplicate (ticker, fiscal_year, metric_name): {k}")
+                obs_keys.add(k)
                 obs_map[(obs.get("ticker"), obs.get("fiscal_year_label"), obs.get("metric_name"))] = obs
-                obs_map[(obs.get("ticker"), obs.get("fiscal_year"), obs.get("metric_name"))] = obs
+                obs_map[k] = obs
+
+            if source_obs_dups:
+                results.append(ValidationResult(
+                    rule_id="GATE_INDEPENDENT_SOURCE_OBSERVATION",
+                    rule_name="Independent Source Observation Provenance & Cross-Check",
+                    status=ValidationStatus.FAIL,
+                    message=f"Duplicate source observations detected: {source_obs_dups[:3]}",
+                    details={"errors": source_obs_dups},
+                    dimension="SOURCE_LINEAGE"
+                ))
+                return results
 
             source_obs_errors = []
             for f in facts:

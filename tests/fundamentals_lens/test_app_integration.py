@@ -32,11 +32,20 @@ def test_streamlit_app_company_analysis_page():
     at.run()
     assert len(at.exception) == 0, [e.value for e in at.exception]
     
-    # Switch company
+    # Initial company check
     assert len(at.selectbox) > 0
+    init_company = at.selectbox[0].value
+
+    # Switch company to TCS and assert behavioral state mutation
     at.selectbox[0].set_value("TCS")
     at.run()
     assert len(at.exception) == 0, [e.value for e in at.exception]
+    assert at.selectbox[0].value == "TCS"
+    assert at.selectbox[0].value != init_company
+
+    # Assert rendered markdown/header dynamically reflects the newly selected company
+    rendered_text = " ".join(m.value for m in at.markdown) + " " + " ".join(h.value for h in at.header)
+    assert "TCS" in rendered_text or "Tata Consultancy Services" in rendered_text
 
 
 def test_streamlit_app_peer_comparison_page():
@@ -89,12 +98,20 @@ def test_streamlit_app_technical_analysis_page_and_demo_switching():
     assert len(at.radio) > 0
 
     # Test switching demo asset if selectbox is available
-    if len(at.selectbox) > 0:
-        demo_opts = at.selectbox[0].options
-        if len(demo_opts) > 1:
-            at.selectbox[0].set_value(demo_opts[1])
-            at.run()
-            assert len(at.exception) == 0, [e.value for e in at.exception]
+    demo_sb = None
+    for sb in at.selectbox:
+        if "Demo Asset" in getattr(sb, "label", ""):
+            demo_sb = sb
+            break
+
+    if demo_sb is not None and len(demo_sb.options) > 1:
+        initial_val = demo_sb.value
+        target_val = demo_sb.options[1]
+        demo_sb.set_value(target_val)
+        at.run()
+        assert len(at.exception) == 0, [e.value for e in at.exception]
+        assert demo_sb.value == target_val
+        assert demo_sb.value != initial_val
 
 
 def test_streamlit_app_technical_analysis_indicator_toggles_and_benchmark():
@@ -113,13 +130,19 @@ def test_streamlit_app_technical_analysis_indicator_toggles_and_benchmark():
                 at.selectbox[1].set_value(opt)
                 at.run()
                 assert len(at.exception) == 0, [e.value for e in at.exception]
+                assert at.selectbox[1].value == opt
                 break
 
-    # Toggle checkboxes if present
+    # Toggle checkboxes if present and assert behavioral state mutation
     if len(at.checkbox) > 0:
-        at.checkbox[0].uncheck()
+        orig_state = at.checkbox[0].value
+        if orig_state is True:
+            at.checkbox[0].uncheck()
+        else:
+            at.checkbox[0].check()
         at.run()
         assert len(at.exception) == 0, [e.value for e in at.exception]
+        assert at.checkbox[0].value != orig_state
 
 
 def test_technical_analysis_invalid_csv_diagnostics():

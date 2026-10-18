@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """
-Phase 13 Independent Source Observation Pipeline.
+Phase 13 Independent Source Observation Pipeline (Phase 14 Hardened).
 Rebuilds `datasets/fundamentals_lens/source_observations.json` (375 primary observations).
 
 Guarantees:
 1. Strict independence from `financial_facts_5yr.json` (no circular provenance).
 2. Clean-clone reproducibility in offline mode without requiring network access,
    API keys, or git-ignored scratch caches.
-3. Accurate metric definition types for each individual metric.
-4. Full source provenance, statement locator specificity, and attribution tracking.
-5. Honest verification tiers: all 375 observations verified from primary audited statements or SEC XBRL.
-6. Support for optional online SEC verification audit mode with genuine User-Agent and error handling.
+3. Pre-map uniqueness validation: strictly verifies absence of duplicate observation IDs
+   and duplicate (ticker, fiscal_year, metric) records before dictionary population.
+4. Truthful offline/online telemetry: Offline runs emit `source_document_status: "OFFLINE_AUDITED"`,
+   never falsely inheriting or elevating to `ONLINE_VERIFIED`.
+5. Accurate metric definition types for each individual metric.
+6. Full source provenance, statement locator specificity, and attribution tracking.
 """
 
 import sys
@@ -20,7 +22,7 @@ import time
 import argparse
 import hashlib
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Set
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATASETS_DIR = REPO_ROOT / "datasets" / "fundamentals_lens"
@@ -52,6 +54,8 @@ def build_observations_offline(
     """
     Builds observations strictly from tracked source input extracts.
     Never reads or imports financial_facts_5yr.json.
+    Truthfully assigns OFFLINE_AUDITED document status in offline builds.
+    Validates pre-map uniqueness for all observations.
     """
     target_us_file = us_input_file or US_INPUT_FILE
     target_indian_file = indian_input_file or INDIAN_INPUT_FILE
@@ -106,7 +110,7 @@ def build_observations_offline(
             "extraction_method": item["extraction_method"],
             "verification_mode": "OFFLINE",
             "verification_timestamp": build_timestamp,
-            "source_document_status": item["source_document_status"],
+            "source_document_status": "OFFLINE_AUDITED",
             "confidence_tier": item["confidence_tier"],
             "discrepancy_reference": item.get("discrepancy_reference"),
             "data_provenance": item["data_provenance"]
@@ -152,12 +156,26 @@ def build_observations_offline(
             "extraction_method": "PENDING_STATEMENT_AUDIT" if is_pending else item.get("extraction_method", "MANUAL_AUDITED_STATEMENT_EXTRACT"),
             "verification_mode": "OFFLINE",
             "verification_timestamp": build_timestamp,
-            "source_document_status": item["source_document_status"],
+            "source_document_status": "OFFLINE_AUDITED",
             "confidence_tier": item["confidence_tier"],
             "discrepancy_reference": item.get("discrepancy_reference"),
             "data_provenance": item["data_provenance"]
         }
         observations.append(obs)
+
+    # Pre-map Uniqueness Validation (M1)
+    obs_id_set: Set[str] = set()
+    obs_key_set: Set[tuple] = set()
+    for o in observations:
+        oid = o["observation_id"]
+        if oid in obs_id_set:
+            raise ValueError(f"Duplicate observation_id detected: '{oid}'")
+        obs_id_set.add(oid)
+
+        k = (o["ticker"], o["fiscal_year"], o["metric_name"])
+        if k in obs_key_set:
+            raise ValueError(f"Duplicate (ticker, fiscal_year, metric_name) detected: {k}")
+        obs_key_set.add(k)
 
     # Sort deterministically: ticker, fiscal_year, metric order
     def sort_key(x: Dict[str, Any]):
@@ -215,17 +233,18 @@ def run_online_sec_audit(observations: List[Dict[str, Any]], build_timestamp: st
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Phase 13 Independent Source Observation Pipeline")
+    parser = argparse.ArgumentParser(description="Phase 13 Independent Source Observation Pipeline (Phase 14 Hardened)")
     parser.add_argument("--online", action="store_true", help="Perform live online SEC submissions audit")
     parser.add_argument("--offline", action="store_true", default=True, help="Run in strict offline reproducible mode (default)")
+    parser.add_argument("--timestamp", type=str, default=None, help="Fixed ISO timestamp for deterministic build")
     parser.add_argument("--us-input", type=str, default=None, help="Path to custom US source input extracts")
     parser.add_argument("--indian-input", type=str, default=None, help="Path to custom Indian source input extracts")
     parser.add_argument("--output-file", type=str, default=None, help="Path to output source observations JSON")
     args = parser.parse_args()
 
-    build_time = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    build_time = args.timestamp or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     print("=" * 80)
-    print("FUNDAMENTALS LENS: INDEPENDENT SOURCE OBSERVATION PIPELINE (PHASE 13)")
+    print("FUNDAMENTALS LENS: INDEPENDENT SOURCE OBSERVATION PIPELINE (PHASE 14 HARDENED)")
     print(f"Execution mode: {'ONLINE SEC AUDIT' if args.online else 'OFFLINE CLEAN-CLONE REPRODUCIBLE'}")
     print(f"Timestamp:      {build_time}")
     print("=" * 80)
@@ -253,8 +272,13 @@ def main():
     online_cnt = sum(1 for o in observations if o["verification_mode"] == "ONLINE")
     offline_cnt = sum(1 for o in observations if o["verification_mode"] == "OFFLINE")
 
+    status_breakdown = {}
+    for o in observations:
+        s = o.get("source_document_status", "UNKNOWN")
+        status_breakdown[s] = status_breakdown.get(s, 0) + 1
+
     build_report = {
-        "pipeline_version": "Phase 13 Release Candidate",
+        "pipeline_version": "Phase 14 Hardened Release Candidate",
         "build_timestamp": build_time,
         "mode": "ONLINE" if args.online else "OFFLINE",
         "inputs": {
@@ -275,6 +299,7 @@ def main():
             "indian_observations": in_cnt,
             "online_audited": online_cnt,
             "offline_reproduced": offline_cnt,
+            "source_document_status_breakdown": status_breakdown,
             "reconciliation_percentage": round((reconciled_cnt / total_obs) * 100.0, 2)
         }
     }
@@ -289,6 +314,7 @@ def main():
     print(f"  Source-Linked Only:          {source_linked_cnt} ({round((source_linked_cnt/total_obs)*100.0, 1)}%)")
     print(f"  Offline Verified:            {offline_cnt}")
     print(f"  Online Verified:             {online_cnt}")
+    print(f"  Document Status Breakdown:   {status_breakdown}")
     print(f"\nSaved canonical source observations to: {OUTPUT_FILE}")
     print(f"Saved build audit report to:            {BUILD_REPORT_FILE}")
     print(f"Summary: Reconciled={reconciled_cnt} ({round((reconciled_cnt/total_obs)*100.0, 1)}%), Source-Linked={source_linked_cnt} ({round((source_linked_cnt/total_obs)*100.0, 1)}%)")

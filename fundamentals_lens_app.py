@@ -1031,6 +1031,14 @@ elif selected_page == "Peer Comparison":
             companies, facts_by_ticker, selected_group_id, selected_metric
         )
 
+    # Analytical Safeguard: Surface explicit suppression warnings
+    suppressed_series = [s for s in matrix["series"] if s.get("is_suppressed")]
+    if suppressed_series:
+        st.warning(
+            "⚠️ **Analytical Safeguard Triggered:** The following company series are suppressed from direct ranking and comparative plotting due to structural accounting incompatibilities:\n" +
+            "\n".join([f"- **{s['ticker']} ({s['company_name']}):** {s.get('suppress_reason')}" for s in suppressed_series])
+        )
+
     # Multi-line comparative chart
     fig_peer = go.Figure()
     palette = ["#0284C7", "#0D9488", "#F59E0B", "#8B5CF6"]
@@ -1038,14 +1046,18 @@ elif selected_page == "Peer Comparison":
     for idx, s in enumerate(matrix["series"]):
         x_vals = [pt["fiscal_year_label"] for pt in s["data"]]
         y_vals = [pt["value"] for pt in s["data"]]
+        is_sup = s.get("is_suppressed", False)
+        trace_name = f"{s['ticker']} (Suppressed)" if is_sup else f"{s['ticker']} ({s['company_name']})"
+        h_template = f"<b>{s['ticker']} (%{{x}})</b><br>SUPPRESSED: {s.get('suppress_reason')}<extra></extra>" if is_sup else f"<b>{s['ticker']} (%{{x}})</b><br>{matrix['unit']}: %{{y}}<extra></extra>"
+
         fig_peer.add_trace(go.Scatter(
             x=x_vals,
             y=y_vals,
-            name=f"{s['ticker']} ({s['company_name']})",
+            name=trace_name,
             mode="lines+markers",
-            line=dict(width=3, color=palette[idx % len(palette)]),
+            line=dict(width=3, color=palette[idx % len(palette)], dash="dot" if is_sup else "solid"),
             marker=dict(size=8),
-            hovertemplate=f"<b>{s['ticker']} (%{{x}})</b><br>{matrix['unit']}: %{{y}}<extra></extra>"
+            hovertemplate=h_template
         ))
 
     if use_indexing:

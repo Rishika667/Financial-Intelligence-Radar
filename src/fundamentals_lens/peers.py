@@ -3,7 +3,7 @@ Peer comparison engine and analytical safeguards for Fundamentals Lens.
 Provides defensible peer metrics, comparability caveats, and currency guards.
 """
 from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 from .models import Company, FinancialFact, DerivedMetrics
 from .metrics import compute_derived_metrics_for_company
 
@@ -121,6 +121,43 @@ class PeerComparisonEngine:
         return PEER_GROUP_METADATA
 
     @classmethod
+    def evaluate_metric_comparability(
+        cls,
+        group_id: str,
+        metric_name: str,
+        company: Company,
+        fact: FinancialFact,
+        is_single_currency: bool
+    ) -> Tuple[bool, Optional[str]]:
+        """
+        Determines whether a specific metric observation is comparable within its peer group.
+        Returns (is_suppressed, suppression_reason).
+
+        Analytical Guards:
+        1. Cross-Currency Guard: Nominal metrics (Revenue, Operating Income, Net Income, OCF, Capex, FCF)
+           are suppressed across mixed currencies to prevent unadjusted nominal comparisons.
+        2. Operating Profit Proxy Guard:
+           - TCS reports PBEI proxy (excluding other operating items); suppressed against standard EBIT in Indian IT.
+           - Bajaj Auto reports EBITDA proxy (excluding depreciation); suppressed against standard EBIT in Indian Auto.
+        3. Accounting Taxonomy Nuances:
+           - FMCG peers mutually report PBEI proxy (comparable within group with caveat).
+        """
+        nominal_metrics = {"revenue", "operating_income", "net_income", "operating_cash_flow", "capital_expenditure", "free_cash_flow"}
+
+        # 1. Cross-currency guard
+        if metric_name in nominal_metrics and not is_single_currency:
+            return True, f"Cross-currency nominal comparison is suppressed ({company.reporting_currency} vs mixed peer currencies). Compare percentage margins or growth rates instead."
+
+        # 2. Operating income / operating margin definition compatibility
+        if metric_name in ("operating_income", "operating_margin"):
+            if group_id == "group_b_india_it" and company.ticker == "TCS":
+                return True, "TCS operating profit reflects PBEI proxy (excluding other operating items), not directly comparable to EBIT (DISC-007). Direct ranking and chart series suppressed."
+            if group_id == "group_d_india_auto" and company.ticker == "BAJAJ-AUTO":
+                return True, "Bajaj Auto operating profit reflects EBITDA proxy (excluding depreciation of ~₹448 Cr), not directly comparable to EBIT (DISC-008). Direct ranking and chart series suppressed."
+
+        return False, None
+
+    @classmethod
     def build_peer_comparison_matrix(
         cls,
         companies: List[Company],
@@ -129,7 +166,7 @@ class PeerComparisonEngine:
         metric_name: str
     ) -> Dict[str, Any]:
         """
-        Builds a multi-period matrix for peer comparison with unit guards.
+        Builds a multi-period matrix for peer comparison with unit guards and analytical suppression.
         Supported metrics: 'revenue', 'revenue_growth_yoy', 'operating_margin', 
                            'net_margin', 'free_cash_flow', 'cash_conversion_ratio'
         """
@@ -160,7 +197,7 @@ class PeerComparisonEngine:
         if metric_name == "operating_income":
             metric_note = (
                 "Accounting Definition Note: US peers report US GAAP Operating Income; Indian IT peers report Ind AS EBIT; "
-                "Indian FMCG and Auto peers report Profit Before Exceptional Items (PBEI). Direct rankings should account for these standards."
+                "Indian FMCG and Auto peers report Profit Before Exceptional Items (PBEI). Incompatible proxies (TCS PBEI, Bajaj Auto EBITDA) are automatically suppressed."
             )
         elif metric_name == "capital_expenditure":
             metric_note = (
@@ -169,14 +206,17 @@ class PeerComparisonEngine:
             )
 
         series_data = []
+        any_suppression = False
 
         for c in group_companies:
             c_facts = sorted(facts_by_ticker.get(c.ticker, []), key=lambda x: x.fiscal_year)
             c_derived = compute_derived_metrics_for_company(c_facts)
             derived_map = {d.fiscal_year: d for d in c_derived}
-            facts_map = {f.fiscal_year: f for f in c_facts}
 
             data_points = []
+            series_suppressed = False
+            series_suppress_reason = None
+
             for f in c_facts:
                 yr = f.fiscal_year
                 d = derived_map.get(yr)
@@ -195,6 +235,20 @@ class PeerComparisonEngine:
                 elif metric_name == "cash_conversion_ratio":
                     val = d.cash_conversion_ratio if d else None
 
+                suppressed, s_reason = cls.evaluate_metric_comparability(
+                    group_id=group_id,
+                    metric_name=metric_name,
+                    company=c,
+                    fact=f,
+                    is_single_currency=is_single_currency
+                )
+
+                if suppressed:
+                    series_suppressed = True
+                    any_suppression = True
+                    if not series_suppress_reason:
+                        series_suppress_reason = s_reason
+
                 data_points.append({
                     "fiscal_year": yr,
                     "fiscal_year_label": f.fiscal_year_label,
@@ -202,15 +256,27 @@ class PeerComparisonEngine:
                     "period_end": f.period_end,
                     "period_date_display": f"{f.fiscal_year_label} ({f.period_end})" if f.period_end else f.fiscal_year_label,
                     "comparability_flag": getattr(f, "comparability_flag", None) or "UNKNOWN",
-                    "value": val
+                    "value": None if suppressed else val,
+                    "nominal_value": val,
+                    "is_suppressed": suppressed,
+                    "suppress_reason": s_reason
                 })
 
             series_data.append({
                 "ticker": c.ticker,
                 "company_name": c.name,
                 "currency": c.reporting_currency,
+                "is_suppressed": series_suppressed,
+                "suppress_reason": series_suppress_reason,
                 "data": data_points
             })
+
+        caveats = list(group_meta.structural_caveats)
+        if any_suppression:
+            caveats.append(
+                "Analytical Safeguard: Incompatible metric definitions (e.g. proxy metrics, cross-currency nominals) "
+                "are automatically suppressed from rankings and comparative plots to prevent analytical distortion."
+            )
 
         return {
             "group_id": group_id,
@@ -221,7 +287,7 @@ class PeerComparisonEngine:
             "is_single_currency": is_single_currency,
             "currency_code": currency_code,
             "comparability_notes": group_meta.comparability_notes,
-            "structural_caveats": group_meta.structural_caveats,
+            "structural_caveats": caveats,
             "series": series_data
         }
 
@@ -238,26 +304,27 @@ class PeerComparisonEngine:
         Builds an indexed comparison matrix where performance is normalized to 100.0
         at a designated base year (or earliest available period).
         Formula: Indexed_t = (Metric_t / Metric_{base}) * 100.0.
-        If Metric_{base} <= 0 or missing, indexing is suppressed with an explicit warning.
+        If Metric_{base} <= 0, missing, or suppressed, indexing is suppressed with an explicit reason.
         """
         matrix = cls.build_peer_comparison_matrix(companies, facts_by_ticker, group_id, metric_name)
         if "error" in matrix:
             return matrix
 
-        # Collect all available fiscal years across series
+        # Collect all available fiscal years across unsuppressed series
         all_years = []
         series_years = []
         for s in matrix["series"]:
-            years_for_s = {
-                pt["fiscal_year"] for pt in s["data"]
-                if pt.get("fiscal_year") is not None and pt.get("value") is not None
-            }
-            if years_for_s:
-                series_years.append(years_for_s)
-                all_years.extend(list(years_for_s))
+            if not s.get("is_suppressed"):
+                years_for_s = {
+                    pt["fiscal_year"] for pt in s["data"]
+                    if pt.get("fiscal_year") is not None and pt.get("value") is not None
+                }
+                if years_for_s:
+                    series_years.append(years_for_s)
+                    all_years.extend(list(years_for_s))
         
         if not all_years:
-            return {"error": "No historical periods with valid data found for indexed comparison."}
+            return {"error": "No historical periods with valid unsuppressed data found for indexed comparison."}
 
         common_years = set.intersection(*series_years) if series_years else set()
 
@@ -280,7 +347,10 @@ class PeerComparisonEngine:
             suppressed = False
             suppress_reason = None
 
-            if base_val is None:
+            if s.get("is_suppressed"):
+                suppressed = True
+                suppress_reason = s.get("suppress_reason")
+            elif base_val is None:
                 suppressed = True
                 suppress_reason = f"Base period ({base_year_used}) value is unavailable."
             elif base_val <= 0:
@@ -290,7 +360,10 @@ class PeerComparisonEngine:
             indexed_data = []
             for pt in s["data"]:
                 val = pt["value"]
-                if suppressed or val is None or base_val is None or base_val == 0:
+                pt_suppressed = pt.get("is_suppressed", False)
+                pt_reason = pt.get("suppress_reason")
+
+                if suppressed or pt_suppressed or val is None or base_val is None or base_val == 0:
                     idx_val = None
                 else:
                     idx_val = round((val / base_val) * 100.0, 2)
@@ -303,7 +376,9 @@ class PeerComparisonEngine:
                     "period_date_display": pt.get("period_date_display"),
                     "comparability_flag": pt.get("comparability_flag"),
                     "value": idx_val,
-                    "nominal_value": val
+                    "nominal_value": pt.get("nominal_value"),
+                    "is_suppressed": suppressed or pt_suppressed,
+                    "suppress_reason": suppress_reason or pt_reason
                 })
 
             indexed_series.append({

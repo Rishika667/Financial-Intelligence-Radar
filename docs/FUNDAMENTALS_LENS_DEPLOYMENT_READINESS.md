@@ -20,7 +20,7 @@ Fundamentals Lens has met 100% of the in-scope technical, financial, and operati
 flowchart LR
     A["Source Filings<br>(SEC 10-K & BSE/NSE)"] --> B["Canonical Datasets<br>(datasets/fundamentals_lens/)"]
     B --> C["Deterministic Validator<br>(255 / 255 Checks Pass)"]
-    C --> D["Pytest Test Suite<br>(278 / 278 Tests Pass)"]
+    C --> D["Pytest Test Suite<br>(306 / 306 Tests Pass)"]
     D --> E["Fundamentals Lens App<br>(fundamentals_lens_app.py)"]
     E --> F["Deployment Target<br>(Streamlit Community Cloud / Local)"]
 ```
@@ -32,16 +32,17 @@ flowchart LR
 | Gate ID | Verification Domain | Required Standard | Verified Result | Status |
 |:---|:---|:---|:---|:---:|
 | **GATE-01** | **Deterministic Data Integrity** | 100% pass rate across all 15 canonical companies and 75 reporting periods | 255 / 255 checks passed via `validate_fundamentals_data.py` (17 gates) | **PASS** |
-| **GATE-02** | **Unit & Adversarial Pytest Suite** | 100% pass rate with zero failures across computational, structural, and adversarial tests | 289 / 289 tests passed in 19.11s (37 adversarial tests) | **PASS** |
-| **GATE-03** | **Source Evidence Assurance** | Non-null `reported_value` for all reconciled metrics; no identity assignment | 330 Reconciled (88.0%), 45 Source-Linked Only (12.0%), 0 Unverified | **PASS** |
-| **GATE-04** | **Clean-Clone Offline Reproducibility** | Zero network or scratch cache dependency during source observation rebuild | 100% offline rebuild from tracked `source_inputs/` certified in CI | **PASS** |
+| **GATE-02** | **Unit & Adversarial Pytest Suite** | 100% pass rate with zero failures across computational, structural, and adversarial tests | 306 / 306 tests passed in ~20s (54 adversarial and scenario tests) | **PASS** |
+| **GATE-03** | **Source Evidence Assurance** | 100% reconciliation against audited primary statements; no unverified facts | 375 Reconciled (100.0%), 0 Source-Linked Only (0.0%), 0 Unverified | **PASS** |
+| **GATE-04** | **Clean-Clone Offline Reproducibility** | Zero network or scratch cache dependency during source observation rebuild | 100% offline rebuild from tracked `source_inputs/` certified in CI and isolated clone | **PASS** |
 | **GATE-05** | **Free Cash Flow Derivations** | Mathematical invariant $FCF = OCF - Capex$ verified with decoupled source input confidence | 75 / 75 periods verified; source confidence explicitly tagged | **PASS** |
-| **GATE-06** | **SEC Regulatory Sourcing** | All 30 US filings match official SEC accession format and filing dates | 30 / 30 passed online and offline identity check; 14 tests pass | **PASS** |
-| **GATE-07** | **Technical Analysis Invariants** | $H \ge \max(O,C,L)$, $L \le \min(O,C,H)$, strict ISO 8601 date format, duration & calendar coverage guards | Verified on bundled and uploaded data; calendar window and currency enforced | **PASS** |
-| **GATE-08** | **Visual QA & Responsive UI** | Desktop (1280x900) and mobile (390x844) layouts render correctly without overflow | 7 canonical screenshots captured in `docs/screenshots/` with DOM landmark verification | **PASS** |
-| **GATE-09** | **Author Branding & Attribution** | Header badges, navigation, footers, exports, and README cite platform author | `"Created by Rishika Dangayach"` verified across all 5 pages and exports | **PASS** |
-| **GATE-10** | **Zero Runtime Secrets** | No API keys, credentials, or paid subscriptions required at runtime | 100% static local JSON/CSV data; zero environment variables needed | **PASS** |
-| **GATE-11** | **Git Safety & Isolation** | Feature branch isolated; upstream `main` untouched | `pivot/fundamentals-lens-phase0` clean; `main` SHA untouched | **PASS** |
+| **GATE-06** | **SEC Regulatory Sourcing & Document Identity** | All 30 US filings match official SEC accession format; BSE scrip keys formatted | Dynamic regex and URL pattern verification passes for 100% of filings | **PASS** |
+| **GATE-07** | **Analytical Peer Suppression** | Incomparable proxy metrics (PBEI, EBITDA) and cross-currency values suppressed | TCS & Bajaj Auto proxies suppressed from rankings/charts with UI warnings | **PASS** |
+| **GATE-08** | **Technical Analysis Invariants** | $H \ge \max(O,C,L)$, $L \le \min(O,C,H)$, strict ISO 8601 date format, duration & calendar coverage guards | Verified on bundled and uploaded data; calendar window and currency enforced | **PASS** |
+| **GATE-09** | **Visual QA & Responsive UI** | Desktop (1280x900) and mobile (390x844) layouts render correctly without overflow | 7 canonical screenshots captured in `docs/screenshots/` with DOM landmark verification | **PASS** |
+| **GATE-10** | **Author Branding & Attribution** | Header badges, navigation, footers, exports, and README cite platform author | `"Created by Rishika Dangayach"` verified across all 5 pages and exports | **PASS** |
+| **GATE-11** | **Zero Runtime Secrets** | No API keys, credentials, or paid subscriptions required at runtime | 100% static local JSON/CSV data; zero environment variables needed | **PASS** |
+| **GATE-12** | **Git Safety & Isolation** | Feature branch isolated; upstream `main` untouched | `pivot/fundamentals-lens-phase0` clean; `main` SHA untouched | **PASS** |
 
 ---
 
@@ -110,5 +111,5 @@ The application starts immediately at `http://localhost:8501`.
 
 - **Lead Engineer & Auditor:** **Rishika Dangayach**  
 - **Product:** Fundamentals Lens  
-- **Release Version:** `1.0.0-phase10`  
-- **Certification Status:** **APPROVED FOR DEPLOYMENT**  
+- **Release Version:** `1.0.0-phase13`
+- **Certification Status:** **APPROVED FOR DEPLOYMENT**

@@ -1,10 +1,10 @@
 # Fundamentals Lens: Master Sourcing & Evidence Assurance Audit
 
-**Platform:** Fundamentals Lens (`Rishika667/Financial-Intelligence-Radar`)  
-**Phase:** Phase 12 — Source-Truth Repair, Clean-Clone Pipeline Reproducibility & 88.5% Readiness
-**Author & Lead Engineer:** **Rishika Dangayach**  
-**Audit Standard:** Zero-Coercion, Primary Statement Citation, Documented Discrepancy Ledger  
-**Dataset Snapshot Cutoff:** `2026-10-18`  
+**Platform:** Fundamentals Lens (`Rishika667/Financial-Intelligence-Radar`)<br>
+**Phase:** Phase 13 — Full Source Reconciliation, Analytical Suppression & Deployment-Candidate Certification<br>
+**Author & Lead Engineer:** **Rishika Dangayach**<br>
+**Audit Standard:** Zero-Coercion, Primary Statement Citation, Documented Discrepancy Ledger<br>
+**Dataset Snapshot Cutoff:** `2026-10-18`
 
 ---
 
@@ -14,8 +14,8 @@ Every financial metric observation in Fundamentals Lens is assigned an unambiguo
 
 | Verification Tier | Technical Definition | Required Evidence Attributes | Current Metric Count |
 |:---|:---|:---|:---:|
-| **`INDEPENDENTLY_RECONCILED`** | The metric has been verified directly against the official audited financial statement (Form 10-K or BSE/NSE Annual Report) with line-item and locator match. | Non-null `reported_value`, `comparison_result` (`EXACT_STATEMENT_MATCH` or documented discrepancy), statement name ($\ge 3$ chars), reported line item ($\ge 3$ chars), statement locator ($\ge 5$ chars), and accession / filing key. | **330** (88.0%) |
-| **`SOURCE_LINKED_ONLY`** | Sourced directly from official annual filings with active primary URLs and document keys, but secondary line-item statement reconciliation is explicitly pending. | `reported_value = None`, `comparison_result = "NOT_RECONCILED"`, active primary document URL, filing key. Must **never** claim `EXACT_STATEMENT_MATCH`. | **45** (12.0%) |
+| **`INDEPENDENTLY_RECONCILED`** | The metric has been verified directly against the official audited financial statement (Form 10-K or BSE/NSE Annual Report) with line-item and locator match. | Non-null `reported_value`, `comparison_result` (`EXACT_STATEMENT_MATCH` or documented discrepancy), statement name ($\ge 3$ chars), reported line item ($\ge 3$ chars), statement locator ($\ge 5$ chars), and accession / filing key. | **375** (100.0%) |
+| **`SOURCE_LINKED_ONLY`** | Sourced directly from official annual filings with active primary URLs and document keys, but secondary line-item statement reconciliation is explicitly pending. | `reported_value = None`, `comparison_result = "NOT_RECONCILED"`, active primary document URL, filing key. Must **never** claim `EXACT_STATEMENT_MATCH`. | **0** (0.0%) |
 | **`DERIVED_VERIFIED`** | Mathematical derivation computed directly from audited primary disclosures. | Invariant verified ($FCF = OCF - Capex$). Decoupled source input confidence (`INDEPENDENTLY_RECONCILED_INPUTS` vs `SOURCE_LINKED_INPUTS`). | **75** (100% of periods) |
 | **`UNVERIFIED`** | Missing source provenance, invalid filing identity, or unverified disclosure. | Data suppressed or flagged for immediate review. | **0** (0.0%) |
 | **`FAILED`** | Mathematical contradiction, corrupted value, or invariant breach. | Triggers validation failure; app suppresses metric card. | **0** (0.0%) |
@@ -34,23 +34,23 @@ Every financial metric observation in Fundamentals Lens is assigned an unambiguo
 ### Group B: Indian IT Services (Ind AS • BSE / NSE Annual Reports)
 | Ticker | Company Name | Fiscal Periods | Filing Basis | Filing Accession / Scrip Reference | Sourced Statement Locations | Reconciled Metrics | Source-Linked (FY 2024–25) |
 |:---|:---|:---:|:---:|:---|:---|:---:|:---:|
-| `TCS` | Tata Consultancy Services | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-532540` / `TCS-AR-2022` to `2026` | Consolidated Statement of Profit & Loss and Cash Flows | 20 / 25 | 5 |
-| `INFY` | Infosys Ltd. | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-500209` / `INFY-AR-2022` to `2026` | Consolidated Financial Statements — Profit and Loss & Cash Flow | 20 / 25 | 5 |
-| `HCLTECH` | HCL Technologies | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-532281` / `HCLTECH-AR-2022` to `2026` | Consolidated Financial Statements — Statement of Profit and Loss | 20 / 25 | 5 |
+| `TCS` | Tata Consultancy Services | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-532540` / `TCS-AR-2022` to `2026` | Consolidated Statement of Profit & Loss and Cash Flows | 25 / 25 | 0 |
+| `INFY` | Infosys Ltd. | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-500209` / `INFY-AR-2022` to `2026` | Consolidated Financial Statements — Profit and Loss & Cash Flow | 25 / 25 | 0 |
+| `HCLTECH` | HCL Technologies | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-532281` / `HCLTECH-AR-2022` to `2026` | Consolidated Financial Statements — Statement of Profit and Loss | 25 / 25 | 0 |
 
 ### Group C: Indian Consumer Staples / FMCG (Ind AS • BSE / NSE Annual Reports)
 | Ticker | Company Name | Fiscal Periods | Filing Basis | Filing Accession / Scrip Reference | Sourced Statement Locations | Reconciled Metrics | Source-Linked (FY 2024–25) |
 |:---|:---|:---:|:---:|:---|:---|:---:|:---:|
-| `HINDUNILVR` | Hindustan Unilever | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-500696` / `HUL-AR-2022` to `2026` | Consolidated Statement of Profit and Loss & Cash Flow Statement | 20 / 25 | 5 |
-| `BRITANNIA` | Britannia Industries | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-500825` / `BRIT-AR-2022` to `2026` | Consolidated Financial Statements — P&L and Cash Flow | 20 / 25 | 5 |
-| `DABUR` | Dabur India | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-500096` / `DABUR-AR-2022` to `2026` | Consolidated Statement of Profit and Loss & Cash Flows | 20 / 25 | 5 |
+| `HINDUNILVR` | Hindustan Unilever | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-500696` / `HUL-AR-2022` to `2026` | Consolidated Statement of Profit and Loss & Cash Flow Statement | 25 / 25 | 0 |
+| `BRITANNIA` | Britannia Industries | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-500825` / `BRIT-AR-2022` to `2026` | Consolidated Financial Statements — P&L and Cash Flow | 25 / 25 | 0 |
+| `DABUR` | Dabur India | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-500096` / `DABUR-AR-2022` to `2026` | Consolidated Statement of Profit and Loss & Cash Flows | 25 / 25 | 0 |
 
 ### Group D: Indian Automobile Manufacturers (Ind AS • BSE / NSE Annual Reports)
 | Ticker | Company Name | Fiscal Periods | Filing Basis | Filing Accession / Scrip Reference | Sourced Statement Locations | Reconciled Metrics | Source-Linked (FY 2024–25) |
 |:---|:---|:---:|:---:|:---|:---|:---:|:---:|
-| `MARUTI` | Maruti Suzuki India | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-532500` / `MARUTI-AR-2022` to `2026` | Consolidated Statement of Profit and Loss & Cash Flows | 20 / 25 | 5 |
-| `BAJAJ-AUTO` | Bajaj Auto Ltd. | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-532977` / `BAJAJ-AR-2022` to `2026` | Consolidated Statement of Profit and Loss & Cash Flows | 20 / 25 | 5 |
-| `HEROMOTOCO` | Hero MotoCorp | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-500182` / `HERO-AR-2022` to `2026` | Consolidated Statement of Profit and Loss & Cash Flows | 20 / 25 | 5 |
+| `MARUTI` | Maruti Suzuki India | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-532500` / `MARUTI-AR-2022` to `2026` | Consolidated Statement of Profit and Loss & Cash Flows | 25 / 25 | 0 |
+| `BAJAJ-AUTO` | Bajaj Auto Ltd. | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-532977` / `BAJAJ-AR-2022` to `2026` | Consolidated Statement of Profit and Loss & Cash Flows | 25 / 25 | 0 |
+| `HEROMOTOCO` | Hero MotoCorp | FY 2021–22 to FY 2025–26 | Consolidated Ind AS | `BSE-SCRIP-500182` / `HERO-AR-2022` to `2026` | Consolidated Statement of Profit and Loss & Cash Flows | 25 / 25 | 0 |
 
 ### Group E: US Retail Leaders (US GAAP • Form 10-K)
 | Ticker | Company Name | Fiscal Periods | Filing Form | Primary Accession Range | Sourced Statement Locations | Reconciled Metrics | Source-Linked |
@@ -91,23 +91,23 @@ The canonical repository maintains a formal discrepancy ledger (`datasets/fundam
 ### Deterministic Clean-Clone Rebuild (100% Offline)
 ```bash
 # Rebuild source observations strictly from tracked source inputs
-python scripts/build_source_observations_phase12.py --offline
+python scripts/build_source_observations_phase13.py --offline
 
 # Rebuild evidence register and reconcile against canonical facts
-python scripts/build_evidence_register_phase12.py
+python scripts/build_evidence_register_phase13.py
 ```
 
 ### Deterministic Validation (100% Offline CI)
 ```bash
 python scripts/validate_fundamentals_data.py
 ```
-- Validates structural completeness, chronological dates, arithmetic invariants, source URLs, accessions, and evidence tier consistency across all 15 companies.
+- Validates structural completeness, chronological dates, arithmetic invariants, source URLs, accessions, dynamic document identity, and evidence tier consistency across all 15 companies.
 
 ### Full Test Suite Execution
 ```bash
 python -m pytest -q
 ```
-- Executes 289 unit, integration, and adversarial tests (including 37 adversarial invariant tests and clean-clone reproducibility tests).
+- Executes 306 unit, integration, and adversarial tests (including 54 adversarial invariant, Phase 13 scenario tests, and clean-clone reproducibility tests).
 
 ### SEC Submissions Audit (Offline & Online Modes)
 ```bash
@@ -124,10 +124,11 @@ python scripts/audit_sec_filings_online.py --user-agent "RishikaDangayach rishik
 ## 5. Summary Certification
 
 - **Universe Integrity:** Exactly 15 companies, 75 consecutive annual periods.
-- **Evidence Integrity:** 330 Reconciled (88.0%), 45 Source-Linked (12.0%), 0 Unverified.
+- **Evidence Integrity:** 375 Reconciled (100.0%), 0 Source-Linked (0.0%), 0 Unverified (0.0%).
 - **Derived Integrity:** 75 Free Cash Flow records mathematically validated with decoupled source input confidence.
 - **Validation Gates:** 255 / 255 checks passing (100.0%).
-- **Pytest Suite:** 289 / 289 tests passing (100.0%).
+- **Pytest Suite:** 306 / 306 tests passing (100.0%).
 - **Discrepancy Ledger:** 16 documented accounting items (DISC-001 through DISC-016).
 - **Clean-Clone Certification:** 100% offline reproducible without git-ignored scratch caches.
+- **Peer Safeguards:** Analytical suppression enforced for proxy metrics and cross-currency comparisons.
 - **Platform Author:** **Rishika Dangayach**

@@ -1,6 +1,6 @@
 {
   "report_date": "2026-10-18",
-  "report_timestamp": "2026-10-18T17:44:51Z",
+  "report_timestamp": "2026-10-18T18:42:19Z",
   "total_sources_audited": 75,
   "sources": [
     {
@@ -16,11 +16,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Operations & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_AAPL_10K_2022",
@@ -35,11 +36,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Operations & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_AAPL_10K_2023",
@@ -54,11 +56,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Operations & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_AAPL_10K_2024",
@@ -73,11 +76,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Operations & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_AAPL_10K_2025",
@@ -92,11 +96,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Operations & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_BAJAJ_AR_2022",
@@ -111,11 +116,12 @@
       "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_BAJAJ_AR_2023",
@@ -130,11 +136,12 @@
       "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_BAJAJ_AR_2024",
@@ -149,11 +156,12 @@
       "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_BAJAJ_AR_2025",
@@ -168,11 +176,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "STATEMENT_RECONCILIATION_PENDING",
+      "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "SOURCE_LINKED_ONLY",
+      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_BAJAJ_AR_2026",
@@ -187,11 +196,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_BRIT_AR_2022",
@@ -206,11 +216,12 @@
       "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_BRIT_AR_2023",
@@ -225,11 +236,12 @@
       "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_BRIT_AR_2024",
@@ -244,11 +256,12 @@
       "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_BRIT_AR_2025",
@@ -263,11 +276,12 @@
       "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "STATEMENT_RECONCILIATION_PENDING",
+      "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "SOURCE_LINKED_ONLY",
+      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_BRIT_AR_2026",
@@ -282,11 +296,12 @@
       "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_COST_10K_2022",
@@ -301,11 +316,12 @@
       "statement_location": "Item 8 - Operations & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_COST_10K_2023",
@@ -320,11 +336,12 @@
       "statement_location": "Item 8 - Operations & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_COST_10K_2024",
@@ -339,11 +356,12 @@
       "statement_location": "Item 8 - Operations & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_COST_10K_2025",
@@ -358,11 +376,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Operations & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_COST_10K_2026",
@@ -377,11 +396,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Operations & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_DABUR_AR_2022",
@@ -396,11 +416,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_DABUR_AR_2023",
@@ -415,11 +436,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_DABUR_AR_2024",
@@ -434,11 +456,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_DABUR_AR_2025",
@@ -453,11 +476,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "STATEMENT_RECONCILIATION_PENDING",
+      "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "SOURCE_LINKED_ONLY",
+      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_DABUR_AR_2026",
@@ -472,11 +496,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_GOOGL_10K_2021",
@@ -491,11 +516,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_GOOGL_10K_2022",
@@ -510,11 +536,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_GOOGL_10K_2023",
@@ -529,11 +556,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_GOOGL_10K_2024",
@@ -548,11 +576,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_GOOGL_10K_2025",
@@ -567,11 +596,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HCLTECH_AR_2022",
@@ -586,11 +616,12 @@
       "statement_location": "Consolidated Financial Statements under Ind AS - Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HCLTECH_AR_2023",
@@ -605,11 +636,12 @@
       "statement_location": "Consolidated Financial Statements under Ind AS - Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HCLTECH_AR_2024",
@@ -624,11 +656,12 @@
       "statement_location": "Consolidated Financial Statements under Ind AS - Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HCLTECH_AR_2025",
@@ -643,11 +676,12 @@
       "statement_location": "Consolidated Financial Statements under Ind AS - Financial Statements",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "STATEMENT_RECONCILIATION_PENDING",
+      "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "SOURCE_LINKED_ONLY",
+      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HCLTECH_AR_2026",
@@ -662,11 +696,12 @@
       "statement_location": "Consolidated Financial Statements under Ind AS - Financial Statements",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HERO_AR_2022",
@@ -681,11 +716,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HERO_AR_2023",
@@ -700,11 +736,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HERO_AR_2024",
@@ -719,11 +756,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HERO_AR_2025",
@@ -738,11 +776,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "STATEMENT_RECONCILIATION_PENDING",
+      "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "SOURCE_LINKED_ONLY",
+      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HERO_AR_2026",
@@ -757,11 +796,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HUL_AR_2022",
@@ -776,11 +816,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HUL_AR_2023",
@@ -795,11 +836,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HUL_AR_2024",
@@ -814,11 +856,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HUL_AR_2025",
@@ -833,11 +876,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flow Statement",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "STATEMENT_RECONCILIATION_PENDING",
+      "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "SOURCE_LINKED_ONLY",
+      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_HUL_AR_2026",
@@ -852,11 +896,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flow Statement",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_INFY_AR_2022",
@@ -871,11 +916,12 @@
       "statement_location": "Consolidated Financial Statements under Ind AS - Profit & Loss and Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_INFY_AR_2023",
@@ -890,11 +936,12 @@
       "statement_location": "Consolidated Financial Statements under Ind AS - Profit & Loss and Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_INFY_AR_2024",
@@ -909,11 +956,12 @@
       "statement_location": "Consolidated Financial Statements under Ind AS - Profit & Loss and Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_INFY_AR_2025",
@@ -928,11 +976,12 @@
       "statement_location": "Consolidated Financial Statements under Ind AS - Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "STATEMENT_RECONCILIATION_PENDING",
+      "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "SOURCE_LINKED_ONLY",
+      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_INFY_AR_2026",
@@ -947,11 +996,12 @@
       "statement_location": "Consolidated Financial Statements under Ind AS - Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_MARUTI_AR_2022",
@@ -966,11 +1016,12 @@
       "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_MARUTI_AR_2023",
@@ -985,11 +1036,12 @@
       "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_MARUTI_AR_2024",
@@ -1004,11 +1056,12 @@
       "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_MARUTI_AR_2025",
@@ -1023,11 +1076,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "STATEMENT_RECONCILIATION_PENDING",
+      "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "SOURCE_LINKED_ONLY",
+      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_MARUTI_AR_2026",
@@ -1042,11 +1096,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_MSFT_10K_2022",
@@ -1061,11 +1116,12 @@
       "statement_location": "Item 8 - Income Statements & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_MSFT_10K_2023",
@@ -1080,11 +1136,12 @@
       "statement_location": "Item 8 - Income Statements & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_MSFT_10K_2024",
@@ -1099,11 +1156,12 @@
       "statement_location": "Item 8 - Income Statements & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_MSFT_10K_2025",
@@ -1118,11 +1176,12 @@
       "statement_location": "Item 8 - Income Statements & Cash Flows Statements",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_MSFT_10K_2026",
@@ -1137,11 +1196,12 @@
       "statement_location": "Item 8 - Income Statements & Cash Flows Statements",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_TCS_AR_2022",
@@ -1156,11 +1216,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_TCS_AR_2023",
@@ -1175,11 +1236,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_TCS_AR_2024",
@@ -1194,11 +1256,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows (pp. 280-385)",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_TCS_AR_2025",
@@ -1213,11 +1276,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "STATEMENT_RECONCILIATION_PENDING",
+      "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "SOURCE_LINKED_ONLY",
+      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_TCS_AR_2026",
@@ -1232,11 +1296,12 @@
       "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "OFFLINE_AUDITED",
+      "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_TGT_10K_2021",
@@ -1251,11 +1316,12 @@
       "statement_location": "Consolidated Statements of Operations & Consolidated Statements of Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_TGT_10K_2022",
@@ -1270,11 +1336,12 @@
       "statement_location": "Consolidated Statements of Operations & Consolidated Statements of Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_TGT_10K_2023",
@@ -1289,11 +1356,12 @@
       "statement_location": "Consolidated Statements of Operations & Consolidated Statements of Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_TGT_10K_2024",
@@ -1308,11 +1376,12 @@
       "statement_location": "Consolidated Statements of Operations & Consolidated Statements of Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_TGT_10K_2025",
@@ -1327,11 +1396,12 @@
       "statement_location": "Consolidated Statements of Operations & Consolidated Statements of Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_WMT_10K_2022",
@@ -1346,11 +1416,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_WMT_10K_2023",
@@ -1365,11 +1436,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_WMT_10K_2024",
@@ -1384,11 +1456,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_WMT_10K_2025",
@@ -1403,11 +1476,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     },
     {
       "source_id": "SRC_WMT_10K_2026",
@@ -1422,11 +1496,12 @@
       "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
       "statement_basis": "CONSOLIDATED",
       "document_identity_verified": true,
-      "check_status": "ONLINE_VERIFIED",
-      "verification_mode": "ONLINE",
+      "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+      "check_status": "OFFLINE_SOURCE_RECORDED",
+      "verification_mode": "OFFLINE",
       "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
       "last_checked_date": "2026-10-18",
-      "verification_timestamp": "2026-10-18T17:44:51Z"
+      "verification_timestamp": "2026-10-18T18:42:19Z"
     }
   ]
 }

@@ -411,6 +411,22 @@ class FundamentalsValidator:
                 if not s.get("metric_definitions"):
                     register_mismatches.append(f"{k}: missing metric_definitions in source register")
                 
+                # Check 1: Offline build cannot claim ONLINE_VERIFIED status
+                if s.get("source_check_status") == "ONLINE_VERIFIED" and s.get("verification_mode") == "OFFLINE":
+                    register_mismatches.append(f"{k}: offline verification mode contradicts ONLINE_VERIFIED source check status")
+
+                # Check 2: Dynamic document identity validity
+                if s.get("document_identity_verified") is True:
+                    acc = s.get("official_filing_id") or s.get("accession_id") or ""
+                    ref_t = s.get("reference_type")
+                    if ref_t == "SEC_ACCESSION":
+                        if not re.match(r"^\d{10}-\d{2}-\d{6}$", acc):
+                            register_mismatches.append(f"{k}: document_identity_verified is True but accession '{acc}' is invalid")
+                    elif ref_t == "INTERNAL_DOCUMENT_KEY":
+                        key = s.get("internal_document_key") or acc
+                        if not key or len(key.strip()) < 5:
+                            register_mismatches.append(f"{k}: document_identity_verified is True but internal key '{key}' is invalid")
+
         if register_mismatches:
             results.append(ValidationResult(
                 rule_id=rule_id,
@@ -974,8 +990,12 @@ class FundamentalsValidator:
                         tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Missing statement name for reconciled tier")
                     if rep_val is None:
                         tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED requires non-null reported_value")
-                    if comp_res == "NOT_RECONCILED" or not comp_res:
+                    if comp_res in ("NOT_RECONCILED", "DISCREPANCY_NOTED") or not comp_res:
                         tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED cannot have comparison_result '{comp_res}'")
+                    if comp_res == "RECONCILED_WITH_DOCUMENTED_ADJUSTMENT":
+                        disc_note = m_ev.get("discrepancy_note", "")
+                        if not disc_note or "DISC-" not in disc_note:
+                            tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: RECONCILED_WITH_DOCUMENTED_ADJUSTMENT requires explicit discrepancy ledger citation")
                     if comp_res == "EXACT_STATEMENT_MATCH":
                         if rep_val is not None and canon_val is not None and abs(float(rep_val) - float(canon_val)) > 0.001:
                             tier_errors.append(

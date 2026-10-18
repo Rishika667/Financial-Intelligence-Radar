@@ -1,18 +1,25 @@
 {
-  "pipeline_version": "v1.0.0-phase12",
-  "build_timestamp": "2026-10-18T17:45:08Z",
-  "mode": "OFFLINE_DETERMINISTIC",
-  "total_observations": 375,
-  "us_observations": 150,
-  "indian_observations": 225,
-  "independently_reconciled": 330,
-  "source_linked_only": 45,
-  "input_artefacts": {
-    "sec_company_facts_extracts_hash": "2ab1cf1de2aba0489058155fc0e8b8b85c28daf2bf21e7cff72298928e6e26dd",
-    "indian_statement_extracts_hash": "d4966874bd955bcd2ac33230da3d869b329598a0ef02e79f2d0d94741c0f59dc"
+  "pipeline_version": "Phase 13 Release Candidate",
+  "build_timestamp": "2026-10-18T18:44:36Z",
+  "mode": "OFFLINE",
+  "inputs": {
+    "us_tracked_extracts": "datasets\\fundamentals_lens\\source_inputs\\sec_company_facts_extracts.json",
+    "us_input_sha256": "2ab1cf1de2aba0489058155fc0e8b8b85c28daf2bf21e7cff72298928e6e26dd",
+    "indian_tracked_extracts": "datasets\\fundamentals_lens\\source_inputs\\indian_statement_extracts.json",
+    "indian_input_sha256": "1f6ea5bd1e949031f9e1af8051857661b093790725fcd01761dcc1b1847123b5"
   },
-  "output_artefacts": {
-    "source_observations_hash": "3e9ca3e8213d76f10d3f78a49faa853426a1279a74f3e075eb0e7e271b4da62c"
+  "output": {
+    "source_observations_file": "datasets\\fundamentals_lens\\source_observations.json",
+    "output_sha256": "64d11ad9c768b05433345df35389f3bf1c60f71d28ee8b1472adab6e3dcd2eb2"
   },
-  "independence_guarantee": "reported_value originates strictly from tracked source inputs without reading financial_facts_5yr.json."
+  "statistics": {
+    "total_observations": 375,
+    "independently_reconciled": 375,
+    "source_linked_only": 0,
+    "us_observations": 150,
+    "indian_observations": 225,
+    "online_audited": 0,
+    "offline_reproduced": 375,
+    "reconciliation_percentage": 100.0
+  }
 }

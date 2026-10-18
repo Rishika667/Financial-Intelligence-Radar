@@ -142,5 +142,5 @@ def test_validator_gate_anomaly_scanning_warning(canonical_dataset):
     # Cause a > 20% margin shift between year 0 and year 1
     anomaly_facts[1].operating_income = anomaly_facts[1].revenue * 0.95 # 95% margin
     res = FundamentalsValidator._check_anomalies_and_variances(anomaly_facts)
-    assert res[0].status == ValidationStatus.PASS
+    assert res[0].status == ValidationStatus.WARNING
     assert "Operating margin shifted" in res[0].details["warnings"][0]

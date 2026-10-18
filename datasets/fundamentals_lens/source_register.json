@@ -23,8 +23,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total net sales less Cost of sales and Operating expenses (R&D, SG&A); excludes other income/(expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Payments for acquisition of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Payments for acquisition of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_AAPL_10K_2022",
@@ -50,8 +55,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total net sales less Cost of sales and Operating expenses (R&D, SG&A); excludes other income/(expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Payments for acquisition of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Payments for acquisition of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_AAPL_10K_2023",
@@ -77,8 +87,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total net sales less Cost of sales and Operating expenses (R&D, SG&A); excludes other income/(expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Payments for acquisition of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Payments for acquisition of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_AAPL_10K_2024",
@@ -104,8 +119,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total net sales less Cost of sales and Operating expenses (R&D, SG&A); excludes other income/(expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Payments for acquisition of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Payments for acquisition of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_AAPL_10K_2025",
@@ -131,19 +151,24 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total net sales less Cost of sales and Operating expenses (R&D, SG&A); excludes other income/(expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Payments for acquisition of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Payments for acquisition of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2022",
     "ticker": "BAJAJ-AUTO",
     "fiscal_year": 2022,
     "fiscal_year_label": "FY 2021\u201322",
-    "source_title": "Bajaj Auto Annual Report 2021-22",
-    "source_url": "https://www.bajajauto.com/investors",
+    "source_title": "Bajaj Auto Limited 15th Annual Report 2021-22",
+    "source_url": "https://www.bajajauto.com/investors/financial-and-operational-performance/annual-reports/2021-22",
     "filing_date": "2022-06-17",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532977/2022",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532977-AR-2021-22",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -158,19 +183,24 @@
       "operating_income_line_item": "Operating profit before exceptional items and tax",
       "operating_income_note": "Operating profit before exceptional items and tax under Ind AS; two- and three-wheeler manufacturing operations.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Purchase of property, plant and equipment and intangible assets (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and intangible assets (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2023",
     "ticker": "BAJAJ-AUTO",
     "fiscal_year": 2023,
     "fiscal_year_label": "FY 2022\u201323",
-    "source_title": "Bajaj Auto Annual Report 2022-23",
-    "source_url": "https://www.bajajauto.com/investors",
+    "source_title": "Bajaj Auto Limited 16th Annual Report 2022-23",
+    "source_url": "https://www.bajajauto.com/investors/financial-and-operational-performance/annual-reports/2022-23",
     "filing_date": "2023-06-16",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532977/2023",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532977-AR-2022-23",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -185,19 +215,24 @@
       "operating_income_line_item": "Operating profit before exceptional items and tax",
       "operating_income_note": "Operating profit before exceptional items and tax under Ind AS; two- and three-wheeler manufacturing operations.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Purchase of property, plant and equipment and intangible assets (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and intangible assets (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2024",
     "ticker": "BAJAJ-AUTO",
     "fiscal_year": 2024,
     "fiscal_year_label": "FY 2023\u201324",
-    "source_title": "Bajaj Auto Annual Report 2023-24",
-    "source_url": "https://www.bajajauto.com/investors",
+    "source_title": "Bajaj Auto Limited 17th Annual Report 2023-24",
+    "source_url": "https://www.bajajauto.com/investors/financial-and-operational-performance/annual-reports/2023-24",
     "filing_date": "2024-06-14",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532977/2024",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532977-AR-2023-24",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -212,19 +247,24 @@
       "operating_income_line_item": "Operating profit before exceptional items and tax",
       "operating_income_note": "Operating profit before exceptional items and tax under Ind AS; two- and three-wheeler manufacturing operations.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Purchase of property, plant and equipment and intangible assets (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and intangible assets (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2025",
     "ticker": "BAJAJ-AUTO",
     "fiscal_year": 2025,
     "fiscal_year_label": "FY 2024\u201325",
-    "source_title": "Bajaj Auto Annual Report 2024-25",
+    "source_title": "Bajaj Auto Limited Annual Report 2024-25",
     "source_url": "https://www.bajajauto.com/investors/financial-results/annual-reports/2024-25",
     "filing_date": "2025-06-20",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532977-202425-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-532977-AR-2024-25",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -239,19 +279,24 @@
       "operating_income_line_item": "Operating profit before exceptional items and tax",
       "operating_income_note": "Operating profit before exceptional items and tax under Ind AS; two- and three-wheeler manufacturing operations.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Purchase of property, plant and equipment and intangible assets (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and intangible assets (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2026",
     "ticker": "BAJAJ-AUTO",
     "fiscal_year": 2026,
     "fiscal_year_label": "FY 2025\u201326",
-    "source_title": "Bajaj Auto Integrated Annual Report 2025-26",
+    "source_title": "Bajaj Auto Limited Annual Report 2025-26",
     "source_url": "https://www.bajajauto.com/investors/financial-results/annual-reports/2025-26",
     "filing_date": "2026-06-18",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532977-202526-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-532977-AR-2025-26",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -266,19 +311,24 @@
       "operating_income_line_item": "Operating profit before exceptional items and tax",
       "operating_income_note": "Operating profit before exceptional items and tax under Ind AS; two- and three-wheeler manufacturing operations.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Purchase of property, plant and equipment and intangible assets (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and intangible assets (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_BRIT_AR_2022",
     "ticker": "BRITANNIA",
     "fiscal_year": 2022,
     "fiscal_year_label": "FY 2021\u201322",
-    "source_title": "Britannia Industries Annual Report 2021-22",
-    "source_url": "https://www.britannia.co.in/investors",
+    "source_title": "Britannia Industries Limited Annual Report 2021-22",
+    "source_url": "https://www.britannia.co.in/investors/financial-performance/annual-report/2021-2022",
     "filing_date": "2022-06-16",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500825/2022",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500825-AR-2021-22",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -293,19 +343,24 @@
       "operating_income_line_item": "Profit before tax and exceptional items",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_BRIT_AR_2023",
     "ticker": "BRITANNIA",
     "fiscal_year": 2023,
     "fiscal_year_label": "FY 2022\u201323",
-    "source_title": "Britannia Industries Annual Report 2022-23",
-    "source_url": "https://www.britannia.co.in/investors",
+    "source_title": "Britannia Industries Limited Annual Report 2022-23",
+    "source_url": "https://www.britannia.co.in/investors/financial-performance/annual-report/2022-2023",
     "filing_date": "2023-06-15",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500825/2023",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500825-AR-2022-23",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -320,19 +375,24 @@
       "operating_income_line_item": "Profit before tax and exceptional items",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_BRIT_AR_2024",
     "ticker": "BRITANNIA",
     "fiscal_year": 2024,
     "fiscal_year_label": "FY 2023\u201324",
-    "source_title": "Britannia Industries Annual Report 2023-24",
-    "source_url": "https://www.britannia.co.in/investors",
+    "source_title": "Britannia Industries Limited Annual Report 2023-24",
+    "source_url": "https://www.britannia.co.in/investors/financial-performance/annual-report/2023-2024",
     "filing_date": "2024-06-18",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500825/2024",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500825-AR-2023-24",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -347,19 +407,24 @@
       "operating_income_line_item": "Profit before tax and exceptional items",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_BRIT_AR_2025",
     "ticker": "BRITANNIA",
     "fiscal_year": 2025,
     "fiscal_year_label": "FY 2024\u201325",
-    "source_title": "Britannia Industries Annual Report 2024-25",
+    "source_title": "Britannia Industries Limited Annual Report 2024-25",
     "source_url": "https://www.britannia.co.in/investors/annual-reports/2024-25",
     "filing_date": "2025-07-10",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500825-202425-AR",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500825-AR-2024-25",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -374,19 +439,24 @@
       "operating_income_line_item": "Profit before tax and exceptional items",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_BRIT_AR_2026",
     "ticker": "BRITANNIA",
     "fiscal_year": 2026,
     "fiscal_year_label": "FY 2025\u201326",
-    "source_title": "Britannia Industries Integrated Annual Report 2025-26",
+    "source_title": "Britannia Industries Limited Annual Report 2025-26",
     "source_url": "https://www.britannia.co.in/investors/annual-reports/2025-26",
     "filing_date": "2026-07-08",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500825-202526-AR",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500825-AR-2025-26",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -401,8 +471,13 @@
       "operating_income_line_item": "Profit before tax and exceptional items",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_COST_10K_2022",
@@ -428,8 +503,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue (Net sales + Membership fees) less Merchandise costs and SG&A expenses; excludes interest and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Additions to property and equipment (Investing Activities)."
-    }
+      "capex_note": "Additions to property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_COST_10K_2023",
@@ -455,8 +535,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue (Net sales + Membership fees) less Merchandise costs and SG&A expenses; excludes interest and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Additions to property and equipment (Investing Activities)."
-    }
+      "capex_note": "Additions to property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_COST_10K_2024",
@@ -482,8 +567,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue (Net sales + Membership fees) less Merchandise costs and SG&A expenses; excludes interest and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Additions to property and equipment (Investing Activities)."
-    }
+      "capex_note": "Additions to property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_COST_10K_2025",
@@ -509,8 +599,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue (Net sales + Membership fees) less Merchandise costs and SG&A expenses; excludes interest and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Additions to property and equipment (Investing Activities)."
-    }
+      "capex_note": "Additions to property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_COST_10K_2026",
@@ -536,8 +631,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue (Net sales + Membership fees) less Merchandise costs and SG&A expenses; excludes interest and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Additions to property and equipment (Investing Activities)."
-    }
+      "capex_note": "Additions to property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_DABUR_AR_2022",
@@ -548,7 +648,7 @@
     "source_url": "https://www.dabur.com/digital-annual-report-2021-22/",
     "filing_date": "2022-06-23",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500096-202122-AR",
+    "accession_id": "BSE-SCRIP-500096-AR-2021-22",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -563,8 +663,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchase of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_DABUR_AR_2023",
@@ -575,7 +680,7 @@
     "source_url": "https://www.dabur.com/digital-annual-report-2022-23/",
     "filing_date": "2023-06-22",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500096-202223-AR",
+    "accession_id": "BSE-SCRIP-500096-AR-2022-23",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -590,8 +695,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchase of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_DABUR_AR_2024",
@@ -602,7 +712,7 @@
     "source_url": "https://www.dabur.com/Investors/Financial%20Information/Reports/Annual%20Reports/2023-24/Annual%20Report%202023-24.pdf",
     "filing_date": "2024-06-20",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500096-202324-AR",
+    "accession_id": "BSE-SCRIP-500096-AR-2023-24",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -617,8 +727,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchase of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_DABUR_AR_2025",
@@ -629,7 +744,7 @@
     "source_url": "https://www.dabur.com/investor-relations/annual-reports/2024-25",
     "filing_date": "2025-07-15",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500096-202425-AR",
+    "accession_id": "BSE-SCRIP-500096-AR-2024-25",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -644,8 +759,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchase of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_DABUR_AR_2026",
@@ -656,7 +776,7 @@
     "source_url": "https://www.dabur.com/investor-relations/annual-reports/2025-26",
     "filing_date": "2026-07-14",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500096-202526-AR",
+    "accession_id": "BSE-SCRIP-500096-AR-2025-26",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -671,8 +791,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchase of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_GOOGL_10K_2021",
@@ -698,8 +823,13 @@
       "operating_income_line_item": "Income from operations",
       "operating_income_note": "Revenues less Costs and expenses (Cost of revenues, R&D, Sales & marketing, G&A); excludes Other income (expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchases of property and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchases of property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_GOOGL_10K_2022",
@@ -725,8 +855,13 @@
       "operating_income_line_item": "Income from operations",
       "operating_income_note": "Revenues less Costs and expenses (Cost of revenues, R&D, Sales & marketing, G&A); excludes Other income (expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchases of property and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchases of property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_GOOGL_10K_2023",
@@ -752,8 +887,13 @@
       "operating_income_line_item": "Income from operations",
       "operating_income_note": "Revenues less Costs and expenses (Cost of revenues, R&D, Sales & marketing, G&A); excludes Other income (expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchases of property and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchases of property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_GOOGL_10K_2024",
@@ -779,8 +919,13 @@
       "operating_income_line_item": "Income from operations",
       "operating_income_note": "Revenues less Costs and expenses (Cost of revenues, R&D, Sales & marketing, G&A); excludes Other income (expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchases of property and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchases of property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_GOOGL_10K_2025",
@@ -806,19 +951,24 @@
       "operating_income_line_item": "Income from operations",
       "operating_income_note": "Revenues less Costs and expenses (Cost of revenues, R&D, Sales & marketing, G&A); excludes Other income (expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchases of property and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchases of property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2022",
     "ticker": "HCLTECH",
     "fiscal_year": 2022,
     "fiscal_year_label": "FY 2021\u201322",
-    "source_title": "HCL Technologies Annual Report 2021-22",
-    "source_url": "https://www.hcltech.com/investors",
+    "source_title": "HCL Technologies Limited Annual Report 2021-22",
+    "source_url": "https://www.hcltech.com/sites/default/files/documents/investor-reports/AnnualReport2022.pdf",
     "filing_date": "2022-07-21",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532281/2022",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532281-AR-2021-22",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -833,19 +983,24 @@
       "operating_income_line_item": "Earnings before interest and tax (EBIT / Operating Profit)",
       "operating_income_note": "Operating profit from software operations before other income, finance costs, and tax expense.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Payment for property, plant and equipment and intangibles (Cash Flows Statement)."
-    }
+      "capex_note": "Payment for property, plant and equipment and intangibles (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "LIMITED",
+      "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2023",
     "ticker": "HCLTECH",
     "fiscal_year": 2023,
     "fiscal_year_label": "FY 2022\u201323",
-    "source_title": "HCL Technologies Annual Report 2022-23",
-    "source_url": "https://www.hcltech.com/investors",
+    "source_title": "HCLTech Annual Report 2022-23",
+    "source_url": "https://www.hcltech.com/investors/annual-reports/2022-2023",
     "filing_date": "2023-07-20",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532281/2023",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532281-AR-2022-23",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -860,19 +1015,24 @@
       "operating_income_line_item": "Earnings before interest and tax (EBIT / Operating Profit)",
       "operating_income_note": "Operating profit from software operations before other income, finance costs, and tax expense.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Payment for property, plant and equipment and intangibles (Cash Flows Statement)."
-    }
+      "capex_note": "Payment for property, plant and equipment and intangibles (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "LIMITED",
+      "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2024",
     "ticker": "HCLTECH",
     "fiscal_year": 2024,
     "fiscal_year_label": "FY 2023\u201324",
-    "source_title": "HCL Technologies Integrated Annual Report 2023-24",
-    "source_url": "https://www.hcltech.com/investors",
+    "source_title": "HCLTech Annual Report 2023-24",
+    "source_url": "https://www.hcltech.com/investors/annual-reports/2023-2024",
     "filing_date": "2024-07-23",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532281/2024",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532281-AR-2023-24",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -887,19 +1047,24 @@
       "operating_income_line_item": "Earnings before interest and tax (EBIT / Operating Profit)",
       "operating_income_note": "Operating profit from software operations before other income, finance costs, and tax expense.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Payment for property, plant and equipment and intangibles (Cash Flows Statement)."
-    }
+      "capex_note": "Payment for property, plant and equipment and intangibles (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "LIMITED",
+      "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2025",
     "ticker": "HCLTECH",
     "fiscal_year": 2025,
     "fiscal_year_label": "FY 2024\u201325",
-    "source_title": "HCLTech Integrated Annual Report 2024-25",
+    "source_title": "HCLTech Annual Report 2024-25",
     "source_url": "https://www.hcltech.com/investors/annual-reports/2024-2025",
     "filing_date": "2025-06-25",
-    "statement_location": "Consolidated Financial Statements under Ind AS",
-    "accession_id": "BSE-532281-202425-AR",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Financial Statements",
+    "accession_id": "BSE-SCRIP-532281-AR-2024-25",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -914,19 +1079,24 @@
       "operating_income_line_item": "Earnings before interest and tax (EBIT / Operating Profit)",
       "operating_income_note": "Operating profit from software operations before other income, finance costs, and tax expense.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Payment for property, plant and equipment and intangibles (Cash Flows Statement)."
-    }
+      "capex_note": "Payment for property, plant and equipment and intangibles (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "LIMITED",
+      "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2026",
     "ticker": "HCLTECH",
     "fiscal_year": 2026,
     "fiscal_year_label": "FY 2025\u201326",
-    "source_title": "HCLTech Integrated Annual Report 2025-26",
+    "source_title": "HCLTech Annual Report 2025-26",
     "source_url": "https://www.hcltech.com/investors/annual-reports/2025-2026",
     "filing_date": "2026-06-22",
-    "statement_location": "Consolidated Financial Statements under Ind AS",
-    "accession_id": "BSE-532281-202526-AR",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Financial Statements",
+    "accession_id": "BSE-SCRIP-532281-AR-2025-26",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -941,19 +1111,24 @@
       "operating_income_line_item": "Earnings before interest and tax (EBIT / Operating Profit)",
       "operating_income_note": "Operating profit from software operations before other income, finance costs, and tax expense.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Payment for property, plant and equipment and intangibles (Cash Flows Statement)."
-    }
+      "capex_note": "Payment for property, plant and equipment and intangibles (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "LIMITED",
+      "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_HERO_AR_2022",
     "ticker": "HEROMOTOCO",
     "fiscal_year": 2022,
     "fiscal_year_label": "FY 2021\u201322",
-    "source_title": "Hero MotoCorp Annual Report 2021-22",
-    "source_url": "https://www.heromotocorp.com",
+    "source_title": "Hero MotoCorp Limited Annual Report 2021-22",
+    "source_url": "https://www.heromotocorp.com/en-in/investors/investor-relations/annual-reports/2021-22.html",
     "filing_date": "2022-07-13",
-    "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE:500182/2022",
+    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500182-AR-2021-22",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -968,19 +1143,24 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax under Ind AS; two-wheeler manufacturing operations.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_HERO_AR_2023",
     "ticker": "HEROMOTOCO",
     "fiscal_year": 2023,
     "fiscal_year_label": "FY 2022\u201323",
-    "source_title": "Hero MotoCorp Annual Report 2022-23",
-    "source_url": "https://www.heromotocorp.com",
+    "source_title": "Hero MotoCorp Limited Annual Report 2022-23",
+    "source_url": "https://www.heromotocorp.com/en-in/investors/investor-relations/annual-reports/2022-23.html",
     "filing_date": "2023-07-12",
-    "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE:500182/2023",
+    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500182-AR-2022-23",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -995,19 +1175,24 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax under Ind AS; two-wheeler manufacturing operations.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_HERO_AR_2024",
     "ticker": "HEROMOTOCO",
     "fiscal_year": 2024,
     "fiscal_year_label": "FY 2023\u201324",
-    "source_title": "Hero MotoCorp Annual Report 2023-24",
-    "source_url": "https://www.heromotocorp.com",
+    "source_title": "Hero MotoCorp Limited Annual Report 2023-24",
+    "source_url": "https://www.heromotocorp.com/en-in/investors/investor-relations/annual-reports/2023-24.html",
     "filing_date": "2024-07-16",
-    "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE:500182/2024",
+    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500182-AR-2023-24",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1022,19 +1207,24 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax under Ind AS; two-wheeler manufacturing operations.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_HERO_AR_2025",
     "ticker": "HEROMOTOCO",
     "fiscal_year": 2025,
     "fiscal_year_label": "FY 2024\u201325",
-    "source_title": "Hero MotoCorp Integrated Annual Report 2024-25",
+    "source_title": "Hero MotoCorp Limited Annual Report 2024-25",
     "source_url": "https://www.heromotocorp.com/en-in/investor-relations/annual-reports/2024-25.html",
     "filing_date": "2025-07-16",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500182-202425-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500182-AR-2024-25",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -1049,19 +1239,24 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax under Ind AS; two-wheeler manufacturing operations.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_HERO_AR_2026",
     "ticker": "HEROMOTOCO",
     "fiscal_year": 2026,
     "fiscal_year_label": "FY 2025\u201326",
-    "source_title": "Hero MotoCorp Integrated Annual Report 2025-26",
+    "source_title": "Hero MotoCorp Limited Annual Report 2025-26",
     "source_url": "https://www.heromotocorp.com/en-in/investor-relations/annual-reports/2025-26.html",
     "filing_date": "2026-07-15",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500182-202526-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500182-AR-2025-26",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -1076,8 +1271,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax under Ind AS; two-wheeler manufacturing operations.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_HUL_AR_2022",
@@ -1088,7 +1288,7 @@
     "source_url": "https://www.hul.co.in/files/annual-report-2021-22.pdf",
     "filing_date": "2022-06-02",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500696-202122-AR",
+    "accession_id": "BSE-SCRIP-500696-AR-2021-22",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1103,8 +1303,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax (PBEI)",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchase of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_HUL_AR_2023",
@@ -1115,7 +1320,7 @@
     "source_url": "https://www.hul.co.in/files/annual-report-2022-23.pdf",
     "filing_date": "2023-06-01",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500696-202223-AR",
+    "accession_id": "BSE-SCRIP-500696-AR-2022-23",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1130,8 +1335,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax (PBEI)",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchase of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_HUL_AR_2024",
@@ -1142,7 +1352,7 @@
     "source_url": "https://www.hul.co.in/files/annual-report-2023-24.pdf",
     "filing_date": "2024-06-03",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500696-202324-AR",
+    "accession_id": "BSE-SCRIP-500696-AR-2023-24",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1157,8 +1367,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax (PBEI)",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchase of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_HUL_AR_2025",
@@ -1169,7 +1384,7 @@
     "source_url": "https://www.hul.co.in/files/annual-report-2024-25.pdf",
     "filing_date": "2025-06-18",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flow Statement",
-    "accession_id": "BSE-500696-202425-AR",
+    "accession_id": "BSE-SCRIP-500696-AR-2024-25",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -1184,8 +1399,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax (PBEI)",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchase of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_HUL_AR_2026",
@@ -1196,7 +1416,7 @@
     "source_url": "https://www.hul.co.in/files/annual-report-2025-26.pdf",
     "filing_date": "2026-06-15",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flow Statement",
-    "accession_id": "BSE-500696-202526-AR",
+    "accession_id": "BSE-SCRIP-500696-AR-2025-26",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -1211,19 +1431,24 @@
       "operating_income_line_item": "Profit before exceptional items and tax (PBEI)",
       "operating_income_note": "Profit before exceptional items and tax; serves as canonical operating profit proxy under Ind AS Schedule III format.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Purchase of property, plant and equipment (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_INFY_AR_2022",
     "ticker": "INFY",
     "fiscal_year": 2022,
     "fiscal_year_label": "FY 2021\u201322",
-    "source_title": "Infosys Annual Report 2021-22",
-    "source_url": "https://www.infosys.com/investors",
+    "source_title": "Infosys Limited Integrated Annual Report 2021-22",
+    "source_url": "https://www.infosys.com/content/dam/infosys-web/en/investors/reports-filings/annual-report/annual-reports/ar-2021-22/annual-report-2021-22.pdf",
     "filing_date": "2022-05-30",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500209/2022",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit & Loss and Cash Flows",
+    "accession_id": "BSE-SCRIP-500209-AR-2021-22",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1238,19 +1463,24 @@
       "operating_income_line_item": "Operating profit",
       "operating_income_note": "Revenues from operations less operating expenses (Cost of sales, SG&A); excludes other non-operating income, finance costs, and tax.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Capital expenditures / Purchase of property, plant and equipment (Cash Flows Statement)."
-    }
+      "capex_note": "Capital expenditures / Purchase of property, plant and equipment (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_INFY_AR_2023",
     "ticker": "INFY",
     "fiscal_year": 2023,
     "fiscal_year_label": "FY 2022\u201323",
-    "source_title": "Infosys Annual Report 2022-23",
-    "source_url": "https://www.infosys.com/investors",
+    "source_title": "Infosys Limited Integrated Annual Report 2022-23",
+    "source_url": "https://www.infosys.com/content/dam/infosys-web/en/investors/reports-filings/annual-report/annual-reports/ar-2022-23/annual-report-2022-23.pdf",
     "filing_date": "2023-05-24",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500209/2023",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit & Loss and Cash Flows",
+    "accession_id": "BSE-SCRIP-500209-AR-2022-23",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1265,19 +1495,24 @@
       "operating_income_line_item": "Operating profit",
       "operating_income_note": "Revenues from operations less operating expenses (Cost of sales, SG&A); excludes other non-operating income, finance costs, and tax.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Capital expenditures / Purchase of property, plant and equipment (Cash Flows Statement)."
-    }
+      "capex_note": "Capital expenditures / Purchase of property, plant and equipment (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_INFY_AR_2024",
     "ticker": "INFY",
     "fiscal_year": 2024,
     "fiscal_year_label": "FY 2023\u201324",
-    "source_title": "Infosys Integrated Annual Report 2023-24",
-    "source_url": "https://www.infosys.com/investors",
+    "source_title": "Infosys Limited Integrated Annual Report 2023-24",
+    "source_url": "https://www.infosys.com/content/dam/infosys-web/en/investors/reports-filings/annual-report/annual-reports/ar-2023-24/annual-report-2023-24.pdf",
     "filing_date": "2024-05-20",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500209/2024",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit & Loss and Cash Flows",
+    "accession_id": "BSE-SCRIP-500209-AR-2023-24",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1292,19 +1527,24 @@
       "operating_income_line_item": "Operating profit",
       "operating_income_note": "Revenues from operations less operating expenses (Cost of sales, SG&A); excludes other non-operating income, finance costs, and tax.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Capital expenditures / Purchase of property, plant and equipment (Cash Flows Statement)."
-    }
+      "capex_note": "Capital expenditures / Purchase of property, plant and equipment (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_INFY_AR_2025",
     "ticker": "INFY",
     "fiscal_year": 2025,
     "fiscal_year_label": "FY 2024\u201325",
-    "source_title": "Infosys Integrated Annual Report 2024-25",
-    "source_url": "https://www.infosys.com/investors/reports-filings/annual-report/2024-2025.html",
+    "source_title": "Infosys Limited Integrated Annual Report 2024-25",
+    "source_url": "https://www.infosys.com/investors/reports-filings/annual-report/annual-reports/ar-2024-25/annual-report-2024-25.pdf",
     "filing_date": "2025-05-28",
-    "statement_location": "Consolidated Financial Statements under Ind AS / IFRS",
-    "accession_id": "BSE-500209-202425-AR",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500209-AR-2024-25",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated financial statements in INR crores.",
     "line_item_mappings": {
@@ -1319,19 +1559,24 @@
       "operating_income_line_item": "Operating profit",
       "operating_income_note": "Revenues from operations less operating expenses (Cost of sales, SG&A); excludes other non-operating income, finance costs, and tax.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Capital expenditures / Purchase of property, plant and equipment (Cash Flows Statement)."
-    }
+      "capex_note": "Capital expenditures / Purchase of property, plant and equipment (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_INFY_AR_2026",
     "ticker": "INFY",
     "fiscal_year": 2026,
     "fiscal_year_label": "FY 2025\u201326",
-    "source_title": "Infosys Integrated Annual Report 2025-26",
-    "source_url": "https://www.infosys.com/investors/reports-filings/annual-report/2025-2026.html",
+    "source_title": "Infosys Limited Integrated Annual Report 2025-26",
+    "source_url": "https://www.infosys.com/investors/reports-filings/annual-report/annual-reports/ar-2025-26/annual-report-2025-26.pdf",
     "filing_date": "2026-05-26",
-    "statement_location": "Consolidated Financial Statements under Ind AS / IFRS",
-    "accession_id": "BSE-500209-202526-AR",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500209-AR-2025-26",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated financial statements in INR crores.",
     "line_item_mappings": {
@@ -1346,19 +1591,24 @@
       "operating_income_line_item": "Operating profit",
       "operating_income_note": "Revenues from operations less operating expenses (Cost of sales, SG&A); excludes other non-operating income, finance costs, and tax.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Capital expenditures / Purchase of property, plant and equipment (Cash Flows Statement)."
-    }
+      "capex_note": "Capital expenditures / Purchase of property, plant and equipment (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_MARUTI_AR_2022",
     "ticker": "MARUTI",
     "fiscal_year": 2022,
     "fiscal_year_label": "FY 2021\u201322",
-    "source_title": "Maruti Suzuki Annual Report 2021-22",
-    "source_url": "https://www.marutisuzuki.com/corporate/investors",
+    "source_title": "Maruti Suzuki Integrated Report 2021-22 (40 Years - Joy of Mobility)",
+    "source_url": "https://www.marutisuzuki.com/corporate/investor-relations/company-reports/annual-reports/2021-22",
     "filing_date": "2022-07-26",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532500/2022",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532500-AR-2021-22",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1373,19 +1623,24 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax under Ind AS; reflects automotive manufacturing profit before exceptional items, finance costs, and tax.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_MARUTI_AR_2023",
     "ticker": "MARUTI",
     "fiscal_year": 2023,
     "fiscal_year_label": "FY 2022\u201323",
-    "source_title": "Maruti Suzuki Annual Report 2022-23",
-    "source_url": "https://www.marutisuzuki.com/corporate/investors",
+    "source_title": "Maruti Suzuki Integrated Report 2022-23 (Maruti Suzuki 3.0)",
+    "source_url": "https://www.marutisuzuki.com/corporate/investor-relations/company-reports/annual-reports/2022-23",
     "filing_date": "2023-07-25",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532500/2023",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532500-AR-2022-23",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1400,19 +1655,24 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax under Ind AS; reflects automotive manufacturing profit before exceptional items, finance costs, and tax.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_MARUTI_AR_2024",
     "ticker": "MARUTI",
     "fiscal_year": 2024,
     "fiscal_year_label": "FY 2023\u201324",
-    "source_title": "Maruti Suzuki Annual Report 2023-24",
-    "source_url": "https://www.marutisuzuki.com/corporate/investors",
+    "source_title": "Maruti Suzuki Annual Integrated Report 2023-24",
+    "source_url": "https://www.marutisuzuki.com/corporate/investor-relations/company-reports/annual-reports/2023-24",
     "filing_date": "2024-08-04",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532500/2024",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532500-AR-2023-24",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1427,8 +1687,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax under Ind AS; reflects automotive manufacturing profit before exceptional items, finance costs, and tax.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_MARUTI_AR_2025",
@@ -1438,8 +1703,8 @@
     "source_title": "Maruti Suzuki Annual Integrated Report 2024-25",
     "source_url": "https://www.marutisuzuki.com/corporate/investors/company-reports/annual-reports/2024-25",
     "filing_date": "2025-07-28",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532500-202425-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-532500-AR-2024-25",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -1454,8 +1719,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax under Ind AS; reflects automotive manufacturing profit before exceptional items, finance costs, and tax.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_MARUTI_AR_2026",
@@ -1465,8 +1735,8 @@
     "source_title": "Maruti Suzuki Annual Integrated Report 2025-26",
     "source_url": "https://www.marutisuzuki.com/corporate/investors/company-reports/annual-reports/2025-26",
     "filing_date": "2026-07-24",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532500-202526-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-532500-AR-2025-26",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -1481,8 +1751,13 @@
       "operating_income_line_item": "Profit before exceptional items and tax",
       "operating_income_note": "Profit before exceptional items and tax under Ind AS; reflects automotive manufacturing profit before exceptional items, finance costs, and tax.",
       "capex_type": "PPE_AND_CWIP",
-      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and capital work-in-progress (Investing Activities).",
+      "operating_income_comparability": "PROXY",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "PROXY",
+      "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_MSFT_10K_2022",
@@ -1508,8 +1783,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue less Cost of revenue, R&D, and G&A expenses; excludes other income (expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Additions to property and equipment (including capitalized software assets) (Investing Activities)."
-    }
+      "capex_note": "Additions to property and equipment (including capitalized software assets) (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_MSFT_10K_2023",
@@ -1535,8 +1815,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue less Cost of revenue, R&D, and G&A expenses; excludes other income (expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Additions to property and equipment (including capitalized software assets) (Investing Activities)."
-    }
+      "capex_note": "Additions to property and equipment (including capitalized software assets) (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_MSFT_10K_2024",
@@ -1562,8 +1847,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue less Cost of revenue, R&D, and G&A expenses; excludes other income (expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Additions to property and equipment (including capitalized software assets) (Investing Activities)."
-    }
+      "capex_note": "Additions to property and equipment (including capitalized software assets) (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_MSFT_10K_2025",
@@ -1589,8 +1879,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue less Cost of revenue, R&D, and G&A expenses; excludes other income (expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Additions to property and equipment (including capitalized software assets) (Investing Activities)."
-    }
+      "capex_note": "Additions to property and equipment (including capitalized software assets) (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_MSFT_10K_2026",
@@ -1616,8 +1911,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue less Cost of revenue, R&D, and G&A expenses; excludes other income (expense), net, and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Additions to property and equipment (including capitalized software assets) (Investing Activities)."
-    }
+      "capex_note": "Additions to property and equipment (including capitalized software assets) (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_TCS_AR_2022",
@@ -1628,7 +1928,7 @@
     "source_url": "https://www.tcs.com/content/dam/global-tcs/en/pdf/investors/annual-reports/2021-22/tcs-integrated-annual-report-2021-22.pdf",
     "filing_date": "2022-06-09",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532540-202122-AR",
+    "accession_id": "BSE-SCRIP-532540-AR-2021-22",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1643,8 +1943,13 @@
       "operating_income_line_item": "Operating profit / Profit before exceptional items and tax",
       "operating_income_note": "Earnings from core IT consulting services before other non-operating income, finance costs, and income taxes.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Purchase of property, plant and equipment and intangible assets (Cash Flows Statement)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and intangible assets (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "LIMITED",
+      "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_TCS_AR_2023",
@@ -1655,7 +1960,7 @@
     "source_url": "https://www.tcs.com/content/dam/global-tcs/en/pdf/investors/annual-reports/2022-23/tcs-integrated-annual-report-2022-23.pdf",
     "filing_date": "2023-06-12",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532540-202223-AR",
+    "accession_id": "BSE-SCRIP-532540-AR-2022-23",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1670,8 +1975,13 @@
       "operating_income_line_item": "Operating profit / Profit before exceptional items and tax",
       "operating_income_note": "Earnings from core IT consulting services before other non-operating income, finance costs, and income taxes.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Purchase of property, plant and equipment and intangible assets (Cash Flows Statement)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and intangible assets (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "LIMITED",
+      "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_TCS_AR_2024",
@@ -1682,7 +1992,7 @@
     "source_url": "https://www.tcs.com/content/dam/global-tcs/en/pdf/investors/annual-reports/2023-24/tcs-integrated-annual-report-2023-24.pdf",
     "filing_date": "2024-06-03",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows (pp. 280-385)",
-    "accession_id": "BSE-532540-202324-AR",
+    "accession_id": "BSE-SCRIP-532540-AR-2023-24",
     "verification_status": "VERIFIED",
     "notes": "Audited Ind AS consolidated financial statements.",
     "line_item_mappings": {
@@ -1697,8 +2007,13 @@
       "operating_income_line_item": "Operating profit / Profit before exceptional items and tax",
       "operating_income_note": "Earnings from core IT consulting services before other non-operating income, finance costs, and income taxes.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Purchase of property, plant and equipment and intangible assets (Cash Flows Statement)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and intangible assets (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "LIMITED",
+      "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_TCS_AR_2025",
@@ -1709,7 +2024,7 @@
     "source_url": "https://www.tcs.com/investor-relations/financial-statements/2024-25/annual-report",
     "filing_date": "2025-06-12",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532540-202425-AR",
+    "accession_id": "BSE-SCRIP-532540-AR-2024-25",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "line_item_mappings": {
@@ -1724,8 +2039,13 @@
       "operating_income_line_item": "Operating profit / Profit before exceptional items and tax",
       "operating_income_note": "Earnings from core IT consulting services before other non-operating income, finance costs, and income taxes.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Purchase of property, plant and equipment and intangible assets (Cash Flows Statement)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and intangible assets (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "LIMITED",
+      "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "source_id": "SRC_TCS_AR_2026",
@@ -1736,7 +2056,7 @@
     "source_url": "https://www.tcs.com/investor-relations/financial-statements/2025-26/annual-report",
     "filing_date": "2026-06-10",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532540-202526-AR",
+    "accession_id": "BSE-SCRIP-532540-AR-2025-26",
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements; 25.0% operating margin.",
     "line_item_mappings": {
@@ -1751,8 +2071,13 @@
       "operating_income_line_item": "Operating profit / Profit before exceptional items and tax",
       "operating_income_note": "Earnings from core IT consulting services before other non-operating income, finance costs, and income taxes.",
       "capex_type": "PPE_AND_INTANGIBLES",
-      "capex_note": "Purchase of property, plant and equipment and intangible assets (Cash Flows Statement)."
-    }
+      "capex_note": "Purchase of property, plant and equipment and intangible assets (Cash Flows Statement).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "LIMITED",
+      "overall_comparability": "LIMITED",
+      "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
+    },
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "TGT",
@@ -1776,9 +2101,15 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue less Cost of sales and SG&A/D&A expenses; excludes net interest expense and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Expenditures for property and equipment (Investing Activities)."
+      "capex_note": "Expenditures for property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "verification_status": "VERIFIED"
+    "verification_status": "VERIFIED",
+    "fiscal_year": 2021,
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TGT",
@@ -1802,9 +2133,15 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue less Cost of sales and SG&A/D&A expenses; excludes net interest expense and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Expenditures for property and equipment (Investing Activities)."
+      "capex_note": "Expenditures for property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "verification_status": "VERIFIED"
+    "verification_status": "VERIFIED",
+    "fiscal_year": 2022,
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TGT",
@@ -1828,9 +2165,15 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue less Cost of sales and SG&A/D&A expenses; excludes net interest expense and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Expenditures for property and equipment (Investing Activities)."
+      "capex_note": "Expenditures for property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "verification_status": "VERIFIED"
+    "verification_status": "VERIFIED",
+    "fiscal_year": 2023,
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TGT",
@@ -1854,9 +2197,15 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue less Cost of sales and SG&A/D&A expenses; excludes net interest expense and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Expenditures for property and equipment (Investing Activities)."
+      "capex_note": "Expenditures for property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "verification_status": "VERIFIED"
+    "verification_status": "VERIFIED",
+    "fiscal_year": 2024,
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TGT",
@@ -1880,9 +2229,15 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenue less Cost of sales and SG&A/D&A expenses; excludes net interest expense and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Expenditures for property and equipment (Investing Activities)."
+      "capex_note": "Expenditures for property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "verification_status": "VERIFIED"
+    "verification_status": "VERIFIED",
+    "fiscal_year": 2025,
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_WMT_10K_2022",
@@ -1908,8 +2263,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenues less Cost of sales and Operating, selling, general and administrative expenses; excludes net interest expense and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Payments for property and equipment (Investing Activities)."
-    }
+      "capex_note": "Payments for property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_WMT_10K_2023",
@@ -1935,8 +2295,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenues less Cost of sales and Operating, selling, general and administrative expenses; excludes net interest expense and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Payments for property and equipment (Investing Activities)."
-    }
+      "capex_note": "Payments for property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_WMT_10K_2024",
@@ -1962,8 +2327,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenues less Cost of sales and Operating, selling, general and administrative expenses; excludes net interest expense and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Payments for property and equipment (Investing Activities)."
-    }
+      "capex_note": "Payments for property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_WMT_10K_2025",
@@ -1989,8 +2359,13 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenues less Cost of sales and Operating, selling, general and administrative expenses; excludes net interest expense and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Payments for property and equipment (Investing Activities)."
-    }
+      "capex_note": "Payments for property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "source_id": "SRC_WMT_10K_2026",
@@ -2016,7 +2391,12 @@
       "operating_income_line_item": "Operating income",
       "operating_income_note": "Total revenues less Cost of sales and Operating, selling, general and administrative expenses; excludes net interest expense and income taxes.",
       "capex_type": "PPE_PURCHASES_ONLY",
-      "capex_note": "Payments for property and equipment (Investing Activities)."
-    }
+      "capex_note": "Payments for property and equipment (Investing Activities).",
+      "operating_income_comparability": "DIRECT",
+      "capex_comparability": "DIRECT",
+      "overall_comparability": "DIRECT",
+      "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
+    },
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   }
 ]

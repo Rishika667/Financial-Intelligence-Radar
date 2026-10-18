@@ -201,6 +201,17 @@ companies, facts_by_ticker, sources, coverage = get_app_data()
 companies_map = {c.ticker: c for c in companies}
 coverage_map = {entry["ticker"]: entry for entry in coverage}
 
+# High-level universe statistics computed dynamically from loaded datasets
+total_comps = len(companies)
+total_periods = sum(len(facts) for facts in facts_by_ticker.values())
+total_datapoints = total_periods * 5
+target_verified_count = sum(1 for c in coverage if c.get("target_period_status_code") == 0)
+target_pending_count = sum(1 for c in coverage if c.get("target_period_status_code") == 1)
+
+all_facts_flat = [f for fl in facts_by_ticker.values() for f in fl]
+reconciled_metrics = sum(5 for f in all_facts_flat if getattr(f, "reconciliation_tier", "") == "INDEPENDENTLY_RECONCILED")
+source_audited_metrics = sum(5 for f in all_facts_flat if getattr(f, "reconciliation_tier", "") == "SOURCE_LINKED_AUDITED")
+
 # --- SIDEBAR NAVIGATION ---
 st.sidebar.markdown("### **Fundamentals Lens**")
 st.sidebar.caption("Evidence-First Financial Research")
@@ -212,7 +223,18 @@ pages = [
     "Data Integrity & Methodology"
 ]
 
-selected_page = st.sidebar.radio("Navigation", pages, index=0)
+query_page = st.query_params.get("page", "")
+default_page_idx = 0
+if query_page:
+    qp = str(query_page).lower().strip()
+    if "comp" in qp:
+        default_page_idx = 1
+    elif "peer" in qp:
+        default_page_idx = 2
+    elif "data" in qp or "integ" in qp or "method" in qp:
+        default_page_idx = 3
+
+selected_page = st.sidebar.radio("Navigation", pages, index=default_page_idx)
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("**Dataset Snapshot:** `2026-10-18`")
@@ -349,13 +371,6 @@ if selected_page == "Overview":
     
     st.info("ℹ️ **Historical Research Notice:** This application provides historical financial analysis based on audited annual disclosures. It is not a live trading feed, stock price prediction tool, or investment advisory service.")
 
-    # High-level universe statistics computed dynamically from loaded datasets
-    total_comps = len(companies)
-    total_periods = sum(len(facts) for facts in facts_by_ticker.values())
-    total_datapoints = total_periods * 5
-    target_verified_count = sum(1 for c in coverage if c.get("target_period_status_code") == 0)
-    target_pending_count = sum(1 for c in coverage if c.get("target_period_status_code") == 1)
-
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.markdown(f"""
@@ -376,17 +391,17 @@ if selected_page == "Overview":
     with col3:
         st.markdown(f"""
         <div class="kpi-card">
-            <div class="kpi-label">Primary Source Basis</div>
-            <div class="kpi-val">100%</div>
-            <div class="kpi-delta pos">Consolidated SEC & BSE Filings</div>
+            <div class="kpi-label">Reconciliation Scope</div>
+            <div class="kpi-val">{reconciled_metrics} <span style="font-size:0.9rem;font-weight:400;">Reconciled</span></div>
+            <div class="kpi-delta pos">{source_audited_metrics} Source-Linked Audited (0 Unverified)</div>
         </div>
         """, unsafe_allow_html=True)
     with col4:
         st.markdown(f"""
         <div class="kpi-card">
-            <div class="kpi-label">Audited Data Points</div>
-            <div class="kpi-val">{total_datapoints}</div>
-            <div class="kpi-delta pos">{target_verified_count} Target Verified, {target_pending_count} Target Ongoing</div>
+            <div class="kpi-label">Target Reporting Horizon</div>
+            <div class="kpi-val">{target_verified_count} <span style="font-size:0.9rem;font-weight:400;">Included</span></div>
+            <div class="kpi-delta neu">{target_pending_count} Horizon Pending 10-K (AAPL, GOOGL, TGT)</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -492,9 +507,14 @@ elif selected_page == "Company Analysis":
     </div>
     """, unsafe_allow_html=True)
 
+    ticker_opts = [c.ticker for c in companies]
+    q_ticker = str(st.query_params.get("ticker", "")).upper().strip()
+    default_t_idx = ticker_opts.index(q_ticker) if q_ticker in ticker_opts else 0
+
     selected_ticker = st.selectbox(
         "Select Company:",
-        options=[c.ticker for c in companies],
+        options=ticker_opts,
+        index=default_t_idx,
         format_func=lambda t: f"{t} — {companies_map[t].name} ({companies_map[t].peer_group_name})"
     )
     
@@ -611,9 +631,12 @@ elif selected_page == "Company Analysis":
     derived_map = {d.fiscal_year: d for d in c_derived}
     for f in c_facts:
         d = derived_map.get(f.fiscal_year)
+        comp_badge = getattr(f, "comparability_flag", "DIRECT")
+        tier_label = getattr(f, "reconciliation_tier", "INDEPENDENTLY_RECONCILED")
         table_rows.append({
             "Fiscal Period": f.fiscal_year_label,
-            "Period Dates": f"{f.period_start} to {f.period_end}",
+            "Period End": f.period_end,
+            "Basis": f.statement_basis,
             f"Revenue ({unit})": f"{f.revenue:,.1f}",
             "YoY Growth": f"{d.revenue_growth_yoy:+.1f}%" if d and d.revenue_growth_yoy is not None else "—",
             f"Operating Income ({unit})": f"{f.operating_income:,.1f}",
@@ -623,10 +646,15 @@ elif selected_page == "Company Analysis":
             f"Operating Cash Flow ({unit})": f"{f.operating_cash_flow:,.1f}",
             f"Capex ({unit})": f"{f.capital_expenditure:,.1f}",
             f"Free Cash Flow ({unit})": f"{d.free_cash_flow:,.1f}" if d and d.free_cash_flow is not None else "—",
-            "Cash Conversion (x)": f"{d.cash_conversion_ratio:.2f}x" if d and d.cash_conversion_ratio is not None else "Suppressed"
+            "Cash Conversion (x)": f"{d.cash_conversion_ratio:.2f}x" if d and d.cash_conversion_ratio is not None else f"Suppressed ({d.cash_conversion_qualified_reason or 'Guarded'})",
+            "Comparability": comp_badge,
+            "Reconciliation": "Reconciled" if tier_label == "INDEPENDENTLY_RECONCILED" else "Source-Linked"
         })
     df_history = pd.DataFrame(table_rows)
     st.dataframe(df_history, hide_index=True, use_container_width=True)
+
+    if latest_fact.accounting_notes:
+        st.info(f"💡 **Accounting Comparability Note:** {latest_fact.accounting_notes}")
 
     st.markdown("---")
 
@@ -858,7 +886,7 @@ elif selected_page == "Data Integrity & Methodology":
 
     # Coverage Report Table
     st.markdown("### **Company-Level Target Reporting Horizon & Period Coverage**")
-    st.caption("Snapshot Date: `2026-10-18` | All 15 companies verified across 5 consecutive annual periods.")
+    st.caption(f"Dataset Snapshot Cutoff: `2026-10-18` • Universe: {total_comps} Companies across {total_periods} Completed Annual Periods • {reconciled_metrics} Primary Disclosures Reconciled, {source_audited_metrics} Source-Linked Audited (0 Unverified).")
     
     cov_rows = []
     for c in companies:
@@ -884,15 +912,18 @@ elif selected_page == "Data Integrity & Methodology":
     st.markdown("---")
 
     # 7-Gate Validation Engine
-    st.markdown("### **Deterministic 7-Gate Validation Results**")
+    st.markdown("### **Deterministic Multi-Gate Validation Results**")
     
-    if st.button("🔄 Re-run Complete 7-Gate Validation Audit", use_container_width=True):
+    if st.button("🔄 Re-run Complete Validation Audit", use_container_width=True):
         st.cache_data.clear()
         
     all_validation_results = []
     all_raw_results = []
     total_checks = 0
     passed_checks = 0
+    warning_checks = 0
+    failed_checks = 0
+    unverified_checks = 0
     
     for c in companies:
         c_facts = facts_by_ticker.get(c.ticker, [])
@@ -902,6 +933,13 @@ elif selected_page == "Data Integrity & Methodology":
             total_checks += 1
             if r.status == ValidationStatus.PASS:
                 passed_checks += 1
+            elif r.status == ValidationStatus.WARNING:
+                warning_checks += 1
+            elif r.status == ValidationStatus.FAIL:
+                failed_checks += 1
+            elif r.status == ValidationStatus.UNVERIFIED:
+                unverified_checks += 1
+
             all_validation_results.append({
                 "Ticker": c.ticker,
                 "Company": c.name,
@@ -912,24 +950,26 @@ elif selected_page == "Data Integrity & Methodology":
                 "Details": r.message
             })
 
-    v_col1, v_col2, v_col3 = st.columns(3)
+    v_col1, v_col2, v_col3, v_col4 = st.columns(4)
     with v_col1:
         st.metric("Total Validation Checks", total_checks)
     with v_col2:
         st.metric("Checks Passed", passed_checks)
     with v_col3:
-        pass_rate = (passed_checks / total_checks) * 100 if total_checks > 0 else 0
-        st.metric("Aggregate Pass Rate", f"{pass_rate:.1f}%")
+        st.metric("Review Warnings", warning_checks)
+    with v_col4:
+        st.metric("Failed / Unverified", failed_checks + unverified_checks)
 
     # Dimension Breakdown Passport
-    st.markdown("#### **Data Integrity Passport — 7 Validation Dimensions**")
-    st.caption("Distinguishes structural schema verification from factual source reconciliation and comparability guards.")
+    st.markdown("#### **Data Integrity Passport — Multi-Dimensional Quality Gates**")
+    st.caption("Distinguishes structural schema verification from factual source reconciliation, non-coercion, and comparability guards.")
     dim_summary = FundamentalsValidator.get_dimension_summary(all_raw_results)
     dim_rows = []
     for dim_name, counts in dim_summary.items():
         total_d = sum(counts.values())
         passed_d = counts.get("PASS", 0)
-        warn_d = counts.get("UNVERIFIED", 0) + counts.get("NOT_APPLICABLE", 0)
+        warn_d = counts.get("WARNING", 0)
+        unver_d = counts.get("UNVERIFIED", 0)
         failed_d = counts.get("FAIL", 0)
         rate = (passed_d / total_d * 100) if total_d > 0 else 0
         dim_rows.append({
@@ -937,6 +977,7 @@ elif selected_page == "Data Integrity & Methodology":
             "Total Rules": total_d,
             "Passed": passed_d,
             "Warnings": warn_d,
+            "Unverified": unver_d,
             "Failed": failed_d,
             "Pass Rate": f"{rate:.1f}%"
         })
@@ -962,15 +1003,41 @@ elif selected_page == "Data Integrity & Methodology":
 
     st.markdown("---")
 
-    # Master Source Register Browser
-    st.markdown("### **Master Primary Source Register & Filing Identifiers**")
-    st.caption("Complete lineage records for all 75 annual observations.")
-    
+    # Downloadable Evidence Register & Source Register
+    st.markdown("### **Primary Evidence Register & Master Source Browser**")
+    st.caption("Complete line-item provenance and filing audit trail across all 75 annual observations.")
+
+    d_col1, d_col2 = st.columns(2)
+    with d_col1:
+        ev_path = ROOT_DIR / "datasets" / "fundamentals_lens" / "evidence_register.csv"
+        if ev_path.exists():
+            with open(ev_path, "r", encoding="utf-8") as f:
+                ev_csv = f.read()
+            st.download_button(
+                label="📥 Download Complete Evidence Register (CSV)",
+                data=ev_csv,
+                file_name="fundamentals_lens_evidence_register.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+    with d_col2:
+        src_path = ROOT_DIR / "datasets" / "fundamentals_lens" / "source_register.json"
+        if src_path.exists():
+            with open(src_path, "r", encoding="utf-8") as f:
+                src_json = f.read()
+            st.download_button(
+                label="📥 Download Master Source Register (JSON)",
+                data=src_json,
+                file_name="fundamentals_lens_source_register.json",
+                mime="application/json",
+                use_container_width=True
+            )
+
     sources_df = pd.DataFrame(sources)[[
         "ticker", "fiscal_year_label", "source_title", "filing_date", "accession_id", "statement_location", "source_url"
     ]]
     sources_df.columns = [
-        "Ticker", "Fiscal Year", "Filing Document", "Filing Date", "Accession ID", "Statement Location", "Source URL"
+        "Ticker", "Fiscal Year", "Filing Document", "Filing Date", "Filing Reference ID", "Statement Location", "Source URL"
     ]
     st.dataframe(sources_df, hide_index=True, use_container_width=True)
 
@@ -978,6 +1045,6 @@ elif selected_page == "Data Integrity & Methodology":
 st.markdown("---")
 st.markdown("""
 <div style="text-align:center; color:#64748B; font-size:0.8rem; padding: 12px 0;">
-    Fundamentals Lens • Evidence-First SEC & Indian Disclosure Research • Built with Streamlit & Plotly • 100% Primary Public Filings
+    Fundamentals Lens • Evidence-First SEC & Indian Corporate Disclosure Intelligence • Built with Streamlit & Plotly • Verified Public Regulatory Filings
 </div>
 """, unsafe_allow_html=True)

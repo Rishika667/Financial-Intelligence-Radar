@@ -25,7 +25,10 @@
     "accession_id": "0000320193-21-000105",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "AAPL",
@@ -53,7 +56,10 @@
     "accession_id": "0000320193-22-000108",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "AAPL",
@@ -81,7 +87,10 @@
     "accession_id": "0000320193-23-000106",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year."
+    "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "AAPL",
@@ -109,7 +118,10 @@
     "accession_id": "0000320193-24-000123",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "AAPL",
@@ -137,7 +149,10 @@
     "accession_id": "0000320193-25-000079",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "GOOGL",
@@ -165,7 +180,10 @@
     "accession_id": "0001652044-22-000015",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "GOOGL",
@@ -193,7 +211,10 @@
     "accession_id": "0001652044-23-000016",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "GOOGL",
@@ -221,7 +242,10 @@
     "accession_id": "0001652044-24-000022",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "GOOGL",
@@ -249,7 +273,10 @@
     "accession_id": "0001652044-25-000014",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "GOOGL",
@@ -277,7 +304,10 @@
     "accession_id": "0001652044-26-000012",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "MSFT",
@@ -305,7 +335,10 @@
     "accession_id": "0000950170-22-013661",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "MSFT",
@@ -333,7 +366,10 @@
     "accession_id": "0000950170-23-035122",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "MSFT",
@@ -361,7 +397,10 @@
     "accession_id": "0000950170-24-087843",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "MSFT",
@@ -389,7 +428,10 @@
     "accession_id": "0000789019-25-000038",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "MSFT",
@@ -417,7 +459,10 @@
     "accession_id": "0000789019-26-000041",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements; substantial AI datacenter capex."
+    "notes": "Audited primary 10-K consolidated financial statements; substantial AI datacenter capex.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "HCLTECH",
@@ -438,14 +483,17 @@
     "operating_cash_flow": 16900.0,
     "capital_expenditure": 491.0,
     "source_id": "SRC_HCLTECH_AR_2022",
-    "source_title": "HCL Technologies Annual Report 2021-22",
-    "source_url": "https://www.hcltech.com/investors",
+    "source_title": "HCL Technologies Limited Annual Report 2021-22",
+    "source_url": "https://www.hcltech.com/sites/default/files/documents/investor-reports/AnnualReport2022.pdf",
     "filing_date": "2022-07-21",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532281/2022",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532281-AR-2021-22",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "LIMITED",
+    "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "HCLTECH",
@@ -466,14 +514,17 @@
     "operating_cash_flow": 18009.0,
     "capital_expenditure": 593.0,
     "source_id": "SRC_HCLTECH_AR_2023",
-    "source_title": "HCL Technologies Annual Report 2022-23",
-    "source_url": "https://www.hcltech.com/investors",
+    "source_title": "HCLTech Annual Report 2022-23",
+    "source_url": "https://www.hcltech.com/investors/annual-reports/2022-2023",
     "filing_date": "2023-07-20",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532281/2023",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532281-AR-2022-23",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "LIMITED",
+    "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "HCLTECH",
@@ -494,14 +545,17 @@
     "operating_cash_flow": 22448.0,
     "capital_expenditure": 1048.0,
     "source_id": "SRC_HCLTECH_AR_2024",
-    "source_title": "HCL Technologies Integrated Annual Report 2023-24",
-    "source_url": "https://www.hcltech.com/investors",
+    "source_title": "HCLTech Annual Report 2023-24",
+    "source_url": "https://www.hcltech.com/investors/annual-reports/2023-2024",
     "filing_date": "2024-07-23",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532281/2024",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532281-AR-2023-24",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "LIMITED",
+    "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "HCLTECH",
@@ -522,14 +576,17 @@
     "operating_cash_flow": 18800.0,
     "capital_expenditure": 1590.0,
     "source_id": "SRC_HCLTECH_AR_2025",
-    "source_title": "HCLTech Integrated Annual Report 2024-25",
+    "source_title": "HCLTech Annual Report 2024-25",
     "source_url": "https://www.hcltech.com/investors/annual-reports/2024-2025",
     "filing_date": "2025-06-25",
-    "statement_location": "Consolidated Financial Statements under Ind AS",
-    "accession_id": "BSE-532281-202425-AR",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Financial Statements",
+    "accession_id": "BSE-SCRIP-532281-AR-2024-25",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "LIMITED",
+    "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "HCLTECH",
@@ -550,14 +607,17 @@
     "operating_cash_flow": 19975.0,
     "capital_expenditure": 1422.0,
     "source_id": "SRC_HCLTECH_AR_2026",
-    "source_title": "HCLTech Integrated Annual Report 2025-26",
+    "source_title": "HCLTech Annual Report 2025-26",
     "source_url": "https://www.hcltech.com/investors/annual-reports/2025-2026",
     "filing_date": "2026-06-22",
-    "statement_location": "Consolidated Financial Statements under Ind AS",
-    "accession_id": "BSE-532281-202526-AR",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Financial Statements",
+    "accession_id": "BSE-SCRIP-532281-AR-2025-26",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "LIMITED",
+    "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "INFY",
@@ -578,14 +638,17 @@
     "operating_cash_flow": 22096.0,
     "capital_expenditure": 1787.0,
     "source_id": "SRC_INFY_AR_2022",
-    "source_title": "Infosys Annual Report 2021-22",
-    "source_url": "https://www.infosys.com/investors",
+    "source_title": "Infosys Limited Integrated Annual Report 2021-22",
+    "source_url": "https://www.infosys.com/content/dam/infosys-web/en/investors/reports-filings/annual-report/annual-reports/ar-2021-22/annual-report-2021-22.pdf",
     "filing_date": "2022-05-30",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500209/2022",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit & Loss and Cash Flows",
+    "accession_id": "BSE-SCRIP-500209-AR-2021-22",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "INFY",
@@ -606,14 +669,17 @@
     "operating_cash_flow": 19169.0,
     "capital_expenditure": 2130.0,
     "source_id": "SRC_INFY_AR_2023",
-    "source_title": "Infosys Annual Report 2022-23",
-    "source_url": "https://www.infosys.com/investors",
+    "source_title": "Infosys Limited Integrated Annual Report 2022-23",
+    "source_url": "https://www.infosys.com/content/dam/infosys-web/en/investors/reports-filings/annual-report/annual-reports/ar-2022-23/annual-report-2022-23.pdf",
     "filing_date": "2023-05-24",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500209/2023",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit & Loss and Cash Flows",
+    "accession_id": "BSE-SCRIP-500209-AR-2022-23",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "INFY",
@@ -634,14 +700,17 @@
     "operating_cash_flow": 20787.0,
     "capital_expenditure": 1832.0,
     "source_id": "SRC_INFY_AR_2024",
-    "source_title": "Infosys Integrated Annual Report 2023-24",
-    "source_url": "https://www.infosys.com/investors",
+    "source_title": "Infosys Limited Integrated Annual Report 2023-24",
+    "source_url": "https://www.infosys.com/content/dam/infosys-web/en/investors/reports-filings/annual-report/annual-reports/ar-2023-24/annual-report-2023-24.pdf",
     "filing_date": "2024-05-20",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500209/2024",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Profit & Loss and Cash Flows",
+    "accession_id": "BSE-SCRIP-500209-AR-2023-24",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "INFY",
@@ -662,14 +731,17 @@
     "operating_cash_flow": 35694.0,
     "capital_expenditure": 2600.0,
     "source_id": "SRC_INFY_AR_2025",
-    "source_title": "Infosys Integrated Annual Report 2024-25",
-    "source_url": "https://www.infosys.com/investors/reports-filings/annual-report/2024-2025.html",
+    "source_title": "Infosys Limited Integrated Annual Report 2024-25",
+    "source_url": "https://www.infosys.com/investors/reports-filings/annual-report/annual-reports/ar-2024-25/annual-report-2024-25.pdf",
     "filing_date": "2025-05-28",
-    "statement_location": "Consolidated Financial Statements under Ind AS / IFRS",
-    "accession_id": "BSE-500209-202425-AR",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500209-AR-2024-25",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated financial statements in INR crores."
+    "notes": "Audited consolidated financial statements in INR crores.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "INFY",
@@ -690,14 +762,17 @@
     "operating_cash_flow": 33986.0,
     "capital_expenditure": 2857.0,
     "source_id": "SRC_INFY_AR_2026",
-    "source_title": "Infosys Integrated Annual Report 2025-26",
-    "source_url": "https://www.infosys.com/investors/reports-filings/annual-report/2025-2026.html",
+    "source_title": "Infosys Limited Integrated Annual Report 2025-26",
+    "source_url": "https://www.infosys.com/investors/reports-filings/annual-report/annual-reports/ar-2025-26/annual-report-2025-26.pdf",
     "filing_date": "2026-05-26",
-    "statement_location": "Consolidated Financial Statements under Ind AS / IFRS",
-    "accession_id": "BSE-500209-202526-AR",
+    "statement_location": "Consolidated Financial Statements under Ind AS - Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500209-AR-2025-26",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated financial statements in INR crores."
+    "notes": "Audited consolidated financial statements in INR crores.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "TCS",
@@ -722,10 +797,13 @@
     "source_url": "https://www.tcs.com/content/dam/global-tcs/en/pdf/investors/annual-reports/2021-22/tcs-integrated-annual-report-2021-22.pdf",
     "filing_date": "2022-06-09",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532540-202122-AR",
+    "accession_id": "BSE-SCRIP-532540-AR-2021-22",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "LIMITED",
+    "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TCS",
@@ -750,10 +828,13 @@
     "source_url": "https://www.tcs.com/content/dam/global-tcs/en/pdf/investors/annual-reports/2022-23/tcs-integrated-annual-report-2022-23.pdf",
     "filing_date": "2023-06-12",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532540-202223-AR",
+    "accession_id": "BSE-SCRIP-532540-AR-2022-23",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "LIMITED",
+    "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TCS",
@@ -778,10 +859,13 @@
     "source_url": "https://www.tcs.com/content/dam/global-tcs/en/pdf/investors/annual-reports/2023-24/tcs-integrated-annual-report-2023-24.pdf",
     "filing_date": "2024-06-03",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows (pp. 280-385)",
-    "accession_id": "BSE-532540-202324-AR",
+    "accession_id": "BSE-SCRIP-532540-AR-2023-24",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "LIMITED",
+    "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TCS",
@@ -806,10 +890,13 @@
     "source_url": "https://www.tcs.com/investor-relations/financial-statements/2024-25/annual-report",
     "filing_date": "2025-06-12",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532540-202425-AR",
+    "accession_id": "BSE-SCRIP-532540-AR-2024-25",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "LIMITED",
+    "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "TCS",
@@ -834,10 +921,13 @@
     "source_url": "https://www.tcs.com/investor-relations/financial-statements/2025-26/annual-report",
     "filing_date": "2026-06-10",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532540-202526-AR",
+    "accession_id": "BSE-SCRIP-532540-AR-2025-26",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements; 25.0% operating margin."
+    "notes": "Audited consolidated Ind AS financial statements; 25.0% operating margin.",
+    "comparability_flag": "LIMITED",
+    "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "BRITANNIA",
@@ -858,14 +948,17 @@
     "operating_cash_flow": 1300.0,
     "capital_expenditure": 556.0,
     "source_id": "SRC_BRIT_AR_2022",
-    "source_title": "Britannia Industries Annual Report 2021-22",
-    "source_url": "https://www.britannia.co.in/investors",
+    "source_title": "Britannia Industries Limited Annual Report 2021-22",
+    "source_url": "https://www.britannia.co.in/investors/financial-performance/annual-report/2021-2022",
     "filing_date": "2022-06-16",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500825/2022",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500825-AR-2021-22",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "BRITANNIA",
@@ -886,14 +979,17 @@
     "operating_cash_flow": 2526.0,
     "capital_expenditure": 705.0,
     "source_id": "SRC_BRIT_AR_2023",
-    "source_title": "Britannia Industries Annual Report 2022-23",
-    "source_url": "https://www.britannia.co.in/investors",
+    "source_title": "Britannia Industries Limited Annual Report 2022-23",
+    "source_url": "https://www.britannia.co.in/investors/financial-performance/annual-report/2022-2023",
     "filing_date": "2023-06-15",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500825/2023",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500825-AR-2022-23",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "BRITANNIA",
@@ -914,14 +1010,17 @@
     "operating_cash_flow": 2573.0,
     "capital_expenditure": 614.0,
     "source_id": "SRC_BRIT_AR_2024",
-    "source_title": "Britannia Industries Annual Report 2023-24",
-    "source_url": "https://www.britannia.co.in/investors",
+    "source_title": "Britannia Industries Limited Annual Report 2023-24",
+    "source_url": "https://www.britannia.co.in/investors/financial-performance/annual-report/2023-2024",
     "filing_date": "2024-06-18",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:500825/2024",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500825-AR-2023-24",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "BRITANNIA",
@@ -942,14 +1041,17 @@
     "operating_cash_flow": 2450.0,
     "capital_expenditure": 437.0,
     "source_id": "SRC_BRIT_AR_2025",
-    "source_title": "Britannia Industries Annual Report 2024-25",
+    "source_title": "Britannia Industries Limited Annual Report 2024-25",
     "source_url": "https://www.britannia.co.in/investors/annual-reports/2024-25",
     "filing_date": "2025-07-10",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500825-202425-AR",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500825-AR-2024-25",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "BRITANNIA",
@@ -970,14 +1072,17 @@
     "operating_cash_flow": 2612.0,
     "capital_expenditure": 268.0,
     "source_id": "SRC_BRIT_AR_2026",
-    "source_title": "Britannia Industries Integrated Annual Report 2025-26",
+    "source_title": "Britannia Industries Limited Annual Report 2025-26",
     "source_url": "https://www.britannia.co.in/investors/annual-reports/2025-26",
     "filing_date": "2026-07-08",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500825-202526-AR",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500825-AR-2025-26",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "DABUR",
@@ -1002,10 +1107,13 @@
     "source_url": "https://www.dabur.com/digital-annual-report-2021-22/",
     "filing_date": "2022-06-23",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500096-202122-AR",
+    "accession_id": "BSE-SCRIP-500096-AR-2021-22",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "DABUR",
@@ -1030,10 +1138,13 @@
     "source_url": "https://www.dabur.com/digital-annual-report-2022-23/",
     "filing_date": "2023-06-22",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500096-202223-AR",
+    "accession_id": "BSE-SCRIP-500096-AR-2022-23",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "DABUR",
@@ -1058,10 +1169,13 @@
     "source_url": "https://www.dabur.com/Investors/Financial%20Information/Reports/Annual%20Reports/2023-24/Annual%20Report%202023-24.pdf",
     "filing_date": "2024-06-20",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500096-202324-AR",
+    "accession_id": "BSE-SCRIP-500096-AR-2023-24",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "DABUR",
@@ -1086,10 +1200,13 @@
     "source_url": "https://www.dabur.com/investor-relations/annual-reports/2024-25",
     "filing_date": "2025-07-15",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500096-202425-AR",
+    "accession_id": "BSE-SCRIP-500096-AR-2024-25",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "DABUR",
@@ -1114,10 +1231,13 @@
     "source_url": "https://www.dabur.com/investor-relations/annual-reports/2025-26",
     "filing_date": "2026-07-14",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500096-202526-AR",
+    "accession_id": "BSE-SCRIP-500096-AR-2025-26",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "HINDUNILVR",
@@ -1142,10 +1262,13 @@
     "source_url": "https://www.hul.co.in/files/annual-report-2021-22.pdf",
     "filing_date": "2022-06-02",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500696-202122-AR",
+    "accession_id": "BSE-SCRIP-500696-AR-2021-22",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "HINDUNILVR",
@@ -1170,10 +1293,13 @@
     "source_url": "https://www.hul.co.in/files/annual-report-2022-23.pdf",
     "filing_date": "2023-06-01",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500696-202223-AR",
+    "accession_id": "BSE-SCRIP-500696-AR-2022-23",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "HINDUNILVR",
@@ -1198,10 +1324,13 @@
     "source_url": "https://www.hul.co.in/files/annual-report-2023-24.pdf",
     "filing_date": "2024-06-03",
     "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE-500696-202324-AR",
+    "accession_id": "BSE-SCRIP-500696-AR-2023-24",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "HINDUNILVR",
@@ -1226,10 +1355,13 @@
     "source_url": "https://www.hul.co.in/files/annual-report-2024-25.pdf",
     "filing_date": "2025-06-18",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flow Statement",
-    "accession_id": "BSE-500696-202425-AR",
+    "accession_id": "BSE-SCRIP-500696-AR-2024-25",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "HINDUNILVR",
@@ -1254,10 +1386,13 @@
     "source_url": "https://www.hul.co.in/files/annual-report-2025-26.pdf",
     "filing_date": "2026-06-15",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flow Statement",
-    "accession_id": "BSE-500696-202526-AR",
+    "accession_id": "BSE-SCRIP-500696-AR-2025-26",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "BAJAJ-AUTO",
@@ -1278,14 +1413,17 @@
     "operating_cash_flow": 4197.0,
     "capital_expenditure": 521.0,
     "source_id": "SRC_BAJAJ_AR_2022",
-    "source_title": "Bajaj Auto Annual Report 2021-22",
-    "source_url": "https://www.bajajauto.com/investors",
+    "source_title": "Bajaj Auto Limited 15th Annual Report 2021-22",
+    "source_url": "https://www.bajajauto.com/investors/financial-and-operational-performance/annual-reports/2021-22",
     "filing_date": "2022-06-17",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532977/2022",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532977-AR-2021-22",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "BAJAJ-AUTO",
@@ -1306,14 +1444,17 @@
     "operating_cash_flow": 5277.0,
     "capital_expenditure": 336.0,
     "source_id": "SRC_BAJAJ_AR_2023",
-    "source_title": "Bajaj Auto Annual Report 2022-23",
-    "source_url": "https://www.bajajauto.com/investors",
+    "source_title": "Bajaj Auto Limited 16th Annual Report 2022-23",
+    "source_url": "https://www.bajajauto.com/investors/financial-and-operational-performance/annual-reports/2022-23",
     "filing_date": "2023-06-16",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532977/2023",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532977-AR-2022-23",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "BAJAJ-AUTO",
@@ -1334,14 +1475,17 @@
     "operating_cash_flow": 6558.0,
     "capital_expenditure": 823.0,
     "source_id": "SRC_BAJAJ_AR_2024",
-    "source_title": "Bajaj Auto Annual Report 2023-24",
-    "source_url": "https://www.bajajauto.com/investors",
+    "source_title": "Bajaj Auto Limited 17th Annual Report 2023-24",
+    "source_url": "https://www.bajajauto.com/investors/financial-and-operational-performance/annual-reports/2023-24",
     "filing_date": "2024-06-14",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532977/2024",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532977-AR-2023-24",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "BAJAJ-AUTO",
@@ -1362,14 +1506,17 @@
     "operating_cash_flow": 7267.0,
     "capital_expenditure": 480.0,
     "source_id": "SRC_BAJAJ_AR_2025",
-    "source_title": "Bajaj Auto Annual Report 2024-25",
+    "source_title": "Bajaj Auto Limited Annual Report 2024-25",
     "source_url": "https://www.bajajauto.com/investors/financial-results/annual-reports/2024-25",
     "filing_date": "2025-06-20",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532977-202425-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-532977-AR-2024-25",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "BAJAJ-AUTO",
@@ -1390,14 +1537,17 @@
     "operating_cash_flow": 8961.0,
     "capital_expenditure": 501.0,
     "source_id": "SRC_BAJAJ_AR_2026",
-    "source_title": "Bajaj Auto Integrated Annual Report 2025-26",
+    "source_title": "Bajaj Auto Limited Annual Report 2025-26",
     "source_url": "https://www.bajajauto.com/investors/financial-results/annual-reports/2025-26",
     "filing_date": "2026-06-18",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532977-202526-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-532977-AR-2025-26",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "HEROMOTOCO",
@@ -1418,14 +1568,17 @@
     "operating_cash_flow": 2104.0,
     "capital_expenditure": 520.0,
     "source_id": "SRC_HERO_AR_2022",
-    "source_title": "Hero MotoCorp Annual Report 2021-22",
-    "source_url": "https://www.heromotocorp.com",
+    "source_title": "Hero MotoCorp Limited Annual Report 2021-22",
+    "source_url": "https://www.heromotocorp.com/en-in/investors/investor-relations/annual-reports/2021-22.html",
     "filing_date": "2022-07-13",
-    "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE:500182/2022",
+    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500182-AR-2021-22",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "HEROMOTOCO",
@@ -1446,14 +1599,17 @@
     "operating_cash_flow": 2614.0,
     "capital_expenditure": 550.0,
     "source_id": "SRC_HERO_AR_2023",
-    "source_title": "Hero MotoCorp Annual Report 2022-23",
-    "source_url": "https://www.heromotocorp.com",
+    "source_title": "Hero MotoCorp Limited Annual Report 2022-23",
+    "source_url": "https://www.heromotocorp.com/en-in/investors/investor-relations/annual-reports/2022-23.html",
     "filing_date": "2023-07-12",
-    "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE:500182/2023",
+    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500182-AR-2022-23",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "HEROMOTOCO",
@@ -1474,14 +1630,17 @@
     "operating_cash_flow": 4923.0,
     "capital_expenditure": 620.0,
     "source_id": "SRC_HERO_AR_2024",
-    "source_title": "Hero MotoCorp Annual Report 2023-24",
-    "source_url": "https://www.heromotocorp.com",
+    "source_title": "Hero MotoCorp Limited Annual Report 2023-24",
+    "source_url": "https://www.heromotocorp.com/en-in/investors/investor-relations/annual-reports/2023-24.html",
     "filing_date": "2024-07-16",
-    "statement_location": "Consolidated Statement of Profit and Loss",
-    "accession_id": "BSE:500182/2024",
+    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-500182-AR-2023-24",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "HEROMOTOCO",
@@ -1502,14 +1661,17 @@
     "operating_cash_flow": 7100.0,
     "capital_expenditure": 1050.0,
     "source_id": "SRC_HERO_AR_2025",
-    "source_title": "Hero MotoCorp Integrated Annual Report 2024-25",
+    "source_title": "Hero MotoCorp Limited Annual Report 2024-25",
     "source_url": "https://www.heromotocorp.com/en-in/investor-relations/annual-reports/2024-25.html",
     "filing_date": "2025-07-16",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500182-202425-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500182-AR-2024-25",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "HEROMOTOCO",
@@ -1530,14 +1692,17 @@
     "operating_cash_flow": 8315.0,
     "capital_expenditure": 1120.0,
     "source_id": "SRC_HERO_AR_2026",
-    "source_title": "Hero MotoCorp Integrated Annual Report 2025-26",
+    "source_title": "Hero MotoCorp Limited Annual Report 2025-26",
     "source_url": "https://www.heromotocorp.com/en-in/investor-relations/annual-reports/2025-26.html",
     "filing_date": "2026-07-15",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-500182-202526-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-500182-AR-2025-26",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "MARUTI",
@@ -1558,14 +1723,17 @@
     "operating_cash_flow": 1840.0,
     "capital_expenditure": 3410.0,
     "source_id": "SRC_MARUTI_AR_2022",
-    "source_title": "Maruti Suzuki Annual Report 2021-22",
-    "source_url": "https://www.marutisuzuki.com/corporate/investors",
+    "source_title": "Maruti Suzuki Integrated Report 2021-22 (40 Years - Joy of Mobility)",
+    "source_url": "https://www.marutisuzuki.com/corporate/investor-relations/company-reports/annual-reports/2021-22",
     "filing_date": "2022-07-26",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532500/2022",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532500-AR-2021-22",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "MARUTI",
@@ -1586,14 +1754,17 @@
     "operating_cash_flow": 10815.0,
     "capital_expenditure": 6350.0,
     "source_id": "SRC_MARUTI_AR_2023",
-    "source_title": "Maruti Suzuki Annual Report 2022-23",
-    "source_url": "https://www.marutisuzuki.com/corporate/investors",
+    "source_title": "Maruti Suzuki Integrated Report 2022-23 (Maruti Suzuki 3.0)",
+    "source_url": "https://www.marutisuzuki.com/corporate/investor-relations/company-reports/annual-reports/2022-23",
     "filing_date": "2023-07-25",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532500/2023",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532500-AR-2022-23",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "MARUTI",
@@ -1614,14 +1785,17 @@
     "operating_cash_flow": 16801.0,
     "capital_expenditure": 8826.0,
     "source_id": "SRC_MARUTI_AR_2024",
-    "source_title": "Maruti Suzuki Annual Report 2023-24",
-    "source_url": "https://www.marutisuzuki.com/corporate/investors",
+    "source_title": "Maruti Suzuki Annual Integrated Report 2023-24",
+    "source_url": "https://www.marutisuzuki.com/corporate/investor-relations/company-reports/annual-reports/2023-24",
     "filing_date": "2024-08-04",
-    "statement_location": "Consolidated Financial Statements",
-    "accession_id": "BSE:532500/2024",
+    "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss & Cash Flows",
+    "accession_id": "BSE-SCRIP-532500-AR-2023-24",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited Ind AS consolidated financial statements."
+    "notes": "Audited Ind AS consolidated financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "MARUTI",
@@ -1645,11 +1819,14 @@
     "source_title": "Maruti Suzuki Annual Integrated Report 2024-25",
     "source_url": "https://www.marutisuzuki.com/corporate/investors/company-reports/annual-reports/2024-25",
     "filing_date": "2025-07-28",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532500-202425-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-532500-AR-2024-25",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "MARUTI",
@@ -1673,11 +1850,14 @@
     "source_title": "Maruti Suzuki Annual Integrated Report 2025-26",
     "source_url": "https://www.marutisuzuki.com/corporate/investors/company-reports/annual-reports/2025-26",
     "filing_date": "2026-07-24",
-    "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
-    "accession_id": "BSE-532500-202526-AR",
+    "statement_location": "Consolidated Statement of Profit and Loss",
+    "accession_id": "BSE-SCRIP-532500-AR-2025-26",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited consolidated Ind AS financial statements."
+    "notes": "Audited consolidated Ind AS financial statements.",
+    "comparability_flag": "PROXY",
+    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
   },
   {
     "ticker": "COST",
@@ -1705,7 +1885,10 @@
     "accession_id": "0000909832-22-000018",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "COST",
@@ -1733,7 +1916,10 @@
     "accession_id": "0000909832-23-000047",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year."
+    "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "COST",
@@ -1761,7 +1947,10 @@
     "accession_id": "0000909832-24-000049",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "COST",
@@ -1789,7 +1978,10 @@
     "accession_id": "0000909832-25-000045",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "COST",
@@ -1817,7 +2009,10 @@
     "accession_id": "0000909832-26-000052",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements; 52-week period."
+    "notes": "Audited primary 10-K consolidated financial statements; 52-week period.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TGT",
@@ -1845,7 +2040,10 @@
     "accession_id": "0000027419-22-000007",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 29, 2022."
+    "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 29, 2022.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TGT",
@@ -1873,7 +2071,10 @@
     "accession_id": "0000027419-23-000014",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 28, 2023."
+    "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 28, 2023.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TGT",
@@ -1901,7 +2102,10 @@
     "accession_id": "0000027419-24-000032",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year ended February 3, 2024."
+    "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year ended February 3, 2024.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TGT",
@@ -1929,7 +2133,10 @@
     "accession_id": "0000027419-25-000018",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended February 1, 2025."
+    "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended February 1, 2025.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "TGT",
@@ -1957,7 +2164,10 @@
     "accession_id": "0000027419-26-000016",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 31, 2026."
+    "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 31, 2026.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "WMT",
@@ -1985,7 +2195,10 @@
     "accession_id": "0000104169-22-000012",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "WMT",
@@ -2013,7 +2226,10 @@
     "accession_id": "0000104169-23-000020",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "WMT",
@@ -2041,7 +2257,10 @@
     "accession_id": "0000104169-24-000056",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "WMT",
@@ -2069,7 +2288,10 @@
     "accession_id": "0000104169-25-000019",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   },
   {
     "ticker": "WMT",
@@ -2097,6 +2319,9 @@
     "accession_id": "0000104169-26-000021",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
-    "notes": "Audited primary 10-K consolidated financial statements."
+    "notes": "Audited primary 10-K consolidated financial statements.",
+    "comparability_flag": "DIRECT",
+    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
   }
 ]

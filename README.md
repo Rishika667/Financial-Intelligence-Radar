@@ -6,14 +6,18 @@ An evidence-first, zero-cost disclosure intelligence and fundamental equity rese
 
 ---
 
-## 🌟 Featured Product: Fundamentals Lens
+## 🌟 Featured Product: Fundamentals Lens (80% Portfolio-Ready Milestone)
 
 **Fundamentals Lens** is the primary, lightweight financial research product in this repository. It provides transparent five-year financial performance exploration, rule-based inquiry ("What changed, why it matters, and what to investigate"), guarded peer comparisons, and one-click research exports without requiring API keys, live data feeds, or database setup.
 
 - **Primary Entry Point:** `fundamentals_lens_app.py`
+- **Portfolio Readiness:** **80% Production-Grade Milestone** (Phase 5 Closeout)
 - **Architecture:** Zero-Cost, Pure-Python Static Application (Operating budget: ₹0 / $0)
 - **Target Universe:** 15 Global & Indian Leaders across 5 Peer Groups (75 Audited Annual Periods)
-- **Documentation:** [Fundamentals Lens Operational Guide](docs/FUNDAMENTALS_LENS_RELEASE_GUIDE.md) | [Data Foundation Report](docs/FUNDAMENTALS_LENS_DATA_FOUNDATION.md) | [Pivot Architecture Plan](docs/FUNDAMENTALS_LENS_PIVOT_PLAN.md)
+- **Primary Source Lineage:** 100% of observations link to primary filings with verified statement locations, valid accession IDs, and direct annual report/PDF links (0 generic investor URLs).
+- **Evidence Assurance:** 57 periods (285 primary metrics) independently reconciled against financial statements; 18 periods (90 primary metrics) source-linked audited. Repeatable audit trail in `datasets/fundamentals_lens/evidence_register.csv`.
+- **Validation Gates:** 12-gate multi-dimensional deterministic validator (`scripts/validate_fundamentals_data.py`) with 100% pass rate (180/180 checks) and 12 adversarial mutation tests.
+- **Documentation:** [Phase 5 Closeout](docs/FUNDAMENTALS_LENS_PHASE5_CLOSEOUT.md) | [Phase 5 Gap Register](docs/FUNDAMENTALS_LENS_PHASE5_GAP_REGISTER.md) | [Data Foundation Report](docs/FUNDAMENTALS_LENS_DATA_FOUNDATION.md) | [Release Guide](docs/FUNDAMENTALS_LENS_RELEASE_GUIDE.md) | [Visual QA Screenshots](docs/screenshots/)
 
 ### Quick Start (Fundamentals Lens)
 
@@ -22,10 +26,21 @@ An evidence-first, zero-cost disclosure intelligence and fundamental equity rese
 source .venv/bin/activate  # On Linux/macOS
 .venv\Scripts\Activate.ps1 # On Windows
 
-# 2. Run the application
+# 2. Run deterministic data integrity validation
+python scripts/validate_fundamentals_data.py
+
+# 3. Launch the application
 streamlit run fundamentals_lens_app.py
 ```
 *Opens immediately at `http://localhost:8501`. No login, API credentials, or database setup required.*
+
+### Visual Walkthrough
+
+| Overview & Snapshot | Company Fundamentals & Inquiries |
+|:---:|:---:|
+| ![Overview](docs/screenshots/01_overview_desktop.png) | ![Company Analysis](docs/screenshots/02_company_analysis_desktop.png) |
+| **Guarded Peer Comparison** | **Data Integrity & Methodology** |
+| ![Peer Comparison](docs/screenshots/03_peer_comparison_desktop.png) | ![Data Integrity](docs/screenshots/04_data_integrity_desktop.png) |
 
 ---
 

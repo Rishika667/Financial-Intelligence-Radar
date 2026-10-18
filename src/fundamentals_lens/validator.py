@@ -1,5 +1,6 @@
 from datetime import date
 from typing import List, Dict, Any, Optional
+import re
 
 from .models import (
     Company,
@@ -13,8 +14,9 @@ from .metrics import compute_derived_metrics_for_company
 
 class FundamentalsValidator:
     """
-    Deterministic data integrity validation framework for Fundamentals Lens.
-    Evaluates datasets against structural, provenance, arithmetic, and anomaly gates.
+    Deterministic data integrity validation framework for Fundamentals Lens (Phase 5 Hardened).
+    Evaluates datasets against structural, reporting standards, source provenance,
+    computational invariants, coverage integrity, accounting comparability, and anomaly review.
     """
 
     @classmethod
@@ -23,11 +25,12 @@ class FundamentalsValidator:
         company: Company, 
         facts: List[FinancialFact],
         sources: Optional[List[Dict[str, Any]]] = None,
-        coverage: Optional[List[Dict[str, Any]]] = None
+        coverage: Optional[List[Dict[str, Any]]] = None,
+        derived_metrics: Optional[List[DerivedMetrics]] = None
     ) -> List[ValidationResult]:
         results: List[ValidationResult] = []
         
-        # Dimension 1: Structural Integrity (Completeness & Uniqueness)
+        # Dimension 1: Structural Integrity (Completeness, Chronology & Uniqueness)
         results.append(cls._check_period_completeness(company, facts))
         results.append(cls._check_duplicate_observations(facts))
         
@@ -39,13 +42,14 @@ class FundamentalsValidator:
         results.extend(cls._check_source_provenance(facts, sources))
         
         # Dimension 4: Computational & Arithmetic Invariants
-        results.extend(cls._check_arithmetic_invariants(facts))
+        results.extend(cls._check_arithmetic_invariants(facts, derived_metrics=derived_metrics))
         
         # Dimension 5: Coverage & Target Horizon Integrity
         results.append(cls._check_coverage_integrity(company, coverage, facts=facts))
 
-        # Dimension 6: Comparability Integrity
+        # Dimension 6: Accounting Definition & Comparability Integrity
         results.append(cls._check_comparability_integrity(company))
+        results.append(cls._check_metric_definitions(facts, sources))
         
         # Dimension 7: Statistical Anomaly & Outlier Review (Non-destructive)
         results.extend(cls._check_anomalies_and_variances(facts))
@@ -55,7 +59,7 @@ class FundamentalsValidator:
     @staticmethod
     def _check_period_completeness(company: Company, facts: List[FinancialFact]) -> ValidationResult:
         rule_id = "GATE_PERIOD_COMPLETENESS"
-        rule_name = "Five-Period Consecutive Completeness"
+        rule_name = "Five-Period Consecutive Completeness & Chronology"
         
         if len(facts) != 5:
             return ValidationResult(
@@ -69,7 +73,8 @@ class FundamentalsValidator:
             
         sorted_facts = sorted(facts, key=lambda f: f.fiscal_year)
         sorted_years = [f.fiscal_year for f in sorted_facts]
-        # Check consecutive years
+        
+        # 1. Check consecutive years
         for i in range(1, len(sorted_years)):
             if sorted_years[i] != sorted_years[i-1] + 1:
                 return ValidationResult(
@@ -81,6 +86,45 @@ class FundamentalsValidator:
                     dimension="STRUCTURAL"
                 )
                 
+        # 2. Check chronological period dates
+        for i, f in enumerate(sorted_facts):
+            if f.period_start and f.period_end:
+                if f.period_start >= f.period_end:
+                    return ValidationResult(
+                        rule_id=rule_id,
+                        rule_name=rule_name,
+                        status=ValidationStatus.FAIL,
+                        message=f"Period start ({f.period_start}) must precede period end ({f.period_end}) for {company.ticker} {f.fiscal_year_label}.",
+                        details={"period_start": f.period_start, "period_end": f.period_end},
+                        dimension="STRUCTURAL"
+                    )
+            if i > 0:
+                prev = sorted_facts[i-1]
+                if f.period_end <= prev.period_end:
+                    return ValidationResult(
+                        rule_id=rule_id,
+                        rule_name=rule_name,
+                        status=ValidationStatus.FAIL,
+                        message=f"Chronological ordering violation for {company.ticker}: {f.fiscal_year_label} ({f.period_end}) <= {prev.fiscal_year_label} ({prev.period_end}).",
+                        details={"current": f.period_end, "previous": prev.period_end},
+                        dimension="STRUCTURAL"
+                    )
+
+        # 3. Check fiscal year label matches fiscal year
+        for f in sorted_facts:
+            yr_str = str(f.fiscal_year)
+            short_yr = yr_str[-2:]
+            # FY2021 or FY 2021-22
+            if yr_str not in f.fiscal_year_label and short_yr not in f.fiscal_year_label:
+                return ValidationResult(
+                    rule_id=rule_id,
+                    rule_name=rule_name,
+                    status=ValidationStatus.FAIL,
+                    message=f"Fiscal year label '{f.fiscal_year_label}' does not correspond to fiscal_year {f.fiscal_year} for {company.ticker}.",
+                    details={"fiscal_year": f.fiscal_year, "fiscal_year_label": f.fiscal_year_label},
+                    dimension="STRUCTURAL"
+                )
+
         return ValidationResult(
             rule_id=rule_id,
             rule_name=rule_name,
@@ -109,12 +153,12 @@ class FundamentalsValidator:
                 dimension="REPORTING_STANDARDS"
             )
             
-        if len(units) > 1 or len(scales) > 1:
+        if len(units) > 1 or len(scales) > 1 or (units and list(units)[0] != company.standard_unit_label) or (scales and list(scales)[0] != company.scale_multiplier):
             return ValidationResult(
                 rule_id=rule_id,
                 rule_name=rule_name,
                 status=ValidationStatus.FAIL,
-                message=f"Mixed scale multipliers or unit labels detected for {company.ticker}: {units}, {scales}",
+                message=f"Mixed scale multipliers or unit labels detected for {company.ticker}: {units}, {scales} (expected {company.standard_unit_label}, {company.scale_multiplier})",
                 details={"units": list(units), "scales": list(scales)},
                 dimension="REPORTING_STANDARDS"
             )
@@ -135,16 +179,21 @@ class FundamentalsValidator:
         
         seen_years = set()
         seen_dates = set()
+        seen_accessions = set()
         duplicates = []
         for f in facts:
             year_key = (f.ticker, f.fiscal_year)
             date_key = (f.ticker, f.period_end)
+            acc_key = (f.ticker, f.accession_id)
             if year_key in seen_years:
                 duplicates.append(f"Year duplicate: {year_key}")
             if date_key in seen_dates:
                 duplicates.append(f"Period end duplicate: {date_key}")
+            if acc_key in seen_accessions:
+                duplicates.append(f"Accession duplicate across periods: {acc_key}")
             seen_years.add(year_key)
             seen_dates.add(date_key)
+            seen_accessions.add(acc_key)
             
         if duplicates:
             return ValidationResult(
@@ -160,7 +209,7 @@ class FundamentalsValidator:
             rule_id=rule_id,
             rule_name=rule_name,
             status=ValidationStatus.PASS,
-            message="Zero duplicate observation records found; strictly one record per fiscal year and unique period end date.",
+            message="Zero duplicate observation records found; strictly one record per fiscal year, unique period end date, and unique accession.",
             details={"record_count": len(facts)},
             dimension="STRUCTURAL"
         )
@@ -175,16 +224,35 @@ class FundamentalsValidator:
         # Zero capex is allowed if explicitly supported by primary disclosure notes.
         suspicious_zeros = []
         disclosed_zeros = []
+        missing_values = []
+
         for f in facts:
-            if f.revenue == 0.0:
+            # Check for None values in mandatory primary metrics
+            for m in ("revenue", "operating_income", "net_income", "operating_cash_flow", "capital_expenditure"):
+                val = getattr(f, m, None)
+                if val is None:
+                    missing_values.append((f.fiscal_year_label, m))
+
+            if f.revenue is not None and f.revenue <= 0.0:
                 if not f.notes or "zero revenue" not in f.notes.lower():
-                    suspicious_zeros.append((f.fiscal_year_label, "revenue (unexplained zero)"))
-            if f.capital_expenditure == 0.0:
-                if f.notes and ("zero capex" in f.notes.lower() or "no capital expenditure" in f.notes.lower()):
+                    suspicious_zeros.append((f.fiscal_year_label, "revenue (unexplained non-positive)"))
+            if f.capital_expenditure is not None and f.capital_expenditure == 0.0:
+                notes_text = (f.notes or "") + " " + (getattr(f, "accounting_notes", "") or "")
+                if "zero capex" in notes_text.lower() or "no capital expenditure" in notes_text.lower():
                     disclosed_zeros.append((f.fiscal_year_label, "capex (disclosed zero)"))
                 else:
                     suspicious_zeros.append((f.fiscal_year_label, "capital_expenditure (unexplained zero)"))
                 
+        if missing_values:
+            return ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.FAIL,
+                message=f"Mandatory primary financial metrics missing (None) without documented justification: {missing_values}",
+                details={"missing_values": missing_values},
+                dimension="REPORTING_STANDARDS"
+            )
+
         if suspicious_zeros:
             return ValidationResult(
                 rule_id=rule_id,
@@ -223,15 +291,26 @@ class FundamentalsValidator:
         unverified_facts = []
         register_mismatches = []
 
-        generic_url_indicators = ["sec.gov/edgar/browse"]
+        # Disallowed generic URL patterns: browse portals, root domains without documents, bare landing pages
+        generic_url_patterns = [
+            r"sec\.gov/edgar/browse",
+            r"https?://www\.[a-z0-9\-]+\.(com|co\.in|in)/?$", # bare domain root
+            r"https?://www\.[a-z0-9\-]+\.(com|co\.in|in)/investors/?$", # generic root /investors
+            r"https?://www\.[a-z0-9\-]+\.(com|co\.in|in)/investor-relations/?$", # generic root /investor-relations
+            r"https?://www\.[a-z0-9\-]+\.(com|co\.in|in)/corporate/investors/?$" # generic root /corporate/investors
+        ]
 
         for f in facts:
-            if not f.source_url or not f.source_url.startswith("http"):
+            url = f.source_url or ""
+            if not url or not url.startswith("http"):
                 missing_urls.append(f.fiscal_year_label)
-            for gen in generic_url_indicators:
-                if gen in f.source_url.lower():
-                    generic_urls.append((f.fiscal_year_label, f.source_url))
-            if not f.statement_location:
+            
+            for pat in generic_url_patterns:
+                if re.search(pat, url, re.IGNORECASE):
+                    generic_urls.append((f.fiscal_year_label, url))
+                    break
+
+            if not f.statement_location or len(f.statement_location.strip()) < 5:
                 missing_locations.append(f.fiscal_year_label)
             if f.verification_status != "VERIFIED":
                 unverified_facts.append(f.fiscal_year_label)
@@ -252,7 +331,7 @@ class FundamentalsValidator:
                 rule_id=rule_id,
                 rule_name=rule_name,
                 status=ValidationStatus.FAIL,
-                message=f"Generic search/browse URLs detected instead of specific filing document URLs: {generic_urls}",
+                message=f"Generic search/browse or bare landing URLs detected instead of specific filing document URLs: {generic_urls}",
                 details={"generic_urls": generic_urls},
                 dimension="SOURCE_LINEAGE"
             ))
@@ -309,49 +388,13 @@ class FundamentalsValidator:
                 if not s.get("metric_definitions"):
                     register_mismatches.append(f"{k}: missing metric_definitions in source register")
                 
-        if missing_urls:
-            results.append(ValidationResult(
-                rule_id=rule_id,
-                rule_name=rule_name,
-                status=ValidationStatus.FAIL,
-                message=f"Missing or invalid primary source URLs in periods: {missing_urls}",
-                details={"missing_urls": missing_urls},
-                dimension="SOURCE_LINEAGE"
-            ))
-        elif generic_urls:
-            results.append(ValidationResult(
-                rule_id=rule_id,
-                rule_name=rule_name,
-                status=ValidationStatus.FAIL,
-                message=f"Generic search/browse URLs detected instead of specific filing document URLs: {generic_urls}",
-                details={"generic_urls": generic_urls},
-                dimension="SOURCE_LINEAGE"
-            ))
-        elif missing_locations:
-            results.append(ValidationResult(
-                rule_id=rule_id,
-                rule_name=rule_name,
-                status=ValidationStatus.FAIL,
-                message=f"Missing statement page or line-item locations in periods: {missing_locations}",
-                details={"missing_locations": missing_locations},
-                dimension="SOURCE_LINEAGE"
-            ))
-        elif register_mismatches:
+        if register_mismatches:
             results.append(ValidationResult(
                 rule_id=rule_id,
                 rule_name=rule_name,
                 status=ValidationStatus.FAIL,
                 message=f"Source register alignment mismatches detected: {register_mismatches[:3]}",
                 details={"mismatches": register_mismatches},
-                dimension="SOURCE_LINEAGE"
-            ))
-        elif unverified_facts:
-            results.append(ValidationResult(
-                rule_id=rule_id,
-                rule_name=rule_name,
-                status=ValidationStatus.UNVERIFIED,
-                message=f"Observations not marked as VERIFIED: {unverified_facts}",
-                details={"unverified_facts": unverified_facts},
                 dimension="SOURCE_LINEAGE"
             ))
         else:
@@ -367,16 +410,21 @@ class FundamentalsValidator:
         return results
 
     @staticmethod
-    def _check_arithmetic_invariants(facts: List[FinancialFact]) -> List[ValidationResult]:
+    def _check_arithmetic_invariants(
+        facts: List[FinancialFact],
+        derived_metrics: Optional[List[DerivedMetrics]] = None
+    ) -> List[ValidationResult]:
         results = []
-        derived_list = compute_derived_metrics_for_company(facts)
+        derived_list = derived_metrics if derived_metrics is not None else compute_derived_metrics_for_company(facts)
         
         # 1. Operating Margin Invariant Check
         margin_errors = []
         for fact, derived in zip(facts, derived_list):
-            if fact.revenue > 0 and derived.operating_margin is not None:
+            if fact.revenue > 0:
                 expected = round((fact.operating_income / fact.revenue) * 100.0, 2)
-                if abs(derived.operating_margin - expected) > 0.05:
+                if fact.operating_income > fact.revenue:
+                    margin_errors.append((fact.fiscal_year_label, f"Operating income ({fact.operating_income}) exceeds revenue ({fact.revenue})"))
+                elif derived.operating_margin is not None and abs(derived.operating_margin - expected) > 0.05:
                     margin_errors.append((fact.fiscal_year_label, derived.operating_margin, expected))
                     
         if margin_errors:
@@ -398,14 +446,36 @@ class FundamentalsValidator:
                 dimension="COMPUTATIONAL"
             ))
             
-        # 2. Free Cash Flow Reconciliation Invariant
+        # 2. Free Cash Flow & Capex Sign Invariants
         fcf_errors = []
+        capex_sign_errors = []
         for fact, derived in zip(facts, derived_list):
+            if fact.capital_expenditure < 0:
+                capex_sign_errors.append((fact.fiscal_year_label, fact.capital_expenditure))
             if derived.free_cash_flow is not None:
                 expected_fcf = round(fact.operating_cash_flow - fact.capital_expenditure, 2)
                 if abs(derived.free_cash_flow - expected_fcf) > 0.001:
                     fcf_errors.append((fact.fiscal_year_label, derived.free_cash_flow, expected_fcf))
                     
+        if capex_sign_errors:
+            results.append(ValidationResult(
+                rule_id="GATE_ARITHMETIC_CAPEX_SIGN",
+                rule_name="Capital Expenditure Non-Negative Sign Invariant",
+                status=ValidationStatus.FAIL,
+                message=f"Capex must be expressed as a non-negative cash outflow magnitude: {capex_sign_errors}",
+                details={"errors": capex_sign_errors},
+                dimension="COMPUTATIONAL"
+            ))
+        else:
+            results.append(ValidationResult(
+                rule_id="GATE_ARITHMETIC_CAPEX_SIGN",
+                rule_name="Capital Expenditure Non-Negative Sign Invariant",
+                status=ValidationStatus.PASS,
+                message="All capital expenditures conform to positive magnitude cash outflow convention.",
+                details={},
+                dimension="COMPUTATIONAL"
+            ))
+
         if fcf_errors:
             results.append(ValidationResult(
                 rule_id="GATE_ARITHMETIC_FCF",
@@ -573,6 +643,87 @@ class FundamentalsValidator:
         )
 
     @staticmethod
+    def _check_metric_definitions(
+        facts: List[FinancialFact], 
+        sources: Optional[List[Dict[str, Any]]]
+    ) -> ValidationResult:
+        rule_id = "GATE_METRIC_DEFINITIONS"
+        rule_name = "Accounting Metric Definitions & Comparability Nuance"
+
+        if not sources:
+            return ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.UNVERIFIED,
+                message="Source register not provided; metric definitions cannot be verified.",
+                dimension="COMPARABILITY_INTEGRITY"
+            )
+
+        allowed_oi_types = {"US_GAAP_OPERATING_INCOME", "IND_AS_EBIT_OPERATING_PROFIT", "IND_AS_PBEI_PROXY"}
+        allowed_capex_types = {"PPE_PURCHASES_ONLY", "PPE_AND_CWIP", "PPE_AND_INTANGIBLES"}
+        allowed_comp_flags = {"DIRECT", "PROXY", "LIMITED", "NOT_COMPARABLE"}
+
+        def_errors = []
+        source_map = {(s["ticker"], s["fiscal_year_label"]): s for s in sources}
+
+        for f in facts:
+            k = (f.ticker, f.fiscal_year_label)
+            src = source_map.get(k)
+            if not src:
+                def_errors.append(f"Missing source entry for {k}")
+                continue
+
+            mdefs = src.get("metric_definitions")
+            if not mdefs:
+                def_errors.append(f"Missing metric_definitions for {k}")
+                continue
+
+            oi_type = mdefs.get("operating_income_type")
+            capex_type = mdefs.get("capex_type")
+            oi_comp = mdefs.get("operating_income_comparability")
+            capex_comp = mdefs.get("capex_comparability")
+            overall_comp = mdefs.get("overall_comparability")
+
+            if oi_type not in allowed_oi_types:
+                def_errors.append(f"Invalid operating_income_type '{oi_type}' in {k}")
+            if capex_type not in allowed_capex_types:
+                def_errors.append(f"Invalid capex_type '{capex_type}' in {k}")
+            if oi_comp not in allowed_comp_flags:
+                def_errors.append(f"Invalid operating_income_comparability '{oi_comp}' in {k}")
+            if capex_comp not in allowed_comp_flags:
+                def_errors.append(f"Invalid capex_comparability '{capex_comp}' in {k}")
+            if overall_comp not in allowed_comp_flags:
+                def_errors.append(f"Invalid overall_comparability '{overall_comp}' in {k}")
+
+            # Specific rule: If Ind AS PBEI proxy, comparability must be PROXY
+            if oi_type == "IND_AS_PBEI_PROXY" and oi_comp != "PROXY":
+                def_errors.append(f"PBEI proxy must have comparability flag 'PROXY' in {k}")
+
+            # Fact comparability flag must match source overall_comparability
+            fact_comp = getattr(f, "comparability_flag", None)
+            if fact_comp and fact_comp != overall_comp:
+                def_errors.append(f"Fact comparability_flag '{fact_comp}' != source '{overall_comp}' in {k}")
+
+        if def_errors:
+            return ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.FAIL,
+                message=f"Accounting metric definition errors: {def_errors[:3]}",
+                details={"errors": def_errors},
+                dimension="COMPARABILITY_INTEGRITY"
+            )
+
+        return ValidationResult(
+            rule_id=rule_id,
+            rule_name=rule_name,
+            status=ValidationStatus.PASS,
+            message="All observations have documented canonical accounting definitions and peer comparability flags.",
+            details={"observation_count": len(facts)},
+            dimension="COMPARABILITY_INTEGRITY"
+        )
+
+    @staticmethod
     def _check_anomalies_and_variances(facts: List[FinancialFact]) -> List[ValidationResult]:
         results = []
         derived_list = compute_derived_metrics_for_company(facts)
@@ -596,8 +747,8 @@ class FundamentalsValidator:
             results.append(ValidationResult(
                 rule_id="GATE_ANOMALY_SCAN",
                 rule_name="Statistical Outlier and Variance Scan",
-                status=ValidationStatus.PASS, # Passes with qualification; warnings are non-destructive
-                message="Data points flagged for analytical review (no errors; verified in audited statements).",
+                status=ValidationStatus.WARNING,
+                message=f"Statistical anomaly flagged for analyst review ({len(warnings)} variances detected).",
                 details={"warnings": warnings},
                 dimension="ANOMALY_REVIEW"
             ))
@@ -619,7 +770,7 @@ class FundamentalsValidator:
         for r in results:
             dim = r.dimension or "STRUCTURAL"
             if dim not in summary:
-                summary[dim] = {"PASS": 0, "FAIL": 0, "UNVERIFIED": 0, "NOT_APPLICABLE": 0}
+                summary[dim] = {"PASS": 0, "FAIL": 0, "WARNING": 0, "UNVERIFIED": 0, "NOT_APPLICABLE": 0}
             status_key = r.status.value
             summary[dim][status_key] = summary[dim].get(status_key, 0) + 1
         return summary

@@ -1,6 +1,6 @@
 """
-Deterministic export utilities for Fundamentals Lens.
-Generates company-specific CSV datasets and formatted research briefs.
+Deterministic export utilities for Fundamentals Lens (Phase 5).
+Generates company-specific CSV datasets, peer comparison CSVs, and formatted research briefs.
 """
 import io
 import csv
@@ -13,7 +13,8 @@ from .insights import NarrativeEngine, FinancialInsight
 
 class ExportGenerator:
     """
-    Generates downloadable CSV data and Markdown research briefs.
+    Generates downloadable CSV data and Markdown research briefs with explicit provenance
+    and accounting comparability caveats.
     """
 
     @classmethod
@@ -25,6 +26,7 @@ class ExportGenerator:
     ) -> str:
         """
         Generates a clean, comma-separated values string of 5-year financials and metrics.
+        Preserves empty values as empty strings without synthetic zero coercion.
         """
         if derived is None:
             derived = compute_derived_metrics_for_company(facts)
@@ -33,7 +35,7 @@ class ExportGenerator:
         output = io.StringIO()
         writer = csv.writer(output)
 
-        # Header
+        # Header (Index 10 is Revenue for backward compatibility)
         writer.writerow([
             "Ticker",
             "Company Name",
@@ -61,7 +63,10 @@ class ExportGenerator:
             "Source ID",
             "Filing Date",
             "Accession ID",
-            "Source URL"
+            "Source URL",
+            "Comparability Flag",
+            "Accounting Notes",
+            "Reconciliation Tier"
         ])
 
         for f in sorted(facts, key=lambda x: x.fiscal_year):
@@ -78,23 +83,75 @@ class ExportGenerator:
                 f.period_start,
                 f.period_end,
                 f.revenue,
-                f"{d.revenue_growth_yoy:.2f}" if d and d.revenue_growth_yoy is not None else "",
+                f"{d.revenue_growth_yoy:.2f}" if (d and d.revenue_growth_yoy is not None) else "",
                 f.operating_income,
-                f"{d.operating_margin:.2f}" if d and d.operating_margin is not None else "",
+                f"{d.operating_margin:.2f}" if (d and d.operating_margin is not None) else "",
                 f.net_income,
-                f"{d.net_margin:.2f}" if d and d.net_margin is not None else "",
+                f"{d.net_margin:.2f}" if (d and d.net_margin is not None) else "",
                 f.operating_cash_flow,
                 f.capital_expenditure,
-                f"{d.free_cash_flow:.2f}" if d and d.free_cash_flow is not None else "",
-                f"{d.cash_conversion_ratio:.2f}" if d and d.cash_conversion_ratio is not None else "",
-                d.cash_conversion_qualified_reason if d and d.cash_conversion_qualified_reason else "",
+                f"{d.free_cash_flow:.2f}" if (d and d.free_cash_flow is not None) else "",
+                f"{d.cash_conversion_ratio:.2f}" if (d and d.cash_conversion_ratio is not None) else "",
+                d.cash_conversion_qualified_reason if (d and d.cash_conversion_qualified_reason) else "",
                 f.statement_basis,
                 f.verification_status,
                 f.source_id,
                 f.filing_date,
                 f.accession_id,
-                f.source_url
+                f.source_url,
+                getattr(f, "comparability_flag", "DIRECT"),
+                getattr(f, "accounting_notes", ""),
+                getattr(f, "reconciliation_tier", "INDEPENDENTLY_RECONCILED")
             ])
+
+        return output.getvalue()
+
+    @classmethod
+    def generate_peer_comparison_csv(
+        cls,
+        matrix: Dict[str, Any],
+        peer_group_name: str = ""
+    ) -> str:
+        """
+        Generates a CSV export of peer comparison data across multiple fiscal periods.
+        """
+        output = io.StringIO()
+        writer = csv.writer(output)
+
+        writer.writerow(["# Peer Comparison Export", peer_group_name])
+        metric_label = matrix.get("metric_name") or matrix.get("metric", "")
+        writer.writerow(["# Metric", metric_label])
+        writer.writerow(["# Unit", matrix.get("unit", "")])
+        if matrix.get("metric_note"):
+            writer.writerow(["# Accounting Caveat", matrix["metric_note"]])
+        writer.writerow([])
+
+        # Collect unique years and labels
+        period_year_map = {}
+        for s in matrix.get("series", []):
+            for pt in s.get("data", []):
+                yr = pt.get("fiscal_year")
+                lbl = pt.get("fiscal_year_label")
+                if yr is not None and lbl:
+                    period_year_map[yr] = lbl
+
+        sorted_yrs = sorted(period_year_map.keys())
+        all_period_labels = [period_year_map[y] for y in sorted_yrs]
+
+        header = ["Fiscal Period"] + [f"{s['ticker']} ({s['company_name']})" for s in matrix.get("series", [])]
+        writer.writerow(header)
+
+        for yr in sorted_yrs:
+            lbl = period_year_map[yr]
+            row = [lbl]
+            for s in matrix.get("series", []):
+                if s.get("is_suppressed"):
+                    row.append(f"Suppressed ({s.get('suppress_reason')})")
+                else:
+                    series_points = {pt["fiscal_year"]: pt["value"] for pt in s.get("data", [])}
+                    val = series_points.get(yr)
+                    row.append(f"{val:.2f}" if val is not None else "")
+            writer.writerow(row)
 
         return output.getvalue()
 
@@ -121,12 +178,14 @@ class ExportGenerator:
 
         unit = company.standard_unit_label
         curr = company.reporting_currency
+        report_date = date.today().isoformat()
 
         lines = []
         lines.append(f"# FUNDAMENTALS LENS — FINANCIAL RESEARCH BRIEF")
         lines.append(f"## {company.name} ({company.ticker})")
         lines.append(f"**Peer Group:** {company.peer_group_name} | **Exchange:** {company.exchange} | **Country:** {company.country}")
-        lines.append(f"**Research Snapshot Date:** {snapshot_date} | **Statement Basis:** CONSOLIDATED (100% Audited)")
+        lines.append(f"**Dataset Snapshot Cutoff:** `{snapshot_date}` | **Brief Generation Date:** `{report_date}`")
+        lines.append(f"**Statement Basis:** CONSOLIDATED (100% Audited Regulatory Disclosures)")
         lines.append(f"**Latest Verified Period:** {latest_fact.fiscal_year_label if latest_fact else 'N/A'}")
         lines.append("")
         lines.append("---")
@@ -141,13 +200,14 @@ class ExportGenerator:
 
         # 2. Historical 5-Period Financial Facts Table
         lines.append(f"### 2. Historical Financial Disclosures (in {unit})")
-        lines.append("| Fiscal Period | Period Dates | Revenue | Operating Income | Net Income | Operating Cash Flow | Capex |")
-        lines.append("|:---|:---:|:---:|:---:|:---:|:---:|:---:|")
+        lines.append("| Fiscal Period | Period Dates | Revenue | Operating Income | Net Income | Operating Cash Flow | Capex | Comparability |")
+        lines.append("|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|")
         for f in sorted_facts:
+            comp_flag = getattr(f, "comparability_flag", "DIRECT")
             lines.append(
                 f"| {f.fiscal_year_label} | {f.period_start} to {f.period_end} | "
                 f"{f.revenue:,.1f} | {f.operating_income:,.1f} | {f.net_income:,.1f} | "
-                f"{f.operating_cash_flow:,.1f} | {f.capital_expenditure:,.1f} |"
+                f"{f.operating_cash_flow:,.1f} | {f.capital_expenditure:,.1f} | `{comp_flag}` |"
             )
         lines.append("")
 
@@ -170,27 +230,37 @@ class ExportGenerator:
             lines.append(f"| {f.fiscal_year_label} | {growth} | {op_m} | {net_m} | {fcf} | {conv} |")
         lines.append("")
 
-        # 4. Narrative Insights
-        lines.append("### 4. What Changed, Why It Matters, and What to Investigate")
+        # 4. Standard Metric Formulas & Methodology
+        lines.append("### 4. Mathematical Formulas & Calculation Invariants")
+        lines.append("- **Operating Margin (%):** `(Operating Income / Revenue) * 100`")
+        lines.append("- **Net Margin (%):** `(Net Income / Revenue) * 100`")
+        lines.append("- **Free Cash Flow:** `Operating Cash Flow - Capital Expenditure (Capex)`")
+        lines.append("- **Cash Conversion Ratio:** `Operating Cash Flow / Net Income` (Suppressed if Net Income ≤ 0 to prevent distortion)")
+        lines.append("- **Capex Sign Convention:** Expressed as a positive cash outflow magnitude.")
+        lines.append("")
+
+        # 5. Narrative Insights
+        lines.append("### 5. What Changed, Why It Matters, and What to Investigate")
         for idx, insight in enumerate(insights, 1):
-            lines.append(f"#### 4.{idx} {insight.headline}")
+            lines.append(f"#### 5.{idx} {insight.headline}")
             lines.append(f"- **What Changed:** {insight.what_changed}")
-            lines.append(f"- **Numerical Evidence:** {insight.evidence}")
+            lines.append(f"- **Numerical Evidence:** `{insight.evidence}`")
             lines.append(f"- **Why It Matters:** {insight.why_it_matters}")
             lines.append(f"- **What to Investigate:** {insight.what_to_investigate}")
             lines.append(f"- *Analytical Limitations:* {insight.limitations}")
             lines.append("")
 
-        # 5. Provenance & Source Register
-        lines.append("### 5. Primary Source Verification & Audit Trail")
-        lines.append("| Period | Source Document | Filing Date | Statement Location | Accession ID | Status |")
+        # 6. Provenance & Source Register
+        lines.append("### 6. Primary Source Verification & Audit Trail")
+        lines.append("| Period | Source Document | Filing Date | Statement Location | Filing Reference ID | Tier |")
         lines.append("|:---|:---|:---:|:---|:---|:---:|")
         for f in sorted_facts:
-            lines.append(f"| {f.fiscal_year_label} | [{f.source_title}]({f.source_url}) | {f.filing_date} | {f.statement_location} | `{f.accession_id}` | `{f.verification_status}` |")
+            tier = getattr(f, "reconciliation_tier", "INDEPENDENTLY_RECONCILED")
+            lines.append(f"| {f.fiscal_year_label} | [{f.source_title}]({f.source_url}) | {f.filing_date} | {f.statement_location} | `{f.accession_id}` | `{tier}` |")
         lines.append("")
 
-        # 6. Disclaimers & Methodology
-        lines.append("### 6. Methodology & Research Disclaimer")
+        # 7. Disclaimers & Methodology
+        lines.append("### 7. Methodology & Research Disclaimer")
         lines.append(
             "> **Disclaimer:** This research brief was generated deterministically by **Fundamentals Lens** for financial analysis "
             "and academic research purposes only. It does not constitute investment advice, financial promotion, valuation opinion, "

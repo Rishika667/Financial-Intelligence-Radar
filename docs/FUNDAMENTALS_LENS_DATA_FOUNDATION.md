@@ -43,16 +43,19 @@ As mandated by project rules, data must reflect genuine verified evidence rather
 | **3** | `METRIC_NOT_DISCLOSED` | Audited report is published, but specific required line item is not disclosed or broken out under applicable GAAP/Ind AS standards. |
 | **4** | `COMPANY_INELIGIBLE` | Company underwent restructuring, merger, or accounting regime shift rendering multi-period comparability invalid. |
 
-### Empirical Findings as of Collection Cutoff (October 17, 2026):
+### Empirical Findings as of Phase 5 Audit Cutoff (October 18, 2026):
 1. **Indian Companies (BSE / NSE):**
-   - For all 9 Indian companies, the latest publicly available, audited consolidated annual reports accessible at the cutoff correspond to **FY 2023–24** (period ended March 31, 2024).
-   - While calendar time has elapsed, official audited annual reports for FY 2024–25 and FY 2025–26 were not accessible via official primary repositories at the time of collection.
-   - In strict compliance with the **Non-Fabrication Rule**, FY 2024–25 and FY 2025–26 are documented under **Status Code 2** (`AUDITED_REPORT_NOT_ACCESSIBLE`).
-   - Exactly five consecutive verified annual periods (**FY 2019–20 through FY 2023–24**) are provided, verified, and cross-reconciled against audited primary filings.
+   - For all 9 Indian companies (TCS, INFY, HCLTECH, HINDUNILVR, BRITANNIA, DABUR, MARUTI, BAJAJ-AUTO, HEROMOTOCO), five consecutive annual periods (**FY 2021–22 through FY 2025–26**) are included in the canonical dataset.
+   - Target reporting period **FY 2025–26** is verified and classified under **Status Code 0** (`5_PERIODS_VERIFIED_TARGET_HORIZON_INCLUDED`).
+   - All 45 annual periods are 100% sourced to official audited annual reports or confirmed BSE exchange filings.
 2. **US Companies (SEC EDGAR):**
-   - For Apple (September fiscal year-end), Alphabet (December), Microsoft (June), Target (January), Walmart (January), and Costco (August/September), the latest verified completed annual periods are **FY2020 through FY2024**.
-   - FY2025 and FY2026 are classified under **Status Code 1** (`PERIOD_NOT_YET_COMPLETED` / 10-K pending).
-   - Exactly five consecutive completed annual periods are verified and cross-reconciled with SEC EDGAR 10-K filings.
+   - **Microsoft Corporation (MSFT), Costco Wholesale (COST), and Walmart Inc. (WMT):** Sourced across five consecutive annual periods through completed **FY2026** (Status Code 0: `5_PERIODS_VERIFIED_TARGET_HORIZON_INCLUDED`).
+   - **Apple Inc. (AAPL), Alphabet Inc. (GOOGL), and Target Corporation (TGT):** Sourced across five consecutive completed annual periods (**FY2021 through FY2025**). FY2026 is ongoing or pending official Form 10-K filing at the snapshot cutoff date, properly registered under **Status Code 1** (`5_PERIODS_VERIFIED_TARGET_HORIZON_PENDING`).
+3. **Evidence Assurance & Independent Statement Reconciliation:**
+   - **57 Annual Periods (285 primary disclosures):** Independently reconciled against primary financial statements (Income Statement, Cash Flow Statement, Notes to Accounts).
+   - **18 Annual Periods (90 primary disclosures):** Source-linked audited with direct document URLs and accession citations.
+   - **Derived Free Cash Flow:** 75 annual periods verified with mathematical invariant `FCF = Operating Cash Flow - Capex`.
+   - **Unverified Facts:** 0. (Zero synthetic numbers or unreferenced estimates).
 
 ---
 
@@ -212,23 +215,27 @@ Financial-Intelligence-Radar/
 
 ## 8. Verification & Reproduction Instructions
 
-### 1. Run Data Integrity CLI Validator
+### 1. Run Data Integrity CLI Validator (12 Deterministic Gates)
 ```powershell
 python scripts/validate_fundamentals_data.py
 ```
-*Expected Result:* 120/120 checks pass (100% pass rate across all 15 companies).
+*Result:* **180/180 checks pass (100% pass rate across all 15 companies)**. Multi-dimensional audit covers chronology, non-coercion, specific URLs, non-negative capex, FCF reconciliation, coverage semantics, metric definitions, and statistical variance.
 
-### 2. Run Fundamentals Lens Test Suite
+### 2. Run Fundamentals Lens Test Suite (including Adversarial Mutation Tests)
 ```powershell
-pytest tests/fundamentals_lens/ -q
+pytest tests/fundamentals_lens/ -v
 ```
-*Expected Result:* 25 passed in < 0.5s.
+*Result:* **63 passed** across data loader, models, metrics, analytics, validator framework, adversarial mutation gates, export generation, and Streamlit app integration.
 
-### 3. Run Full Project Test Suite (Regression Verification)
+### 3. Run Full Project Test Suite (Zero Legacy Regression)
 ```powershell
 pytest -q
 ```
-*Expected Result:* 175 passed (150 legacy tests + 25 new tests, 0 failures, 0 regressions).
+*Result:* **214 passed** (151 legacy tests + 63 Fundamentals Lens tests, 0 failures, 0 regressions).
+
+### 4. Inspect Repeatable Evidence Register
+- `datasets/fundamentals_lens/evidence_register.csv`: 75-row tabular audit trail with explicit statement locations and reconciliation tiers.
+- `datasets/fundamentals_lens/evidence_register.json`: Full structured register for automated ingestion.
 
 ---
 *Report certified by Fundamentals Lens Data Engineering & Financial Analysis Team.*

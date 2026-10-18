@@ -6,6 +6,7 @@ from typing import Optional, List, Dict, Any
 class ValidationStatus(str, Enum):
     PASS = "PASS"
     FAIL = "FAIL"
+    WARNING = "WARNING"
     UNVERIFIED = "UNVERIFIED"
     NOT_APPLICABLE = "NOT_APPLICABLE"
 
@@ -75,6 +76,9 @@ class FinancialFact:
     reported_status: str
     verification_status: str
     notes: str = ""
+    comparability_flag: str = "DIRECT"
+    accounting_notes: str = ""
+    reconciliation_tier: str = "INDEPENDENTLY_RECONCILED"
 
 
 @dataclass

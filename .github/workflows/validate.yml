@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - "phase-*"
+      - "pivot/**"
   pull_request:
 jobs:
   test:
@@ -19,8 +20,11 @@ jobs:
       - name: Verify package imports and app compilation
         run: |
           python -c "import financial_radar; print('Imported financial_radar from', financial_radar.__file__)"
-          python -m compileall -q src app.py
+          python -c "import fundamentals_lens; print('Imported fundamentals_lens from', fundamentals_lens.__file__)"
+          python -m compileall -q src app.py fundamentals_lens_app.py
       - name: Install test dependencies
         run: python -m pip install -e '.[dev]'
+      - name: Run Fundamentals Lens Data Integrity Validation
+        run: python scripts/validate_fundamentals_data.py
       - name: Run full test suite
         run: python -m pytest -q

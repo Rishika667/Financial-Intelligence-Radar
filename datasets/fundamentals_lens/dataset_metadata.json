@@ -2,7 +2,7 @@
   "product_name": "Fundamentals Lens",
   "product_tagline": "Evidence-First SEC & Indian Corporate Disclosure Intelligence",
   "creator_name": "Rishika Dangayach",
-  "dataset_version": "1.0.0-phase10",
+  "dataset_version": "1.0.0-phase11",
   "dataset_snapshot_date": "2026-10-18",
   "universe_size": 15,
   "total_annual_periods": 75,
@@ -18,27 +18,55 @@
     {
       "id": "group_a_tech",
       "name": "Global Technology Leaders",
-      "tickers": ["AAPL", "MSFT", "GOOGL"]
+      "tickers": [
+        "AAPL",
+        "MSFT",
+        "GOOGL"
+      ]
     },
     {
       "id": "group_b_india_it",
       "name": "Indian IT Services",
-      "tickers": ["TCS", "INFY", "HCLTECH"]
+      "tickers": [
+        "TCS",
+        "INFY",
+        "HCLTECH"
+      ]
     },
     {
       "id": "group_c_india_fmcg",
       "name": "Indian Consumer Brands",
-      "tickers": ["HINDUNILVR", "BRITANNIA", "DABUR"]
+      "tickers": [
+        "HINDUNILVR",
+        "BRITANNIA",
+        "DABUR"
+      ]
     },
     {
       "id": "group_d_india_auto",
       "name": "Indian Auto & Mobility",
-      "tickers": ["MARUTI", "BAJAJ-AUTO", "HEROMOTOCO"]
+      "tickers": [
+        "MARUTI",
+        "BAJAJ-AUTO",
+        "HEROMOTOCO"
+      ]
     },
     {
       "id": "group_e_us_retail",
       "name": "US Retailers",
-      "tickers": ["WMT", "COST", "TGT"]
+      "tickers": [
+        "WMT",
+        "COST",
+        "TGT"
+      ]
     }
-  ]
+  ],
+  "build_timestamp": "2026-10-18T15:08:18Z",
+  "total_companies": 15,
+  "total_periods": 75,
+  "independently_reconciled_metrics": 330,
+  "source_linked_only_metrics": 45,
+  "unverified_metrics": 0,
+  "derived_fcf_records": 75,
+  "discrepancies_registered": 15
 }

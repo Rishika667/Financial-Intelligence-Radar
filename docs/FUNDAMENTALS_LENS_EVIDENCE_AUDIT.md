@@ -1,7 +1,7 @@
 # Fundamentals Lens: Master Sourcing & Evidence Assurance Audit
 
 **Platform:** Fundamentals Lens (`Rishika667/Financial-Intelligence-Radar`)  
-**Phase:** Phase 10 — Final Evidence Reconciliation, Zero-Mislabel Audit & Deployment-Readiness Certification  
+**Phase:** Phase 11 — Final Independent Source Reconciliation, Zero-Mislabel Release & Human-Approved Deployment Readiness  
 **Author & Lead Engineer:** **Rishika Dangayach**  
 **Audit Standard:** Zero-Coercion, Primary Statement Citation, Documented Discrepancy Ledger  
 **Dataset Snapshot Cutoff:** `2026-10-18`  
@@ -76,6 +76,12 @@ The canonical repository maintains a formal discrepancy ledger (`datasets/fundam
 | `DISC-007` | `TCS` | FY 2025–26 | Operating Income | ₹66,755.0 Cr | ₹66,755.0 Cr | Dataset stores ₹66,755 Cr reflecting Operating profit before exceptional items and other income (PBEI). In 5-Year Performance Trend of Integrated Annual Report, EBIT is cited as ₹66,838 Cr. Canonical registered as PBEI proxy with `PROXY` comparability flag and documented ₹83 Cr delta. |
 | `DISC-008` | `BAJAJ-AUTO` | FY 2025–26 | Operating Income | ₹12,019.0 Cr | ₹12,019.0 Cr | Stored ₹12,019 Cr represents EBITDA (Operating Profit before Depreciation) as highlighted in Annual Report. Standalone depreciation is ₹448.2 Cr, giving operating profit (EBIT) of ~₹11,570.8 Cr. Documented as EBITDA Proxy with `PROXY` comparability flag. |
 | `DISC-009` | `INFY` | FY 2025–26 | Net Income | ₹29,440.0 Cr | ₹29,440.0 Cr | Total consolidated profit is ₹29,474 Cr. Profit attributable to owners of the Company (after non-controlling interests of ₹34 Cr) is ₹29,440 Cr. Registered attribution basis as `ATTRIBUTABLE_TO_OWNERS`. |
+| `DISC-010` | `COST` | FY2022 | Op & Net Income | $7,795.0M / $5,841M | $7,793.0M / $5,844M | Initial dataset had $7,795.0M operating income and $5,841.0M net income; official Form 10-K Item 8 Consolidated Statements of Operations reports Operating Income of $7,793.0M and Net Income of $5,844.0M. |
+| `DISC-011` | `COST` | FY2024 | Accession Alignment | ...-000084 | ...-000049 | Previous dataset recorded accession 0000909832-24-000084; official SEC EDGAR submissions API confirms accession is 0000909832-24-000049. |
+| `DISC-012` | `COST` | FY2025 | OCF & Capex | $14,100M / $5,200M | $13,335.0M / $5,498M | Preliminary estimate recorded $14,100M OCF and $5,200M capex; official Form 10-K Item 8 Consolidated Statements of Cash Flows reports OCF of $13,335M and Capex of $5,498M. FCF updated to $7,837M. |
+| `DISC-013` | `COST` | FY2026 | Operating Income | $11,700.0M | $11,685.0M | Initial dataset had $11,700M rounded operating income; official Form 10-K Item 8 Consolidated Statements of Operations reports Operating Income of $11,685.0M under accession `0000909832-26-000093`. |
+| `DISC-014` | `MSFT` | FY2025 | Revenue & Op Inc | $281,654M / $128,450M | $281,724.0M / $128,528M | Subsequent segment reclassifications in Microsoft Form 10-K report Revenue of $281,724M and Operating Income of $128,528M under accession `0000950170-25-100235`. |
+| `DISC-015` | `MSFT` | FY2026 | Net Income & OCF | $133,768M / $182,933M | $133,749.0M / $182,935M | Initial dataset had $133,768M net income and $182,933M OCF; official Form 10-K Item 8 reports Net Income of $133,749M and Cash from Operations of $182,935M under accession `0001193125-26-323660`. FCF updated to $66,987M. |
 
 ---
 

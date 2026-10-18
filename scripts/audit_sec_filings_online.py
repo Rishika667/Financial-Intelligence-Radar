@@ -1,14 +1,21 @@
 """
 Repeatable SEC EDGAR Submissions Audit Script:
-Verifies official Form 10-K filing identity, accession numbers, filing dates, and report periods
-against the official SEC EDGAR submissions API (https://data.sec.gov/submissions/CIK{cik}.json).
+Verifies official Form 10-K filing identity, accession numbers, filing dates, report periods,
+primary documents, and dataset source URLs against the official SEC EDGAR submissions API
+(https://data.sec.gov/submissions/CIK{cik}.json).
 
 Statuses:
-- ONLINE_VERIFIED: Successfully matched against official SEC submissions API.
+- ONLINE_VERIFIED: All mandatory checks passed against official SEC submissions API:
+    * Company CIK and Form 10-K verified
+    * Filing date matches exactly
+    * Period of report date matches stored period-end
+    * Primary document filename matches source URL
+    * Unhyphenated accession directory matches source URL
+    * CIK directory matches source URL
 - OFFLINE_STRUCTURE_ONLY: Verified against structural 20-digit SEC accession and URL rules offline.
-- NOT_FOUND: Accession was not found in SEC EDGAR recent submissions.
-- MISMATCH: Filing was found, but form/dates/primary document contradicted the canonical facts.
-- UNAVAILABLE: SEC EDGAR endpoint unreachable, network timeout, or rate-limited (HTTP 429/5xx).
+- NOT_FOUND: Accession was not found in SEC EDGAR recent or historical submissions.
+- MISMATCH: Filing was found, but form/dates/primary document/URL contradicted the canonical facts.
+- UNAVAILABLE: SEC EDGAR endpoint unreachable, network timeout, rate-limited (HTTP 429), or missing network library.
 
 Usage:
   python scripts/audit_sec_filings_online.py [--offline] [--strict] [--user-agent "YourName yourname@domain.com"]
@@ -49,7 +56,7 @@ ACCESSION_PATTERN = re.compile(r"^\d{10}-\d{2}-\d{6}$")
 def audit_sec_filings(
     offline: bool = False, 
     strict: bool = False,
-    user_agent: str = "AnalystResearch analyst@example.com",
+    user_agent: Optional[str] = None,
     facts_path: Optional[Path] = None,
     report_path: Optional[Path] = None
 ) -> Dict[str, Any]:
@@ -66,7 +73,14 @@ def audit_sec_filings(
     print(f"Loaded {len(us_facts)} US financial facts across {len(CIK_MAP)} companies.")
 
     results: List[Dict[str, Any]] = []
-    headers = {"User-Agent": user_agent, "Accept-Encoding": "gzip, deflate"}
+    
+    # Resolve User-Agent: CLI flag > SEC_USER_AGENT env > truthful project default
+    resolved_ua = (
+        user_agent
+        or os.environ.get("SEC_USER_AGENT", "").strip()
+        or "FinancialIntelligenceRadar rishika.dangayach@domain.com"
+    )
+    headers = {"User-Agent": resolved_ua, "Accept-Encoding": "gzip, deflate"}
 
     failure_detected = False
 
@@ -81,10 +95,13 @@ def audit_sec_filings(
                 src_url = f.get("source_url", "")
                 has_valid_url = bool(src_url and "sec.gov/Archives/edgar/data" in src_url)
 
+                checks = ["accession_regex_format", "sec_archives_url_domain"]
                 if is_valid_format and has_valid_url:
                     status = "OFFLINE_STRUCTURE_ONLY"
+                    err = None
                 else:
                     status = "MISMATCH"
+                    err = "Invalid accession pattern or SEC URL"
                     failure_detected = True
 
                 results.append({
@@ -97,7 +114,8 @@ def audit_sec_filings(
                     "filing_date": f.get("filing_date"),
                     "period_end": f.get("period_end"),
                     "source_url": src_url,
-                    "error": None if status == "OFFLINE_STRUCTURE_ONLY" else "Invalid accession pattern or SEC URL"
+                    "checks_performed": checks,
+                    "error": err
                 })
             continue
 
@@ -108,6 +126,24 @@ def audit_sec_filings(
             resp = requests.get(url, headers=headers, timeout=12)
             if resp.status_code == 200:
                 sub_data = resp.json()
+                
+                # Check company CIK identity in response
+                sec_cik_raw = str(sub_data.get("cik", "")).zfill(10)
+                if sec_cik_raw and sec_cik_raw != cik:
+                    failure_detected = True
+                    for f in company_facts:
+                        results.append({
+                            "ticker": ticker,
+                            "cik": cik,
+                            "fiscal_year_label": f.get("fiscal_year_label"),
+                            "accession_id": f.get("accession_id"),
+                            "status": "MISMATCH",
+                            "form": "10-K",
+                            "checks_performed": ["company_cik_identity"],
+                            "error": f"SEC submissions returned CIK {sec_cik_raw} != expected {cik}"
+                        })
+                    continue
+
                 recent = sub_data.get("filings", {}).get("recent", {})
                 acc_list = recent.get("accessionNumber", [])
                 form_list = recent.get("form", [])
@@ -152,14 +188,46 @@ def audit_sec_filings(
 
                     if stored_acc in edgar_map:
                         sec_info = edgar_map[stored_acc]
-                        # Check form and dates
+                        checks = ["accession_existence"]
+                        mismatch_errors = []
+
+                        # 1. Form Check
+                        checks.append("form_10k_type")
                         if sec_info["form"] != "10-K":
+                            mismatch_errors.append(f"Expected Form 10-K, but SEC reports Form {sec_info['form']}")
+
+                        # 2. Filing Date Check
+                        checks.append("filing_date_parity")
+                        if f.get("filing_date") and sec_info["filing_date"] != f.get("filing_date"):
+                            mismatch_errors.append(f"Filing date mismatch: fact has {f.get('filing_date')}, SEC reports {sec_info['filing_date']}")
+
+                        # 3. Report Period Check
+                        checks.append("report_period_parity")
+                        if f.get("period_end") and sec_info.get("report_date") and sec_info["report_date"] != f.get("period_end"):
+                            mismatch_errors.append(f"Report period mismatch: fact has {f.get('period_end')}, SEC reports {sec_info['report_date']}")
+
+                        # 4. Primary Document Filename in Source URL
+                        checks.append("primary_document_url_alignment")
+                        src_url = f.get("source_url", "")
+                        p_doc = sec_info.get("primary_doc")
+                        if p_doc and (p_doc not in src_url):
+                            mismatch_errors.append(f"Primary document '{p_doc}' not found in source_url '{src_url}'")
+
+                        # 5. Accession Directory in Source URL
+                        checks.append("accession_directory_url_alignment")
+                        acc_dir = stored_acc.replace("-", "")
+                        if acc_dir not in src_url:
+                            mismatch_errors.append(f"Accession directory '{acc_dir}' not found in source_url '{src_url}'")
+
+                        # 6. CIK Directory in Source URL
+                        checks.append("cik_directory_url_alignment")
+                        unpadded_cik = str(int(cik))
+                        if f"/data/{unpadded_cik}/" not in src_url and f"/data/{cik}/" not in src_url:
+                            mismatch_errors.append(f"CIK directory '/data/{unpadded_cik}/' not found in source_url '{src_url}'")
+
+                        if mismatch_errors:
                             status = "MISMATCH"
-                            err = f"Expected Form 10-K, but SEC reports Form {sec_info['form']}"
-                            failure_detected = True
-                        elif f.get("filing_date") and sec_info["filing_date"] != f.get("filing_date"):
-                            status = "MISMATCH"
-                            err = f"Filing date mismatch: fact has {f.get('filing_date')}, SEC reports {sec_info['filing_date']}"
+                            err = "; ".join(mismatch_errors)
                             failure_detected = True
                         else:
                             status = "ONLINE_VERIFIED"
@@ -172,9 +240,13 @@ def audit_sec_filings(
                             "accession_id": stored_acc,
                             "sec_filing_date": sec_info["filing_date"],
                             "dataset_filing_date": f.get("filing_date"),
-                            "primary_document": sec_info["primary_doc"],
+                            "sec_report_date": sec_info.get("report_date"),
+                            "dataset_period_end": f.get("period_end"),
+                            "primary_document": sec_info.get("primary_doc"),
+                            "source_url": src_url,
                             "status": status,
                             "form": sec_info["form"],
+                            "checks_performed": checks,
                             "error": err
                         })
                     else:
@@ -186,6 +258,7 @@ def audit_sec_filings(
                             "accession_id": stored_acc,
                             "status": "NOT_FOUND",
                             "form": "10-K",
+                            "checks_performed": ["accession_existence"],
                             "error": "Accession not found in recent or historical EDGAR submissions"
                         })
             elif resp.status_code in (429, 500, 502, 503, 504):
@@ -198,7 +271,21 @@ def audit_sec_filings(
                         "accession_id": f.get("accession_id"),
                         "status": "UNAVAILABLE",
                         "form": "10-K",
-                        "error": f"HTTP_{resp.status_code}"
+                        "checks_performed": ["http_endpoint_reachability"],
+                        "error": f"HTTP_{resp.status_code}: SEC endpoint unavailable or rate limited"
+                    })
+            elif resp.status_code == 403:
+                print(f"[{ticker}] SEC returned HTTP 403 (User-Agent rejected).")
+                for f in company_facts:
+                    results.append({
+                        "ticker": ticker,
+                        "cik": cik,
+                        "fiscal_year_label": f.get("fiscal_year_label"),
+                        "accession_id": f.get("accession_id"),
+                        "status": "UNAVAILABLE",
+                        "form": "10-K",
+                        "checks_performed": ["http_endpoint_reachability"],
+                        "error": "HTTP_403: SEC EDGAR requires a declared operator name and contact email in User-Agent header"
                     })
             else:
                 failure_detected = True
@@ -210,6 +297,7 @@ def audit_sec_filings(
                         "accession_id": f.get("accession_id"),
                         "status": "NOT_FOUND",
                         "form": "10-K",
+                        "checks_performed": ["http_endpoint_reachability"],
                         "error": f"HTTP_{resp.status_code}"
                     })
         except Exception as e:
@@ -222,6 +310,7 @@ def audit_sec_filings(
                     "accession_id": f.get("accession_id"),
                     "status": "UNAVAILABLE",
                     "form": "10-K",
+                    "checks_performed": ["http_endpoint_reachability"],
                     "error": str(e)
                 })
 
@@ -261,7 +350,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="SEC EDGAR Submissions Audit")
     parser.add_argument("--offline", action="store_true", help="Run in offline verification mode")
     parser.add_argument("--strict", action="store_true", help="Exit with code 1 on mismatch or failure")
-    parser.add_argument("--user-agent", default="AnalystResearch analyst@example.com", help="SEC EDGAR User-Agent")
+    parser.add_argument("--user-agent", default=None, help="SEC EDGAR User-Agent (Name email@domain.com)")
     args = parser.parse_args()
 
     audit_sec_filings(offline=args.offline, strict=args.strict, user_agent=args.user_agent)

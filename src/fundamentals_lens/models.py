@@ -136,8 +136,8 @@ class MetricEvidence:
     reconciliation_method: str
     comparison_result: str
     discrepancy_note: str = ""
-    evidence_check_date: str = "2026-10-18"
-    comparability: str = "DIRECT"
+    evidence_check_date: Optional[str] = None
+    comparability: str = "UNKNOWN"
     definition_type: Optional[str] = None
     attribution_basis: Optional[str] = None
     scope_type: Optional[str] = None
@@ -261,4 +261,9 @@ class TechnicalSummary:
     relative_performance_period: Optional[float] = None
     price_adjustment_basis: str = "UNKNOWN"
     currency: str = "USD"
+    coverage_start_date: Optional[str] = None
+    coverage_end_date: Optional[str] = None
+    coverage_calendar_days: Optional[int] = None
+    max_consecutive_gap_days: Optional[int] = None
+    has_adequate_calendar_coverage: bool = False
 

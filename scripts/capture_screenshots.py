@@ -49,6 +49,24 @@ async def send_cdp(ws, method, params=None, msg_id=1):
             return resp.get("result", {})
 
 
+async def verify_dom_landmark(ws, timeout_sec=10):
+    """Polls via CDP Runtime.evaluate to verify essential Streamlit DOM landmarks are mounted."""
+    start = time.time()
+    while time.time() - start < timeout_sec:
+        res = await send_cdp(ws, "Runtime.evaluate", {
+            "expression": (
+                "Boolean(document.body && "
+                "document.querySelector('[data-testid=\"stAppViewContainer\"]') && "
+                "document.querySelectorAll('.stMarkdown, [data-testid=\"stMarkdownContainer\"], h1, h2, h3').length > 0)"
+            ),
+            "returnByValue": True
+        }, msg_id=20)
+        if res.get("result", {}).get("value") is True:
+            return True
+        await asyncio.sleep(0.5)
+    return False
+
+
 async def capture_page(ws, url, output_path, width=1280, height=900, is_mobile=False, wait_sec=4):
     import websockets
 
@@ -64,13 +82,19 @@ async def capture_page(ws, url, output_path, width=1280, height=900, is_mobile=F
     await send_cdp(ws, "Page.navigate", {"url": url}, msg_id=11)
     await asyncio.sleep(wait_sec)
 
+    # DOM landmark verification
+    dom_ready = await verify_dom_landmark(ws, timeout_sec=8)
+    if not dom_ready:
+        print(f"Warning: DOM landmark verification timed out for {url}, capturing anyway...")
+
     # Capture screenshot
     res = await send_cdp(ws, "Page.captureScreenshot", {"format": "png"}, msg_id=12)
     img_data = base64.b64decode(res["data"])
 
     with open(output_path, "wb") as f:
         f.write(img_data)
-    print(f"Captured: {output_path.name} ({width}x{height}, {len(img_data):,} bytes)")
+    landmark_status = "DOM verified" if dom_ready else "DOM timeout"
+    print(f"Captured: {output_path.name} ({width}x{height}, {len(img_data):,} bytes, {landmark_status})")
 
 
 async def run_capture_pipeline():

@@ -408,3 +408,109 @@ def test_adversarial_url_mismatch_between_fact_and_evidence(sample_company_datas
     assert align_res.status == ValidationStatus.FAIL
     assert "Fact source_url" in align_res.details["errors"][0]
 
+
+def test_adversarial_altered_canonical_value_against_source_observation(sample_company_dataset):
+    """25. Adversarial test: Altering canonical fact value against unchanged raw observation fails observation gate."""
+    from fundamentals_lens.data_loader import load_evidence_register, load_source_observations
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_facts = copy.deepcopy(facts)
+    evidence = load_evidence_register()
+    obs = load_source_observations()
+
+    # Tamper with canonical revenue fact (change from 365817.0 to 400000.0)
+    # Also update evidence canonical value so alignment passes, proving observation check catches it
+    mutated_facts[0].revenue = 400000.0
+    mutated_evidence = copy.deepcopy(evidence)
+    for reg in mutated_evidence:
+        if reg["ticker"] == "AAPL" and reg["fiscal_year_label"] == "FY2021":
+            reg["metrics"]["revenue"]["canonical_value"] = 400000.0
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, mutated_facts, sources, coverage=coverage, evidence_register=mutated_evidence, source_observations=obs
+    )
+    obs_res = next(r for r in results if r.rule_id == "GATE_INDEPENDENT_SOURCE_OBSERVATION")
+    assert obs_res.status == ValidationStatus.FAIL
+    assert any("Canonical fact" in err and "Observation reported_value" in err for err in obs_res.details["source_obs_errors"])
+
+
+def test_adversarial_altered_source_observation_reported_value(sample_company_dataset):
+    """26. Adversarial test: Corrupting reported value in source observations fails observation gate."""
+    from fundamentals_lens.data_loader import load_evidence_register, load_source_observations
+    company, facts, sources, coverage = sample_company_dataset
+    evidence = load_evidence_register()
+    mutated_obs = copy.deepcopy(load_source_observations())
+
+    # Tamper with observation reported_value for AAPL FY2021 revenue
+    for o in mutated_obs:
+        if o["ticker"] == "AAPL" and o["fiscal_year_label"] == "FY2021" and o["metric_name"] == "revenue":
+            o["reported_value"] = 999999.0
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=evidence, source_observations=mutated_obs
+    )
+    obs_res = next(r for r in results if r.rule_id == "GATE_INDEPENDENT_SOURCE_OBSERVATION")
+    assert obs_res.status == ValidationStatus.FAIL
+    assert any("Evidence reported_value" in err and "Observation reported_value" in err for err in obs_res.details["source_obs_errors"])
+
+
+def test_adversarial_standalone_statement_basis_fails_gate(sample_company_dataset):
+    """27. Adversarial test: Standalone statement basis falsely labeled consolidated fails observation gate."""
+    from fundamentals_lens.data_loader import load_evidence_register, load_source_observations
+    company, facts, sources, coverage = sample_company_dataset
+    evidence = load_evidence_register()
+    mutated_obs = copy.deepcopy(load_source_observations())
+
+    for o in mutated_obs:
+        if o["ticker"] == "AAPL" and o["fiscal_year_label"] == "FY2021" and o["metric_name"] == "revenue":
+            o["statement_basis"] = "STANDALONE"
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=evidence, source_observations=mutated_obs
+    )
+    obs_res = next(r for r in results if r.rule_id == "GATE_INDEPENDENT_SOURCE_OBSERVATION")
+    assert obs_res.status == ValidationStatus.FAIL
+    assert any("Observation statement_basis is 'STANDALONE'" in err for err in obs_res.details["source_obs_errors"])
+
+
+def test_adversarial_missing_xbrl_concept_on_sec_observation(sample_company_dataset):
+    """28. Adversarial test: Missing XBRL concept on US SEC observation fails observation gate."""
+    from fundamentals_lens.data_loader import load_evidence_register, load_source_observations
+    company, facts, sources, coverage = sample_company_dataset
+    evidence = load_evidence_register()
+    mutated_obs = copy.deepcopy(load_source_observations())
+
+    for o in mutated_obs:
+        if o["ticker"] == "AAPL" and o["fiscal_year_label"] == "FY2021" and o["metric_name"] == "revenue":
+            o["xbrl_concept"] = ""
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=evidence, source_observations=mutated_obs
+    )
+    obs_res = next(r for r in results if r.rule_id == "GATE_INDEPENDENT_SOURCE_OBSERVATION")
+    assert obs_res.status == ValidationStatus.FAIL
+    assert any("Missing XBRL concept in US SEC observation" in err for err in obs_res.details["source_obs_errors"])
+
+
+def test_adversarial_missing_source_observation_entry(sample_company_dataset):
+    """29. Adversarial test: Missing observation record in source_observations fails observation gate."""
+    from fundamentals_lens.data_loader import load_evidence_register, load_source_observations
+    company, facts, sources, coverage = sample_company_dataset
+    evidence = load_evidence_register()
+    # Drop AAPL FY2021 revenue observation entirely
+    mutated_obs = [
+        o for o in load_source_observations()
+        if not (o["ticker"] == "AAPL" and o["fiscal_year_label"] == "FY2021" and o["metric_name"] == "revenue")
+    ]
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=evidence, source_observations=mutated_obs
+    )
+    obs_res = next(r for r in results if r.rule_id == "GATE_INDEPENDENT_SOURCE_OBSERVATION")
+    assert obs_res.status == ValidationStatus.FAIL
+    assert any("Missing source observation for AAPL FY2021 (revenue)" in err for err in obs_res.details["source_obs_errors"])
+
+

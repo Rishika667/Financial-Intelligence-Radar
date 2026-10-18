@@ -88,5 +88,65 @@
     "primary_reported_value": 29440.0,
     "investigation_finding": "In Infosys Consolidated Financial Results for FY26, total profit for the period is Rs 29,474 Cr. Net profit attributable to owners of the Company (after non-controlling interests of Rs 34 Cr) is Rs 29,440 Cr.",
     "resolution": "Documented attribution basis as ATTRIBUTABLE_TO_OWNERS at 29,440.0 Cr, confirming canonical figure aligns with common equity shareholder net income."
+  },
+  {
+    "discrepancy_id": "DISC-010",
+    "ticker": "COST",
+    "fiscal_year_label": "FY2022",
+    "metric": "operating_income",
+    "initial_dataset_value": 7795.0,
+    "primary_reported_value": 7793.0,
+    "investigation_finding": "Initial dataset had $7,795.0M operating income and $5,841.0M net income; official Form 10-K Item 8 Consolidated Statements of Operations reports Operating Income of $7,793.0M and Net Income of $5,844.0M under accession 0000909832-22-000021.",
+    "resolution": "Updated canonical operating income to 7,793.0M and net income to 5,844.0M to conform to audited Form 10-K statement."
+  },
+  {
+    "discrepancy_id": "DISC-011",
+    "ticker": "COST",
+    "fiscal_year_label": "FY2024",
+    "metric": "accession_alignment",
+    "initial_dataset_value": 0.0,
+    "primary_reported_value": 0.0,
+    "investigation_finding": "Previous dataset recorded accession 0000909832-24-000084 for Form 10-K filed October 9, 2024; official SEC EDGAR submissions API confirms accession is 0000909832-24-000049.",
+    "resolution": "Updated accession_id to 0000909832-24-000049 and aligned source_url accordingly."
+  },
+  {
+    "discrepancy_id": "DISC-012",
+    "ticker": "COST",
+    "fiscal_year_label": "FY2025",
+    "metric": "operating_cash_flow",
+    "initial_dataset_value": 14100.0,
+    "primary_reported_value": 13335.0,
+    "investigation_finding": "Preliminary estimate recorded $14,100M OCF and $5,200M capex; official Form 10-K Item 8 Consolidated Statements of Cash Flows reports Cash Provided by Operating Activities of $13,335M and Property Additions (Capex) of $5,498M.",
+    "resolution": "Updated canonical OCF to 13,335.0M, capex to 5,498.0M, and recomputed FCF as $7,837.0M."
+  },
+  {
+    "discrepancy_id": "DISC-013",
+    "ticker": "COST",
+    "fiscal_year_label": "FY2026",
+    "metric": "operating_income",
+    "initial_dataset_value": 11700.0,
+    "primary_reported_value": 11685.0,
+    "investigation_finding": "Initial dataset had $11,700M rounded operating income; official Form 10-K Item 8 Consolidated Statements of Operations reports Operating Income of $11,685.0M under accession 0000909832-26-000093.",
+    "resolution": "Updated canonical operating income to 11,685.0M to match official 10-K statement."
+  },
+  {
+    "discrepancy_id": "DISC-014",
+    "ticker": "MSFT",
+    "fiscal_year_label": "FY2025",
+    "metric": "revenue",
+    "initial_dataset_value": 281654.0,
+    "primary_reported_value": 281724.0,
+    "investigation_finding": "Subsequent segment reclassifications in Microsoft Form 10-K (accession 0000950170-25-100235) report Revenue of $281,724M and Operating Income of $128,528M.",
+    "resolution": "Updated canonical revenue to 281,724.0M and operating income to 128,528.0M to align with audited Form 10-K."
+  },
+  {
+    "discrepancy_id": "DISC-015",
+    "ticker": "MSFT",
+    "fiscal_year_label": "FY2026",
+    "metric": "net_income",
+    "initial_dataset_value": 133768.0,
+    "primary_reported_value": 133749.0,
+    "investigation_finding": "Initial dataset had $133,768M net income and $182,933M OCF; official Form 10-K Item 8 reports Net Income of $133,749M and Cash from Operations of $182,935M under accession 0001193125-26-323660.",
+    "resolution": "Updated canonical net income to 133,749.0M, OCF to 182,935.0M, and recomputed FCF as $66,987.0M."
   }
 ]

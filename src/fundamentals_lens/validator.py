@@ -29,7 +29,8 @@ class FundamentalsValidator:
         sources: Optional[List[Dict[str, Any]]] = None,
         coverage: Optional[List[Dict[str, Any]]] = None,
         derived_metrics: Optional[List[DerivedMetrics]] = None,
-        evidence_register: Optional[List[Dict[str, Any]]] = None
+        evidence_register: Optional[List[Dict[str, Any]]] = None,
+        source_observations: Optional[List[Dict[str, Any]]] = None
     ) -> List[ValidationResult]:
         results: List[ValidationResult] = []
         
@@ -56,14 +57,22 @@ class FundamentalsValidator:
         results.append(cls._check_comparability_integrity(company))
         results.append(cls._check_metric_definitions(facts, sources))
         
-        # Dimension 7: Evidence Alignment & Reconciliation Tiers (Phase 6 Hardened)
+        # Dimension 7: Evidence Alignment, Independent Observations & Reconciliation Tiers
         if evidence_register is None:
             try:
                 from .data_loader import load_evidence_register
                 evidence_register = load_evidence_register()
             except Exception:
                 evidence_register = None
-        results.extend(cls._check_evidence_alignment_and_tiers(facts, evidence_register))
+
+        if source_observations is None:
+            try:
+                from .data_loader import load_source_observations
+                source_observations = load_source_observations()
+            except Exception:
+                source_observations = None
+
+        results.extend(cls._check_evidence_alignment_and_tiers(facts, evidence_register, source_observations=source_observations))
         
         # Dimension 8: Statistical Anomaly & Outlier Review (Non-destructive)
         results.extend(cls._check_anomalies_and_variances(facts))
@@ -871,7 +880,8 @@ class FundamentalsValidator:
     @staticmethod
     def _check_evidence_alignment_and_tiers(
         facts: List[FinancialFact],
-        evidence_register: Optional[List[Dict[str, Any]]]
+        evidence_register: Optional[List[Dict[str, Any]]],
+        source_observations: Optional[List[Dict[str, Any]]] = None
     ) -> List[ValidationResult]:
         results = []
         
@@ -1004,12 +1014,111 @@ class FundamentalsValidator:
                 dimension="SOURCE_LINEAGE"
             ))
 
+        # Gate: Independent Source Observation Provenance & Cross-Check
+        if source_observations is None:
+            results.append(ValidationResult(
+                rule_id="GATE_INDEPENDENT_SOURCE_OBSERVATION",
+                rule_name="Independent Source Observation Provenance & Cross-Check",
+                status=ValidationStatus.UNVERIFIED,
+                message="Independent source observations not provided; source extraction cross-verification skipped.",
+                dimension="SOURCE_LINEAGE"
+            ))
+        else:
+            obs_map = {}
+            for obs in source_observations:
+                obs_map[(obs.get("ticker"), obs.get("fiscal_year_label"), obs.get("metric_name"))] = obs
+                obs_map[(obs.get("ticker"), obs.get("fiscal_year"), obs.get("metric_name"))] = obs
+
+            source_obs_errors = []
+            for f in facts:
+                for m in primary_metrics:
+                    key = (f.ticker, f.fiscal_year_label, m)
+                    obs = obs_map.get(key) or obs_map.get((f.ticker, f.fiscal_year, m))
+                    if not obs:
+                        source_obs_errors.append(f"Missing source observation for {f.ticker} {f.fiscal_year_label} ({m})")
+                        continue
+
+                    reg = evidence_map.get((f.ticker, f.fiscal_year_label)) or evidence_map.get((f.ticker, f.fiscal_year))
+                    m_ev = reg.get("metrics", {}).get(m, {}) if reg else {}
+
+                    ev_tier = normalize_verification_tier(m_ev.get("reconciliation_tier"))
+                    obs_tier = normalize_verification_tier(obs.get("confidence_tier"))
+
+                    if ev_tier != obs_tier:
+                        source_obs_errors.append(
+                            f"{f.ticker} {f.fiscal_year_label} {m}: Tier mismatch between evidence ({ev_tier}) and observation ({obs_tier})"
+                        )
+
+                    # Statement basis check: canonical facts must be CONSOLIDATED
+                    obs_basis = obs.get("statement_basis")
+                    if obs_basis != "CONSOLIDATED":
+                        source_obs_errors.append(
+                            f"{f.ticker} {f.fiscal_year_label} {m}: Observation statement_basis is '{obs_basis}' (requires CONSOLIDATED)"
+                        )
+
+                    if ev_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
+                        obs_rep_val = obs.get("reported_value")
+                        ev_rep_val = m_ev.get("reported_value")
+                        if obs_rep_val is None:
+                            source_obs_errors.append(
+                                f"{f.ticker} {f.fiscal_year_label} {m}: Reconciled observation has null reported_value"
+                            )
+                        elif ev_rep_val is None or abs(float(ev_rep_val) - float(obs_rep_val)) > 0.001:
+                            source_obs_errors.append(
+                                f"{f.ticker} {f.fiscal_year_label} {m}: Evidence reported_value {ev_rep_val} != Observation reported_value {obs_rep_val}"
+                            )
+
+                        # Fact value vs observation value check for EXACT_STATEMENT_MATCH
+                        fact_val = getattr(f, m, None)
+                        comp_res = m_ev.get("comparison_result")
+                        if comp_res == "EXACT_STATEMENT_MATCH" and fact_val is not None and obs_rep_val is not None:
+                            if abs(float(fact_val) - float(obs_rep_val)) > 0.001:
+                                source_obs_errors.append(
+                                    f"{f.ticker} {f.fiscal_year_label} {m}: Canonical fact {fact_val} != Observation reported_value {obs_rep_val} for EXACT_STATEMENT_MATCH"
+                                )
+
+                        # US SEC concept check
+                        country = obs.get("country") or (reg.get("country") if reg else None)
+                        if country == "US" or obs.get("reference_type") == "SEC_ACCESSION":
+                            xbrl_concept = obs.get("xbrl_concept")
+                            if not xbrl_concept or len(xbrl_concept.strip()) < 3:
+                                source_obs_errors.append(
+                                    f"{f.ticker} {f.fiscal_year_label} {m}: Missing XBRL concept in US SEC observation"
+                                )
+
+                        # Document status check
+                        doc_status = obs.get("source_document_status")
+                        if doc_status not in ("ONLINE_VERIFIED", "OFFLINE_AUDITED"):
+                            source_obs_errors.append(
+                                f"{f.ticker} {f.fiscal_year_label} {m}: Invalid source_document_status '{doc_status}'"
+                            )
+
+            if source_obs_errors:
+                results.append(ValidationResult(
+                    rule_id="GATE_INDEPENDENT_SOURCE_OBSERVATION",
+                    rule_name="Independent Source Observation Provenance & Cross-Check",
+                    status=ValidationStatus.FAIL,
+                    message=f"Independent source observation cross-check failed: {source_obs_errors[:3]}",
+                    details={"source_obs_errors": source_obs_errors},
+                    dimension="SOURCE_LINEAGE"
+                ))
+            else:
+                results.append(ValidationResult(
+                    rule_id="GATE_INDEPENDENT_SOURCE_OBSERVATION",
+                    rule_name="Independent Source Observation Provenance & Cross-Check",
+                    status=ValidationStatus.PASS,
+                    message="All metrics strictly match independent source extraction observations with verified statement basis and XBRL/filing provenance.",
+                    details={"observations_checked": len(facts) * len(primary_metrics)},
+                    dimension="SOURCE_LINEAGE"
+                ))
+
         return results
 
     @classmethod
     def get_metric_verification_counts(
         cls, 
-        evidence_register: Optional[List[Dict[str, Any]]] = None
+        evidence_register: Optional[List[Dict[str, Any]]] = None,
+        source_observations: Optional[List[Dict[str, Any]]] = None
     ) -> Dict[str, int]:
         if evidence_register is None:
             try:
@@ -1017,6 +1126,19 @@ class FundamentalsValidator:
                 evidence_register = load_evidence_register()
             except Exception:
                 evidence_register = []
+
+        if source_observations is None:
+            try:
+                from .data_loader import load_source_observations
+                source_observations = load_source_observations()
+            except Exception:
+                source_observations = None
+
+        obs_map = {}
+        if source_observations:
+            for obs in source_observations:
+                obs_map[(obs.get("ticker"), obs.get("fiscal_year_label"), obs.get("metric_name"))] = obs
+                obs_map[(obs.get("ticker"), obs.get("fiscal_year"), obs.get("metric_name"))] = obs
 
         reconciled = 0
         source_linked = 0
@@ -1039,12 +1161,27 @@ class FundamentalsValidator:
                 total_primary += 1
                 tier = m_ev.get("reconciliation_tier")
                 norm_tier = normalize_verification_tier(tier)
+
                 if norm_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
-                    reconciled += 1
-                    if m == "operating_cash_flow":
-                        has_reconciled_ocf = True
-                    elif m == "capital_expenditure":
-                        has_reconciled_capex = True
+                    # Enforce strict audit requirements before counting as reconciled
+                    is_valid_reconciled = (
+                        m_ev.get("reported_value") is not None
+                        and m_ev.get("comparison_result") != "NOT_RECONCILED"
+                        and len(m_ev.get("statement_locator") or "") >= 5
+                    )
+                    if obs_map:
+                        obs = obs_map.get((reg.get("ticker"), reg.get("fiscal_year_label"), m)) or obs_map.get((reg.get("ticker"), reg.get("fiscal_year"), m))
+                        if not obs or normalize_verification_tier(obs.get("confidence_tier")) != VerificationTier.INDEPENDENTLY_RECONCILED.value or obs.get("reported_value") is None:
+                            is_valid_reconciled = False
+
+                    if is_valid_reconciled:
+                        reconciled += 1
+                        if m == "operating_cash_flow":
+                            has_reconciled_ocf = True
+                        elif m == "capital_expenditure":
+                            has_reconciled_capex = True
+                    else:
+                        unverified += 1
                 elif norm_tier == VerificationTier.SOURCE_LINKED_ONLY.value:
                     source_linked += 1
                 elif norm_tier == VerificationTier.FAILED.value:

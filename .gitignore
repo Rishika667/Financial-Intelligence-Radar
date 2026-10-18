@@ -52,5 +52,6 @@ raw_sec_data/
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db
+# Scratch & Temp
+scratch/
 

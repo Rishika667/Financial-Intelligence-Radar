@@ -234,7 +234,7 @@ companies_map = {c.ticker: c for c in companies}
 coverage_map = {entry["ticker"]: entry for entry in coverage}
 discrepancies_count = len(discrepancy_ledger)
 dataset_meta = load_dataset_metadata()
-snapshot_date = dataset_meta.get("dataset_snapshot_date", "2026-10-18")
+snapshot_date = dataset_meta.get("dataset_snapshot_date") or "Unavailable"
 
 # High-level universe statistics computed dynamically from loaded datasets
 total_comps = len(companies)
@@ -903,8 +903,8 @@ elif selected_page == "Company Analysis":
         derived_map = {d.fiscal_year: d for d in c_derived}
         for f in c_facts:
             d = derived_map.get(f.fiscal_year)
-            comp_badge = getattr(f, "comparability_flag", "DIRECT")
-            tier_label = getattr(f, "reconciliation_tier", "INDEPENDENTLY_RECONCILED")
+            comp_badge = getattr(f, "comparability_flag", None) or "UNKNOWN"
+            tier_label = getattr(f, "reconciliation_tier", None) or "UNVERIFIED"
             table_rows.append({
                 "Fiscal Period": f.fiscal_year_label,
                 "Period End": f.period_end,

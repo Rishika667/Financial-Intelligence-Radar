@@ -352,3 +352,126 @@ def test_validate_ohlcv_dataframe_strict_iso_date_format():
     assert "strictly conform to ISO 8601 YYYY-MM-DD" in err
     assert report.is_valid is False
 
+
+def test_technical_summary_251_252_253_boundaries():
+    """Verify exact 251, 252, and 253 bar boundaries with daily business days."""
+    dates_251 = pd.date_range("2025-10-15", periods=251, freq="B").strftime("%Y-%m-%d")
+    df_251 = pd.DataFrame({
+        "Date": dates_251,
+        "Open": [100.0] * 251,
+        "High": [105.0] * 251,
+        "Low": [95.0] * 251,
+        "Close": [102.0] * 251,
+        "Volume": [1000] * 251
+    })
+    _, _, clean_251, _ = validate_ohlcv_dataframe(df_251)
+    summary_251 = compute_technical_summary(clean_251, ticker="ASSET_251")
+    assert summary_251.total_bars == 251
+    assert summary_251.change_1y is None
+    assert summary_251.is_full_52w is False
+
+    dates_252 = pd.date_range("2025-10-15", periods=252, freq="B").strftime("%Y-%m-%d")
+    closes_252 = [100.0 + (i * 0.1) for i in range(252)]
+    df_252 = pd.DataFrame({
+        "Date": dates_252,
+        "Open": [c - 0.05 for c in closes_252],
+        "High": [c + 1.0 for c in closes_252],
+        "Low": [c - 1.0 for c in closes_252],
+        "Close": closes_252,
+        "Volume": [1000] * 252
+    })
+    is_v, err, clean_252, _ = validate_ohlcv_dataframe(df_252)
+    assert is_v is True, err
+    summary_252 = compute_technical_summary(clean_252, ticker="ASSET_252")
+    assert summary_252.total_bars == 252
+    assert summary_252.has_adequate_calendar_coverage is True
+    assert summary_252.is_full_52w is True
+    assert summary_252.change_1y is not None
+
+    dates_253 = pd.date_range("2025-10-15", periods=253, freq="B").strftime("%Y-%m-%d")
+    closes_253 = [100.0 + (i * 0.1) for i in range(253)]
+    df_253 = pd.DataFrame({
+        "Date": dates_253,
+        "Open": [c - 0.05 for c in closes_253],
+        "High": [c + 1.0 for c in closes_253],
+        "Low": [c - 1.0 for c in closes_253],
+        "Close": closes_253,
+        "Volume": [1000] * 253
+    })
+    is_v, err, clean_253, _ = validate_ohlcv_dataframe(df_253)
+    assert is_v is True, err
+    summary_253 = compute_technical_summary(clean_253, ticker="ASSET_253")
+    assert summary_253.total_bars == 253
+    assert summary_253.has_adequate_calendar_coverage is True
+    assert summary_253.is_full_52w is True
+    assert summary_253.change_1y is not None
+
+
+def test_technical_summary_sparse_dates_spanning_years_suppresses_1y():
+    """Verify that 252 bars sparse over 5 years (1 bar/week) suppresses 1Y return."""
+    dates_sparse = pd.date_range("2020-01-01", periods=252, freq="7D").strftime("%Y-%m-%d")
+    df_sparse = pd.DataFrame({
+        "Date": dates_sparse,
+        "Open": [100.0] * 252,
+        "High": [105.0] * 252,
+        "Low": [95.0] * 252,
+        "Close": [102.0] * 252,
+        "Volume": [1000] * 252
+    })
+    _, _, clean_sparse, _ = validate_ohlcv_dataframe(df_sparse)
+    summary_sparse = compute_technical_summary(clean_sparse, ticker="ASSET_SPARSE")
+    assert summary_sparse.total_bars == 252
+    # 252 bars * 7 days = ~1764 days (not ~365 days)
+    assert summary_sparse.coverage_calendar_days > 1000
+    assert summary_sparse.has_adequate_calendar_coverage is False
+    assert summary_sparse.is_full_52w is False
+    assert summary_sparse.change_1y is None
+
+
+def test_technical_summary_irregular_large_gap_suppresses_1y():
+    """Verify that 252 bars containing an anomalous large gap (> 14 days) suppresses 1Y return."""
+    # 126 bars in 2025, 40-day hiatus gap, then 126 bars
+    part1 = pd.date_range("2025-06-01", periods=126, freq="B")
+    gap_date = part1[-1] + pd.Timedelta(days=40)
+    part2 = pd.date_range(gap_date, periods=126, freq="B")
+    all_dates = list(part1.strftime("%Y-%m-%d")) + list(part2.strftime("%Y-%m-%d"))
+    assert len(all_dates) == 252
+
+    df_gap = pd.DataFrame({
+        "Date": all_dates,
+        "Open": [100.0] * 252,
+        "High": [105.0] * 252,
+        "Low": [95.0] * 252,
+        "Close": [102.0] * 252,
+        "Volume": [1000] * 252
+    })
+    _, _, clean_gap, _ = validate_ohlcv_dataframe(df_gap)
+    summary_gap = compute_technical_summary(clean_gap, ticker="ASSET_GAP")
+    assert summary_gap.max_consecutive_gap_days >= 35
+    assert summary_gap.has_adequate_calendar_coverage is False
+    assert summary_gap.is_full_52w is False
+    assert summary_gap.change_1y is None
+
+
+def test_technical_summary_currency_inference():
+    """Verify that Indian tickers resolve currency to INR instead of defaulting silently to USD."""
+    dates = pd.date_range("2026-01-01", periods=30, freq="B").strftime("%Y-%m-%d")
+    df = pd.DataFrame({
+        "Date": dates,
+        "Open": [3000.0] * 30,
+        "High": [3050.0] * 30,
+        "Low": [2950.0] * 30,
+        "Close": [3020.0] * 30,
+        "Volume": [100000] * 30
+    })
+    _, _, clean_df, _ = validate_ohlcv_dataframe(df)
+    summary_tcs = compute_technical_summary(clean_df, ticker="TCS")
+    assert summary_tcs.currency == "INR"
+
+    summary_infy = compute_technical_summary(clean_df, ticker="INFY.NS")
+    assert summary_infy.currency == "INR"
+
+    summary_aapl = compute_technical_summary(clean_df, ticker="AAPL")
+    assert summary_aapl.currency == "USD"
+
+

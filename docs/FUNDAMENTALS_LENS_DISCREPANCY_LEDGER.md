@@ -1,4 +1,4 @@
-# Fundamentals Lens — Discrepancy Ledger & Source Audit Trail (Phase 10)
+# Fundamentals Lens — Discrepancy Ledger & Source Audit Trail (Phase 11)
 
 **Product:** Fundamentals Lens  
 **Repository:** `Rishika667/Financial-Intelligence-Radar`  
@@ -11,9 +11,9 @@
 
 ## Executive Summary
 
-During Phase 6 through Phase 10 adversarial auditing and reconciliation against official regulatory filings (SEC EDGAR Form 10-K and BSE/NSE Ind AS Annual Reports), nine specific financial discrepancies and definition divergences were identified and reconciled.
+During Phase 6 through Phase 11 adversarial auditing and reconciliation against official regulatory filings (SEC EDGAR Form 10-K and BSE/NSE Ind AS Annual Reports), fifteen specific financial discrepancies and definition divergences were identified and reconciled (DISC-001 through DISC-015).
 
-In accordance with the project's zero-synthetic-fabrication and primary-source-truth mandate, all nine discrepancies were investigated against official Item 8 consolidated financial statements and Integrated Annual Reports, documented in `datasets/fundamentals_lens/discrepancy_ledger.json`, corrected in `financial_facts_5yr.json`, and cross-verified in `evidence_register.json`.
+In accordance with the project's zero-synthetic-fabrication and primary-source-truth mandate, all fifteen discrepancies were investigated against official Item 8 consolidated financial statements, official SEC EDGAR submissions APIs, and Integrated Annual Reports, documented in `datasets/fundamentals_lens/discrepancy_ledger.json`, corrected in `financial_facts_5yr.json`, and cross-verified in `evidence_register.json` and `source_observations.json`.
 
 ---
 
@@ -127,6 +127,78 @@ In accordance with the project's zero-synthetic-fabrication and primary-source-t
 
 ---
 
+### 10. DISC-010: Costco Wholesale Corporation (COST) — FY2022 Operating Income & Net Income
+- **Metric:** `operating_income`, `net_income`
+- **Fiscal Period:** `FY2022` (Year Ended August 28, 2022)
+- **Initial Dataset Value:** `$7,795.0M` (Op Income), `$5,841.0M` (Net Income)
+- **Audited Primary Value:** `$7,793.0M` (Op Income), `$5,844.0M` (Net Income)
+- **Filing Reference:** SEC Form 10-K Accession `0000909832-22-000021` (Filed October 5, 2022)
+- **Statement Location:** Item 8 — Consolidated Statements of Operations, Line: *"Operating income"* and *"Net income"*
+- **Investigation Finding:** Initial dataset had $7,795.0M operating income and $5,841.0M net income; official Form 10-K Item 8 Consolidated Statements of Operations reports Operating Income of $7,793.0M and Net Income of $5,844.0M.
+- **Resolution:** Updated canonical operating income to $7,793.0M and net income to $5,844.0M to conform to audited Form 10-K statement.
+
+---
+
+### 11. DISC-011: Costco Wholesale Corporation (COST) — FY2024 Accession Alignment
+- **Metric:** `accession_alignment`
+- **Fiscal Period:** `FY2024` (Year Ended September 1, 2024)
+- **Initial Dataset Value:** Accession `0000909832-24-000084`
+- **Audited Primary Value:** Accession `0000909832-24-000049`
+- **Filing Reference:** SEC Form 10-K Accession `0000909832-24-000049` (Filed October 9, 2024)
+- **Statement Location:** SEC EDGAR Submissions Master API
+- **Investigation Finding:** Previous dataset recorded accession 0000909832-24-000084 for Form 10-K filed October 9, 2024; official SEC EDGAR submissions API confirms accession is 0000909832-24-000049.
+- **Resolution:** Updated accession_id to 0000909832-24-000049 and aligned source_url accordingly.
+
+---
+
+### 12. DISC-012: Costco Wholesale Corporation (COST) — FY2025 Operating Cash Flow & Capex
+- **Metric:** `operating_cash_flow`, `capital_expenditure`
+- **Fiscal Period:** `FY2025` (Year Ended August 31, 2025)
+- **Initial Dataset Value:** `$14,100.0M` (OCF), `$5,200.0M` (Capex)
+- **Audited Primary Value:** `$13,335.0M` (OCF), `$5,498.0M` (Capex)
+- **Filing Reference:** SEC Form 10-K Accession `0000909832-25-000084` (Filed October 8, 2025)
+- **Statement Location:** Item 8 — Consolidated Statements of Cash Flows, Line: *"Cash provided by operating activities"* and *"Property additions (Capex)"*
+- **Investigation Finding:** Preliminary estimate recorded $14,100M OCF and $5,200M capex; official Form 10-K Item 8 Consolidated Statements of Cash Flows reports Cash Provided by Operating Activities of $13,335M and Property Additions (Capex) of $5,498M.
+- **Resolution:** Updated canonical OCF to $13,335.0M, capex to $5,498.0M, and recomputed FCF as $7,837.0M ($13,335M − $5,498M).
+
+---
+
+### 13. DISC-013: Costco Wholesale Corporation (COST) — FY2026 Operating Income
+- **Metric:** `operating_income`
+- **Fiscal Period:** `FY2026` (Year Ended August 30, 2026)
+- **Initial Dataset Value:** `$11,700.0M`
+- **Audited Primary Value:** `$11,685.0M`
+- **Filing Reference:** SEC Form 10-K Accession `0000909832-26-000093` (Filed October 7, 2026)
+- **Statement Location:** Item 8 — Consolidated Statements of Operations, Line: *"Operating income"*
+- **Investigation Finding:** Initial dataset had $11,700M rounded operating income; official Form 10-K Item 8 Consolidated Statements of Operations reports Operating Income of $11,685.0M under accession 0000909832-26-000093.
+- **Resolution:** Updated canonical operating income to $11,685.0M to match official 10-K statement.
+
+---
+
+### 14. DISC-014: Microsoft Corporation (MSFT) — FY2025 Revenue & Operating Income
+- **Metric:** `revenue`, `operating_income`
+- **Fiscal Period:** `FY2025` (Year Ended June 30, 2025)
+- **Initial Dataset Value:** `$281,654.0M` (Revenue), `$128,450.0M` (Op Income)
+- **Audited Primary Value:** `$281,724.0M` (Revenue), `$128,528.0M` (Op Income)
+- **Filing Reference:** SEC Form 10-K Accession `0000950170-25-100235` (Filed July 30, 2025)
+- **Statement Location:** Item 8 — Consolidated Statements of Income, Line: *"Total revenue"* and *"Operating income"*
+- **Investigation Finding:** Subsequent segment reclassifications in Microsoft Form 10-K report Revenue of $281,724M and Operating Income of $128,528M.
+- **Resolution:** Updated canonical revenue to $281,724.0M and operating income to $128,528.0M to align with audited Form 10-K.
+
+---
+
+### 15. DISC-015: Microsoft Corporation (MSFT) — FY2026 Net Income & Operating Cash Flow
+- **Metric:** `net_income`, `operating_cash_flow`
+- **Fiscal Period:** `FY2026` (Year Ended June 30, 2026)
+- **Initial Dataset Value:** `$133,768.0M` (Net Income), `$182,933.0M` (OCF)
+- **Audited Primary Value:** `$133,749.0M` (Net Income), `$182,935.0M` (OCF)
+- **Filing Reference:** SEC Form 10-K Accession `0001193125-26-323660` (Filed July 29, 2026)
+- **Statement Location:** Item 8 — Consolidated Statements of Income & Cash Flows, Line: *"Net income"* and *"Operations"*
+- **Investigation Finding:** Initial dataset had $133,768M net income and $182,933M OCF; official Form 10-K Item 8 reports Net Income of $133,749M and Cash from Operations of $182,935M under accession 0001193125-26-323660.
+- **Resolution:** Updated canonical net income to $133,749.0M, OCF to $182,935.0M, and recomputed FCF as $66,987.0M ($182,935M − $115,948M).
+
+---
+
 ## Reconciliation Summary Table
 
 | ID | Ticker | Fiscal Period | Metric | Initial Value | Corrected Canonical | Difference | Official Filing Citation |
@@ -140,6 +212,12 @@ In accordance with the project's zero-synthetic-fabrication and primary-source-t
 | **DISC-007** | TCS | FY 2025–26 | Operating Income | ₹66,755.0 Cr | ₹66,755.0 Cr | 0 (EBIT +₹83 Cr) | BSE Scrip `532540` PBEI Proxy |
 | **DISC-008** | BAJAJ-AUTO | FY 2025–26 | Operating Income | ₹12,019.0 Cr | ₹12,019.0 Cr | 0 (EBIT ~₹11,570.8 Cr) | BSE Scrip `532977` EBITDA Proxy |
 | **DISC-009** | INFY | FY 2025–26 | Net Income | ₹29,440.0 Cr | ₹29,440.0 Cr | 0 (Consol +₹34 Cr) | BSE Scrip `500209` Attributable to Owners |
+| **DISC-010** | COST | FY2022 | Op & Net Income | $7,795.0M / $5,841M | $7,793.0M / $5,844M | -$2.0M / +$3.0M | SEC 10-K `0000909832-22-000021` |
+| **DISC-011** | COST | FY2024 | Accession Alignment | ...-000084 | ...-000049 | Accession fixed | SEC EDGAR API `0000909832-24-000049` |
+| **DISC-012** | COST | FY2025 | OCF & Capex | $14,100M / $5,200M | $13,335.0M / $5,498M | -$765M / +$298M | SEC 10-K `0000909832-25-000084` |
+| **DISC-013** | COST | FY2026 | Operating Income | $11,700.0M | $11,685.0M | -$15.0M | SEC 10-K `0000909832-26-000093` |
+| **DISC-014** | MSFT | FY2025 | Revenue & Op Inc | $281,654M / $128,450M | $281,724.0M / $128,528M | +$70.0M / +$78.0M | SEC 10-K `0000950170-25-100235` |
+| **DISC-015** | MSFT | FY2026 | Net Income & OCF | $133,768M / $182,933M | $133,749.0M / $182,935M | -$19.0M / +$2.0M | SEC 10-K `0001193125-26-323660` |
 
 ---
 

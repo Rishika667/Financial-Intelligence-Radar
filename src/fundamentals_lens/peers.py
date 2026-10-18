@@ -201,7 +201,7 @@ class PeerComparisonEngine:
                     "period_start": f.period_start,
                     "period_end": f.period_end,
                     "period_date_display": f"{f.fiscal_year_label} ({f.period_end})" if f.period_end else f.fiscal_year_label,
-                    "comparability_flag": getattr(f, "comparability_flag", "DIRECT") or "DIRECT",
+                    "comparability_flag": getattr(f, "comparability_flag", None) or "UNKNOWN",
                     "value": val
                 })
 

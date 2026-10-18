@@ -473,8 +473,9 @@ def compute_technical_summary(
 
     # Multi-period returns
     def get_pct_change(lookback: int) -> Optional[float]:
-        if n > lookback:
-            prior_close = float(df.iloc[-1 - lookback]["Close"])
+        if n >= lookback:
+            idx = -1 - lookback if n > lookback else 0
+            prior_close = float(df.iloc[idx]["Close"])
             if prior_close > 0:
                 return round(((last_close / prior_close) - 1.0) * 100.0, 2)
         return None
@@ -482,11 +483,45 @@ def compute_technical_summary(
     ret_1m = get_pct_change(21)
     ret_3m = get_pct_change(63)
     ret_6m = get_pct_change(126)
-    # Strictly enforce 252 bars for 1Y
-    ret_1y = get_pct_change(252)
+    # Duration and calendar coverage evaluation
+    has_adequate_calendar_coverage = False
+    cov_start_str = None
+    cov_end_str = None
+    cov_calendar_days = None
+    max_gap_days = None
 
-    # 52-Week High & Low
-    is_full_52w = (n >= 252)
+    if n >= 252:
+        recent_window = df.tail(252)
+        dates_window = pd.to_datetime(recent_window["Date"])
+        cov_start_dt = dates_window.iloc[0]
+        cov_end_dt = dates_window.iloc[-1]
+        cov_start_str = str(recent_window.iloc[0]["Date_Str"])
+        cov_end_str = str(recent_window.iloc[-1]["Date_Str"])
+        cov_calendar_days = int((cov_end_dt - cov_start_dt).days)
+
+        gaps = dates_window.diff().dt.days.dropna()
+        max_gap_days = int(gaps.max()) if len(gaps) > 0 else 0
+
+        # Plausible annual coverage requires 340 to 395 calendar days and max consecutive gap <= 14 days
+        if 340 <= cov_calendar_days <= 395 and max_gap_days <= 14:
+            has_adequate_calendar_coverage = True
+    elif n > 1:
+        dates_all = pd.to_datetime(df["Date"])
+        cov_start_str = str(df.iloc[0]["Date_Str"])
+        cov_end_str = str(df.iloc[-1]["Date_Str"])
+        cov_calendar_days = int((dates_all.iloc[-1] - dates_all.iloc[0]).days)
+        gaps = dates_all.diff().dt.days.dropna()
+        max_gap_days = int(gaps.max()) if len(gaps) > 0 else 0
+
+    # 1-Year Return is only populated if BOTH >= 252 bars AND adequate calendar coverage are satisfied
+    if n >= 252 and has_adequate_calendar_coverage:
+        ret_1y = get_pct_change(252)
+        is_full_52w = True
+    else:
+        ret_1y = None
+        is_full_52w = False
+
+    # 52-Week High & Low (over available window up to 252 bars)
     w_bars = df.tail(min(252, n))
     high_52w = float(w_bars["High"].max())
     low_52w = float(w_bars["Low"].min())
@@ -562,10 +597,25 @@ def compute_technical_summary(
                 asset_period_ret = round(((last_a / first_a) - 1.0) * 100.0, 2)
                 rel_perf_period = round(asset_period_ret - bm_period_ret, 2)
 
-                # Only assign 1-year benchmark change if common overlapping bars >= 252
+                # Only assign 1-year benchmark change if common overlapping bars >= 252 AND common calendar coverage is adequate
                 if common_bars >= 252:
-                    bm_1y = bm_period_ret
-                    rel_perf_1y = rel_perf_period
+                    common_dates_win = pd.to_datetime(merged["Date"].tail(252))
+                    common_cal_days = int((common_dates_win.iloc[-1] - common_dates_win.iloc[0]).days)
+                    common_gaps = common_dates_win.diff().dt.days.dropna()
+                    common_max_gap = int(common_gaps.max()) if len(common_gaps) > 0 else 0
+                    if 340 <= common_cal_days <= 395 and common_max_gap <= 14:
+                        b_win_first = float(merged.iloc[-252]["Bench_Close"])
+                        a_win_first = float(merged.iloc[-252]["Asset_Close"])
+                        if b_win_first > 0 and a_win_first > 0:
+                            bm_1y = round(((last_b / b_win_first) - 1.0) * 100.0, 2)
+                            a_1y = round(((last_a / a_win_first) - 1.0) * 100.0, 2)
+                            rel_perf_1y = round(a_1y - bm_1y, 2)
+
+    # Resolve currency honestly: do not assume USD if asset is Indian
+    resolved_currency = currency
+    indian_syms = {"TCS", "INFY", "HCLTECH", "HINDUNILVR", "BRITANNIA", "DABUR", "MARUTI", "BAJAJ-AUTO", "HEROMOTOCO"}
+    if currency == "USD" and (ticker.upper() in indian_syms or ticker.endswith(".NS") or ticker.endswith(".BO")):
+        resolved_currency = "INR"
 
     return TechnicalSummary(
         ticker=ticker,
@@ -598,7 +648,12 @@ def compute_technical_summary(
         benchmark_period_return=bm_period_ret,
         relative_performance_period=rel_perf_period,
         price_adjustment_basis=price_adjustment_basis,
-        currency=currency
+        currency=resolved_currency,
+        coverage_start_date=cov_start_str,
+        coverage_end_date=cov_end_str,
+        coverage_calendar_days=cov_calendar_days,
+        max_consecutive_gap_days=max_gap_days,
+        has_adequate_calendar_coverage=has_adequate_calendar_coverage
     )
 
 

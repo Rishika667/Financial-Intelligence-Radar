@@ -396,7 +396,7 @@ class ExportGenerator:
             try:
                 from .data_loader import load_dataset_metadata
                 meta = load_dataset_metadata()
-                snap_date = meta.get("dataset_snapshot_date", "2026-10-18")
+                snap_date = meta.get("dataset_snapshot_date") or (latest_fact.filing_date if latest_fact else report_date)
             except Exception:
                 snap_date = latest_fact.filing_date if latest_fact else report_date
         else:

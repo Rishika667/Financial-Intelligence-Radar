@@ -33,7 +33,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-21-000105",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2021-09-25"
   },
@@ -71,7 +71,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-22-000108",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-09-24"
   },
@@ -109,7 +109,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-23-000106",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-09-30"
   },
@@ -147,7 +147,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-24-000123",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-09-28"
   },
@@ -185,7 +185,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-25-000079",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-09-27"
   },
@@ -337,7 +337,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2024-25",
-    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
+    "source_check_status": "STATEMENT_RECONCILIATION_PENDING",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31"
   },
@@ -527,7 +527,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2024-25",
-    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
+    "source_check_status": "STATEMENT_RECONCILIATION_PENDING",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31"
   },
@@ -603,7 +603,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-22-000021",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-08-28"
   },
@@ -641,7 +641,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-23-000042",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-09-03"
   },
@@ -651,10 +651,10 @@
     "fiscal_year": 2024,
     "fiscal_year_label": "FY2024",
     "source_title": "Costco Wholesale Form 10-K (FY 2024)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983224000084/cost-20240901.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983224000049/cost-20240901.htm",
     "filing_date": "2024-10-09",
     "statement_location": "Item 8 - Operations & Cash Flows",
-    "accession_id": "0000909832-24-000084",
+    "accession_id": "0000909832-24-000049",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements.",
     "line_item_mappings": {
@@ -677,9 +677,9 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000909832-24-000084",
+    "official_filing_id": "0000909832-24-000049",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-09-01"
   },
@@ -717,7 +717,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-25-000101",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-08-31"
   },
@@ -755,7 +755,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-26-000093",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-08-30"
   },
@@ -907,7 +907,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2024-25",
-    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
+    "source_check_status": "STATEMENT_RECONCILIATION_PENDING",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31"
   },
@@ -983,7 +983,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-22-000019",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2021-12-31"
   },
@@ -1021,7 +1021,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-23-000016",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-12-31"
   },
@@ -1059,7 +1059,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-24-000022",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-12-31"
   },
@@ -1097,7 +1097,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-25-000014",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-12-31"
   },
@@ -1135,7 +1135,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-26-000018",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-12-31"
   },
@@ -1287,7 +1287,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2024-25",
-    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
+    "source_check_status": "STATEMENT_RECONCILIATION_PENDING",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31"
   },
@@ -1477,7 +1477,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2024-25",
-    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
+    "source_check_status": "STATEMENT_RECONCILIATION_PENDING",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31"
   },
@@ -1667,7 +1667,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2024-25",
-    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
+    "source_check_status": "STATEMENT_RECONCILIATION_PENDING",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31"
   },
@@ -1857,7 +1857,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2024-25",
-    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
+    "source_check_status": "STATEMENT_RECONCILIATION_PENDING",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31"
   },
@@ -2047,7 +2047,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2024-25",
-    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
+    "source_check_status": "STATEMENT_RECONCILIATION_PENDING",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31"
   },
@@ -2123,7 +2123,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001564590-22-026876",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-06-30"
   },
@@ -2161,7 +2161,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000950170-23-035122",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-06-30"
   },
@@ -2199,7 +2199,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000950170-24-087843",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-06-30"
   },
@@ -2237,7 +2237,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000950170-25-100235",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-06-30"
   },
@@ -2275,7 +2275,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001193125-26-323660",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-06-30"
   },
@@ -2427,7 +2427,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2024-25",
-    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
+    "source_check_status": "STATEMENT_RECONCILIATION_PENDING",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31"
   },
@@ -2503,7 +2503,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-22-000007",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-01-29"
   },
@@ -2541,7 +2541,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-23-000015",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-01-28"
   },
@@ -2579,7 +2579,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-24-000032",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-02-03"
   },
@@ -2617,7 +2617,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-25-000018",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-02-01"
   },
@@ -2655,7 +2655,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-26-000016",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-01-31"
   },
@@ -2693,7 +2693,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-22-000012",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-01-31"
   },
@@ -2731,7 +2731,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-23-000020",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-01-31"
   },
@@ -2769,7 +2769,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-24-000056",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-01-31"
   },
@@ -2807,7 +2807,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-25-000021",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-01-31"
   },
@@ -2845,7 +2845,7 @@
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-26-000055",
     "internal_document_key": null,
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "ONLINE_VERIFIED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-01-31"
   }

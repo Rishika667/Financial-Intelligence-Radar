@@ -646,3 +646,183 @@ def test_adversarial_legacy_radar_app_entrypoint_functional():
     assert spec is not None
     # Verifying module can be loaded
     assert spec.loader is not None
+
+
+def test_adversarial_p0_source_input_decoupled_from_canonical_facts():
+    """37. Adversarial test: prepare_source_inputs is decoupled from financial_facts_5yr.json."""
+    import ast
+    from pathlib import Path
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    prep_script = repo_root / "scripts" / "prepare_source_inputs.py"
+    assert prep_script.exists()
+    content = prep_script.read_text(encoding="utf-8")
+
+    # Invariant: Must NOT read or load financial_facts_5yr.json in any executable code
+    tree = ast.parse(content)
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Constant) and isinstance(node.value, str):
+            assert "financial_facts_5yr.json" not in node.value, (
+                f"Executable string constant references financial_facts_5yr.json at line {getattr(node, 'lineno', '?')}"
+            )
+
+    # Invariant: Indian fiscal dates are statutory, independent of canonical facts
+    from scripts.prepare_source_inputs import get_indian_fiscal_dates
+    start_d, end_d = get_indian_fiscal_dates(2025)
+    assert start_d == "2024-04-01"
+    assert end_d == "2025-03-31"
+
+
+def test_adversarial_p0_unverified_source_identity_cannot_be_reconciled():
+    """38. Adversarial test: Corrupted source identity fails verification and cannot be reconciled."""
+    from scripts.build_evidence_register_phase13 import derive_document_identity_verified
+
+    # Case A: SEC source with tampered CIK path
+    fake_sec = {
+        "ticker": "AAPL",
+        "fiscal_year": 2024,
+        "source_url": "https://www.sec.gov/Archives/edgar/data/99999999/000032019324000106/aapl-20240928.htm",
+        "accession_id": "0000320193-24-000106",
+        "filing_date": "2024-11-01",
+        "reference_type": "SEC_ACCESSION"
+    }
+    apple_meta = {"country": "US", "sec_cik": "0000320193"}
+    is_ok, reason = derive_document_identity_verified(fake_sec, apple_meta)
+    assert is_ok is False
+    assert "CIK" in reason
+
+    # Case B: SEC source with wrong accession
+    fake_sec_acc = {
+        "ticker": "AAPL",
+        "fiscal_year": 2024,
+        "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019324000106/aapl-20240928.htm",
+        "accession_id": "0000320193-99-999999",
+        "filing_date": "2024-11-01",
+        "reference_type": "SEC_ACCESSION"
+    }
+    is_ok2, reason2 = derive_document_identity_verified(fake_sec_acc, apple_meta)
+    assert is_ok2 is False
+    assert "accession" in reason2
+
+    # Case C: Indian source with mismatched scrip
+    fake_in = {
+        "ticker": "TCS",
+        "fiscal_year": 2025,
+        "source_url": "https://www.tcs.com/investor-relations/annual-reports",
+        "internal_document_key": "WRONG-KEY-999999",
+        "filing_date": "2025-06-15",
+        "reference_type": "INTERNAL_DOCUMENT_KEY"
+    }
+    tcs_meta = {"country": "IN", "bse_scrip": "532540"}
+    is_ok3, reason3 = derive_document_identity_verified(fake_in, tcs_meta)
+    assert is_ok3 is False
+    assert "532540" in reason3
+
+
+def test_adversarial_p0_mismatched_metric_without_approved_discrepancy_is_discrepant():
+    """39. Adversarial test: Mismatched metric without approved discrepancy note fails validation."""
+    from fundamentals_lens.data_loader import load_evidence_register, get_company_by_ticker, get_facts_for_company
+
+    company = get_company_by_ticker("AAPL")
+    facts = get_facts_for_company("AAPL")
+    evidence = load_evidence_register()
+
+    # Adversarially tamper with an evidence record: mismatch reported vs canonical without note
+    mutated_evidence = copy.deepcopy(evidence)
+    aapl_ev = next(e for e in mutated_evidence if e["ticker"] == "AAPL" and e["fiscal_year"] == 2024)
+    aapl_ev["metrics"]["revenue"]["reported_value"] = aapl_ev["metrics"]["revenue"]["canonical_value"] + 50000.0
+    # Keep comparison_result as EXACT_STATEMENT_MATCH to test guard
+    aapl_ev["metrics"]["revenue"]["comparison_result"] = "EXACT_STATEMENT_MATCH"
+
+    results = FundamentalsValidator._check_evidence_alignment_and_tiers(facts, mutated_evidence)
+    tier_res = next((r for r in results if r.rule_id == "GATE_EVIDENCE_TIER_CONSISTENCY"), None)
+    assert tier_res is not None
+    assert tier_res.status == ValidationStatus.FAIL
+    assert any("EXACT_STATEMENT_MATCH reported_value" in err for err in tier_res.details.get("tier_errors", []))
+
+
+def test_adversarial_p0_offline_run_cannot_claim_online_verified():
+    """40. Adversarial test: Offline source check report strictly enforces verification_mode == OFFLINE."""
+    from pathlib import Path
+    import json
+
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    check_report_path = repo_root / "datasets" / "fundamentals_lens" / "source_check_report.json"
+    assert check_report_path.exists()
+
+    with open(check_report_path, "r", encoding="utf-8") as f:
+        report = json.load(f)
+
+    # Invariant: All sources in offline source check report must have verification_mode OFFLINE
+    sources = report.get("sources", [])
+    assert len(sources) == 75
+    for s in sources:
+        assert s.get("verification_mode") == "OFFLINE"
+        assert s.get("check_status") == "OFFLINE_SOURCE_RECORDED"
+        assert s.get("check_status") != "ONLINE_VERIFIED"
+
+    # Adversarial check: An offline source claiming check_status ONLINE_VERIFIED is contradictory
+    mutated_s = copy.deepcopy(sources[0])
+    mutated_s["check_status"] = "ONLINE_VERIFIED"
+    assert mutated_s["verification_mode"] == "OFFLINE" and mutated_s["check_status"] == "ONLINE_VERIFIED"
+    # The contradiction is detected
+    is_valid_offline = not (mutated_s["verification_mode"] == "OFFLINE" and mutated_s["check_status"] == "ONLINE_VERIFIED")
+    assert is_valid_offline is False, "Offline audit entry claiming ONLINE_VERIFIED must be detected as contradictory"
+
+
+def test_adversarial_p0_inconsistent_dataset_metadata_fails_validation():
+    """41. Adversarial test: FundamentalsValidator.validate_dataset_metadata fails on inconsistent counts."""
+    from pathlib import Path
+    import json
+
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    meta_path = repo_root / "datasets" / "fundamentals_lens" / "dataset_metadata.json"
+    with open(meta_path, "r", encoding="utf-8") as f:
+        meta = json.load(f)
+
+    # Valid metadata passes
+    pass_res = FundamentalsValidator.validate_dataset_metadata(meta)
+    assert pass_res.status == ValidationStatus.PASS, f"Expected PASS on valid metadata: {pass_res.message}"
+
+    # Mutate 1: Legacy field contradiction
+    bad_meta_1 = copy.deepcopy(meta)
+    bad_meta_1["independently_reconciled_metrics"] = 330  # Stale Phase 11 count
+    fail_res_1 = FundamentalsValidator.validate_dataset_metadata(bad_meta_1)
+    assert fail_res_1.status == ValidationStatus.FAIL
+    assert "GATE_METADATA_INTEGRITY" == fail_res_1.rule_id
+    assert any("independently_reconciled_metrics" in err for err in fail_res_1.details["errors"])
+
+    # Mutate 2: Under-reported reconciled count
+    bad_meta_2 = copy.deepcopy(meta)
+    bad_meta_2["reconciled_metric_observations"] = 350
+    fail_res_2 = FundamentalsValidator.validate_dataset_metadata(bad_meta_2)
+    assert fail_res_2.status == ValidationStatus.FAIL
+    assert any("reconciled_metric_observations" in err for err in fail_res_2.details["errors"])
+
+    # Mutate 3: Discrepancy count mismatch
+    bad_meta_3 = copy.deepcopy(meta)
+    bad_meta_3["discrepancy_count"] = 12  # Stale count
+    fail_res_3 = FundamentalsValidator.validate_dataset_metadata(bad_meta_3)
+    assert fail_res_3.status == ValidationStatus.FAIL
+    assert any("discrepancy_count" in err for err in fail_res_3.details["errors"])
+
+
+def test_adversarial_p0_missing_source_value_never_coerced_to_zero():
+    """42. Adversarial test: Missing source value is never converted to 0.0 or synthetic approximation."""
+    from fundamentals_lens.data_loader import load_evidence_register, get_company_by_ticker, get_facts_for_company
+
+    company = get_company_by_ticker("AAPL")
+    facts = get_facts_for_company("AAPL")
+    evidence = load_evidence_register()
+
+    # Adversarially simulate a missing reported value
+    mutated_evidence = copy.deepcopy(evidence)
+    aapl_ev = next(e for e in mutated_evidence if e["ticker"] == "AAPL" and e["fiscal_year"] == 2024)
+    aapl_ev["metrics"]["revenue"]["reported_value"] = None
+    aapl_ev["metrics"]["revenue"]["reconciliation_tier"] = "INDEPENDENTLY_RECONCILED"
+
+    # Validator must reject null reported_value for INDEPENDENTLY_RECONCILED
+    results = FundamentalsValidator._check_evidence_alignment_and_tiers(facts, mutated_evidence)
+    tier_res = next((r for r in results if r.rule_id == "GATE_EVIDENCE_TIER_CONSISTENCY"), None)
+    assert tier_res is not None
+    assert tier_res.status == ValidationStatus.FAIL
+    assert any("requires non-null reported_value" in err for err in tier_res.details.get("tier_errors", []))

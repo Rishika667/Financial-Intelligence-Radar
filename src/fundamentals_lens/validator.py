@@ -1220,11 +1220,11 @@ class FundamentalsValidator:
                 norm_tier = normalize_verification_tier(tier)
 
                 if norm_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
-                    # Enforce strict audit requirements before counting as reconciled
                     is_valid_reconciled = (
                         m_ev.get("reported_value") is not None
-                        and m_ev.get("comparison_result") != "NOT_RECONCILED"
+                        and m_ev.get("comparison_result") not in ("NOT_RECONCILED", "DISCREPANCY_NOTED", "IDENTITY_UNVERIFIED")
                         and len(m_ev.get("statement_locator") or "") >= 5
+                        and reg.get("document_identity_verified", True) is True
                     )
                     if obs_map:
                         obs = obs_map.get((reg.get("ticker"), reg.get("fiscal_year_label"), m)) or obs_map.get((reg.get("ticker"), reg.get("fiscal_year"), m))
@@ -1272,3 +1272,110 @@ class FundamentalsValidator:
             status_key = r.status.value
             summary[dim][status_key] = summary[dim].get(status_key, 0) + 1
         return summary
+
+    @classmethod
+    def validate_dataset_metadata(
+        cls,
+        metadata: Optional[Dict[str, Any]] = None,
+        evidence_register: Optional[List[Dict[str, Any]]] = None,
+        discrepancies: Optional[List[Dict[str, Any]]] = None
+    ) -> ValidationResult:
+        """
+        Validates dataset_metadata.json against actual evidence register and discrepancy ledger.
+        Ensures metadata counts are derived from actual metric-level statuses and contain zero
+        contradictory legacy values.
+        """
+        if metadata is None:
+            try:
+                from .data_loader import load_dataset_metadata
+                metadata = load_dataset_metadata()
+            except Exception as e:
+                return ValidationResult(
+                    rule_id="GATE_METADATA_INTEGRITY",
+                    rule_name="Dataset Metadata & Artifact Consistency",
+                    status=ValidationStatus.FAIL,
+                    message=f"Failed to load dataset metadata: {e}",
+                    dimension="STRUCTURAL"
+                )
+
+        if evidence_register is None:
+            try:
+                from .data_loader import load_evidence_register
+                evidence_register = load_evidence_register()
+            except Exception:
+                evidence_register = []
+
+        if discrepancies is None:
+            try:
+                from .data_loader import load_discrepancy_ledger
+                discrepancies = load_discrepancy_ledger()
+            except Exception:
+                discrepancies = []
+
+        actual_counts = cls.get_metric_verification_counts(evidence_register)
+
+        errors = []
+        # Check reconciled counts
+        meta_reconciled = metadata.get("reconciled_metric_observations")
+        legacy_reconciled = metadata.get("independently_reconciled_metrics")
+        expected_reconciled = actual_counts["independently_reconciled"]
+
+        if meta_reconciled != expected_reconciled:
+            errors.append(f"metadata.reconciled_metric_observations ({meta_reconciled}) != evidence ({expected_reconciled})")
+        if legacy_reconciled is not None and legacy_reconciled != expected_reconciled:
+            errors.append(f"metadata.independently_reconciled_metrics ({legacy_reconciled}) != evidence ({expected_reconciled})")
+
+        # Check source linked counts
+        meta_sl = metadata.get("source_linked_metric_observations")
+        legacy_sl = metadata.get("source_linked_only_metrics")
+        expected_sl = actual_counts["source_linked_only"]
+
+        if meta_sl != expected_sl:
+            errors.append(f"metadata.source_linked_metric_observations ({meta_sl}) != evidence ({expected_sl})")
+        if legacy_sl is not None and legacy_sl != expected_sl:
+            errors.append(f"metadata.source_linked_only_metrics ({legacy_sl}) != evidence ({expected_sl})")
+
+        # Check unverified counts
+        meta_unver = metadata.get("unverified_metric_observations")
+        legacy_unver = metadata.get("unverified_metrics")
+        expected_unver = actual_counts["unverified"]
+
+        if meta_unver != expected_unver:
+            errors.append(f"metadata.unverified_metric_observations ({meta_unver}) != evidence ({expected_unver})")
+        if legacy_unver is not None and legacy_unver != expected_unver:
+            errors.append(f"metadata.unverified_metrics ({legacy_unver}) != evidence ({expected_unver})")
+
+        # Check discrepancy counts
+        meta_disc = metadata.get("discrepancy_count")
+        legacy_disc = metadata.get("discrepancies_registered")
+        expected_disc = len(discrepancies)
+
+        if meta_disc != expected_disc:
+            errors.append(f"metadata.discrepancy_count ({meta_disc}) != ledger ({expected_disc})")
+        if legacy_disc is not None and legacy_disc != expected_disc:
+            errors.append(f"metadata.discrepancies_registered ({legacy_disc}) != ledger ({expected_disc})")
+
+        # Check total primary metrics
+        meta_total = metadata.get("total_metric_observations") or metadata.get("total_primary_metrics")
+        expected_total = actual_counts["total_primary_metrics"]
+        if meta_total != expected_total:
+            errors.append(f"metadata.total_metric_observations ({meta_total}) != evidence ({expected_total})")
+
+        if errors:
+            return ValidationResult(
+                rule_id="GATE_METADATA_INTEGRITY",
+                rule_name="Dataset Metadata & Artifact Consistency",
+                status=ValidationStatus.FAIL,
+                message=f"Dataset metadata consistency check failed: {'; '.join(errors)}",
+                details={"errors": errors, "actual_counts": actual_counts},
+                dimension="STRUCTURAL"
+            )
+
+        return ValidationResult(
+            rule_id="GATE_METADATA_INTEGRITY",
+            rule_name="Dataset Metadata & Artifact Consistency",
+            status=ValidationStatus.PASS,
+            message="Dataset metadata counts strictly agree with evidence register and discrepancy ledger.",
+            details={"counts": actual_counts, "discrepancies": expected_disc},
+            dimension="STRUCTURAL"
+        )

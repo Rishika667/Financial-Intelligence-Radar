@@ -118,31 +118,46 @@ def test_isolated_clean_clone_offline_rebuild():
         # Verify scratch/sec_cache is NOT present in fresh clone
         assert not (tmp_clone / "scratch" / "sec_cache").exists()
 
-        # Sync current working-tree changes (scripts, src, datasets) into tmp_clone
-        import shutil
-        for subdir in ["scripts", "src", "datasets"]:
-            src_dir = repo_root / subdir
-            dst_dir = tmp_clone / subdir
-            if src_dir.exists():
-                shutil.copytree(src_dir, dst_dir, dirs_exist_ok=True, ignore=shutil.ignore_patterns("*.pyc", "__pycache__"))
+        # If there are uncommitted working-tree changes to tracked files in the local repo,
+        # apply them via an explicit git diff patch rather than copying arbitrary directories.
+        diff_res = subprocess.run(
+            ["git", "diff", "HEAD"],
+            cwd=str(repo_root),
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace"
+        )
+        if diff_res.stdout and diff_res.stdout.strip():
+            patch_file = Path(tmpdir) / "working_tree.patch"
+            patch_file.write_text(diff_res.stdout, encoding="utf-8")
+            apply_res = subprocess.run(
+                ["git", "apply", "--ignore-space-change", "--ignore-whitespace", str(patch_file)],
+                cwd=str(tmp_clone),
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace"
+            )
+            # If apply succeeds, the clone has uncommitted modifications; otherwise it tests committed HEAD
 
-        # Confirm scratch cache is STILL not present
+        # Confirm scratch cache is STILL not present in fresh clone
         assert not (tmp_clone / "scratch" / "sec_cache").exists()
 
         # Run offline source observations builder
         cmd1 = [sys.executable, str(tmp_clone / "scripts" / "build_source_observations_phase13.py"), "--offline"]
-        res1 = subprocess.run(cmd1, cwd=str(tmp_clone), capture_output=True, text=True)
+        res1 = subprocess.run(cmd1, cwd=str(tmp_clone), capture_output=True, text=True, encoding="utf-8", errors="replace")
         assert res1.returncode == 0, f"Source observations rebuild failed:\n{res1.stderr}"
         assert "Reconciled=375 (100.0%)" in res1.stdout
 
         # Run evidence register builder
         cmd2 = [sys.executable, str(tmp_clone / "scripts" / "build_evidence_register_phase13.py")]
-        res2 = subprocess.run(cmd2, cwd=str(tmp_clone), capture_output=True, text=True)
+        res2 = subprocess.run(cmd2, cwd=str(tmp_clone), capture_output=True, text=True, encoding="utf-8", errors="replace")
         assert res2.returncode == 0, f"Evidence register rebuild failed:\n{res2.stderr}"
         assert "Independently reconciled:          375 (100.0%)" in res2.stdout
 
         # Run validator
         cmd3 = [sys.executable, str(tmp_clone / "scripts" / "validate_fundamentals_data.py")]
-        res3 = subprocess.run(cmd3, cwd=str(tmp_clone), capture_output=True, text=True)
+        res3 = subprocess.run(cmd3, cwd=str(tmp_clone), capture_output=True, text=True, encoding="utf-8", errors="replace")
         assert res3.returncode == 0, f"Validator failed in clean clone:\n{res3.stderr}"
         assert "RESULT: ALL DATA INTEGRITY GATES PASSED (100% PASS RATE)" in res3.stdout

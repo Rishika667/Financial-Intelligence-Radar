@@ -94,6 +94,19 @@ def run_validation():
                     
         company_pass_map[comp.ticker] = company_passed
 
+    # Dataset-level metadata consistency check
+    meta_res = FundamentalsValidator.validate_dataset_metadata(
+        evidence_register=evidence_register,
+        discrepancies=discrepancies
+    )
+    total_checks += 1
+    if meta_res.status == ValidationStatus.FAIL:
+        failed_checks += 1
+        print(f"\n[DATASET-METADATA] [FAIL      ] {meta_res.rule_name}: {meta_res.message}")
+    else:
+        passed_checks += 1
+        print(f"\n[DATASET-METADATA] [PASS      ] {meta_res.rule_name}: {meta_res.message}")
+
     dim_summary = {}
     for comp in sorted(companies, key=lambda c: (c.peer_group_id, c.ticker)):
         facts = get_facts_for_company(comp.ticker)

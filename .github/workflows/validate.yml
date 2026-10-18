@@ -28,8 +28,6 @@ jobs:
         run: |
           python scripts/build_source_observations_phase13.py --offline
           python scripts/build_evidence_register_phase13.py
-          python scripts/build_source_observations_phase12.py --offline
-          python scripts/build_evidence_register_phase12.py
       - name: Run Fundamentals Lens Data Integrity Validation
         run: python scripts/validate_fundamentals_data.py
       - name: Run full test suite

@@ -232,7 +232,7 @@ def derive_document_identity_verified(source_entry: Dict[str, Any], company_meta
 
     if is_us:
         acc = source_entry.get("official_filing_id") or source_entry.get("accession_id", "")
-        cik = company_meta.get("cik", "")
+        cik = company_meta.get("cik") or company_meta.get("sec_cik", "")
         if not acc or not SEC_ACCESSION_PATTERN.match(acc):
             return False, f"SEC accession '{acc}' does not match standard 20-digit pattern"
         if not url or not url.startswith("https://www.sec.gov/Archives/edgar/data/"):
@@ -385,6 +385,12 @@ def build_evidence_pipeline():
                 if not disc_note:
                     disc_note = "Metric linked to registered primary source; independent line-item statement reconciliation pending."
                 source_linked_metric_count += 1
+            elif not src.get("document_identity_verified", False):
+                comp_result = "IDENTITY_UNVERIFIED"
+                conv_formula = "None (Filing document identity could not be validated)"
+                tier = "UNVERIFIED"
+                disc_note = "Filing document identity check failed (malformed accession, CIK path mismatch, or invalid filing key)."
+                unverified_metric_count += 1
             else:
                 diff = abs(float(rep_val) - float(canonical_val))
                 if diff < 0.001:
@@ -552,25 +558,51 @@ def build_evidence_pipeline():
         writer.writeheader()
         writer.writerows(evidence_flat_rows)
 
-    # 6. Update dataset metadata
-    if METADATA_FILE.exists():
-        with open(METADATA_FILE, "r", encoding="utf-8") as f:
-            metadata = json.load(f)
-    else:
-        metadata = {}
+    # 6. Update dataset metadata (unified authoritative schema, zero stale fields)
+    peer_groups_map = {}
+    for c in COMPANIES_RAW:
+        gid = c.get("peer_group_id")
+        gname = c.get("peer_group_name")
+        if gid and gid not in peer_groups_map:
+            peer_groups_map[gid] = {
+                "id": gid,
+                "name": gname,
+                "tickers": []
+            }
+        if gid:
+            peer_groups_map[gid]["tickers"].append(c["ticker"])
+    peer_groups_data = list(peer_groups_map.values())
 
-    metadata["version"] = "v1.0.0-phase13"
-    metadata["phase"] = "Phase 13 — Source Reconciliation Closure & Deployment-Candidate Readiness"
-    metadata["last_updated"] = BUILD_TIMESTAMP
-    metadata["total_companies"] = 15
-    metadata["total_company_periods"] = len(evidence_records)
-    metadata["total_metric_observations"] = len(evidence_flat_rows)
-    metadata["reconciled_metric_observations"] = reconciled_metric_count
-    metadata["source_linked_metric_observations"] = source_linked_metric_count
-    metadata["unverified_metric_observations"] = unverified_metric_count
-    metadata["discrepancy_count"] = len(DISCREPANCIES)
-    metadata["offline_reproducible"] = True
-    metadata["deployment_candidate_certified"] = True
+    metadata = {
+        "product_name": "Fundamentals Lens",
+        "product_tagline": "Evidence-First SEC & Indian Corporate Disclosure Intelligence",
+        "creator_name": "Rishika Dangayach",
+        "version": "1.0.0-phase13",
+        "dataset_version": "1.0.0-phase13",
+        "phase": "Phase 13 — Source Reconciliation Closure & Deployment-Candidate Readiness",
+        "dataset_snapshot_date": CHECK_DATE,
+        "build_timestamp": BUILD_TIMESTAMP,
+        "last_updated": BUILD_TIMESTAMP,
+        "universe_size": 15,
+        "total_companies": 15,
+        "total_annual_periods": len(evidence_records),
+        "total_company_periods": len(evidence_records),
+        "total_primary_metrics": len(evidence_flat_rows),
+        "total_metric_observations": len(evidence_flat_rows),
+        "primary_metric_keys": metric_keys,
+        "peer_groups": peer_groups_data,
+        "independently_reconciled_metrics": reconciled_metric_count,
+        "reconciled_metric_observations": reconciled_metric_count,
+        "source_linked_only_metrics": source_linked_metric_count,
+        "source_linked_metric_observations": source_linked_metric_count,
+        "unverified_metrics": unverified_metric_count,
+        "unverified_metric_observations": unverified_metric_count,
+        "derived_fcf_records": len(evidence_records),
+        "discrepancies_registered": len(DISCREPANCIES),
+        "discrepancy_count": len(DISCREPANCIES),
+        "offline_reproducible": True,
+        "deployment_candidate_certified": True
+    }
 
     with open(METADATA_FILE, "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2)

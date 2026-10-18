@@ -1128,32 +1128,12 @@ elif selected_page == "Peer Comparison":
 # ==============================================================================
 elif selected_page == "Price & Technical Analysis":
     st.markdown("""
-    <div class="lens-header">
-        <div style="float:right; font-weight:600; color:#1E293B; font-size:0.95rem; background:#F1F5F9; padding:4px 12px; border-radius:6px; border:1px solid #CBD5E1; margin-top:2px;">Created by Rishika Dangayach</div>
-        <h1 class="lens-title">📈 Price & Technical Analysis MVP</h1>
-        <div class="lens-subtitle">Quantitative Research: Daily OHLCV, Moving Averages, Momentum & Risk Profile</div>
+    <div class="lens-header" style="margin-bottom:8px; padding-bottom:4px;">
+        <div style="float:right; font-weight:600; color:#1E293B; font-size:0.85rem; background:#F1F5F9; padding:4px 12px; border-radius:6px; border:1px solid #CBD5E1; margin-top:2px;">Created by Rishika Dangayach</div>
+        <h1 class="lens-title" style="margin-bottom:2px; font-size:1.6rem;">📈 Price & Technical Analysis</h1>
+        <div class="lens-subtitle" style="font-size:0.88rem;">Deterministic Quantitative Analytics: Daily OHLCV, Moving Averages, Momentum & Risk Profile</div>
     </div>
     """, unsafe_allow_html=True)
-
-    # Analyst disclaimer banner
-    st.markdown("""
-    <div class="caveat-banner">
-        <strong>⚠️ Technical Analysis Notice & Scope Guard:</strong><br>
-        Historical technical indicators reflect deterministic mathematical observations of past trading action and volume. 
-        They do <strong>NOT</strong> constitute price targets, buy/sell recommendations, automated trading signals, or investment advice. 
-        Technical analysis should only be used as supplementary quantitative context alongside primary financial disclosures.
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Data Source Selection
-    source_choice = st.radio(
-        "Select Price Data Source:",
-        [
-            "📁 Pre-Packaged Demo Dataset (Generic Synthetic)",
-            "📤 Upload Custom Daily OHLCV CSV (In-Memory Only)"
-        ],
-        horizontal=True
-    )
 
     clean_df = None
     active_ticker = "DEMO"
@@ -1167,18 +1147,20 @@ elif selected_page == "Price & Technical Analysis":
     ohlcv_manifest = load_ohlcv_manifest()
     manifest_assets = ohlcv_manifest.get("assets", {})
 
-    if "Pre-Packaged Demo Dataset" in source_choice:
-        is_sim = True
-        st.warning(
-            "⚠️ **SIMULATED DEMO DATA — NOT ACTUAL MARKET HISTORY**\n\n"
-            "The pre-packaged demonstration datasets are synthetically generated for illustrative software "
-            "workflow and indicator algorithm verification only. They do **NOT** represent actual trading "
-            "history for Apple, Microsoft, TCS, SPY, or any real equity instrument. "
-            "To evaluate real equity securities, upload an official OHLCV CSV using the uploader option."
+    # Top Toolbar: Compact 3-Column Control Header
+    tool_col1, tool_col2, tool_col3 = st.columns([3, 4, 3])
+    with tool_col1:
+        source_choice = st.selectbox(
+            "Select Price Data Source:",
+            [
+                "📁 Pre-Packaged Demo Dataset (Generic Synthetic)",
+                "📤 Upload Custom Daily OHLCV CSV (In-Memory Only)"
+            ]
         )
 
-        demo_col1, demo_col2 = st.columns([3, 2])
-        with demo_col1:
+    if "Pre-Packaged Demo Dataset" in source_choice:
+        is_sim = True
+        with tool_col2:
             demo_opts = {
                 k: v.get("display_name", k)
                 for k, v in manifest_assets.items()
@@ -1207,10 +1189,10 @@ elif selected_page == "Price & Technical Analysis":
             else:
                 st.warning(f"Demo file {demo_file.name} not found.")
 
-        with demo_col2:
+        with tool_col3:
             bm_choice = st.selectbox(
                 "Comparative Benchmark:",
-                ["None", "SIMULATED_MARKET_BENCHMARK — Illustrative Market Benchmark (Pre-Packaged)"]
+                ["None", "SIMULATED_MARKET_BENCHMARK — Market Benchmark (Pre-Packaged)"]
             )
             if "SIMULATED_MARKET_BENCHMARK" in bm_choice:
                 bench_ticker = "SIMULATED_MARKET_BENCHMARK"
@@ -1222,6 +1204,15 @@ elif selected_page == "Price & Technical Analysis":
                         ticker=bench_ticker,
                         price_adjustment_basis=bench_basis
                     )
+
+        # Compact synthetic demo badge
+        st.markdown(
+            """<div style="display:flex; align-items:center; justify-content:space-between; background:#FFFBEB; border:1px solid #FDE68A; padding:6px 12px; border-radius:6px; margin:4px 0 10px 0; font-size:0.83rem; color:#92400E;">
+                <div><strong>⚠️ SYNTHETIC DEMONSTRATION DATASET:</strong> Algorithm verification walk; not real equity trading history or investment advice.</div>
+                <span style="background:#FEF3C7; border:1px solid #FCD34D; padding:2px 8px; border-radius:4px; font-weight:600; font-size:0.75rem;">DEMO MODE</span>
+            </div>""",
+            unsafe_allow_html=True
+        )
 
     else:
         # File uploader
@@ -1330,10 +1321,8 @@ elif selected_page == "Price & Technical Analysis":
             currency=active_currency
         )
 
-        st.markdown("---")
         badge_html = " <span class='badge-limited' style='background:#FEF3C7; color:#92400E; padding:2px 8px; border-radius:4px; font-size:0.8rem; font-weight:600;'>SIMULATED DEMO</span>" if is_sim else ""
-        st.markdown(f"### **Quantitative Performance & Risk Snapshot — `{active_ticker}`**{badge_html}", unsafe_allow_html=True)
-        st.caption(f"Trading Horizon: `{clean_df['Date_Str'].iloc[0]}` to `{summary.last_date}` • `{summary.total_bars}` Observations • Adjustment Basis: `{summary.price_adjustment_basis.value}`")
+        st.markdown(f"#### **Quantitative Snapshot — `{active_ticker}`** ({summary.total_bars} bars, `{clean_df['Date_Str'].iloc[0]}` to `{summary.last_date}`){badge_html}", unsafe_allow_html=True)
 
         # 4 Core KPI Cards
         tkpi1, tkpi2, tkpi3, tkpi4 = st.columns(4)

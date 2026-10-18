@@ -204,7 +204,7 @@ async def run_capture_pipeline():
             await capture_page(
                 ws, f"{streamlit_url}/?page=Price+%26+Technical+Analysis",
                 OUTPUT_DIR / "04_technical_analysis_desktop.png",
-                width=1280, height=950, is_mobile=False, wait_sec=4
+                width=1280, height=900, is_mobile=False, wait_sec=4
             )
 
             # 5. Page 5: Data Integrity Desktop

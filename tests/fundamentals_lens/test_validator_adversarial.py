@@ -826,3 +826,174 @@ def test_adversarial_p0_missing_source_value_never_coerced_to_zero():
     assert tier_res is not None
     assert tier_res.status == ValidationStatus.FAIL
     assert any("requires non-null reported_value" in err for err in tier_res.details.get("tier_errors", []))
+
+
+def test_adversarial_p0_unapproved_discrepancy_fails_validation():
+    """43. Adversarial test: Altering an approved discrepancy value to an unapproved amount fails validation."""
+    from fundamentals_lens.data_loader import load_evidence_register, get_company_by_ticker, get_facts_for_company, load_discrepancy_ledger
+
+    company = get_company_by_ticker("WMT")
+    facts = get_facts_for_company("WMT")
+    evidence = load_evidence_register()
+    discrepancies = load_discrepancy_ledger()
+
+    mutated_evidence = copy.deepcopy(evidence)
+    wmt_ev = next(e for e in mutated_evidence if e["ticker"] == "WMT" and e["fiscal_year"] == 2025)
+    # Mutate reported value to an unapproved number
+    wmt_ev["metrics"]["net_income"]["reported_value"] = 99999.0
+    wmt_ev["metrics"]["net_income"]["reconciliation_tier"] = "INDEPENDENTLY_RECONCILED"
+    wmt_ev["metrics"]["net_income"]["comparison_result"] = "RECONCILED_WITH_APPROVED_ADJUSTMENT"
+
+    results = FundamentalsValidator._check_evidence_alignment_and_tiers(
+        facts, mutated_evidence, discrepancies=discrepancies
+    )
+    tier_res = next(r for r in results if r.rule_id == "GATE_EVIDENCE_TIER_CONSISTENCY")
+    assert tier_res.status == ValidationStatus.FAIL
+    assert any("does not match any approved discrepancy in ledger" in err for err in tier_res.details["tier_errors"])
+
+
+def test_adversarial_p0_unapproved_company_metric_delta_fails_validation():
+    """44. Adversarial test: Arbitrary mismatch on company without approved discrepancy ledger entry fails."""
+    from fundamentals_lens.data_loader import load_evidence_register, get_company_by_ticker, get_facts_for_company, load_discrepancy_ledger
+
+    company = get_company_by_ticker("AAPL")
+    facts = get_facts_for_company("AAPL")
+    evidence = load_evidence_register()
+    discrepancies = load_discrepancy_ledger()
+
+    mutated_evidence = copy.deepcopy(evidence)
+    aapl_ev = next(e for e in mutated_evidence if e["ticker"] == "AAPL" and e["fiscal_year"] == 2021)
+    aapl_ev["metrics"]["revenue"]["reported_value"] = 365000.0  # canonical is 365817.0
+    aapl_ev["metrics"]["revenue"]["reconciliation_tier"] = "INDEPENDENTLY_RECONCILED"
+    aapl_ev["metrics"]["revenue"]["comparison_result"] = "EXACT_STATEMENT_MATCH"
+
+    results = FundamentalsValidator._check_evidence_alignment_and_tiers(
+        facts, mutated_evidence, discrepancies=discrepancies
+    )
+    tier_res = next(r for r in results if r.rule_id == "GATE_EVIDENCE_TIER_CONSISTENCY")
+    assert tier_res.status == ValidationStatus.FAIL
+    assert any("EXACT_STATEMENT_MATCH reported_value 365000.0 != canonical_value 365817.0" in err for err in tier_res.details["tier_errors"])
+
+
+def test_adversarial_p0_source_register_tier_mismatch_fails_validation():
+    """45. Adversarial test: Source register tier claiming INDEPENDENTLY_RECONCILED when metric is DISCREPANT fails."""
+    from fundamentals_lens.data_loader import load_evidence_register, get_company_by_ticker, get_facts_for_company, load_source_register
+
+    company = get_company_by_ticker("AAPL")
+    facts = get_facts_for_company("AAPL")
+    evidence = load_evidence_register()
+    sources = load_source_register()
+
+    mutated_evidence = copy.deepcopy(evidence)
+    mutated_sources = copy.deepcopy(sources)
+
+    # Set one metric in AAPL FY2021 to DISCREPANT
+    aapl_ev = next(e for e in mutated_evidence if e["ticker"] == "AAPL" and e["fiscal_year"] == 2021)
+    aapl_ev["metrics"]["revenue"]["reconciliation_tier"] = "DISCREPANT"
+    aapl_ev["metrics"]["revenue"]["comparison_result"] = "UNEXPLAINED_DISCREPANCY"
+
+    # Source register claims INDEPENDENTLY_RECONCILED
+    aapl_src = next(s for s in mutated_sources if s["ticker"] == "AAPL" and s["fiscal_year"] == 2021)
+    aapl_src["reconciliation_tier"] = "INDEPENDENTLY_RECONCILED"
+
+    results = FundamentalsValidator._check_evidence_alignment_and_tiers(
+        facts, mutated_evidence, sources=mutated_sources
+    )
+    tier_res = next(r for r in results if r.rule_id == "GATE_EVIDENCE_TIER_CONSISTENCY")
+    assert tier_res.status == ValidationStatus.FAIL
+    assert any("does not match derived metric tier 'DISCREPANT'" in err for err in tier_res.details["tier_errors"])
+
+
+def test_adversarial_p0_invalid_multi_dimensional_statuses_fail_validation():
+    """46. Adversarial test: Invalid multi-dimensional verification statuses are caught and failed."""
+    from fundamentals_lens.data_loader import load_evidence_register, get_company_by_ticker, get_facts_for_company
+
+    company = get_company_by_ticker("AAPL")
+    facts = get_facts_for_company("AAPL")
+    evidence = load_evidence_register()
+
+    mutated_evidence = copy.deepcopy(evidence)
+    aapl_ev = next(e for e in mutated_evidence if e["ticker"] == "AAPL" and e["fiscal_year"] == 2021)
+    aapl_ev["metrics"]["revenue"]["document_identity_status"] = "FAKE_STATUS"
+    aapl_ev["metrics"]["revenue"]["numeric_reconciliation_status"] = "CORRUPT_STATUS"
+
+    results = FundamentalsValidator._check_evidence_alignment_and_tiers(facts, mutated_evidence)
+    tier_res = next(r for r in results if r.rule_id == "GATE_EVIDENCE_TIER_CONSISTENCY")
+    assert tier_res.status == ValidationStatus.FAIL
+    assert any("Invalid document_identity_status 'FAKE_STATUS'" in err for err in tier_res.details["tier_errors"])
+    assert any("Invalid numeric_reconciliation_status 'CORRUPT_STATUS'" in err for err in tier_res.details["tier_errors"])
+
+
+def test_adversarial_fundamental_calculations_guardrails():
+    """47. Adversarial test: Math guardrails for CAGR, cash conversion, and margins prevent division by zero or nonsensical metrics."""
+    from fundamentals_lens.metrics import calculate_cagr, calculate_cash_conversion, calculate_operating_margin
+
+    # CAGR with non-positive start value
+    cagr1, err1 = calculate_cagr(-100.0, 200.0, 4)
+    assert cagr1 is None
+    assert "Base period value is non-positive" in err1
+
+    # CAGR with non-positive end value
+    cagr2, err2 = calculate_cagr(100.0, -50.0, 4)
+    assert cagr2 is None
+    assert "End period value is non-positive" in err2
+
+    # CAGR with 0 years
+    cagr3, err3 = calculate_cagr(100.0, 150.0, 0)
+    assert cagr3 is None
+    assert "Period span must be at least 1 interval" in err3
+
+    # Cash conversion with zero net income
+    cc1, cc_err1 = calculate_cash_conversion(100.0, 0.0)
+    assert cc1 is None
+    assert "Net income is zero" in cc_err1
+
+    # Cash conversion with negative net income (loss)
+    cc2, cc_err2 = calculate_cash_conversion(100.0, -50.0)
+    assert cc2 is None
+    assert "Net loss reported" in cc_err2
+
+    # Cash conversion with near-zero distorted net income
+    cc3, cc_err3 = calculate_cash_conversion(100.0, 0.4)
+    assert cc3 is None
+    assert "Near-zero net income" in cc_err3
+
+    # Operating margin with non-positive revenue
+    om1 = calculate_operating_margin(50.0, 0.0)
+    assert om1 is None
+    om2 = calculate_operating_margin(50.0, -100.0)
+    assert om2 is None
+
+
+def test_adversarial_peer_engine_suppression_propagation():
+    """48. Adversarial test: Peer engine suppresses incompatible proxies and cross-currency nominals."""
+    from fundamentals_lens.data_loader import load_companies, get_facts_for_company
+    from fundamentals_lens.peers import PeerComparisonEngine
+
+    companies = load_companies()
+    facts_map = {c.ticker: get_facts_for_company(c.ticker) for c in companies}
+
+    # TCS PBEI proxy in Indian IT group must be suppressed for operating margin
+    matrix_it = PeerComparisonEngine.build_peer_comparison_matrix(
+        companies, facts_map, "group_b_india_it", "operating_margin"
+    )
+    tcs_series = next(s for s in matrix_it["series"] if s["ticker"] == "TCS")
+    assert tcs_series["is_suppressed"] is True
+    assert "TCS operating profit reflects PBEI proxy" in tcs_series["suppress_reason"]
+    assert all(pt["value"] is None for pt in tcs_series["data"])
+
+    # Bajaj Auto EBITDA proxy in Indian Auto group must be suppressed
+    matrix_auto = PeerComparisonEngine.build_peer_comparison_matrix(
+        companies, facts_map, "group_d_india_auto", "operating_margin"
+    )
+    bajaj_series = next(s for s in matrix_auto["series"] if s["ticker"] == "BAJAJ-AUTO")
+    assert bajaj_series["is_suppressed"] is True
+    assert "Bajaj Auto operating profit reflects EBITDA proxy" in bajaj_series["suppress_reason"]
+    assert all(pt["value"] is None for pt in bajaj_series["data"])
+
+    # Indexed matrix should propagate suppression to series
+    idx_it = PeerComparisonEngine.build_indexed_peer_matrix(
+        companies, facts_map, "group_b_india_it", "operating_margin"
+    )
+    idx_tcs = next(s for s in idx_it["series"] if s["ticker"] == "TCS")
+    assert idx_tcs["is_suppressed"] is True

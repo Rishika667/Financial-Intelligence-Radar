@@ -30,7 +30,8 @@ class FundamentalsValidator:
         coverage: Optional[List[Dict[str, Any]]] = None,
         derived_metrics: Optional[List[DerivedMetrics]] = None,
         evidence_register: Optional[List[Dict[str, Any]]] = None,
-        source_observations: Optional[List[Dict[str, Any]]] = None
+        source_observations: Optional[List[Dict[str, Any]]] = None,
+        discrepancies: Optional[List[Dict[str, Any]]] = None
     ) -> List[ValidationResult]:
         results: List[ValidationResult] = []
         
@@ -72,7 +73,20 @@ class FundamentalsValidator:
             except Exception:
                 source_observations = None
 
-        results.extend(cls._check_evidence_alignment_and_tiers(facts, evidence_register, source_observations=source_observations))
+        if discrepancies is None:
+            try:
+                from .data_loader import load_discrepancy_ledger
+                discrepancies = load_discrepancy_ledger()
+            except Exception:
+                discrepancies = None
+
+        results.extend(cls._check_evidence_alignment_and_tiers(
+            facts,
+            evidence_register,
+            source_observations=source_observations,
+            sources=sources,
+            discrepancies=discrepancies
+        ))
         
         # Dimension 8: Statistical Anomaly & Outlier Review (Non-destructive)
         results.extend(cls._check_anomalies_and_variances(facts))
@@ -897,7 +911,9 @@ class FundamentalsValidator:
     def _check_evidence_alignment_and_tiers(
         facts: List[FinancialFact],
         evidence_register: Optional[List[Dict[str, Any]]],
-        source_observations: Optional[List[Dict[str, Any]]] = None
+        source_observations: Optional[List[Dict[str, Any]]] = None,
+        sources: Optional[List[Dict[str, Any]]] = None,
+        discrepancies: Optional[List[Dict[str, Any]]] = None
     ) -> List[ValidationResult]:
         results = []
         
@@ -917,6 +933,26 @@ class FundamentalsValidator:
             evidence_map[key] = reg
             yr_key = (reg.get("ticker"), reg.get("fiscal_year"))
             evidence_map[yr_key] = reg
+
+        if discrepancies is None:
+            try:
+                from .data_loader import load_discrepancy_ledger
+                discrepancies = load_discrepancy_ledger()
+            except Exception:
+                discrepancies = []
+
+        if sources is None:
+            try:
+                from .data_loader import load_source_register
+                sources = load_source_register()
+            except Exception:
+                sources = None
+
+        source_map = {}
+        if sources:
+            for s in sources:
+                source_map[(s.get("ticker"), s.get("fiscal_year_label"))] = s
+                source_map[(s.get("ticker"), s.get("fiscal_year"))] = s
 
         alignment_errors = []
         tier_errors = []
@@ -967,7 +1003,32 @@ class FundamentalsValidator:
                 rep_val = m_ev.get("reported_value")
                 comp_res = m_ev.get("comparison_result")
 
+                # Multi-dimensional status validation
+                doc_id_stat = m_ev.get("document_identity_status")
+                doc_ret_stat = m_ev.get("document_retrieval_status")
+                period_match_stat = m_ev.get("period_match_status")
+                ext_stat = m_ev.get("metric_extraction_status")
+                num_stat = m_ev.get("numeric_reconciliation_status")
+
+                if doc_id_stat and doc_id_stat not in ("VALIDATED", "INVALID_FORMAT", "UNVERIFIED"):
+                    tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Invalid document_identity_status '{doc_id_stat}'")
+                if doc_ret_stat and doc_ret_stat not in ("RETRIEVED_OFFLINE_EXTRACT", "RETRIEVED_ONLINE_EDGAR", "RETRIEVED_ONLINE_BSE", "PENDING_RETRIEVAL"):
+                    tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Invalid document_retrieval_status '{doc_ret_stat}'")
+                if period_match_stat and period_match_stat not in ("EXACT_PERIOD_MATCH", "PERIOD_MISMATCH"):
+                    tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Invalid period_match_status '{period_match_stat}'")
+                if ext_stat and ext_stat not in ("EXTRACTED_LINE_ITEM", "VALUE_NOT_LOCATED"):
+                    tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Invalid metric_extraction_status '{ext_stat}'")
+                if num_stat and num_stat not in ("EXACT_STATEMENT_MATCH", "RECONCILED_WITH_APPROVED_ADJUSTMENT", "UNEXPLAINED_DISCREPANCY", "IDENTITY_UNVERIFIED", "NOT_RECONCILED"):
+                    tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Invalid numeric_reconciliation_status '{num_stat}'")
+
                 if norm_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
+                    if doc_id_stat and doc_id_stat != "VALIDATED":
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED requires document_identity_status 'VALIDATED' (found '{doc_id_stat}')")
+                    if period_match_stat and period_match_stat != "EXACT_PERIOD_MATCH":
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED requires period_match_status 'EXACT_PERIOD_MATCH'")
+                    if ext_stat and ext_stat != "EXTRACTED_LINE_ITEM":
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED requires metric_extraction_status 'EXTRACTED_LINE_ITEM'")
+
                     loc = (m_ev.get("statement_locator") or "").strip()
                     line_item = m_ev.get("reported_line_item") or ""
                     stmt_name = m_ev.get("statement_name") or ""
@@ -990,12 +1051,28 @@ class FundamentalsValidator:
                         tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Missing statement name for reconciled tier")
                     if rep_val is None:
                         tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED requires non-null reported_value")
-                    if comp_res in ("NOT_RECONCILED", "DISCREPANCY_NOTED") or not comp_res:
+                    if comp_res in ("NOT_RECONCILED", "DISCREPANCY_NOTED", "UNEXPLAINED_DISCREPANCY", "IDENTITY_UNVERIFIED") or not comp_res:
                         tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED cannot have comparison_result '{comp_res}'")
-                    if comp_res == "RECONCILED_WITH_DOCUMENTED_ADJUSTMENT":
+
+                    if comp_res in ("RECONCILED_WITH_DOCUMENTED_ADJUSTMENT", "RECONCILED_WITH_APPROVED_ADJUSTMENT"):
                         disc_note = m_ev.get("discrepancy_note", "")
                         if not disc_note or "DISC-" not in disc_note:
                             tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: RECONCILED_WITH_DOCUMENTED_ADJUSTMENT requires explicit discrepancy ledger citation")
+                        # Strict Discrepancy Matching Guard: reported_value must match approved discrepancy amount exactly
+                        matched_disc = None
+                        for d in (discrepancies or []):
+                            if d.get("ticker") == f.ticker and d.get("metric") == m:
+                                d_lbl = d.get("fiscal_year_label", "")
+                                if d_lbl == f.fiscal_year_label or str(f.fiscal_year) in d_lbl:
+                                    approved_rep = d.get("primary_reported_value") if d.get("primary_reported_value") is not None else d.get("reported_value")
+                                    if approved_rep is not None and abs(float(rep_val) - float(approved_rep)) < 0.001:
+                                        matched_disc = d
+                                        break
+                        if not matched_disc:
+                            tier_errors.append(
+                                f"{f.ticker} {f.fiscal_year_label} {m}: Reported value {rep_val} does not match any approved discrepancy in ledger (unapproved discrepancy delta)"
+                            )
+
                     if comp_res == "EXACT_STATEMENT_MATCH":
                         if rep_val is not None and canon_val is not None and abs(float(rep_val) - float(canon_val)) > 0.001:
                             tier_errors.append(
@@ -1005,6 +1082,23 @@ class FundamentalsValidator:
                     if comp_res == "EXACT_STATEMENT_MATCH":
                         tier_errors.append(
                             f"{f.ticker} {f.fiscal_year_label} {m}: SOURCE_LINKED_ONLY cannot claim comparison_result 'EXACT_STATEMENT_MATCH'"
+                        )
+
+            # Check Source Register derived tier consistency
+            if source_map:
+                src_entry = source_map.get((f.ticker, f.fiscal_year)) or source_map.get((f.ticker, f.fiscal_year_label))
+                if src_entry:
+                    from .reconciliation import derive_source_reconciliation_status
+                    derived_tier = derive_source_reconciliation_status(src_entry, list(metrics.values()))
+                    src_tier = src_entry.get("reconciliation_tier")
+                    if src_tier != derived_tier:
+                        tier_errors.append(
+                            f"{f.ticker} {f.fiscal_year_label}: Source register reconciliation_tier '{src_tier}' does not match derived metric tier '{derived_tier}'"
+                        )
+                    reg_tier = reg.get("reconciliation_tier")
+                    if reg_tier and reg_tier != derived_tier:
+                        tier_errors.append(
+                            f"{f.ticker} {f.fiscal_year_label}: Evidence period reconciliation_tier '{reg_tier}' does not match derived metric tier '{derived_tier}'"
                         )
 
         if alignment_errors:

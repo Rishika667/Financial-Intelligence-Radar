@@ -1,9 +1,10 @@
 """
-Tests clean-clone reproducibility and source independence (Phase 12).
+Tests clean-clone reproducibility and source independence (Phase 13 Release Hardened).
 
 Verifies:
-1. Offline build succeeds using strictly tracked source inputs without scratch/sec_cache.
-2. Mutating canonical financial facts does NOT alter the independently extracted source observations.
+1. Strict commit-only clean checkout: rebuilds cleanly from committed tree without scratch caches or working-tree diff patches.
+2. Genuine source independence: mutating canonical financial facts does not alter extracted source observations;
+   mutating source extracts deterministically alters observations.
 3. Substantive observations, counts, and confidence tiers are deterministically reproduced.
 """
 
@@ -12,6 +13,7 @@ import json
 import subprocess
 import sys
 import tempfile
+import hashlib
 from pathlib import Path
 
 import pytest
@@ -21,12 +23,13 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from fundamentals_lens.data_loader import load_evidence_register, load_financial_facts, load_source_observations
-from scripts.build_source_observations_phase12 import (
+from scripts.build_source_observations_phase13 import (
     build_observations_offline,
     OUTPUT_FILE,
     US_INPUT_FILE,
     INDIAN_INPUT_FILE
 )
+from scripts.build_evidence_register_phase13 import build_evidence_pipeline
 
 
 def test_tracked_source_inputs_exist_and_valid():
@@ -60,88 +63,110 @@ def test_build_observations_offline_without_scratch_cache():
         assert rec["statement_locator"] is not None
 
 
-def test_source_observations_independent_of_canonical_facts_mutation():
+def test_genuine_source_independence_with_fact_and_extract_mutations():
     """
-    Critical source independence test:
-    Mutating canonical financial facts has ZERO effect on independently extracted source observations.
+    Genuine source independence test:
+    Part 1: Mutating canonical financial facts has ZERO effect on independently extracted source observations.
+    Part 2: Mutating the source extract propagates deterministically to the observation, proving observations
+            originate exclusively from the source extract and never from facts.
     """
-    canonical_facts = load_financial_facts()
-    original_obs = load_source_observations()
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir)
 
-    # Create mutated facts where every revenue is doubled
-    mutated_facts = copy.deepcopy(canonical_facts)
-    for f in mutated_facts:
-        f.revenue = f.revenue * 2.0
-        f.operating_income = f.operating_income * 2.0
+        # Baseline observations
+        base_obs = build_observations_offline("2026-10-18T00:00:00Z")
+        base_aapl_rev = next(o["reported_value"] for o in base_obs if o["ticker"] == "AAPL" and o["fiscal_year"] == 2021 and o["metric_name"] == "revenue")
 
-    # Re-run offline observation build
-    rebuilt_obs = build_observations_offline("2026-10-18T00:00:00Z")
+        # Part 1: Mutate canonical facts (multiply revenue and operating income by 10)
+        canonical_facts_file = REPO_ROOT / "datasets" / "fundamentals_lens" / "financial_facts_5yr.json"
+        with open(canonical_facts_file, "r", encoding="utf-8") as f:
+            facts_data = json.load(f)
 
-    # Verify that rebuilt observations match original observations exactly (substantively)
-    obs_map_orig = {(o["ticker"], o["fiscal_year"], o["metric_name"]): o["reported_value"] for o in original_obs}
-    obs_map_rebuilt = {(o["ticker"], o["fiscal_year"], o["metric_name"]): o["reported_value"] for o in rebuilt_obs}
+        mutated_facts = copy.deepcopy(facts_data)
+        for fact in mutated_facts:
+            fact["revenue"] = fact["revenue"] * 10.0
+            fact["operating_income"] = fact["operating_income"] * 10.0
 
-    assert obs_map_orig == obs_map_rebuilt, "Rebuilt observations must be completely decoupled from canonical facts"
+        mutated_facts_file = tmp_path / "mutated_facts.json"
+        with open(mutated_facts_file, "w", encoding="utf-8") as f:
+            json.dump(mutated_facts, f, indent=2)
+
+        # Run pipeline with mutated facts
+        pipeline_res = build_evidence_pipeline(
+            facts_file=mutated_facts_file,
+            output_dir=tmp_path / "pipeline_out"
+        )
+
+        # Verify that reported values in evidence records remain 100% unchanged from baseline source extract!
+        ev_flat = pipeline_res["evidence_flat_rows"]
+        aapl_rev_ev = next(r for r in ev_flat if r["ticker"] == "AAPL" and r["fiscal_year"] == 2021 and r["metric_key"] == "revenue")
+        assert aapl_rev_ev["reported_value"] == base_aapl_rev
+        assert aapl_rev_ev["canonical_value"] == base_aapl_rev * 10.0  # Canonical took mutation, reported did not!
+        assert aapl_rev_ev["reconciliation_tier"] == "DISCREPANT"  # Mismatch triggered discrepancy tier!
+
+        # Part 2: Mutate source extract and verify observation changes deterministically
+        with open(US_INPUT_FILE, "r", encoding="utf-8") as f:
+            us_data = json.load(f)
+
+        mutated_us = copy.deepcopy(us_data)
+        for item in mutated_us:
+            if item["ticker"] == "AAPL" and item["fiscal_year"] == 2021 and item["metric_name"] == "revenue":
+                item["reported_value"] = 888888.0
+
+        mutated_us_file = tmp_path / "mutated_us_extracts.json"
+        with open(mutated_us_file, "w", encoding="utf-8") as f:
+            json.dump(mutated_us, f, indent=2)
+
+        # Rebuild observations with mutated source input
+        mutated_obs = build_observations_offline("2026-10-18T00:00:00Z", us_input_file=mutated_us_file)
+        mutated_aapl_rev = next(o["reported_value"] for o in mutated_obs if o["ticker"] == "AAPL" and o["fiscal_year"] == 2021 and o["metric_name"] == "revenue")
+        assert mutated_aapl_rev == 888888.0, "Observation must read directly and exclusively from source extract"
 
 
 def test_offline_rebuild_script_cli_execution():
-    """Verify that `python scripts/build_source_observations_phase13.py --offline` and Phase 12 wrapper run cleanly."""
-    repo_root = Path(__file__).resolve().parent.parent.parent
-    script_path = repo_root / "scripts" / "build_source_observations_phase13.py"
+    """Verify that `python scripts/build_source_observations_phase13.py --offline` runs cleanly."""
+    script_path = REPO_ROOT / "scripts" / "build_source_observations_phase13.py"
 
     cmd = [sys.executable, str(script_path), "--offline"]
-    result = subprocess.run(cmd, cwd=str(repo_root), capture_output=True, text=True)
+    result = subprocess.run(cmd, cwd=str(REPO_ROOT), capture_output=True, text=True)
 
     assert result.returncode == 0, f"Script failed with output:\n{result.stderr}"
     assert "Extracted 375 observations" in result.stdout
     assert "Summary: Reconciled=375 (100.0%), Source-Linked=0 (0.0%)" in result.stdout
 
 
+def test_substantive_determinism():
+    """Verify that two successive offline observation builds produce bit-for-bit identical outputs."""
+    obs_1 = build_observations_offline("2026-10-18T12:00:00Z")
+    obs_2 = build_observations_offline("2026-10-18T12:00:00Z")
+
+    dump_1 = json.dumps(obs_1, sort_keys=True)
+    dump_2 = json.dumps(obs_2, sort_keys=True)
+
+    h1 = hashlib.sha256(dump_1.encode("utf-8")).hexdigest()
+    h2 = hashlib.sha256(dump_2.encode("utf-8")).hexdigest()
+
+    assert h1 == h2, "Offline observation builder must be strictly deterministic"
+
+
 def test_isolated_clean_clone_offline_rebuild():
     """
-    Demonstrates clean-clone reproducibility in an isolated temporary directory.
+    Demonstrates strict clean-clone reproducibility in an isolated temporary directory.
+    Tests committed repository state without applying working-tree diff patches.
     Verifies that git-ignored scratch caches (e.g. scratch/sec_cache) are NOT present,
     and that the offline rebuild pipeline executes and validates with 100% passing gates.
     """
-    repo_root = Path(__file__).resolve().parent.parent.parent
-
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_clone = Path(tmpdir) / "clone"
         # Perform local git clone of working directory
         res = subprocess.run(
-            ["git", "clone", "--local", str(repo_root), str(tmp_clone)],
+            ["git", "clone", "--local", str(REPO_ROOT), str(tmp_clone)],
             capture_output=True,
             text=True
         )
         assert res.returncode == 0, f"Git clone failed: {res.stderr}"
 
         # Verify scratch/sec_cache is NOT present in fresh clone
-        assert not (tmp_clone / "scratch" / "sec_cache").exists()
-
-        # If there are uncommitted working-tree changes to tracked files in the local repo,
-        # apply them via an explicit git diff patch rather than copying arbitrary directories.
-        diff_res = subprocess.run(
-            ["git", "diff", "HEAD"],
-            cwd=str(repo_root),
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace"
-        )
-        if diff_res.stdout and diff_res.stdout.strip():
-            patch_file = Path(tmpdir) / "working_tree.patch"
-            patch_file.write_text(diff_res.stdout, encoding="utf-8")
-            apply_res = subprocess.run(
-                ["git", "apply", "--ignore-space-change", "--ignore-whitespace", str(patch_file)],
-                cwd=str(tmp_clone),
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace"
-            )
-            # If apply succeeds, the clone has uncommitted modifications; otherwise it tests committed HEAD
-
-        # Confirm scratch cache is STILL not present in fresh clone
         assert not (tmp_clone / "scratch" / "sec_cache").exists()
 
         # Run offline source observations builder

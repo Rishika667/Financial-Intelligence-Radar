@@ -64,7 +64,7 @@ def run_validation():
     for comp in sorted(companies, key=lambda c: (c.peer_group_id, c.ticker)):
         facts = get_facts_for_company(comp.ticker)
         results = FundamentalsValidator.validate_company_dataset(
-            comp, facts, sources, coverage=coverage, evidence_register=evidence_register
+            comp, facts, sources, coverage=coverage, evidence_register=evidence_register, discrepancies=discrepancies
         )
         
         company_passed = True

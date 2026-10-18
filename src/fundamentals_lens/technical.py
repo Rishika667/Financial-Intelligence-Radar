@@ -673,7 +673,7 @@ def create_price_candlestick_chart(
     fig = make_subplots(
         rows=2, cols=1,
         shared_xaxes=True,
-        vertical_spacing=0.04,
+        vertical_spacing=0.03,
         row_heights=[0.75, 0.25],
         subplot_titles=(f"{ticker}{badge} Daily Price Action & Overlays", "Trading Volume")
     )
@@ -716,8 +716,8 @@ def create_price_candlestick_chart(
 
     fig.update_layout(
         xaxis_rangeslider_visible=False,
-        height=560,
-        margin=dict(l=40, r=40, t=50, b=30),
+        height=490,
+        margin=dict(l=35, r=35, t=35, b=25),
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         template="plotly_white",
         hovermode="x unified"

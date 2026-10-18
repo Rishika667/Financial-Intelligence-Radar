@@ -36,7 +36,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2021-09-25",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_AAPL_10K_2022",
@@ -75,7 +76,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-09-24",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_AAPL_10K_2023",
@@ -114,7 +116,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-09-30",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_AAPL_10K_2024",
@@ -153,7 +156,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-09-28",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_AAPL_10K_2025",
@@ -192,7 +196,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-09-27",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2022",
@@ -231,7 +236,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2023",
@@ -270,7 +276,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2024",
@@ -309,7 +316,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2025",
@@ -348,7 +356,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2026",
@@ -387,7 +396,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_BRIT_AR_2022",
@@ -426,7 +436,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_BRIT_AR_2023",
@@ -465,7 +476,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_BRIT_AR_2024",
@@ -504,7 +516,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_BRIT_AR_2025",
@@ -543,7 +556,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_BRIT_AR_2026",
@@ -582,7 +596,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_COST_10K_2022",
@@ -621,7 +636,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-08-28",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_COST_10K_2023",
@@ -660,7 +676,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-09-03",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_COST_10K_2024",
@@ -699,7 +716,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-09-01",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_COST_10K_2025",
@@ -738,7 +756,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-08-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_COST_10K_2026",
@@ -777,7 +796,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-08-30",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_DABUR_AR_2022",
@@ -816,7 +836,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_DABUR_AR_2023",
@@ -855,7 +876,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_DABUR_AR_2024",
@@ -894,7 +916,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_DABUR_AR_2025",
@@ -933,7 +956,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_DABUR_AR_2026",
@@ -972,7 +996,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_GOOGL_10K_2021",
@@ -1011,7 +1036,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2021-12-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_GOOGL_10K_2022",
@@ -1050,7 +1076,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-12-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_GOOGL_10K_2023",
@@ -1089,7 +1116,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-12-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_GOOGL_10K_2024",
@@ -1128,7 +1156,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-12-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_GOOGL_10K_2025",
@@ -1167,7 +1196,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-12-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2022",
@@ -1206,7 +1236,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2023",
@@ -1245,7 +1276,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2024",
@@ -1284,7 +1316,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2025",
@@ -1323,7 +1356,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2026",
@@ -1362,7 +1396,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HERO_AR_2022",
@@ -1401,7 +1436,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HERO_AR_2023",
@@ -1440,7 +1476,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HERO_AR_2024",
@@ -1479,7 +1516,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HERO_AR_2025",
@@ -1518,7 +1556,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HERO_AR_2026",
@@ -1557,7 +1596,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HUL_AR_2022",
@@ -1596,7 +1636,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HUL_AR_2023",
@@ -1635,7 +1676,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HUL_AR_2024",
@@ -1674,7 +1716,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HUL_AR_2025",
@@ -1713,7 +1756,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_HUL_AR_2026",
@@ -1752,7 +1796,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_INFY_AR_2022",
@@ -1791,7 +1836,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_INFY_AR_2023",
@@ -1830,7 +1876,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_INFY_AR_2024",
@@ -1869,7 +1916,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_INFY_AR_2025",
@@ -1908,7 +1956,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_INFY_AR_2026",
@@ -1947,7 +1996,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_MARUTI_AR_2022",
@@ -1986,7 +2036,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_MARUTI_AR_2023",
@@ -2025,7 +2076,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_MARUTI_AR_2024",
@@ -2064,7 +2116,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_MARUTI_AR_2025",
@@ -2103,7 +2156,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_MARUTI_AR_2026",
@@ -2142,7 +2196,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_MSFT_10K_2022",
@@ -2181,7 +2236,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-06-30",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_MSFT_10K_2023",
@@ -2220,7 +2276,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-06-30",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_MSFT_10K_2024",
@@ -2259,7 +2316,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-06-30",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_MSFT_10K_2025",
@@ -2298,7 +2356,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-06-30",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_MSFT_10K_2026",
@@ -2337,7 +2396,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-06-30",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_TCS_AR_2022",
@@ -2376,7 +2436,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_TCS_AR_2023",
@@ -2415,7 +2476,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_TCS_AR_2024",
@@ -2454,7 +2516,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_TCS_AR_2025",
@@ -2493,7 +2556,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified"
   },
   {
     "source_id": "SRC_TCS_AR_2026",
@@ -2532,7 +2596,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-03-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified"
   },
   {
     "ticker": "TGT",
@@ -2571,7 +2636,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-01-29",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "ticker": "TGT",
@@ -2610,7 +2676,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-01-28",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "ticker": "TGT",
@@ -2649,7 +2716,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-02-03",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "ticker": "TGT",
@@ -2688,7 +2756,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-02-01",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "ticker": "TGT",
@@ -2727,7 +2796,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-01-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_WMT_10K_2022",
@@ -2766,7 +2836,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2022-01-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_WMT_10K_2023",
@@ -2805,7 +2876,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2023-01-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_WMT_10K_2024",
@@ -2844,7 +2916,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2024-01-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_WMT_10K_2025",
@@ -2883,7 +2956,8 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2025-01-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   },
   {
     "source_id": "SRC_WMT_10K_2026",
@@ -2922,6 +2996,7 @@
     "source_check_status": "OFFLINE_SOURCE_RECORDED",
     "last_checked_date": "2026-10-18",
     "period_end": "2026-01-31",
-    "document_identity_verified": true
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
   }
 ]

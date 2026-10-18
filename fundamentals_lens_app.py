@@ -1324,13 +1324,13 @@ elif selected_page == "Price & Technical Analysis":
         badge_html = " <span class='badge-limited' style='background:#FEF3C7; color:#92400E; padding:2px 8px; border-radius:4px; font-size:0.8rem; font-weight:600;'>SIMULATED DEMO</span>" if is_sim else ""
         st.markdown(f"#### **Quantitative Snapshot — `{active_ticker}`** ({summary.total_bars} bars, `{clean_df['Date_Str'].iloc[0]}` to `{summary.last_date}`){badge_html}", unsafe_allow_html=True)
 
-        # 4 Core KPI Cards
+        # 4 Core KPI Cards with integrated indicator telemetry
         tkpi1, tkpi2, tkpi3, tkpi4 = st.columns(4)
         with tkpi1:
             st.markdown(f"""
-            <div class="kpi-card">
+            <div class="kpi-card" style="padding:10px 14px;">
                 <div class="kpi-label">Latest Close Price</div>
-                <div class="kpi-val">{summary.last_close:,.2f} <span style="font-size:0.9rem; font-weight:600; color:#64748B;">{summary.currency}</span></div>
+                <div class="kpi-val" style="font-size:1.35rem;">{summary.last_close:,.2f} <span style="font-size:0.85rem; font-weight:600; color:#64748B;">{summary.currency}</span></div>
                 <div class="kpi-delta neu">As of {summary.last_date}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -1347,45 +1347,31 @@ elif selected_page == "Price & Technical Analysis":
             else:
                 ret_1y_str = "N/A (<252 bars)"
                 ret_label = f"Period Return ({summary.total_bars} bars)"
+            rsi_brief = summary.rsi_status.split(" ")[0] if summary.rsi_status else "N/A"
             st.markdown(f"""
-            <div class="kpi-card">
+            <div class="kpi-card" style="padding:10px 14px;">
                 <div class="kpi-label">{ret_label}</div>
-                <div class="kpi-val">{ret_1y_str}</div>
-                <div class="kpi-delta neu">1M: {f"{summary.change_1m:+.1f}%" if summary.change_1m else "N/A"} | 3M: {f"{summary.change_3m:+.1f}%" if summary.change_3m else "N/A"}</div>
+                <div class="kpi-val" style="font-size:1.35rem;">{ret_1y_str}</div>
+                <div class="kpi-delta neu">RSI(14): <strong>{summary.current_rsi:.1f}</strong> ({rsi_brief})</div>
             </div>
             """, unsafe_allow_html=True)
         with tkpi3:
             range_label = "52-Week Range" if summary.is_full_52w else f"Trading Range ({summary.total_bars} bars)"
             st.markdown(f"""
-            <div class="kpi-card">
+            <div class="kpi-card" style="padding:10px 14px;">
                 <div class="kpi-label">{range_label}</div>
                 <div class="kpi-val" style="font-size:1.2rem;">{summary.low_52w:,.1f} — {summary.high_52w:,.1f}</div>
-                <div class="kpi-delta neu">From High: {summary.dist_from_52w_high:+.1f}% | Low: {summary.dist_from_52w_low:+.1f}%</div>
+                <div class="kpi-delta neu">SMA 20: {summary.sma_20_status} | 50: {summary.sma_50_status}</div>
             </div>
             """, unsafe_allow_html=True)
         with tkpi4:
             st.markdown(f"""
-            <div class="kpi-card">
+            <div class="kpi-card" style="padding:10px 14px;">
                 <div class="kpi-label">Risk Profile</div>
                 <div class="kpi-val" style="font-size:1.25rem;">{f"σ = {summary.annualized_volatility:.1f}%" if summary.annualized_volatility else "N/A"}</div>
-                <div class="kpi-delta neg">Max Drawdown: {f"{summary.max_drawdown:.1f}%" if summary.max_drawdown else "N/A"}</div>
+                <div class="kpi-delta neg">Max DD: {f"{summary.max_drawdown:.1f}%" if summary.max_drawdown else "N/A"} | 200: {summary.sma_200_status}</div>
             </div>
             """, unsafe_allow_html=True)
-
-        st.markdown("")
-
-        # Indicator Status Bar
-        stat_c1, stat_c2, stat_c3, stat_c4 = st.columns(4)
-        with stat_c1:
-            st.markdown(f"**RSI (14):** `{summary.current_rsi:.1f}` <span class='badge-neutral'>{summary.rsi_status}</span>", unsafe_allow_html=True)
-        with stat_c2:
-            st.markdown(f"**SMA 20:** <span class='badge-neutral'>{summary.sma_20_status}</span>", unsafe_allow_html=True)
-        with stat_c3:
-            st.markdown(f"**SMA 50:** <span class='badge-neutral'>{summary.sma_50_status}</span>", unsafe_allow_html=True)
-        with stat_c4:
-            st.markdown(f"**SMA 200:** <span class='badge-neutral'>{summary.sma_200_status}</span>", unsafe_allow_html=True)
-
-        st.markdown("---")
 
         # Technical Tabs
         tech_tab1, tech_tab2, tech_tab3, tech_tab4 = st.tabs([
@@ -1396,12 +1382,13 @@ elif selected_page == "Price & Technical Analysis":
         ])
 
         with tech_tab1:
-            st.markdown("#### **Candlestick Price Action, Moving Averages & Volume**")
-            chart_ctrl1, chart_ctrl2 = st.columns(2)
-            with chart_ctrl1:
-                show_sma_opt = st.checkbox("Show Simple Moving Averages (20 / 50 / 200)", value=True)
-            with chart_ctrl2:
-                show_bb_opt = st.checkbox("Show Bollinger Bands (20, 2.0σ)", value=True)
+            c_hdr, c_chk1, c_chk2 = st.columns([2, 1, 1])
+            with c_hdr:
+                st.markdown("#### **Price Action, Moving Averages & Volume**")
+            with c_chk1:
+                show_sma_opt = st.checkbox("SMAs (20 / 50 / 200)", value=True)
+            with c_chk2:
+                show_bb_opt = st.checkbox("Bollinger Bands (20, 2.0σ)", value=True)
 
             fig_candle = create_price_candlestick_chart(
                 clean_df, 

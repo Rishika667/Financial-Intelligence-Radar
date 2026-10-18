@@ -20,7 +20,7 @@ import time
 import argparse
 import hashlib
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATASETS_DIR = REPO_ROOT / "datasets" / "fundamentals_lens"
@@ -44,20 +44,27 @@ def compute_file_hash(filepath: Path) -> str:
     return hasher.hexdigest()
 
 
-def build_observations_offline(build_timestamp: str) -> List[Dict[str, Any]]:
+def build_observations_offline(
+    build_timestamp: str,
+    us_input_file: Optional[Path] = None,
+    indian_input_file: Optional[Path] = None
+) -> List[Dict[str, Any]]:
     """
     Builds observations strictly from tracked source input extracts.
     Never reads or imports financial_facts_5yr.json.
     """
-    if not US_INPUT_FILE.exists():
-        raise FileNotFoundError(f"Tracked US source input missing: {US_INPUT_FILE}")
-    if not INDIAN_INPUT_FILE.exists():
-        raise FileNotFoundError(f"Tracked Indian source input missing: {INDIAN_INPUT_FILE}")
+    target_us_file = us_input_file or US_INPUT_FILE
+    target_indian_file = indian_input_file or INDIAN_INPUT_FILE
 
-    with open(US_INPUT_FILE, "r", encoding="utf-8") as f:
+    if not target_us_file.exists():
+        raise FileNotFoundError(f"Tracked US source input missing: {target_us_file}")
+    if not target_indian_file.exists():
+        raise FileNotFoundError(f"Tracked Indian source input missing: {target_indian_file}")
+
+    with open(target_us_file, "r", encoding="utf-8") as f:
         us_extracts = json.load(f)
 
-    with open(INDIAN_INPUT_FILE, "r", encoding="utf-8") as f:
+    with open(target_indian_file, "r", encoding="utf-8") as f:
         indian_extracts = json.load(f)
 
     observations: List[Dict[str, Any]] = []
@@ -211,6 +218,9 @@ def main():
     parser = argparse.ArgumentParser(description="Phase 13 Independent Source Observation Pipeline")
     parser.add_argument("--online", action="store_true", help="Perform live online SEC submissions audit")
     parser.add_argument("--offline", action="store_true", default=True, help="Run in strict offline reproducible mode (default)")
+    parser.add_argument("--us-input", type=str, default=None, help="Path to custom US source input extracts")
+    parser.add_argument("--indian-input", type=str, default=None, help="Path to custom Indian source input extracts")
+    parser.add_argument("--output-file", type=str, default=None, help="Path to output source observations JSON")
     args = parser.parse_args()
 
     build_time = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -220,13 +230,18 @@ def main():
     print(f"Timestamp:      {build_time}")
     print("=" * 80)
 
-    observations = build_observations_offline(build_time)
+    us_in = Path(args.us_input) if args.us_input else None
+    ind_in = Path(args.indian_input) if args.indian_input else None
+    out_f = Path(args.output_file) if args.output_file else OUTPUT_FILE
+
+    observations = build_observations_offline(build_time, us_input_file=us_in, indian_input_file=ind_in)
 
     if args.online:
         observations = run_online_sec_audit(observations, build_time)
 
     # Save canonical source observations
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+    out_f.parent.mkdir(parents=True, exist_ok=True)
+    with open(out_f, "w", encoding="utf-8") as f:
         json.dump(observations, f, indent=2)
 
     # Calculate statistics

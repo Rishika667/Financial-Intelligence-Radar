@@ -2,15 +2,19 @@
 """
 Phase 13 Evidence Register & Canonical Dataset Pipeline.
 
-Reconciles independent primary source observations against canonical financial facts.
+Reconciles independent primary source observations against canonical financial facts
+using the canonical reconciliation engine (src/fundamentals_lens/reconciliation.py).
 
 Guarantees:
 1. Strict independence: reported_value is read EXCLUSIVELY from datasets/fundamentals_lens/source_observations.json.
-2. Dynamic document identity verification: Derived from accession syntax, CIK/scrip alignment, and official URL structure (never hardcoded True).
-3. Honest verification tiers: In offline mode, sources are OFFLINE_SOURCE_RECORDED and OFFLINE_AUDITED (never ONLINE_VERIFIED).
-4. Free cash flow decoupling: arithmetic verification (FCF == OCF - Capex) is decoupled from underlying source input confidence.
-5. Zero unexplained deltas: Mismatches require an approved discrepancy ledger entry or remain DISCREPANT.
-6. Synchronized exports: evidence_register.json, evidence_register.csv, source_register.json, discrepancy_ledger.json, source_check_report.json, and dataset_metadata.json.
+2. Dynamic document identity verification: Derived from accession syntax, CIK/scrip alignment, and official URL structure.
+3. Multi-dimensional verification status: document_identity_status, document_retrieval_status, period_match_status,
+   metric_extraction_status, and numeric_reconciliation_status.
+4. Exact numerical discrepancy validation: Non-zero deltas must match an approved ledger entry within 0.001 tolerance,
+   otherwise flagged as UNEXPLAINED_DISCREPANCY (DISCREPANT tier).
+5. Source-level tier derivation: Source register tier is derived directly from underlying metric outcomes.
+6. Synchronized exports: evidence_register.json, evidence_register.csv, source_register.json, discrepancy_ledger.json,
+   source_check_report.json, and dataset_metadata.json.
 """
 
 import sys
@@ -19,10 +23,25 @@ import json
 import csv
 import re
 import time
+import argparse
 from pathlib import Path
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, Optional
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT / "src") not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT / "src"))
+
+from fundamentals_lens.reconciliation import (
+    reconcile_metric_observation,
+    derive_source_reconciliation_status,
+    DocumentIdentityStatus,
+    DocumentRetrievalStatus,
+    PeriodMatchStatus,
+    MetricExtractionStatus,
+    NumericReconciliationStatus,
+    ReconciliationTier,
+)
+
 DATASETS_DIR = REPO_ROOT / "datasets" / "fundamentals_lens"
 
 FACTS_FILE = DATASETS_DIR / "financial_facts_5yr.json"
@@ -237,7 +256,6 @@ def derive_document_identity_verified(source_entry: Dict[str, Any], company_meta
             return False, f"SEC accession '{acc}' does not match standard 20-digit pattern"
         if not url or not url.startswith("https://www.sec.gov/Archives/edgar/data/"):
             return False, f"US SEC filing URL does not originate from sec.gov archives: '{url}'"
-        # In SEC EDGAR URLs, the format is https://www.sec.gov/Archives/edgar/data/{cik_stripped}/{acc_no_dashes}/...
         cik_clean = cik.lstrip("0") if cik else ""
         acc_clean = acc.replace("-", "")
         if cik_clean and f"/data/{cik_clean}/" not in url and f"/data/{cik}/" not in url:
@@ -252,90 +270,99 @@ def derive_document_identity_verified(source_entry: Dict[str, Any], company_meta
             return False, f"Missing or truncated Indian filing document key: '{key}'"
         if scrip and scrip not in key:
             return False, f"Internal document key '{key}' does not contain registered BSE scrip '{scrip}'"
-        # Verify valid Indian corporate IR domain or exchange filing
         if not any(domain in url for domain in [".com", ".co.in", ".in", ".org", "bseindia", "nseindia"]):
             return False, f"Indian source URL domain invalid: '{url}'"
         return True, f"BSE scrip ({scrip}) document key format and official corporate URL verified"
 
 
-def build_evidence_pipeline():
+def build_evidence_pipeline(
+    facts_file: Optional[Path] = None,
+    sources_file: Optional[Path] = None,
+    source_obs_file: Optional[Path] = None,
+    discrepancy_file: Optional[Path] = None,
+    companies_file: Optional[Path] = None,
+    output_dir: Optional[Path] = None,
+    verification_mode: str = "OFFLINE"
+) -> Dict[str, Any]:
     print("=" * 80)
     print("FUNDAMENTALS LENS: EVIDENCE REGISTER & CANONICAL DATASET PIPELINE (PHASE 13)")
     print(f"Timestamp: {BUILD_TIMESTAMP}")
     print("=" * 80)
 
-    # 1. Load source observations (Primary truth layer)
-    if not SOURCE_OBS_FILE.exists():
-        raise FileNotFoundError(f"Source observations file not found: {SOURCE_OBS_FILE}. Run build_source_observations_phase13.py first.")
+    # Resolve paths
+    target_facts = facts_file or FACTS_FILE
+    target_sources = sources_file or SOURCES_FILE
+    target_source_obs = source_obs_file or SOURCE_OBS_FILE
+    target_discrepancy = discrepancy_file or DISCREPANCY_JSON
+    target_companies = companies_file or COMPANIES_FILE
+    target_out_dir = output_dir or DATASETS_DIR
 
-    with open(SOURCE_OBS_FILE, "r", encoding="utf-8") as f:
+    # Load companies
+    with open(target_companies, "r", encoding="utf-8") as f:
+        comp_raw = json.load(f)
+    comp_map = {c["ticker"]: c for c in comp_raw}
+
+    # 1. Load source observations (Primary truth layer)
+    if not target_source_obs.exists():
+        raise FileNotFoundError(f"Source observations file not found: {target_source_obs}. Run build_source_observations_phase13.py first.")
+
+    with open(target_source_obs, "r", encoding="utf-8") as f:
         source_obs = json.load(f)
 
     obs_map = {(o["ticker"], o["fiscal_year"], o["metric_name"]): o for o in source_obs}
-    print(f"Loaded {len(source_obs)} primary source observations from {SOURCE_OBS_FILE}")
+    print(f"Loaded {len(source_obs)} primary source observations from {target_source_obs}")
 
-    # 2. Load financial facts directly (no on-the-fly mutations)
-    with open(FACTS_FILE, "r", encoding="utf-8") as f:
+    # 2. Load financial facts
+    with open(target_facts, "r", encoding="utf-8") as f:
         facts = json.load(f)
 
-    # 3. Load sources and derive dynamic document identity
-    with open(SOURCES_FILE, "r", encoding="utf-8") as f:
+    # 3. Load sources and prepare discrepancy ledger
+    with open(target_sources, "r", encoding="utf-8") as f:
         sources = json.load(f)
 
-    updated_sources = []
-    source_check_records = []
+    # Discrepancy ledger
+    if target_discrepancy.exists():
+        with open(target_discrepancy, "r", encoding="utf-8") as f:
+            discrepancy_ledger = json.load(f)
+    else:
+        discrepancy_ledger = []
 
+    # Merge DISCREPANCIES if ledger is empty or for fallback
+    disc_keys = { (d.get("ticker"), d.get("fiscal_year_label"), d.get("metric")) for d in discrepancy_ledger }
+    for d in DISCREPANCIES:
+        if (d.get("ticker"), d.get("fiscal_year_label"), d.get("metric")) not in disc_keys:
+            d_copy = dict(d)
+            d_copy["canonical_value"] = d.get("initial_dataset_value")
+            d_copy["reported_value"] = d.get("primary_reported_value")
+            d_copy["resolution_or_reconciliation_note"] = d.get("resolution")
+            d_copy["discrepancy_type"] = "AUDITED_STATEMENT_RECONCILIATION"
+            d_copy["status"] = "RESOLVED"
+            discrepancy_ledger.append(d_copy)
+
+    # 4. Map sources and verify dynamic document identity
+    src_dict = {}
     for s in sources:
         t = s["ticker"]
         fy = s["fiscal_year"]
-        comp_meta = COMPANY_MAP.get(t, {})
-        is_us = (comp_meta.get("country") == "US" or s.get("reference_type") == "SEC_ACCESSION")
+        c_meta = comp_map.get(t, {})
+        is_us = (c_meta.get("country") == "US" or s.get("reference_type") == "SEC_ACCESSION")
 
-        is_identity_verified, identity_reason = derive_document_identity_verified(s, comp_meta)
+        is_identity_verified, identity_reason = derive_document_identity_verified(s, c_meta)
         official_id = s.get("official_filing_id") or (s.get("accession_id") if is_us else None)
         internal_key = None if is_us else (s.get("internal_document_key") or s.get("accession_id"))
         ref_type = "SEC_ACCESSION" if is_us else "INTERNAL_DOCUMENT_KEY"
 
-        # In offline rebuild mode, records are verified offline against tracked primary extracts
-        chk_status = "OFFLINE_SOURCE_RECORDED"
-        mode = "OFFLINE"
-        tier = "INDEPENDENTLY_RECONCILED"
-
-        s["source_check_status"] = chk_status
         s["document_identity_verified"] = is_identity_verified
+        s["document_identity_reason"] = identity_reason
         s["verification_status"] = "VERIFIED" if is_identity_verified else "UNVERIFIED"
         s["last_checked_date"] = CHECK_DATE
-        s["reconciliation_tier"] = tier
         s["reference_type"] = ref_type
         s["official_filing_id"] = official_id
         s["internal_document_key"] = internal_key
+        src_dict[(t, fy)] = s
 
-        updated_sources.append(s)
-
-        source_check_records.append({
-            "source_id": s["source_id"],
-            "ticker": t,
-            "fiscal_year": fy,
-            "fiscal_year_label": s["fiscal_year_label"],
-            "source_title": s["source_title"],
-            "source_url": s["source_url"],
-            "reference_type": ref_type,
-            "official_filing_id": official_id,
-            "internal_document_key": internal_key,
-            "statement_location": s.get("statement_location", ""),
-            "statement_basis": "CONSOLIDATED",
-            "document_identity_verified": is_identity_verified,
-            "document_identity_reason": identity_reason,
-            "check_status": chk_status,
-            "verification_mode": mode,
-            "reconciliation_tier": tier,
-            "last_checked_date": CHECK_DATE,
-            "verification_timestamp": BUILD_TIMESTAMP
-        })
-
-    src_map = {(s["ticker"], s["fiscal_year"]): s for s in updated_sources}
-
-    # 4. Build Evidence Register using EXCLUSIVELY independent source observations
+    # 5. Build Evidence Register using EXCLUSIVELY independent source observations
+    # and explicit record-level reconciliation functions
     evidence_records = []
     evidence_flat_rows = []
 
@@ -345,101 +372,51 @@ def build_evidence_pipeline():
 
     metric_keys = ["revenue", "operating_income", "net_income", "operating_cash_flow", "capital_expenditure"]
 
+    updated_sources = []
+    source_check_records = []
+
     for fact in sorted(facts, key=lambda x: (x["ticker"], x["fiscal_year"])):
         t = fact["ticker"]
         fy = fact["fiscal_year"]
-        src = src_map[(t, fy)]
-        is_us = (fact["country"] == "US")
+        src = src_dict.get((t, fy))
+        if not src:
+            raise ValueError(f"Missing source entry for {t} {fy}")
 
         period_metrics = {}
+        metric_results_for_period = []
 
         for m_key in metric_keys:
-            canonical_val = fact[m_key]
+            canonical_val = fact.get(m_key)
             obs = obs_map.get((t, fy, m_key))
             if not obs:
                 raise ValueError(f"Missing source observation for {t} {fy} {m_key}")
 
-            rep_val = obs["reported_value"]
-            rep_unit = obs["source_unit"]
-            rep_sign = obs["reported_sign"]
-            rec_method = obs["extraction_method"]
-            comp_flag = obs.get("comparability_flag", "DIRECT")
-            def_type = obs.get("definition_type")
-            stmt_name = obs["statement_name"]
-            stmt_loc = obs["statement_locator"]
-            rep_line = obs["reported_line_item"]
+            rep_val = obs.get("reported_value")
 
-            disc_note = ""
-            for d in DISCREPANCIES:
-                if d["ticker"] == t and d["fiscal_year_label"] == fact["fiscal_year_label"] and d.get("metric") == m_key:
-                    disc_note = f"Audited reconciliation ({d['discrepancy_id']}): {d['investigation_finding']}"
-                    break
-                elif d["ticker"] == t and "FY2025/FY2026" in d.get("fiscal_year_label", "") and d.get("metric") == m_key and fact["fiscal_year_label"] in ("FY2025", "FY2026"):
-                    disc_note = f"Audited reconciliation ({d['discrepancy_id']}): {d['investigation_finding']}"
-                    break
+            rec_result = reconcile_metric_observation(
+                canonical_val=canonical_val,
+                reported_val=rep_val,
+                ticker=t,
+                fiscal_year=fy,
+                fiscal_year_label=fact["fiscal_year_label"],
+                metric_key=m_key,
+                src_entry=src,
+                discrepancy_ledger=discrepancy_ledger,
+                obs_entry=obs,
+                verification_mode=verification_mode,
+                verification_timestamp=BUILD_TIMESTAMP
+            )
 
-            if rep_val is None:
-                comp_result = "NOT_RECONCILED"
-                conv_formula = "None (Independent line-item statement reconciliation pending)"
-                tier = "SOURCE_LINKED_ONLY"
-                if not disc_note:
-                    disc_note = "Metric linked to registered primary source; independent line-item statement reconciliation pending."
+            period_metrics[m_key] = rec_result
+            metric_results_for_period.append(rec_result)
+
+            tier = rec_result["reconciliation_tier"]
+            if tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value:
+                reconciled_metric_count += 1
+            elif tier == ReconciliationTier.SOURCE_LINKED_ONLY.value:
                 source_linked_metric_count += 1
-            elif not src.get("document_identity_verified", False):
-                comp_result = "IDENTITY_UNVERIFIED"
-                conv_formula = "None (Filing document identity could not be validated)"
-                tier = "UNVERIFIED"
-                disc_note = "Filing document identity check failed (malformed accession, CIK path mismatch, or invalid filing key)."
-                unverified_metric_count += 1
             else:
-                diff = abs(float(rep_val) - float(canonical_val))
-                if diff < 0.001:
-                    comp_result = "EXACT_STATEMENT_MATCH"
-                    tier = "INDEPENDENTLY_RECONCILED"
-                    reconciled_metric_count += 1
-                else:
-                    if disc_note:
-                        comp_result = "RECONCILED_WITH_DOCUMENTED_ADJUSTMENT"
-                        tier = "INDEPENDENTLY_RECONCILED"
-                        reconciled_metric_count += 1
-                    else:
-                        comp_result = "DISCREPANCY_NOTED"
-                        tier = "DISCREPANT"
-                        unverified_metric_count += 1
-
-                if rep_sign == "NEGATIVE_OUTFLOW":
-                    conv_formula = "abs(reported_outflow) (Normalized to positive magnitude cash outflow)"
-                else:
-                    conv_formula = "reported_value * 1.0 (No scale conversion required)"
-
-                if not disc_note:
-                    if is_us:
-                        disc_note = f"Reconciled to Form 10-K {stmt_name} under accession {fact.get('accession_id')}."
-                    else:
-                        disc_note = f"Reconciled to Ind AS Consolidated {stmt_name} ({fact.get('accession_id')})."
-
-            period_metrics[m_key] = {
-                "metric_key": m_key,
-                "statement_name": stmt_name,
-                "reported_line_item": rep_line,
-                "reported_value": rep_val,
-                "reported_unit": rep_unit,
-                "reported_sign": rep_sign,
-                "canonical_value": canonical_val,
-                "canonical_unit": fact["unit"],
-                "conversion_formula": conv_formula,
-                "statement_locator": stmt_loc,
-                "reconciliation_tier": tier,
-                "reconciliation_method": rec_method,
-                "comparison_result": comp_result,
-                "discrepancy_note": disc_note,
-                "evidence_check_date": CHECK_DATE,
-                "comparability": comp_flag,
-                "definition_type": def_type,
-                "attribution_basis": "ATTRIBUTABLE_TO_OWNERS" if "attributable" in rep_line.lower() else "CONSOLIDATED_TOTAL",
-                "scope_type": def_type,
-                "notes": f"Reconciled via {rec_method} against primary statement disclosure."
-            }
+                unverified_metric_count += 1
 
             evidence_flat_rows.append({
                 "ticker": t,
@@ -450,23 +427,61 @@ def build_evidence_pipeline():
                 "country": fact["country"],
                 "currency": fact["currency"],
                 "metric_key": m_key,
-                "statement_name": stmt_name,
-                "statement_locator": stmt_loc,
-                "reported_line_item": rep_line,
-                "reported_value": rep_val,
-                "canonical_value": canonical_val,
+                "statement_name": rec_result["statement_name"],
+                "statement_locator": rec_result["statement_locator"],
+                "reported_line_item": rec_result["reported_line_item"],
+                "reported_value": rec_result["reported_value"],
+                "canonical_value": rec_result["canonical_value"],
                 "unit": fact["unit"],
-                "reconciliation_tier": tier,
-                "reconciliation_method": rec_method,
-                "comparison_result": comp_result,
-                "comparability_flag": comp_flag,
-                "discrepancy_note": disc_note,
+                "reconciliation_tier": rec_result["reconciliation_tier"],
+                "reconciliation_method": rec_result["reconciliation_method"],
+                "comparison_result": rec_result["comparison_result"],
+                "comparability_flag": rec_result["comparability"],
+                "discrepancy_note": rec_result["discrepancy_note"],
                 "source_title": src["source_title"],
                 "accession_or_key": src.get("accession_id") or src.get("official_filing_id"),
                 "source_url": src["source_url"],
                 "evidence_check_date": CHECK_DATE,
-                "observation_id": obs.get("observation_id")
+                "observation_id": obs.get("observation_id"),
+                "document_identity_status": rec_result["document_identity_status"],
+                "document_retrieval_status": rec_result["document_retrieval_status"],
+                "period_match_status": rec_result["period_match_status"],
+                "metric_extraction_status": rec_result["metric_extraction_status"],
+                "numeric_reconciliation_status": rec_result["numeric_reconciliation_status"],
+                "verification_mode": rec_result["verification_mode"],
+                "verification_timestamp": rec_result["verification_timestamp"],
+                "approved_discrepancy_id": rec_result["approved_discrepancy_id"]
             })
+
+        # Derive source-level tier strictly from underlying metric outcomes
+        source_tier = derive_source_reconciliation_status(src, metric_results_for_period)
+        chk_status = "ONLINE_VERIFIED" if verification_mode == "ONLINE" else "OFFLINE_SOURCE_RECORDED"
+
+        src["reconciliation_tier"] = source_tier
+        src["source_check_status"] = chk_status
+
+        updated_sources.append(src)
+
+        source_check_records.append({
+            "source_id": src["source_id"],
+            "ticker": t,
+            "fiscal_year": fy,
+            "fiscal_year_label": src["fiscal_year_label"],
+            "source_title": src["source_title"],
+            "source_url": src["source_url"],
+            "reference_type": src["reference_type"],
+            "official_filing_id": src.get("official_filing_id"),
+            "internal_document_key": src.get("internal_document_key"),
+            "statement_location": src.get("statement_location", ""),
+            "statement_basis": "CONSOLIDATED",
+            "document_identity_verified": src["document_identity_verified"],
+            "document_identity_reason": src.get("document_identity_reason", ""),
+            "check_status": chk_status,
+            "verification_mode": verification_mode,
+            "reconciliation_tier": source_tier,
+            "last_checked_date": CHECK_DATE,
+            "verification_timestamp": BUILD_TIMESTAMP
+        })
 
         # Decouple FCF validation and confidence
         ocf_canon = fact["operating_cash_flow"]
@@ -476,7 +491,7 @@ def build_evidence_pipeline():
         ocf_tier = period_metrics["operating_cash_flow"]["reconciliation_tier"]
         capex_tier = period_metrics["capital_expenditure"]["reconciliation_tier"]
 
-        if ocf_tier == "INDEPENDENTLY_RECONCILED" and capex_tier == "INDEPENDENTLY_RECONCILED":
+        if ocf_tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value and capex_tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value:
             fcf_input_confidence = "INDEPENDENTLY_RECONCILED_INPUTS"
             fcf_confidence_desc = "Both OCF and Capex inputs are independently reconciled to primary financial statements."
         else:
@@ -500,7 +515,7 @@ def build_evidence_pipeline():
             "internal_document_key": src.get("internal_document_key"),
             "document_identity_verified": src["document_identity_verified"],
             "source_check_status": src["source_check_status"],
-            "reconciliation_tier": src["reconciliation_tier"],
+            "reconciliation_tier": source_tier,
             "metrics": period_metrics,
             "free_cash_flow_derived": {
                 "canonical_fcf_value": fcf_canon,
@@ -512,27 +527,22 @@ def build_evidence_pipeline():
         }
         evidence_records.append(period_record)
 
-    # 5. Persist all updated artefacts
-    print(f"Saving updated sources to {SOURCES_FILE}...")
-    with open(SOURCES_FILE, "w", encoding="utf-8") as f:
+    # 6. Persist all updated artefacts
+    target_out_dir.mkdir(parents=True, exist_ok=True)
+
+    sources_out = target_out_dir / "source_register.json"
+    print(f"Saving updated sources to {sources_out}...")
+    with open(sources_out, "w", encoding="utf-8") as f:
         json.dump(updated_sources, f, indent=2)
 
-    enriched_discrepancies = []
-    for d in DISCREPANCIES:
-        d_copy = dict(d)
-        d_copy["canonical_value"] = d.get("initial_dataset_value")
-        d_copy["reported_value"] = d.get("primary_reported_value")
-        d_copy["resolution_or_reconciliation_note"] = d.get("resolution")
-        d_copy["discrepancy_type"] = "AUDITED_STATEMENT_RECONCILIATION"
-        d_copy["status"] = "RESOLVED"
-        enriched_discrepancies.append(d_copy)
+    discrepancy_out = target_out_dir / "discrepancy_ledger.json"
+    print(f"Saving discrepancy ledger to {discrepancy_out} ({len(discrepancy_ledger)} entries)...")
+    with open(discrepancy_out, "w", encoding="utf-8") as f:
+        json.dump(discrepancy_ledger, f, indent=2)
 
-    print(f"Saving discrepancy ledger to {DISCREPANCY_JSON} ({len(enriched_discrepancies)} entries)...")
-    with open(DISCREPANCY_JSON, "w", encoding="utf-8") as f:
-        json.dump(enriched_discrepancies, f, indent=2)
-
-    print(f"Saving source check report to {SOURCE_CHECK_REPORT}...")
-    with open(SOURCE_CHECK_REPORT, "w", encoding="utf-8") as f:
+    source_check_out = target_out_dir / "source_check_report.json"
+    print(f"Saving source check report to {source_check_out}...")
+    with open(source_check_out, "w", encoding="utf-8") as f:
         json.dump({
             "report_date": CHECK_DATE,
             "report_timestamp": BUILD_TIMESTAMP,
@@ -540,27 +550,32 @@ def build_evidence_pipeline():
             "sources": source_check_records
         }, f, indent=2)
 
-    print(f"Saving evidence register to {EVIDENCE_JSON} ({len(evidence_records)} period records)...")
-    with open(EVIDENCE_JSON, "w", encoding="utf-8") as f:
+    evidence_json_out = target_out_dir / "evidence_register.json"
+    print(f"Saving evidence register to {evidence_json_out} ({len(evidence_records)} period records)...")
+    with open(evidence_json_out, "w", encoding="utf-8") as f:
         json.dump(evidence_records, f, indent=2)
 
-    print(f"Saving flat evidence register to {EVIDENCE_CSV} ({len(evidence_flat_rows)} metric rows)...")
+    evidence_csv_out = target_out_dir / "evidence_register.csv"
+    print(f"Saving flat evidence register to {evidence_csv_out} ({len(evidence_flat_rows)} metric rows)...")
     fieldnames = [
         "ticker", "company_name", "fiscal_year", "fiscal_year_label", "period_end",
         "country", "currency", "metric_key", "statement_name", "statement_locator",
         "reported_line_item", "reported_value", "canonical_value", "unit",
         "reconciliation_tier", "reconciliation_method", "comparison_result",
         "comparability_flag", "discrepancy_note", "source_title", "accession_or_key",
-        "source_url", "evidence_check_date", "observation_id"
+        "source_url", "evidence_check_date", "observation_id",
+        "document_identity_status", "document_retrieval_status", "period_match_status",
+        "metric_extraction_status", "numeric_reconciliation_status", "verification_mode",
+        "verification_timestamp", "approved_discrepancy_id"
     ]
-    with open(EVIDENCE_CSV, "w", newline="", encoding="utf-8") as f:
+    with open(evidence_csv_out, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(evidence_flat_rows)
 
-    # 6. Update dataset metadata (unified authoritative schema, zero stale fields)
+    # 7. Update dataset metadata (authoritative dynamic derivation, zero stale constants)
     peer_groups_map = {}
-    for c in COMPANIES_RAW:
+    for c in comp_raw:
         gid = c.get("peer_group_id")
         gname = c.get("peer_group_name")
         if gid and gid not in peer_groups_map:
@@ -583,8 +598,8 @@ def build_evidence_pipeline():
         "dataset_snapshot_date": CHECK_DATE,
         "build_timestamp": BUILD_TIMESTAMP,
         "last_updated": BUILD_TIMESTAMP,
-        "universe_size": 15,
-        "total_companies": 15,
+        "universe_size": len(comp_raw),
+        "total_companies": len(comp_raw),
         "total_annual_periods": len(evidence_records),
         "total_company_periods": len(evidence_records),
         "total_primary_metrics": len(evidence_flat_rows),
@@ -598,23 +613,41 @@ def build_evidence_pipeline():
         "unverified_metrics": unverified_metric_count,
         "unverified_metric_observations": unverified_metric_count,
         "derived_fcf_records": len(evidence_records),
-        "discrepancies_registered": len(DISCREPANCIES),
-        "discrepancy_count": len(DISCREPANCIES),
+        "discrepancies_registered": len(discrepancy_ledger),
+        "discrepancy_count": len(discrepancy_ledger),
         "offline_reproducible": True,
         "deployment_candidate_certified": True
     }
 
-    with open(METADATA_FILE, "w", encoding="utf-8") as f:
+    metadata_out = target_out_dir / "dataset_metadata.json"
+    with open(metadata_out, "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2)
-    print(f"Updated dataset metadata at {METADATA_FILE}")
+    print(f"Updated dataset metadata at {metadata_out}")
 
     print("\nEvidence pipeline complete:")
     print(f"  Total primary metric observations: {len(evidence_flat_rows)}")
     print(f"  Independently reconciled:          {reconciled_metric_count} ({reconciled_metric_count/len(evidence_flat_rows)*100:.1f}%)")
     print(f"  Source-linked only:                {source_linked_metric_count} ({source_linked_metric_count/len(evidence_flat_rows)*100:.1f}%)")
     print(f"  Unverified / Discrepant:           {unverified_metric_count}")
-    print(f"  Discrepancies catalogued:          {len(DISCREPANCIES)}")
+    print(f"  Discrepancies catalogued:          {len(discrepancy_ledger)}")
+
+    return {
+        "evidence_records": evidence_records,
+        "evidence_flat_rows": evidence_flat_rows,
+        "updated_sources": updated_sources,
+        "source_check_records": source_check_records,
+        "metadata": metadata
+    }
 
 
 if __name__ == "__main__":
-    build_evidence_pipeline()
+    parser = argparse.ArgumentParser(description="Build Fundamentals Lens Evidence Register")
+    parser.add_argument("--offline", action="store_true", default=True, help="Run in offline mode (default)")
+    parser.add_argument("--online", action="store_true", help="Run in online verification mode")
+    parser.add_argument("--output-dir", type=str, default=None, help="Output directory")
+    args = parser.parse_args()
+
+    mode = "ONLINE" if args.online else "OFFLINE"
+    out_dir = Path(args.output_dir) if args.output_dir else None
+
+    build_evidence_pipeline(output_dir=out_dir, verification_mode=mode)

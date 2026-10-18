@@ -7,7 +7,12 @@
     "initial_dataset_value": 91400.0,
     "primary_reported_value": 91447.0,
     "investigation_finding": "Early IR presentation slides cited preliminary ~$91.4B rounded capex; official audited Form 10-K Consolidated Statements of Cash Flows reports exact cash payments for property and equipment of $91,447M under accession 0001652044-26-000018.",
-    "resolution": "Updated canonical value to 91,447.0 and aligned accession ID to 0001652044-26-000018."
+    "resolution": "Updated canonical value to 91,447.0 and aligned accession ID to 0001652044-26-000018.",
+    "canonical_value": 91400.0,
+    "reported_value": 91447.0,
+    "resolution_or_reconciliation_note": "Updated canonical value to 91,447.0 and aligned accession ID to 0001652044-26-000018.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-002",
@@ -17,7 +22,12 @@
     "initial_dataset_value": 5711.0,
     "primary_reported_value": 5707.0,
     "investigation_finding": "Preliminary earnings release table cited $5,711M; official Form 10-K Consolidated Statements of Operations reports Operating Income of $5,707M for the 53-week fiscal year ended February 3, 2024.",
-    "resolution": "Updated canonical value to 5,707.0 to match official Item 8 Form 10-K disclosure."
+    "resolution": "Updated canonical value to 5,707.0 to match official Item 8 Form 10-K disclosure.",
+    "canonical_value": 5711.0,
+    "reported_value": 5707.0,
+    "resolution_or_reconciliation_note": "Updated canonical value to 5,707.0 to match official Item 8 Form 10-K disclosure.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-003",
@@ -27,7 +37,12 @@
     "initial_dataset_value": 44870.0,
     "primary_reported_value": 44685.23,
     "investigation_finding": "Standalone revenue from operations was Rs 44,870.43 Cr; consolidated revenue from operations was Rs 44,685.23 Cr. To preserve the strict Consolidated basis mandate, the consolidated figure of 44,685.2 Cr is registered.",
-    "resolution": "Registered canonical consolidated value of 44,685.2 Cr and documented standalone vs consolidated delta in ledger."
+    "resolution": "Registered canonical consolidated value of 44,685.2 Cr and documented standalone vs consolidated delta in ledger.",
+    "canonical_value": 44870.0,
+    "reported_value": 44685.23,
+    "resolution_or_reconciliation_note": "Registered canonical consolidated value of 44,685.2 Cr and documented standalone vs consolidated delta in ledger.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-004",
@@ -37,7 +52,12 @@
     "initial_dataset_value": 28010.0,
     "primary_reported_value": 28015.0,
     "investigation_finding": "IFRS presentation cited Rs 28,010 Cr; Ind AS audited Consolidated Statement of Profit and Loss reports Operating profit of Rs 28,015 Cr.",
-    "resolution": "Reconciled to Ind AS Consolidated Statement of Profit and Loss at 28,015.0 Cr."
+    "resolution": "Reconciled to Ind AS Consolidated Statement of Profit and Loss at 28,015.0 Cr.",
+    "canonical_value": 28010.0,
+    "reported_value": 28015.0,
+    "resolution_or_reconciliation_note": "Reconciled to Ind AS Consolidated Statement of Profit and Loss at 28,015.0 Cr.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-005",
@@ -47,7 +67,12 @@
     "initial_dataset_value": 27011.0,
     "primary_reported_value": 29348.0,
     "investigation_finding": "Initial dataset recorded adjusted non-GAAP operating income; official Form 10-K Item 8 Consolidated Statements of Income reports GAAP Operating Income of $29,348M.",
-    "resolution": "Updated canonical value to 29,348.0 to conform to strict GAAP reporting standard."
+    "resolution": "Updated canonical value to 29,348.0 to conform to strict GAAP reporting standard.",
+    "canonical_value": 27011.0,
+    "reported_value": 29348.0,
+    "resolution_or_reconciliation_note": "Updated canonical value to 29,348.0 to conform to strict GAAP reporting standard.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-006",
@@ -57,7 +82,12 @@
     "initial_dataset_value": 713158.0,
     "primary_reported_value": 713163.0,
     "investigation_finding": "Preliminary segment disclosure reported $713,158M; official Form 10-K Consolidated Statements of Income reports Total Revenues of $713,163M (Net sales $706,413M + Membership and other income $6,750M).",
-    "resolution": "Updated canonical value to 713,163.0 to match official 10-K statement."
+    "resolution": "Updated canonical value to 713,163.0 to match official 10-K statement.",
+    "canonical_value": 713158.0,
+    "reported_value": 713163.0,
+    "resolution_or_reconciliation_note": "Updated canonical value to 713,163.0 to match official 10-K statement.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-007",
@@ -67,7 +97,12 @@
     "initial_dataset_value": 66755.0,
     "primary_reported_value": 66755.0,
     "investigation_finding": "The dataset stores Rs 66,755 Cr, which reflects Operating profit before exceptional items and other income (PBEI). In the 5-Year Performance Trend of the Integrated Annual Report, EBIT is cited as Rs 66,838 Cr (including other operating items).",
-    "resolution": "Documented canonical line item as Operating Profit before Other Income/Exceptional Items (PBEI Proxy) at 66,755.0 Cr with PROXY comparability flag and noted EBIT delta of Rs 83 Cr in ledger."
+    "resolution": "Documented canonical line item as Operating Profit before Other Income/Exceptional Items (PBEI Proxy) at 66,755.0 Cr with PROXY comparability flag and noted EBIT delta of Rs 83 Cr in ledger.",
+    "canonical_value": 66755.0,
+    "reported_value": 66755.0,
+    "resolution_or_reconciliation_note": "Documented canonical line item as Operating Profit before Other Income/Exceptional Items (PBEI Proxy) at 66,755.0 Cr with PROXY comparability flag and noted EBIT delta of Rs 83 Cr in ledger.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-008",
@@ -77,7 +112,12 @@
     "initial_dataset_value": 12019.0,
     "primary_reported_value": 12019.0,
     "investigation_finding": "The stored value of Rs 12,019 Cr represents EBITDA (Operating Profit before Depreciation & Amortisation) as highlighted in Bajaj Auto's Annual Report. Standalone depreciation is Rs 448.2 Cr, giving operating profit (EBIT) of ~Rs 11,570.8 Cr.",
-    "resolution": "Documented canonical line item as EBITDA (Operating Profit Proxy) at 12,019.0 Cr with PROXY comparability flag, noting EBIT of ~Rs 11,570.8 Cr in ledger."
+    "resolution": "Documented canonical line item as EBITDA (Operating Profit Proxy) at 12,019.0 Cr with PROXY comparability flag, noting EBIT of ~Rs 11,570.8 Cr in ledger.",
+    "canonical_value": 12019.0,
+    "reported_value": 12019.0,
+    "resolution_or_reconciliation_note": "Documented canonical line item as EBITDA (Operating Profit Proxy) at 12,019.0 Cr with PROXY comparability flag, noting EBIT of ~Rs 11,570.8 Cr in ledger.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-009",
@@ -87,7 +127,12 @@
     "initial_dataset_value": 29440.0,
     "primary_reported_value": 29440.0,
     "investigation_finding": "In Infosys Consolidated Financial Results for FY26, total profit for the period is Rs 29,474 Cr. Net profit attributable to owners of the Company (after non-controlling interests of Rs 34 Cr) is Rs 29,440 Cr.",
-    "resolution": "Documented attribution basis as ATTRIBUTABLE_TO_OWNERS at 29,440.0 Cr, confirming canonical figure aligns with common equity shareholder net income."
+    "resolution": "Documented attribution basis as ATTRIBUTABLE_TO_OWNERS at 29,440.0 Cr, confirming canonical figure aligns with common equity shareholder net income.",
+    "canonical_value": 29440.0,
+    "reported_value": 29440.0,
+    "resolution_or_reconciliation_note": "Documented attribution basis as ATTRIBUTABLE_TO_OWNERS at 29,440.0 Cr, confirming canonical figure aligns with common equity shareholder net income.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-010",
@@ -97,7 +142,12 @@
     "initial_dataset_value": 7795.0,
     "primary_reported_value": 7793.0,
     "investigation_finding": "Initial dataset had $7,795.0M operating income and $5,841.0M net income; official Form 10-K Item 8 Consolidated Statements of Operations reports Operating Income of $7,793.0M and Net Income of $5,844.0M under accession 0000909832-22-000021.",
-    "resolution": "Updated canonical operating income to 7,793.0M and net income to 5,844.0M to conform to audited Form 10-K statement."
+    "resolution": "Updated canonical operating income to 7,793.0M and net income to 5,844.0M to conform to audited Form 10-K statement.",
+    "canonical_value": 7795.0,
+    "reported_value": 7793.0,
+    "resolution_or_reconciliation_note": "Updated canonical operating income to 7,793.0M and net income to 5,844.0M to conform to audited Form 10-K statement.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-011",
@@ -107,7 +157,12 @@
     "initial_dataset_value": 0.0,
     "primary_reported_value": 0.0,
     "investigation_finding": "Previous dataset recorded accession 0000909832-24-000084 for Form 10-K filed October 9, 2024; official SEC EDGAR submissions API confirms accession is 0000909832-24-000049.",
-    "resolution": "Updated accession_id to 0000909832-24-000049 and aligned source_url accordingly."
+    "resolution": "Updated accession_id to 0000909832-24-000049 and aligned source_url accordingly.",
+    "canonical_value": 0.0,
+    "reported_value": 0.0,
+    "resolution_or_reconciliation_note": "Updated accession_id to 0000909832-24-000049 and aligned source_url accordingly.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-012",
@@ -117,7 +172,12 @@
     "initial_dataset_value": 14100.0,
     "primary_reported_value": 13335.0,
     "investigation_finding": "Preliminary estimate recorded $14,100M OCF and $5,200M capex; official Form 10-K Item 8 Consolidated Statements of Cash Flows reports Cash Provided by Operating Activities of $13,335M and Property Additions (Capex) of $5,498M.",
-    "resolution": "Updated canonical OCF to 13,335.0M, capex to 5,498.0M, and recomputed FCF as $7,837.0M."
+    "resolution": "Updated canonical OCF to 13,335.0M, capex to 5,498.0M, and recomputed FCF as $7,837.0M.",
+    "canonical_value": 14100.0,
+    "reported_value": 13335.0,
+    "resolution_or_reconciliation_note": "Updated canonical OCF to 13,335.0M, capex to 5,498.0M, and recomputed FCF as $7,837.0M.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-013",
@@ -127,7 +187,12 @@
     "initial_dataset_value": 11700.0,
     "primary_reported_value": 11685.0,
     "investigation_finding": "Initial dataset had $11,700M rounded operating income; official Form 10-K Item 8 Consolidated Statements of Operations reports Operating Income of $11,685.0M under accession 0000909832-26-000093.",
-    "resolution": "Updated canonical operating income to 11,685.0M to match official 10-K statement."
+    "resolution": "Updated canonical operating income to 11,685.0M to match official 10-K statement.",
+    "canonical_value": 11700.0,
+    "reported_value": 11685.0,
+    "resolution_or_reconciliation_note": "Updated canonical operating income to 11,685.0M to match official 10-K statement.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-014",
@@ -137,7 +202,12 @@
     "initial_dataset_value": 281654.0,
     "primary_reported_value": 281724.0,
     "investigation_finding": "Subsequent segment reclassifications in Microsoft Form 10-K (accession 0000950170-25-100235) report Revenue of $281,724M and Operating Income of $128,528M.",
-    "resolution": "Updated canonical revenue to 281,724.0M and operating income to 128,528.0M to align with audited Form 10-K."
+    "resolution": "Updated canonical revenue to 281,724.0M and operating income to 128,528.0M to align with audited Form 10-K.",
+    "canonical_value": 281654.0,
+    "reported_value": 281724.0,
+    "resolution_or_reconciliation_note": "Updated canonical revenue to 281,724.0M and operating income to 128,528.0M to align with audited Form 10-K.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   },
   {
     "discrepancy_id": "DISC-015",
@@ -147,6 +217,26 @@
     "initial_dataset_value": 133768.0,
     "primary_reported_value": 133749.0,
     "investigation_finding": "Initial dataset had $133,768M net income and $182,933M OCF; official Form 10-K Item 8 reports Net Income of $133,749M and Cash from Operations of $182,935M under accession 0001193125-26-323660.",
-    "resolution": "Updated canonical net income to 133,749.0M, OCF to 182,935.0M, and recomputed FCF as $66,987.0M."
+    "resolution": "Updated canonical net income to 133,749.0M, OCF to 182,935.0M, and recomputed FCF as $66,987.0M.",
+    "canonical_value": 133768.0,
+    "reported_value": 133749.0,
+    "resolution_or_reconciliation_note": "Updated canonical net income to 133,749.0M, OCF to 182,935.0M, and recomputed FCF as $66,987.0M.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
+  },
+  {
+    "discrepancy_id": "DISC-016",
+    "ticker": "WMT",
+    "fiscal_year_label": "FY2025/FY2026",
+    "metric": "net_income",
+    "initial_dataset_value": 19549.0,
+    "primary_reported_value": 19436.0,
+    "investigation_finding": "Previous dataset recorded preliminary non-GAAP / press release net income of $19,549M for FY2025 and $22,279M for FY2026. Official audited Form 10-K Item 8 Consolidated Statements of Income reports GAAP Consolidated net income attributable to Walmart of $19,436M for FY2025 (accession 0000104169-25-000021) and $21,893M for FY2026 (accession 0000104169-26-000055) under concept us-gaap:NetIncomeLoss.",
+    "resolution": "Updated canonical net income to 19,436.0M for FY2025 and 21,893.0M for FY2026, aligning with official audited GAAP Form 10-K statements.",
+    "canonical_value": 19549.0,
+    "reported_value": 19436.0,
+    "resolution_or_reconciliation_note": "Updated canonical net income to 19,436.0M for FY2025 and 21,893.0M for FY2026, aligning with official audited GAAP Form 10-K statements.",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "status": "RESOLVED"
   }
 ]

@@ -952,11 +952,22 @@ class FundamentalsValidator:
                 comp_res = m_ev.get("comparison_result")
 
                 if norm_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
-                    loc = m_ev.get("statement_locator") or ""
+                    loc = (m_ev.get("statement_locator") or "").strip()
                     line_item = m_ev.get("reported_line_item") or ""
                     stmt_name = m_ev.get("statement_name") or ""
-                    if len(loc.strip()) < 5:
-                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Missing or inadequate statement locator for reconciled tier")
+                    generic_locators = {
+                        "consolidated financial statements",
+                        "financial statements",
+                        "item 8",
+                        "item 8 - consolidated financial statements",
+                        "item 8 - financial statements",
+                        "annual report",
+                        "annual reports",
+                        "statements",
+                        "consolidated statements"
+                    }
+                    if len(loc) < 10 or loc.lower() in generic_locators:
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Generic, bare or inadequate statement locator '{loc}' for reconciled tier")
                     if len(line_item.strip()) < 3:
                         tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Missing reported line item for reconciled tier")
                     if len(stmt_name.strip()) < 3:
@@ -1091,6 +1102,32 @@ class FundamentalsValidator:
                         if doc_status not in ("ONLINE_VERIFIED", "OFFLINE_AUDITED"):
                             source_obs_errors.append(
                                 f"{f.ticker} {f.fiscal_year_label} {m}: Invalid source_document_status '{doc_status}'"
+                            )
+
+                        # Metric definition semantic type check
+                        m_name = obs.get("metric_name")
+                        def_type = obs.get("definition_type")
+                        if m_name == "revenue" and def_type and ("PPE" in def_type or "CAPEX" in def_type or "CWIP" in def_type):
+                            source_obs_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Revenue observation has invalid capex definition '{def_type}'")
+                        if m_name == "capital_expenditure" and def_type and ("REVENUE" in def_type or "OPERATING_INCOME" in def_type):
+                            source_obs_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Capex observation has invalid revenue/operating income definition '{def_type}'")
+
+                        # Statement locator specificity check
+                        obs_loc = (obs.get("statement_locator") or "").strip()
+                        generic_locators = {
+                            "consolidated financial statements",
+                            "financial statements",
+                            "item 8",
+                            "item 8 - consolidated financial statements",
+                            "item 8 - financial statements",
+                            "annual report",
+                            "annual reports",
+                            "statements",
+                            "consolidated statements"
+                        }
+                        if len(obs_loc) < 10 or obs_loc.lower() in generic_locators:
+                            source_obs_errors.append(
+                                f"{f.ticker} {f.fiscal_year_label} {m}: Generic or bare observation statement locator '{obs_loc}' cannot qualify for INDEPENDENTLY_RECONCILED"
                             )
 
             if source_obs_errors:

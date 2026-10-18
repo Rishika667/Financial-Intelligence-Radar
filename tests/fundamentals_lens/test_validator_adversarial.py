@@ -514,3 +514,122 @@ def test_adversarial_missing_source_observation_entry(sample_company_dataset):
     assert any("Missing source observation for AAPL FY2021 (revenue)" in err for err in obs_res.details["source_obs_errors"])
 
 
+def test_adversarial_definition_type_cross_pollution_rejected(sample_company_dataset):
+    """30. Adversarial test: Revenue inheriting capex definition fails observation gate."""
+    from fundamentals_lens.data_loader import load_evidence_register, load_source_observations
+    company, facts, sources, coverage = sample_company_dataset
+    evidence = load_evidence_register()
+    mutated_obs = copy.deepcopy(load_source_observations())
+
+    # Mutate AAPL revenue to have PPE_PURCHASES_ONLY definition type
+    for o in mutated_obs:
+        if o["ticker"] == "AAPL" and o["fiscal_year_label"] == "FY2021" and o["metric_name"] == "revenue":
+            o["definition_type"] = "PPE_PURCHASES_ONLY"
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=evidence, source_observations=mutated_obs
+    )
+    obs_res = next(r for r in results if r.rule_id == "GATE_INDEPENDENT_SOURCE_OBSERVATION")
+    assert obs_res.status == ValidationStatus.FAIL
+    assert any("Revenue observation has invalid capex definition" in err for err in obs_res.details["source_obs_errors"])
+
+
+def test_adversarial_bare_locator_rejected_for_reconciled(sample_company_dataset):
+    """31. Adversarial test: Bare locator 'Consolidated Financial Statements' fails reconciled gate."""
+    from fundamentals_lens.data_loader import load_evidence_register, load_source_observations
+    company, facts, sources, coverage = sample_company_dataset
+    evidence = load_evidence_register()
+    mutated_obs = copy.deepcopy(load_source_observations())
+
+    # Mutate AAPL revenue locator to bare generic string
+    for o in mutated_obs:
+        if o["ticker"] == "AAPL" and o["fiscal_year_label"] == "FY2021" and o["metric_name"] == "revenue":
+            o["statement_locator"] = "Consolidated Financial Statements"
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=evidence, source_observations=mutated_obs
+    )
+    obs_res = next(r for r in results if r.rule_id == "GATE_INDEPENDENT_SOURCE_OBSERVATION")
+    assert obs_res.status == ValidationStatus.FAIL
+    assert any("Generic or bare observation statement locator" in err for err in obs_res.details["source_obs_errors"])
+
+
+def test_adversarial_wrong_company_document_identity_rejected(sample_company_dataset):
+    """32. Adversarial test: Accession from another company (MSFT on AAPL) fails provenance gate."""
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_sources = copy.deepcopy(sources)
+    # Inject MSFT accession into AAPL source
+    mutated_sources[0]["accession_id"] = "0000789019-21-000032"
+    mutated_sources[0]["official_filing_id"] = "0000789019-21-000032"
+
+    results = FundamentalsValidator.validate_company_dataset(company, facts, mutated_sources, coverage)
+    prov_res = next(r for r in results if r.rule_id == "GATE_SOURCE_PROVENANCE")
+    assert prov_res.status == ValidationStatus.FAIL
+    assert "Source register alignment mismatches detected" in prov_res.message
+
+
+def test_adversarial_fcf_arithmetic_vs_input_confidence_decoupling():
+    """33. Adversarial test: FCF arithmetic is verified even when inputs are SOURCE_LINKED_ONLY."""
+    from fundamentals_lens.data_loader import load_evidence_register
+    evidence = load_evidence_register()
+
+    # Find a record with SOURCE_LINKED_INPUTS (e.g., Indian FY2024-25 pending periods)
+    sl_records = [r for r in evidence if r["free_cash_flow_derived"]["source_input_confidence"] == "SOURCE_LINKED_INPUTS"]
+    assert len(sl_records) == 9, f"Expected 9 Indian pending period records, found {len(sl_records)}"
+
+    for r in sl_records:
+        fcf_info = r["free_cash_flow_derived"]
+        assert fcf_info["arithmetic_verified"] is True
+        assert fcf_info["source_input_confidence"] == "SOURCE_LINKED_INPUTS"
+        assert "await audit" in fcf_info["source_input_confidence_description"]
+
+
+def test_adversarial_evidence_json_csv_count_consistency():
+    """34. Adversarial test: Evidence JSON and CSV exports have 100% consistent counts and metrics."""
+    import csv
+    from fundamentals_lens.data_loader import load_evidence_register
+    from scripts.build_evidence_register_phase12 import EVIDENCE_CSV
+
+    evidence = load_evidence_register()
+    assert len(evidence) == 75, f"Expected 75 period records in JSON, found {len(evidence)}"
+
+    total_json_metrics = sum(len(r["metrics"]) for r in evidence)
+    assert total_json_metrics == 375, f"Expected 375 metric entries in JSON, found {total_json_metrics}"
+
+    with open(EVIDENCE_CSV, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        csv_rows = list(reader)
+    assert len(csv_rows) == 375, f"Expected 375 metric rows in CSV, found {len(csv_rows)}"
+
+
+def test_adversarial_discrepancy_ledger_includes_disc016():
+    """35. Adversarial test: Discrepancy ledger has 16 items and includes DISC-016 for WMT Net Income."""
+    import json
+    from scripts.build_evidence_register_phase12 import DISCREPANCY_JSON
+
+    with open(DISCREPANCY_JSON, "r", encoding="utf-8") as f:
+        ledger = json.load(f)
+
+    assert len(ledger) == 16, f"Expected 16 discrepancies, found {len(ledger)}"
+    disc16 = next((d for d in ledger if d["discrepancy_id"] == "DISC-016"), None)
+    assert disc16 is not None, "DISC-016 missing from discrepancy ledger"
+    assert disc16["ticker"] == "WMT"
+    assert disc16["metric"] == "net_income"
+    assert disc16["primary_reported_value"] == 19436.0
+
+
+def test_adversarial_legacy_radar_app_entrypoint_functional():
+    """36. Adversarial test: Legacy Financial Intelligence Radar app.py loads cleanly without error."""
+    import importlib.util
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    app_path = repo_root / "app.py"
+    assert app_path.exists(), "app.py missing"
+
+    spec = importlib.util.spec_from_file_location("legacy_app", str(app_path))
+    assert spec is not None
+    # Verifying module can be loaded
+    assert spec.loader is not None

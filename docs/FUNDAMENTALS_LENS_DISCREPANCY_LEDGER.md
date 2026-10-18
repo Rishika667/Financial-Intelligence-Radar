@@ -197,6 +197,16 @@ In accordance with the project's zero-synthetic-fabrication and primary-source-t
 - **Investigation Finding:** Initial dataset had $133,768M net income and $182,933M OCF; official Form 10-K Item 8 reports Net Income of $133,749M and Cash from Operations of $182,935M under accession 0001193125-26-323660.
 - **Resolution:** Updated canonical net income to $133,749.0M, OCF to $182,935.0M, and recomputed FCF as $66,987.0M ($182,935M − $115,948M).
 
+### 16. DISC-016: Walmart Inc. (WMT) — FY2025 & FY2026 GAAP Net Income Reconciliation
+- **Metric:** `net_income`
+- **Fiscal Period:** `FY2025` & `FY2026` (Years Ended January 31, 2025 and January 31, 2026)
+- **Initial Dataset Value:** `$19,549.0M` (FY2025), `$22,279.0M` (FY2026)
+- **Audited Primary Value:** `$19,436.0M` (FY2025), `$21,893.0M` (FY2026)
+- **Filing Reference:** SEC Form 10-K Accessions `0000104169-25-000021` (FY2025) and `0000104169-26-000055` (FY2026)
+- **Statement Location:** Item 8 — Consolidated Statements of Income, Line: *"Consolidated net income attributable to Walmart"*, Concept: `us-gaap:NetIncomeLoss`
+- **Investigation Finding:** Previous dataset recorded preliminary non-GAAP / press release net income of $19,549M for FY2025 and $22,279M for FY2026. Official audited Form 10-K Item 8 Consolidated Statements of Income reports GAAP Consolidated net income attributable to Walmart of $19,436M for FY2025 and $21,893M for FY2026 under concept us-gaap:NetIncomeLoss.
+- **Resolution:** Updated canonical net income to $19,436.0M for FY2025 and $21,893.0M for FY2026, eliminating silent hardcoded script overrides and strictly adhering to audited Form 10-K GAAP reporting.
+
 ---
 
 ## Reconciliation Summary Table
@@ -218,6 +228,7 @@ In accordance with the project's zero-synthetic-fabrication and primary-source-t
 | **DISC-013** | COST | FY2026 | Operating Income | $11,700.0M | $11,685.0M | -$15.0M | SEC 10-K `0000909832-26-000093` |
 | **DISC-014** | MSFT | FY2025 | Revenue & Op Inc | $281,654M / $128,450M | $281,724.0M / $128,528M | +$70.0M / +$78.0M | SEC 10-K `0000950170-25-100235` |
 | **DISC-015** | MSFT | FY2026 | Net Income & OCF | $133,768M / $182,933M | $133,749.0M / $182,935M | -$19.0M / +$2.0M | SEC 10-K `0001193125-26-323660` |
+| **DISC-016** | WMT | FY2025/26 | GAAP Net Income | $19,549M / $22,279M | $19,436.0M / $21,893M | -$113M / -$386M | SEC 10-K `0000104169-25-000021` / `...-26-000055` |
 
 ---
 

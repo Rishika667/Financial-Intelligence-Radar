@@ -24,6 +24,10 @@ jobs:
           python -m compileall -q src app.py fundamentals_lens_app.py
       - name: Install test dependencies
         run: python -m pip install -e '.[dev]'
+      - name: Verify Clean-Clone Offline Pipeline Reproducibility
+        run: |
+          python scripts/build_source_observations_phase12.py --offline
+          python scripts/build_evidence_register_phase12.py
       - name: Run Fundamentals Lens Data Integrity Validation
         run: python scripts/validate_fundamentals_data.py
       - name: Run full test suite

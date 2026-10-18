@@ -68,5 +68,14 @@
   "source_linked_only_metrics": 45,
   "unverified_metrics": 0,
   "derived_fcf_records": 75,
-  "discrepancies_registered": 15
+  "discrepancies_registered": 15,
+  "version": "v1.0.0-phase12",
+  "phase": "Phase 12 \u2014 Source-Truth Repair & Clean-Clone Certification",
+  "last_updated": "2026-10-18T17:44:51Z",
+  "total_company_periods": 75,
+  "total_metric_observations": 375,
+  "reconciled_metric_observations": 330,
+  "source_linked_metric_observations": 45,
+  "discrepancy_count": 16,
+  "offline_reproducible": true
 }

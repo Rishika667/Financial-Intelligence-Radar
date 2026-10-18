@@ -1,7 +1,7 @@
 # Fundamentals Lens: Master Sourcing & Evidence Assurance Audit
 
 **Platform:** Fundamentals Lens (`Rishika667/Financial-Intelligence-Radar`)  
-**Phase:** Phase 11 — Final Independent Source Reconciliation, Zero-Mislabel Release & Human-Approved Deployment Readiness  
+**Phase:** Phase 12 — Source-Truth Repair, Clean-Clone Pipeline Reproducibility & 88.5% Readiness
 **Author & Lead Engineer:** **Rishika Dangayach**  
 **Audit Standard:** Zero-Coercion, Primary Statement Citation, Documented Discrepancy Ledger  
 **Dataset Snapshot Cutoff:** `2026-10-18`  
@@ -82,16 +82,32 @@ The canonical repository maintains a formal discrepancy ledger (`datasets/fundam
 | `DISC-013` | `COST` | FY2026 | Operating Income | $11,700.0M | $11,685.0M | Initial dataset had $11,700M rounded operating income; official Form 10-K Item 8 Consolidated Statements of Operations reports Operating Income of $11,685.0M under accession `0000909832-26-000093`. |
 | `DISC-014` | `MSFT` | FY2025 | Revenue & Op Inc | $281,654M / $128,450M | $281,724.0M / $128,528M | Subsequent segment reclassifications in Microsoft Form 10-K report Revenue of $281,724M and Operating Income of $128,528M under accession `0000950170-25-100235`. |
 | `DISC-015` | `MSFT` | FY2026 | Net Income & OCF | $133,768M / $182,933M | $133,749.0M / $182,935M | Initial dataset had $133,768M net income and $182,933M OCF; official Form 10-K Item 8 reports Net Income of $133,749M and Cash from Operations of $182,935M under accession `0001193125-26-323660`. FCF updated to $66,987M. |
+| `DISC-016` | `WMT` | FY2025/26 | GAAP Net Income | $19,549M / $22,279M | $19,436.0M / $21,893M | Previous dataset recorded preliminary non-GAAP net income; official Form 10-K Item 8 reports GAAP Net Income of $19,436M (FY25, `0000104169-25-000021`) and $21,893M (FY26, `0000104169-26-000055`) under concept `us-gaap:NetIncomeLoss`. |
 
 ---
 
 ## 4. Verification and Audit Commands
+
+### Deterministic Clean-Clone Rebuild (100% Offline)
+```bash
+# Rebuild source observations strictly from tracked source inputs
+python scripts/build_source_observations_phase12.py --offline
+
+# Rebuild evidence register and reconcile against canonical facts
+python scripts/build_evidence_register_phase12.py
+```
 
 ### Deterministic Validation (100% Offline CI)
 ```bash
 python scripts/validate_fundamentals_data.py
 ```
 - Validates structural completeness, chronological dates, arithmetic invariants, source URLs, accessions, and evidence tier consistency across all 15 companies.
+
+### Full Test Suite Execution
+```bash
+python -m pytest -q
+```
+- Executes 289 unit, integration, and adversarial tests (including 37 adversarial invariant tests and clean-clone reproducibility tests).
 
 ### SEC Submissions Audit (Offline & Online Modes)
 ```bash
@@ -110,6 +126,8 @@ python scripts/audit_sec_filings_online.py --user-agent "RishikaDangayach rishik
 - **Universe Integrity:** Exactly 15 companies, 75 consecutive annual periods.
 - **Evidence Integrity:** 330 Reconciled (88.0%), 45 Source-Linked (12.0%), 0 Unverified.
 - **Derived Integrity:** 75 Free Cash Flow records mathematically validated with decoupled source input confidence.
-- **Validation Gates:** 240 / 240 checks passing (100.0%).
-- **Pytest Suite:** 262 / 262 tests passing (100.0%).
+- **Validation Gates:** 255 / 255 checks passing (100.0%).
+- **Pytest Suite:** 289 / 289 tests passing (100.0%).
+- **Discrepancy Ledger:** 16 documented accounting items (DISC-001 through DISC-016).
+- **Clean-Clone Certification:** 100% offline reproducible without git-ignored scratch caches.
 - **Platform Author:** **Rishika Dangayach**

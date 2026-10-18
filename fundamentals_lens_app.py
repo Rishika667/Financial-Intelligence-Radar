@@ -1633,13 +1633,13 @@ elif selected_page == "Data Integrity & Methodology":
             disc_rows.append({
                 "ID": d.get("discrepancy_id"),
                 "Ticker": d.get("ticker"),
-                "Period": d.get("fiscal_year"),
+                "Period": d.get("fiscal_year_label") or d.get("fiscal_year"),
                 "Metric": d.get("metric"),
-                "Type": d.get("discrepancy_type"),
-                "Canonical": d.get("canonical_value"),
-                "Reported": d.get("reported_value"),
-                "Status": d.get("status"),
-                "Resolution Note": d.get("resolution_or_reconciliation_note") or d.get("description", "")
+                "Type": d.get("discrepancy_type") or "AUDITED_STATEMENT_RECONCILIATION",
+                "Canonical": d.get("initial_dataset_value") if "initial_dataset_value" in d else d.get("canonical_value"),
+                "Reported": d.get("primary_reported_value") if "primary_reported_value" in d else d.get("reported_value"),
+                "Status": d.get("status") or "RESOLVED",
+                "Resolution Note": d.get("resolution") or d.get("resolution_or_reconciliation_note") or d.get("investigation_finding") or d.get("description", "")
             })
         st.dataframe(pd.DataFrame(disc_rows), hide_index=True, use_container_width=True)
 

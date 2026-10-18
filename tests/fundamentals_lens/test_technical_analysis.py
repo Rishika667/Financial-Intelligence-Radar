@@ -334,3 +334,21 @@ def test_csv_template():
     df = pd.read_csv(io.StringIO(tpl), comment="#")
     assert len(df) == 5
     assert set(["Date", "Open", "High", "Low", "Close", "Volume"]).issubset(set(df.columns))
+
+
+def test_validate_ohlcv_dataframe_strict_iso_date_format():
+    # Slash-delimited dates like DD/MM/YYYY or MM/DD/YYYY should fail strict ISO format
+    bad_dates = [f"2026/01/{i:02d}" for i in range(1, 26)]
+    df = pd.DataFrame({
+        "Date": bad_dates,
+        "Open": [100.0] * 25,
+        "High": [105.0] * 25,
+        "Low": [95.0] * 25,
+        "Close": [102.0] * 25,
+        "Volume": [1000] * 25
+    })
+    is_valid, err, _, report = validate_ohlcv_dataframe(df)
+    assert is_valid is False
+    assert "strictly conform to ISO 8601 YYYY-MM-DD" in err
+    assert report.is_valid is False
+

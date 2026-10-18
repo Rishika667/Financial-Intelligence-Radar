@@ -25,6 +25,7 @@ from fundamentals_lens.data_loader import (
     load_evidence_register,
     load_discrepancy_ledger,
     load_ohlcv_manifest,
+    load_dataset_metadata,
     get_company_by_ticker,
     get_facts_for_company
 )
@@ -232,6 +233,8 @@ companies, facts_by_ticker, sources, coverage, evidence_register, discrepancy_le
 companies_map = {c.ticker: c for c in companies}
 coverage_map = {entry["ticker"]: entry for entry in coverage}
 discrepancies_count = len(discrepancy_ledger)
+dataset_meta = load_dataset_metadata()
+snapshot_date = dataset_meta.get("dataset_snapshot_date", "2026-10-18")
 
 # High-level universe statistics computed dynamically from loaded datasets
 total_comps = len(companies)
@@ -277,7 +280,7 @@ if query_page:
 selected_page = st.sidebar.radio("Navigation", pages, index=default_page_idx)
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("**Dataset Snapshot:** `2026-10-18`")
+st.sidebar.markdown(f"**Dataset Snapshot:** `{snapshot_date}`")
 st.sidebar.markdown("**Universe:** 15 Companies across 5 Peer Groups")
 st.sidebar.markdown(f"**Reconciled Metrics:** {reconciled_metrics} / {total_datapoints} ({reconciled_metrics / total_datapoints * 100:.1f}%)")
 st.sidebar.markdown(f"**Source-Linked Only:** {source_linked_metrics} metrics")
@@ -1179,12 +1182,13 @@ elif selected_page == "Price & Technical Analysis":
             active_ticker = selected_demo
             active_currency = manifest_assets.get(selected_demo, {}).get("currency", "USD")
             demo_file = ohlcv_dir / f"{selected_demo}.csv"
+            demo_basis = manifest_assets.get(selected_demo, {}).get("price_adjustment_basis", "SYNTHETIC_SIMULATION_NOT_APPLICABLE")
             if demo_file.exists():
                 raw_df = pd.read_csv(demo_file)
                 valid, err, clean_df, rep = validate_ohlcv_dataframe_with_report(
                     raw_df,
                     ticker=active_ticker,
-                    price_adjustment_basis=PriceAdjustmentBasis.SPLIT_AND_DIVIDEND_ADJUSTED
+                    price_adjustment_basis=demo_basis
                 )
                 if not valid:
                     st.error(f"Error loading demo dataset: {err}")
@@ -1198,12 +1202,13 @@ elif selected_page == "Price & Technical Analysis":
             )
             if "SIMULATED_MARKET_BENCHMARK" in bm_choice:
                 bench_ticker = "SIMULATED_MARKET_BENCHMARK"
+                bench_basis = manifest_assets.get("SIMULATED_MARKET_BENCHMARK", {}).get("price_adjustment_basis", "SYNTHETIC_SIMULATION_NOT_APPLICABLE")
                 bench_file = ohlcv_dir / "SIMULATED_MARKET_BENCHMARK.csv"
                 if bench_file.exists():
                     valid_bm, _, bench_df, _ = validate_ohlcv_dataframe_with_report(
                         pd.read_csv(bench_file),
                         ticker=bench_ticker,
-                        price_adjustment_basis=PriceAdjustmentBasis.SPLIT_AND_DIVIDEND_ADJUSTED
+                        price_adjustment_basis=bench_basis
                     )
 
     else:
@@ -1501,7 +1506,7 @@ elif selected_page == "Data Integrity & Methodology":
 
     # Coverage Report Table
     st.markdown("### **Company-Level Target Reporting Horizon & Period Coverage**")
-    st.caption(f"Dataset Snapshot Cutoff: `2026-10-18` • Universe: {total_comps} Companies across {total_periods} Completed Annual Periods • {reconciled_metrics} Primary Disclosures Independently Reconciled ({reconciled_metrics / total_datapoints * 100:.1f}%), {source_linked_metrics} Source-Linked Only, {fcf_derived_count} Derived Verified Invariants.")
+    st.caption(f"Dataset Snapshot Cutoff: `{snapshot_date}` • Universe: {total_comps} Companies across {total_periods} Completed Annual Periods • {reconciled_metrics} Primary Disclosures Independently Reconciled ({reconciled_metrics / total_datapoints * 100:.1f}%), {source_linked_metrics} Source-Linked Only, {fcf_derived_count} Derived Verified Invariants.")
     
     cov_rows = []
     for c in companies:

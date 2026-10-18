@@ -34,7 +34,8 @@
     "official_filing_id": "0000320193-21-000105",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2021-09-25"
   },
   {
     "source_id": "SRC_AAPL_10K_2022",
@@ -71,7 +72,8 @@
     "official_filing_id": "0000320193-22-000108",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-09-24"
   },
   {
     "source_id": "SRC_AAPL_10K_2023",
@@ -108,7 +110,8 @@
     "official_filing_id": "0000320193-23-000106",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-09-30"
   },
   {
     "source_id": "SRC_AAPL_10K_2024",
@@ -145,7 +148,8 @@
     "official_filing_id": "0000320193-24-000123",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-09-28"
   },
   {
     "source_id": "SRC_AAPL_10K_2025",
@@ -182,7 +186,8 @@
     "official_filing_id": "0000320193-25-000079",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-09-27"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2022",
@@ -219,7 +224,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2021-22",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-03-31"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2023",
@@ -256,7 +262,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2022-23",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-03-31"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2024",
@@ -293,7 +300,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2023-24",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-03-31"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2025",
@@ -330,7 +338,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2024-25",
     "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-03-31"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2026",
@@ -367,7 +376,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2025-26",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-03-31"
   },
   {
     "source_id": "SRC_BRIT_AR_2022",
@@ -404,7 +414,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2021-22",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-03-31"
   },
   {
     "source_id": "SRC_BRIT_AR_2023",
@@ -441,7 +452,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2022-23",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-03-31"
   },
   {
     "source_id": "SRC_BRIT_AR_2024",
@@ -478,7 +490,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2023-24",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-03-31"
   },
   {
     "source_id": "SRC_BRIT_AR_2025",
@@ -515,7 +528,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2024-25",
     "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-03-31"
   },
   {
     "source_id": "SRC_BRIT_AR_2026",
@@ -552,7 +566,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2025-26",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-03-31"
   },
   {
     "source_id": "SRC_COST_10K_2022",
@@ -779,7 +794,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2021-22",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-03-31"
   },
   {
     "source_id": "SRC_DABUR_AR_2023",
@@ -816,7 +832,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2022-23",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-03-31"
   },
   {
     "source_id": "SRC_DABUR_AR_2024",
@@ -853,7 +870,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2023-24",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-03-31"
   },
   {
     "source_id": "SRC_DABUR_AR_2025",
@@ -890,7 +908,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2024-25",
     "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-03-31"
   },
   {
     "source_id": "SRC_DABUR_AR_2026",
@@ -927,7 +946,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2025-26",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-03-31"
   },
   {
     "source_id": "SRC_GOOGL_10K_2021",
@@ -1154,7 +1174,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2021-22",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-03-31"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2023",
@@ -1191,7 +1212,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2022-23",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-03-31"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2024",
@@ -1228,7 +1250,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2023-24",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-03-31"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2025",
@@ -1265,7 +1288,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2024-25",
     "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-03-31"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2026",
@@ -1302,7 +1326,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2025-26",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-03-31"
   },
   {
     "source_id": "SRC_HERO_AR_2022",
@@ -1339,7 +1364,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2021-22",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-03-31"
   },
   {
     "source_id": "SRC_HERO_AR_2023",
@@ -1376,7 +1402,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2022-23",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-03-31"
   },
   {
     "source_id": "SRC_HERO_AR_2024",
@@ -1413,7 +1440,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2023-24",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-03-31"
   },
   {
     "source_id": "SRC_HERO_AR_2025",
@@ -1450,7 +1478,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2024-25",
     "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-03-31"
   },
   {
     "source_id": "SRC_HERO_AR_2026",
@@ -1487,7 +1516,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2025-26",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-03-31"
   },
   {
     "source_id": "SRC_HUL_AR_2022",
@@ -1524,7 +1554,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2021-22",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-03-31"
   },
   {
     "source_id": "SRC_HUL_AR_2023",
@@ -1561,7 +1592,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2022-23",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-03-31"
   },
   {
     "source_id": "SRC_HUL_AR_2024",
@@ -1598,7 +1630,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2023-24",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-03-31"
   },
   {
     "source_id": "SRC_HUL_AR_2025",
@@ -1635,7 +1668,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2024-25",
     "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-03-31"
   },
   {
     "source_id": "SRC_HUL_AR_2026",
@@ -1672,7 +1706,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2025-26",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-03-31"
   },
   {
     "source_id": "SRC_INFY_AR_2022",
@@ -1709,7 +1744,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2021-22",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-03-31"
   },
   {
     "source_id": "SRC_INFY_AR_2023",
@@ -1746,7 +1782,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2022-23",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-03-31"
   },
   {
     "source_id": "SRC_INFY_AR_2024",
@@ -1783,7 +1820,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2023-24",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-03-31"
   },
   {
     "source_id": "SRC_INFY_AR_2025",
@@ -1820,7 +1858,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2024-25",
     "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-03-31"
   },
   {
     "source_id": "SRC_INFY_AR_2026",
@@ -1857,7 +1896,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2025-26",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-03-31"
   },
   {
     "source_id": "SRC_MARUTI_AR_2022",
@@ -1894,7 +1934,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2021-22",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-03-31"
   },
   {
     "source_id": "SRC_MARUTI_AR_2023",
@@ -1931,7 +1972,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2022-23",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-03-31"
   },
   {
     "source_id": "SRC_MARUTI_AR_2024",
@@ -1968,7 +2010,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2023-24",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-03-31"
   },
   {
     "source_id": "SRC_MARUTI_AR_2025",
@@ -2005,7 +2048,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2024-25",
     "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-03-31"
   },
   {
     "source_id": "SRC_MARUTI_AR_2026",
@@ -2042,7 +2086,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2025-26",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-03-31"
   },
   {
     "source_id": "SRC_MSFT_10K_2022",
@@ -2269,7 +2314,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2021-22",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-03-31"
   },
   {
     "source_id": "SRC_TCS_AR_2023",
@@ -2306,7 +2352,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2022-23",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-03-31"
   },
   {
     "source_id": "SRC_TCS_AR_2024",
@@ -2343,7 +2390,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2023-24",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-03-31"
   },
   {
     "source_id": "SRC_TCS_AR_2025",
@@ -2380,7 +2428,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2024-25",
     "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-03-31"
   },
   {
     "source_id": "SRC_TCS_AR_2026",
@@ -2417,7 +2466,8 @@
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2025-26",
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-03-31"
   },
   {
     "ticker": "TGT",
@@ -2454,7 +2504,8 @@
     "official_filing_id": "0000027419-22-000007",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-01-29"
   },
   {
     "ticker": "TGT",
@@ -2529,7 +2580,8 @@
     "official_filing_id": "0000027419-24-000032",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-02-03"
   },
   {
     "ticker": "TGT",
@@ -2566,7 +2618,8 @@
     "official_filing_id": "0000027419-25-000018",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-02-01"
   },
   {
     "ticker": "TGT",
@@ -2603,7 +2656,8 @@
     "official_filing_id": "0000027419-26-000016",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-01-31"
   },
   {
     "source_id": "SRC_WMT_10K_2022",

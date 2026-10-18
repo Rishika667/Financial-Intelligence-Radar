@@ -128,6 +128,28 @@ def audit_sec_filings(
 
                 for f in company_facts:
                     stored_acc = f.get("accession_id")
+                    if stored_acc not in edgar_map:
+                        # Check historical submission files in filings.files
+                        for f_entry in sub_data.get("filings", {}).get("files", []):
+                            f_name = f_entry.get("name")
+                            if f_name:
+                                try:
+                                    f_resp = requests.get(f"https://data.sec.gov/submissions/{f_name}", headers=headers, timeout=12)
+                                    if f_resp.status_code == 200:
+                                        old_data = f_resp.json()
+                                        o_accs = old_data.get("accessionNumber", [])
+                                        if stored_acc in o_accs:
+                                            idx = o_accs.index(stored_acc)
+                                            edgar_map[stored_acc] = {
+                                                "form": old_data.get("form", [])[idx] if idx < len(old_data.get("form", [])) else "10-K",
+                                                "filing_date": old_data.get("filingDate", [])[idx] if idx < len(old_data.get("filingDate", [])) else None,
+                                                "primary_doc": old_data.get("primaryDocument", [])[idx] if idx < len(old_data.get("primaryDocument", [])) else None,
+                                                "report_date": old_data.get("reportDate", [])[idx] if idx < len(old_data.get("reportDate", [])) else None,
+                                            }
+                                            break
+                                except Exception:
+                                    pass
+
                     if stored_acc in edgar_map:
                         sec_info = edgar_map[stored_acc]
                         # Check form and dates
@@ -164,7 +186,7 @@ def audit_sec_filings(
                             "accession_id": stored_acc,
                             "status": "NOT_FOUND",
                             "form": "10-K",
-                            "error": "Accession not found in recent EDGAR submissions"
+                            "error": "Accession not found in recent or historical EDGAR submissions"
                         })
             elif resp.status_code in (429, 500, 502, 503, 504):
                 print(f"[{ticker}] SEC returned HTTP {resp.status_code} (Rate limit / server unavailable).")

@@ -116,10 +116,33 @@ def validate_ohlcv_dataframe_with_report(
 
     clean_df = pd.DataFrame()
 
-    # 2. Date parsing
-    clean_df["Date"] = pd.to_datetime(df[col_map["date"]], errors="coerce")
+    # 2. Strict ISO 8601 Date validation & parsing
+    raw_date_series = df[col_map["date"]]
+    import re
+    import datetime
+    iso_date_pattern = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+    non_iso_samples = []
+    for idx, val in raw_date_series.items():
+        if pd.isna(val):
+            continue
+        if isinstance(val, (pd.Timestamp, np.datetime64, datetime.date, datetime.datetime)):
+            continue
+        val_str = str(val).strip()
+        if not iso_date_pattern.match(val_str):
+            non_iso_samples.append((idx, val_str))
+
+    if non_iso_samples:
+        errors.append(
+            f"{len(non_iso_samples)} row(s) contain dates that do not strictly conform to ISO 8601 YYYY-MM-DD "
+            f"(samples: {[s[1] for s in non_iso_samples[:3]]}). Format must conform strictly to YYYY-MM-DD."
+        )
+        for idx, s_val in non_iso_samples[:3]:
+            sample_offending.append({"row_index": int(idx), "error": "Non-ISO 8601 date format", "raw_data": str(df.iloc[idx].to_dict())})
+
+    clean_df["Date"] = pd.to_datetime(raw_date_series, errors="coerce")
     bad_date_mask = clean_df["Date"].isna()
-    if bad_date_mask.any():
+    if bad_date_mask.any() and not non_iso_samples:
         bad_count = int(bad_date_mask.sum())
         sample_bad = df.loc[bad_date_mask, col_map["date"]].head(3).tolist()
         errors.append(f"{bad_count} row(s) contain unparseable dates (samples: {sample_bad}). Format must conform to YYYY-MM-DD.")

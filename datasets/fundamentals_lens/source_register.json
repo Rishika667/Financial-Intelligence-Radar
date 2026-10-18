@@ -329,7 +329,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2024-25",
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -362,7 +362,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2025-26",
@@ -514,7 +514,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2024-25",
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -547,7 +547,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2025-26",
@@ -889,7 +889,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2024-25",
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -922,7 +922,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2025-26",
@@ -1264,7 +1264,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2024-25",
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1297,7 +1297,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2025-26",
@@ -1449,7 +1449,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2024-25",
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1482,7 +1482,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2025-26",
@@ -1634,7 +1634,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2024-25",
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1667,7 +1667,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2025-26",
@@ -1819,7 +1819,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2024-25",
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1852,7 +1852,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2025-26",
@@ -2004,7 +2004,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2024-25",
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -2037,7 +2037,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2025-26",
@@ -2379,7 +2379,7 @@
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2024-25",
-    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "source_check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -2412,7 +2412,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2025-26",

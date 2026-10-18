@@ -6,10 +6,11 @@ build-backend = "setuptools.build_meta"
 name = "financial-intelligence-radar"
 version = "0.1.0"
 requires-python = ">=3.10"
-dependencies = ["requests>=2.31", "pandas>=2.0", "streamlit>=1.30", "plotly>=5.18"]
+dependencies = ["requests>=2.31", "pandas>=2.0", "numpy>=1.24", "streamlit>=1.30", "plotly>=5.18"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+qa = ["websockets>=12.0"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

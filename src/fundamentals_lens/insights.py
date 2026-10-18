@@ -218,6 +218,11 @@ class NarrativeEngine:
             what_to_investigate = "Monitor trends across subsequent quarters."
 
         limitations = "Operating income excludes financing expenses and corporate tax rates, but may include exceptional restructuring items."
+        if latest_fact.comparability_flag == "PROXY" or "Proxy" in (latest_fact.accounting_notes or ""):
+            proxy_detail = latest_fact.accounting_notes if latest_fact.accounting_notes else "PBEI / EBITDA proxy"
+            headline += f" (Proxy Basis)"
+            evidence += f" [Note: Operating income utilizes a proxy definition: {proxy_detail}]."
+            limitations += f" Operating profit utilizes a {latest_fact.comparability_flag} basis ({proxy_detail}); derived margins and operating leverage reflect this proxy."
 
         return FinancialInsight(
             category="OPERATING_MARGINS",

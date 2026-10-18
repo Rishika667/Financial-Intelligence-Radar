@@ -147,8 +147,8 @@
     "internal_document_key": "BSE-SCRIP-532977-AR-2024-25",
     "statement_location": "Consolidated Statement of Profit and Loss",
     "statement_basis": "CONSOLIDATED",
-    "document_identity_verified": true,
-    "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "document_identity_verified": false,
+    "check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
@@ -166,7 +166,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -232,8 +232,8 @@
     "internal_document_key": "BSE-SCRIP-500825-AR-2024-25",
     "statement_location": "Consolidated Financial Statements - Statement of Profit and Loss",
     "statement_basis": "CONSOLIDATED",
-    "document_identity_verified": true,
-    "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "document_identity_verified": false,
+    "check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
@@ -251,7 +251,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -402,8 +402,8 @@
     "internal_document_key": "BSE-SCRIP-500096-AR-2024-25",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
     "statement_basis": "CONSOLIDATED",
-    "document_identity_verified": true,
-    "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "document_identity_verified": false,
+    "check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
@@ -421,7 +421,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -572,8 +572,8 @@
     "internal_document_key": "BSE-SCRIP-532281-AR-2024-25",
     "statement_location": "Consolidated Financial Statements under Ind AS - Financial Statements",
     "statement_basis": "CONSOLIDATED",
-    "document_identity_verified": true,
-    "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "document_identity_verified": false,
+    "check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
@@ -591,7 +591,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -657,8 +657,8 @@
     "internal_document_key": "BSE-SCRIP-500182-AR-2024-25",
     "statement_location": "Consolidated Statement of Profit and Loss",
     "statement_basis": "CONSOLIDATED",
-    "document_identity_verified": true,
-    "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "document_identity_verified": false,
+    "check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
@@ -676,7 +676,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -742,8 +742,8 @@
     "internal_document_key": "BSE-SCRIP-500696-AR-2024-25",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flow Statement",
     "statement_basis": "CONSOLIDATED",
-    "document_identity_verified": true,
-    "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "document_identity_verified": false,
+    "check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
@@ -761,7 +761,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -827,8 +827,8 @@
     "internal_document_key": "BSE-SCRIP-500209-AR-2024-25",
     "statement_location": "Consolidated Financial Statements under Ind AS - Statement of Profit and Loss",
     "statement_basis": "CONSOLIDATED",
-    "document_identity_verified": true,
-    "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "document_identity_verified": false,
+    "check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
@@ -846,7 +846,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -912,8 +912,8 @@
     "internal_document_key": "BSE-SCRIP-532500-AR-2024-25",
     "statement_location": "Consolidated Statement of Profit and Loss",
     "statement_basis": "CONSOLIDATED",
-    "document_identity_verified": true,
-    "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "document_identity_verified": false,
+    "check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
@@ -931,7 +931,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1082,8 +1082,8 @@
     "internal_document_key": "BSE-SCRIP-532540-AR-2024-25",
     "statement_location": "Consolidated Statement of Profit and Loss & Cash Flows",
     "statement_basis": "CONSOLIDATED",
-    "document_identity_verified": true,
-    "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "document_identity_verified": false,
+    "check_status": "PRIMARY_SOURCE_LINK_RECORDED",
     "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
@@ -1101,7 +1101,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {

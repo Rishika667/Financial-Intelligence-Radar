@@ -1,7 +1,7 @@
 """
-Deterministic export utilities for Fundamentals Lens (Phase 7).
-Generates company-specific CSV datasets, peer comparison CSVs, technical analysis exports,
-and formatted research briefs with explicit provenance and accounting comparability caveats.
+Deterministic export utilities for Fundamentals Lens (Phase 8).
+Generates company-specific CSV datasets, tabular peer comparison CSVs, technical analysis exports,
+evidence registers, and formatted research briefs with explicit provenance and accounting comparability caveats.
 """
 import io
 import csv
@@ -30,7 +30,7 @@ class ExportGenerator:
         """
         Generates a clean, comma-separated values string of 5-year financials and metrics.
         Preserves empty values as empty strings without synthetic zero coercion.
-        Preserves backwards-compatible column indices 0-32, with Phase 7 deeper indicators in 33-38.
+        Preserves backwards-compatible column indices 0-32, with Phase 7/8 deeper indicators in 33-38.
         """
         if derived is None:
             derived = compute_derived_metrics_for_company(facts)
@@ -74,7 +74,7 @@ class ExportGenerator:
             "Official Filing ID",
             "Internal Document Key",
             "Reference Type",
-            # Phase 7 Deeper Metrics
+            # Deeper Metrics
             "Operating Margin Change (bps)",
             "Net Margin Change (bps)",
             "FCF Margin (%)",
@@ -108,36 +108,108 @@ class ExportGenerator:
                 f"{d.cash_conversion_ratio:.2f}" if (d and d.cash_conversion_ratio is not None) else "",
                 d.cash_conversion_qualified_reason if (d and d.cash_conversion_qualified_reason) else "",
                 f.statement_basis,
-                getattr(f, "verification_status", "UNVERIFIED") or "UNVERIFIED",
+                f.verification_status,
                 f.source_id,
                 f.filing_date,
                 f.accession_id,
                 f.source_url,
-                getattr(f, "comparability_flag", None) or "UNKNOWN",
-                getattr(f, "accounting_notes", "") or "",
-                getattr(f, "verification_tier", None) or getattr(f, "reconciliation_tier", None) or "UNVERIFIED",
-                getattr(f, "official_filing_id", None) or "",
-                getattr(f, "internal_document_key", None) or "",
-                getattr(f, "reference_type", None) or "UNKNOWN",
-                # Phase 7 Deeper Metrics Values
-                f"{d.operating_margin_change_bps:+.1f}" if (d and d.operating_margin_change_bps is not None) else "",
-                f"{d.net_margin_change_bps:+.1f}" if (d and d.net_margin_change_bps is not None) else "",
+                f.comparability_flag or "UNKNOWN",
+                f.accounting_notes or "",
+                f.reconciliation_tier or "UNVERIFIED",
+                f.official_filing_id or "",
+                f.internal_document_key or "",
+                f.reference_type or "UNKNOWN",
+                # Deeper Metrics
+                f"{d.operating_margin_change_bps:.1f}" if (d and d.operating_margin_change_bps is not None) else "",
+                f"{d.net_margin_change_bps:.1f}" if (d and d.net_margin_change_bps is not None) else "",
                 f"{d.fcf_margin:.2f}" if (d and d.fcf_margin is not None) else "",
                 f"{d.capex_intensity:.2f}" if (d and d.capex_intensity is not None) else "",
                 f"{d.reinvestment_rate:.2f}" if (d and d.reinvestment_rate is not None) else "",
-                f"{d.operating_leverage:+.2f}" if (d and d.operating_leverage is not None) else "",
+                f"{d.operating_leverage:.2f}" if (d and d.operating_leverage is not None) else "",
             ])
 
         return output.getvalue()
 
     @classmethod
-    def generate_peer_comparison_csv(
-        cls,
-        matrix: Dict[str, Any],
-        peer_group_name: str = ""
-    ) -> str:
+    def generate_peer_csv(cls, matrix: Dict[str, Any], peer_group_name: str = "Peer Group") -> str:
         """
-        Generates a CSV export of peer comparison data across multiple fiscal periods.
+        Generates a rich, tabular CSV export of peer comparison data across multiple fiscal periods.
+        Preserves company, ticker, fiscal period, period-end, metric, currency, source,
+        verification status, comparability state, and suppression reasons.
+        """
+        output = io.StringIO()
+        writer = csv.writer(output)
+
+        metric_label = matrix.get("metric_name") or matrix.get("metric", "")
+        unit_label = matrix.get("unit", "")
+        caveat = matrix.get("metric_note", "")
+
+        writer.writerow(["# FUNDAMENTALS LENS — PEER COMPARISON AUDIT EXPORT"])
+        writer.writerow([f"# Peer Group: {peer_group_name}"])
+        writer.writerow([f"# Metric: {metric_label} ({unit_label})"])
+        if caveat:
+            writer.writerow([f"# Accounting & Comparability Caveat: {caveat}"])
+        writer.writerow([])
+
+        headers = [
+            "Peer Group",
+            "Ticker",
+            "Company Name",
+            "Country",
+            "Currency",
+            "Fiscal Year",
+            "Fiscal Year Label",
+            "Period End Date",
+            "Metric Name",
+            "Reported Value",
+            "Standard Unit",
+            "Comparability State",
+            "Reconciliation Tier",
+            "Suppression Status",
+            "Suppression Reason"
+        ]
+        writer.writerow(headers)
+
+        for s in matrix.get("series", []):
+            ticker = s.get("ticker", "")
+            cname = s.get("company_name", "")
+            country = s.get("country", "")
+            curr = s.get("currency", "")
+            is_suppressed = s.get("is_suppressed", False)
+            supp_reason = s.get("suppress_reason", "") or ""
+
+            for pt in s.get("data", []):
+                yr = pt.get("fiscal_year", "")
+                lbl = pt.get("fiscal_year_label", "")
+                p_end = pt.get("period_end", "")
+                val = pt.get("value")
+                comp_flag = pt.get("comparability", "DIRECT")
+                tier = pt.get("verification_tier", "INDEPENDENTLY_RECONCILED")
+
+                writer.writerow([
+                    peer_group_name,
+                    ticker,
+                    cname,
+                    country,
+                    curr,
+                    yr,
+                    lbl,
+                    p_end,
+                    metric_label,
+                    f"{val:.2f}" if (val is not None and not is_suppressed) else "",
+                    unit_label,
+                    comp_flag,
+                    tier,
+                    "SUPPRESSED" if is_suppressed else "COMPARABLE",
+                    supp_reason
+                ])
+
+        return output.getvalue()
+
+    @classmethod
+    def generate_peer_comparison_csv(cls, matrix: Dict[str, Any], peer_group_name: str = "Peer Group") -> str:
+        """
+        Generates a CSV export of peer comparison data in matrix format across multiple fiscal periods.
         """
         output = io.StringIO()
         writer = csv.writer(output)
@@ -179,12 +251,35 @@ class ExportGenerator:
         return output.getvalue()
 
     @classmethod
-    def generate_technical_csv(cls, df: pd.DataFrame, ticker: str = "ASSET") -> str:
-        """Generates a CSV export of OHLCV bars and calculated technical indicators."""
+    def generate_technical_csv(
+        cls, 
+        df: pd.DataFrame, 
+        ticker: str = "ASSET",
+        summary: Optional[TechnicalSummary] = None
+    ) -> str:
+        """
+        Generates a CSV export of OHLCV bars and calculated technical indicators
+        with comprehensive provenance metadata and simulated demo warnings where applicable.
+        """
         output = io.StringIO()
         writer = csv.writer(output)
 
-        writer.writerow([f"# Technical Indicators Export: {ticker}"])
+        is_sim = summary.is_simulated_demo if summary else False
+        if is_sim:
+            writer.writerow(["# DATA_TYPE: SIMULATED DEMO DATA — NOT ACTUAL MARKET HISTORY"])
+            writer.writerow(["# WARNING: Prices and volumes are mathematically simulated via geometric Brownian motion for workflow demonstration only."])
+        else:
+            writer.writerow(["# DATA_TYPE: USER_SUPPLIED / RECORDED OHLCV MARKET DATA"])
+
+        if summary:
+            writer.writerow([f"# TICKER: {summary.ticker}"])
+            writer.writerow([f"# CURRENCY: {summary.currency}"])
+            writer.writerow([f"# PRICE_ADJUSTMENT_BASIS: {summary.price_adjustment_basis}"])
+            writer.writerow([f"# DATE_RANGE: {df['Date_Str'].iloc[0] if 'Date_Str' in df.columns else df['Date'].iloc[0]} to {summary.last_date}"])
+            writer.writerow([f"# OBSERVATIONS: {summary.total_bars} bars"])
+            if summary.benchmark_ticker:
+                writer.writerow([f"# BENCHMARK: {summary.benchmark_ticker} ({summary.common_benchmark_bars or 0} common bars)"])
+        writer.writerow(["# INDICATOR_CONVENTIONS: SMA(20,50,200), Wilder's RSI(14), MACD(12,26,9), Bollinger Bands(20, 2.0 std, ddof=1), ATR(14)"])
         writer.writerow([])
 
         cols = [c for c in df.columns if c not in ("Date_Str",)]
@@ -205,40 +300,51 @@ class ExportGenerator:
         lines = []
         lines.append(f"# FUNDAMENTALS LENS — PRICE & TECHNICAL ANALYSIS BRIEF")
         lines.append(f"## Asset / Ticker: `{summary.ticker}`")
-        lines.append(f"**Latest Trading Date:** `{summary.last_date}` | **Latest Close:** `{summary.last_close:,.2f}`")
+        if summary.is_simulated_demo:
+            lines.append("")
+            lines.append("> ⚠️ **SIMULATED DEMO DATA — NOT ACTUAL MARKET HISTORY**: This technical brief reflects mathematically simulated prices generated via geometric Brownian motion. It does NOT represent real-world market transactions or historical pricing for any actual corporate security.")
+            lines.append("")
+
+        lines.append(f"**Latest Trading Date:** `{summary.last_date}` | **Latest Close:** `{summary.last_close:,.2f} {summary.currency}`")
         lines.append(f"**Total Trading Observations:** `{summary.total_bars}` bars")
+        lines.append(f"**Price Adjustment Basis:** `{summary.price_adjustment_basis}`")
         if summary.benchmark_ticker:
-            lines.append(f"**Benchmark Reference:** `{summary.benchmark_ticker}`")
+            lines.append(f"**Benchmark Reference:** `{summary.benchmark_ticker}` (Common bars: `{summary.common_benchmark_bars or 0}`)")
         lines.append("")
         lines.append("---")
         lines.append("")
 
         # 1. Performance Returns
         lines.append("### 1. Multi-Period Return Performance")
-        lines.append("| Lookback Period | Cumulative Return (%) |")
-        lines.append("|:---|:---:|")
-        lines.append(f"| 1-Month (~21 bars) | {f'{summary.change_1m:+.2f}%' if summary.change_1m is not None else 'N/A'} |")
-        lines.append(f"| 3-Month (~63 bars) | {f'{summary.change_3m:+.2f}%' if summary.change_3m is not None else 'N/A'} |")
-        lines.append(f"| 6-Month (~126 bars) | {f'{summary.change_6m:+.2f}%' if summary.change_6m is not None else 'N/A'} |")
-        lines.append(f"| 1-Year (~252 bars) | {f'{summary.change_1y:+.2f}%' if summary.change_1y is not None else 'N/A'} |")
+        lines.append("| Lookback Period | Cumulative Return (%) | Horizon Status |")
+        lines.append("|:---|:---:|:---|")
+        lines.append(f"| 1-Month (~21 bars) | {f'{summary.change_1m:+.2f}%' if summary.change_1m is not None else 'N/A'} | Short-term momentum |")
+        lines.append(f"| 3-Month (~63 bars) | {f'{summary.change_3m:+.2f}%' if summary.change_3m is not None else 'N/A'} | Quarterly horizon |")
+        lines.append(f"| 6-Month (~126 bars) | {f'{summary.change_6m:+.2f}%' if summary.change_6m is not None else 'N/A'} | Semi-annual horizon |")
+        ret_1y_str = f"{summary.change_1y:+.2f}%" if summary.change_1y is not None else "N/A (< 252 bars)"
+        lines.append(f"| 1-Year (252 bars) | {ret_1y_str} | Annual trading horizon |")
         lines.append("")
 
         # 2. Range & Risk Indicators
-        lines.append("### 2. 52-Week Range & Risk Profile")
-        lines.append(f"- **52-Week High:** `{summary.high_52w:,.2f}` ({f'{summary.dist_from_52w_high:+.2f}%' if summary.dist_from_52w_high is not None else 'N/A'} distance)")
-        lines.append(f"- **52-Week Low:** `{summary.low_52w:,.2f}` ({f'{summary.dist_from_52w_low:+.2f}%' if summary.dist_from_52w_low is not None else 'N/A'} distance)")
+        range_label = "52-Week Range" if summary.is_full_52w else f"Available-History Range ({summary.total_bars} bars)"
+        lines.append(f"### 2. {range_label} & Risk Profile")
+        lines.append(f"- **High:** `{summary.high_52w:,.2f}` ({f'{summary.dist_from_52w_high:+.2f}%' if summary.dist_from_52w_high is not None else 'N/A'} distance)")
+        lines.append(f"- **Low:** `{summary.low_52w:,.2f}` ({f'{summary.dist_from_52w_low:+.2f}%' if summary.dist_from_52w_low is not None else 'N/A'} distance)")
         lines.append(f"- **Annualized Daily Volatility (252-day scaled):** `{summary.annualized_volatility:.2f}%`" if summary.annualized_volatility is not None else "- **Annualized Volatility:** N/A")
         lines.append(f"- **Maximum Historical Drawdown:** `{summary.max_drawdown:.2f}%`" if summary.max_drawdown is not None else "- **Maximum Drawdown:** N/A")
         lines.append("")
 
         # 3. Technical Momentum & Trend Status
         lines.append("### 3. Indicator & Trend Status")
-        lines.append(f"- **14-Day RSI:** `{summary.current_rsi:.2f}` ({summary.rsi_status})")
+        lines.append(f"- **14-Day Wilder's RSI:** `{summary.current_rsi:.2f}` ({summary.rsi_status})")
         lines.append(f"- **20-Day SMA Position:** `{summary.sma_20_status}`")
         lines.append(f"- **50-Day SMA Position:** `{summary.sma_50_status}`")
         lines.append(f"- **200-Day SMA Position:** `{summary.sma_200_status}`")
-        if summary.benchmark_ticker and summary.relative_performance_1y is not None:
-            lines.append(f"- **Relative Performance vs. {summary.benchmark_ticker}:** `{summary.relative_performance_1y:+.2f}%` points")
+        if summary.benchmark_ticker:
+            if summary.relative_performance_1y is not None:
+                lines.append(f"- **1-Year Relative Performance vs. {summary.benchmark_ticker}:** `{summary.relative_performance_1y:+.2f}%` points")
+            elif summary.relative_performance_period is not None:
+                lines.append(f"- **Common-Period Relative Performance vs. {summary.benchmark_ticker} ({summary.common_benchmark_bars} bars):** `{summary.relative_performance_period:+.2f}%` points")
         lines.append("")
 
         # 4. Mandatory Disclaimer
@@ -249,6 +355,10 @@ class ExportGenerator:
             "Market dynamics are non-stationary and subject to structural regime shifts. Technical analysis should only be used as a supplementary research perspective "
             "alongside genuine, audited company fundamentals."
         )
+        if summary.price_adjustment_basis in ("RAW_UNADJUSTED", "UNKNOWN"):
+            lines.append("")
+            lines.append("> ⚠️ **Corporate Action Caveat**: Price data adjustment basis is unconfirmed or raw. Stock splits, dividend payouts, or capital restructuring can cause sharp discontinuous price steps not reflective of economic returns.")
+
         lines.append("")
         lines.append("---")
         lines.append("*Report generated by Fundamentals Lens — Technical Analysis MVP Engine.*")
@@ -262,11 +372,11 @@ class ExportGenerator:
         facts: List[FinancialFact],
         derived: Optional[List[DerivedMetrics]] = None,
         insights: Optional[List[FinancialInsight]] = None,
-        snapshot_date: str = "2026-10-18"
+        snapshot_date: Optional[str] = None
     ) -> str:
         """
         Generates a comprehensive research brief in GitHub-flavored Markdown.
-        Includes 5-Year CAGR, Growth Consistency, and Cumulative Cash Flows.
+        Includes multi-year CAGR, Growth Consistency, and Cumulative Cash Flows.
         """
         if derived is None:
             derived = compute_derived_metrics_for_company(facts)
@@ -281,22 +391,24 @@ class ExportGenerator:
         unit = company.standard_unit_label
         curr = company.reporting_currency
         report_date = date.today().isoformat()
+        snap_date = snapshot_date or (latest_fact.filing_date if latest_fact else report_date)
 
         # Cumulative cash flows
         cum_flows = calculate_cumulative_cash_flows(sorted_facts)
 
         # Revenue CAGR
-        cagr, cagr_reason = calculate_cagr(first_fact.revenue, latest_fact.revenue, len(sorted_facts) - 1) if (first_fact and latest_fact) else (None, "No facts")
+        num_intervals = len(sorted_facts) - 1
+        cagr, cagr_reason = calculate_cagr(first_fact.revenue, latest_fact.revenue, num_intervals) if (first_fact and latest_fact) else (None, "No facts")
         cagr_str = f"{cagr:+.2f}%" if cagr is not None else f"N/A ({cagr_reason})"
 
         lines = []
         lines.append(f"# FUNDAMENTALS LENS — FINANCIAL RESEARCH BRIEF")
         lines.append(f"## {company.name} ({company.ticker})")
         lines.append(f"**Peer Group:** {company.peer_group_name} | **Exchange:** {company.exchange} | **Country:** {company.country}")
-        lines.append(f"**Dataset Snapshot Cutoff:** `{snapshot_date}` | **Brief Generation Date:** `{report_date}`")
+        lines.append(f"**Dataset Snapshot Cutoff:** `{snap_date}` | **Brief Generation Date:** `{report_date}`")
         lines.append(f"**Statement Basis:** CONSOLIDATED (Primary Audited Regulatory Disclosures)")
         lines.append(f"**Latest Verified Period:** {latest_fact.fiscal_year_label if latest_fact else 'N/A'}")
-        lines.append(f"**5-Year Revenue CAGR:** `{cagr_str}`")
+        lines.append(f"**5-Period Revenue CAGR ({num_intervals} intervals):** `{cagr_str}`")
         lines.append("")
         lines.append("---")
         lines.append("")
@@ -310,14 +422,15 @@ class ExportGenerator:
 
         # 2. Historical 5-Period Financial Facts Table
         lines.append(f"### 2. Historical Financial Disclosures (in {unit})")
-        lines.append("| Fiscal Period | Period Dates | Revenue | Operating Income | Net Income | Operating Cash Flow | Capex | Comparability |")
-        lines.append("|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|")
+        lines.append("| Fiscal Period | Period Dates | Revenue | Operating Income | Net Income | Operating Cash Flow | Capex | Comparability | Tier |")
+        lines.append("|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|")
         for f in sorted_facts:
             comp_flag = getattr(f, "comparability_flag", None) or "UNKNOWN"
+            tier = getattr(f, "reconciliation_tier", None) or "UNVERIFIED"
             lines.append(
                 f"| {f.fiscal_year_label} | {f.period_start} to {f.period_end} | "
                 f"{f.revenue:,.1f} | {f.operating_income:,.1f} | {f.net_income:,.1f} | "
-                f"{f.operating_cash_flow:,.1f} | {f.capital_expenditure:,.1f} | `{comp_flag}` |"
+                f"{f.operating_cash_flow:,.1f} | {f.capital_expenditure:,.1f} | `{comp_flag}` | `{tier}` |"
             )
         lines.append("")
 
@@ -343,13 +456,18 @@ class ExportGenerator:
         lines.append("")
 
         # 3.1 Cumulative Cash Flow Summary
-        if cum_flows:
-            lines.append("### 3.1 5-Year Cumulative Cash Flow Generation & Reinvestment")
+        if cum_flows and not cum_flows.get("suppressed"):
+            comp_badge = "Complete 5-Period Aggregate" if cum_flows.get("is_complete") else f"Partial Aggregate ({cum_flows.get('periods_included')}/{cum_flows.get('total_periods')} periods)"
+            lines.append(f"### 3.1 Cumulative Cash Flow Generation & Reinvestment ({comp_badge})")
             lines.append(f"- **Cumulative Operating Cash Flow:** `{cum_flows.get('cumulative_ocf', 0):,.1f} {unit}`")
             lines.append(f"- **Cumulative Capital Expenditures:** `{cum_flows.get('cumulative_capex', 0):,.1f} {unit}`")
             lines.append(f"- **Cumulative Free Cash Flow:** `{cum_flows.get('cumulative_fcf', 0):,.1f} {unit}`")
             if cum_flows.get('cumulative_reinvestment_pct') is not None:
                 lines.append(f"- **Cumulative Reinvestment Rate:** `{cum_flows['cumulative_reinvestment_pct']:.1f}%` of Operating Cash Flow")
+            lines.append("")
+        elif cum_flows and cum_flows.get("suppressed"):
+            lines.append("### 3.1 Cumulative Cash Flow Generation")
+            lines.append(f"- *Cumulative metrics suppressed:* {cum_flows.get('suppress_reason')}")
             lines.append("")
 
         # 4. Standard Metric Formulas & Methodology
@@ -380,7 +498,7 @@ class ExportGenerator:
         lines.append("| Period | Source Document | Filing Date | Statement Location | Filing Reference ID | Tier |")
         lines.append("|:---|:---|:---:|:---|:---|:---:|")
         for f in sorted_facts:
-            tier = getattr(f, "verification_tier", None) or getattr(f, "reconciliation_tier", None) or "UNVERIFIED"
+            tier = getattr(f, "reconciliation_tier", None) or "UNVERIFIED"
             ref_type = getattr(f, "reference_type", "UNKNOWN") or "UNKNOWN"
             ref_key = f.official_filing_id if ref_type == "SEC_ACCESSION" and f.official_filing_id else (f.internal_document_key or f.accession_id)
             lines.append(f"| {f.fiscal_year_label} | [{f.source_title}]({f.source_url}) | {f.filing_date} | {f.statement_location} | `{ref_key}` | `{tier}` |")
@@ -399,3 +517,76 @@ class ExportGenerator:
         lines.append("*Report generated by Fundamentals Lens — Zero-Cost SEC & Indian Disclosure Intelligence.*")
 
         return "\n".join(lines)
+
+    @classmethod
+    def generate_evidence_summary_csv(cls, evidence_records: List[Dict[str, Any]]) -> str:
+        """Generates a downloadable CSV of all metric-level evidence records and reconciliation tiers."""
+        output = io.StringIO()
+        writer = csv.writer(output)
+
+        headers = [
+            "Ticker",
+            "Company Name",
+            "Fiscal Year",
+            "Fiscal Year Label",
+            "Period End",
+            "Statement Basis",
+            "Metric Key",
+            "Statement Name",
+            "Statement Locator",
+            "Reported Line Item",
+            "Reported Value",
+            "Canonical Value",
+            "Unit",
+            "Reconciliation Tier",
+            "Comparison Result",
+            "Discrepancy Note",
+            "Reference Type",
+            "Official Filing ID",
+            "Internal Document Key"
+        ]
+        writer.writerow(headers)
+
+        primary_metrics = ["revenue", "operating_income", "net_income", "operating_cash_flow", "capital_expenditure"]
+
+        for rec in evidence_records:
+            t = rec.get("ticker", "")
+            cname = rec.get("company_name", "")
+            fy = rec.get("fiscal_year", "")
+            fylbl = rec.get("fiscal_year_label", "")
+            pend = rec.get("period_end", "")
+            basis = rec.get("statement_basis", "CONSOLIDATED")
+            ref_type = rec.get("reference_type", "")
+            off_id = rec.get("official_filing_id", "") or ""
+            int_key = rec.get("internal_document_key", "") or ""
+            unit = rec.get("unit", "")
+
+            metrics = rec.get("metrics", {})
+            for m in primary_metrics:
+                m_ev = metrics.get(m, {})
+                rep_val = m_ev.get("reported_value")
+                canon_val = m_ev.get("canonical_value")
+
+                writer.writerow([
+                    t,
+                    cname,
+                    fy,
+                    fylbl,
+                    pend,
+                    basis,
+                    m,
+                    m_ev.get("statement_name", ""),
+                    m_ev.get("statement_locator", ""),
+                    m_ev.get("reported_line_item", ""),
+                    str(rep_val) if rep_val is not None else "",
+                    str(canon_val) if canon_val is not None else "",
+                    unit,
+                    m_ev.get("reconciliation_tier", ""),
+                    m_ev.get("comparison_result", ""),
+                    m_ev.get("discrepancy_note", ""),
+                    ref_type,
+                    off_id,
+                    int_key
+                ])
+
+        return output.getvalue()

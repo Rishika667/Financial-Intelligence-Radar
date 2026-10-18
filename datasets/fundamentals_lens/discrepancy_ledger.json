@@ -58,5 +58,35 @@
     "primary_reported_value": 713163.0,
     "investigation_finding": "Preliminary segment disclosure reported $713,158M; official Form 10-K Consolidated Statements of Income reports Total Revenues of $713,163M (Net sales $706,413M + Membership and other income $6,750M).",
     "resolution": "Updated canonical value to 713,163.0 to match official 10-K statement."
+  },
+  {
+    "discrepancy_id": "DISC-007",
+    "ticker": "TCS",
+    "fiscal_year_label": "FY 2025\u201326",
+    "metric": "operating_income",
+    "initial_dataset_value": 66755.0,
+    "primary_reported_value": 66755.0,
+    "investigation_finding": "The dataset stores Rs 66,755 Cr, which reflects Operating profit before exceptional items and other income (PBEI). In the 5-Year Performance Trend of the Integrated Annual Report, EBIT is cited as Rs 66,838 Cr (including other operating items).",
+    "resolution": "Documented canonical line item as Operating Profit before Other Income/Exceptional Items (PBEI Proxy) at 66,755.0 Cr with PROXY comparability flag and noted EBIT delta of Rs 83 Cr in ledger."
+  },
+  {
+    "discrepancy_id": "DISC-008",
+    "ticker": "BAJAJ-AUTO",
+    "fiscal_year_label": "FY 2025\u201326",
+    "metric": "operating_income",
+    "initial_dataset_value": 12019.0,
+    "primary_reported_value": 12019.0,
+    "investigation_finding": "The stored value of Rs 12,019 Cr represents EBITDA (Operating Profit before Depreciation & Amortisation) as highlighted in Bajaj Auto's Annual Report. Standalone depreciation is Rs 448.2 Cr, giving operating profit (EBIT) of ~Rs 11,570.8 Cr.",
+    "resolution": "Documented canonical line item as EBITDA (Operating Profit Proxy) at 12,019.0 Cr with PROXY comparability flag, noting EBIT of ~Rs 11,570.8 Cr in ledger."
+  },
+  {
+    "discrepancy_id": "DISC-009",
+    "ticker": "INFY",
+    "fiscal_year_label": "FY 2025\u201326",
+    "metric": "net_income",
+    "initial_dataset_value": 29440.0,
+    "primary_reported_value": 29440.0,
+    "investigation_finding": "In Infosys Consolidated Financial Results for FY26, total profit for the period is Rs 29,474 Cr. Net profit attributable to owners of the Company (after non-controlling interests of Rs 34 Cr) is Rs 29,440 Cr.",
+    "resolution": "Documented attribution basis as ATTRIBUTABLE_TO_OWNERS at 29,440.0 Cr, confirming canonical figure aligns with common equity shareholder net income."
   }
 ]

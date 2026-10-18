@@ -73,6 +73,16 @@ def load_coverage_report(dataset_dir: Optional[Path] = None) -> List[Dict[str, A
         return json.load(f)
 
 
+def load_discrepancy_ledger(dataset_dir: Optional[Path] = None) -> List[Dict[str, Any]]:
+    base_dir = dataset_dir or get_dataset_dir()
+    file_path = base_dir / "discrepancy_ledger.json"
+    if not file_path.exists():
+        return []
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+
 def get_company_by_ticker(ticker: str, dataset_dir: Optional[Path] = None) -> Optional[Company]:
     companies = load_companies(dataset_dir)
     for c in companies:

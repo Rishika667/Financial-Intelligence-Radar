@@ -192,6 +192,41 @@ class TechnicalIndicators:
     daily_return: Optional[float] = None
 
 
+class PriceAdjustmentBasis(str, Enum):
+    SPLIT_AND_DIVIDEND_ADJUSTED = "SPLIT_AND_DIVIDEND_ADJUSTED"
+    SPLIT_ADJUSTED_ONLY = "SPLIT_ADJUSTED_ONLY"
+    RAW_UNADJUSTED = "RAW_UNADJUSTED"
+    UNKNOWN = "UNKNOWN"
+
+
+@dataclass
+class OHLCVValidationReport:
+    is_valid: bool
+    total_rows: int
+    valid_rows: int
+    error_count: int
+    warning_count: int
+    errors: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
+    sample_offending_rows: List[Dict[str, Any]] = field(default_factory=list)
+    duplicate_dates: List[str] = field(default_factory=list)
+    non_finite_dates: List[str] = field(default_factory=list)
+    invariant_violation_dates: List[str] = field(default_factory=list)
+    ticker: Optional[str] = None
+    price_adjustment_basis: PriceAdjustmentBasis = PriceAdjustmentBasis.UNKNOWN
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    invariants_checked: List[str] = field(default_factory=list)
+
+    @property
+    def duplicate_dates_count(self) -> int:
+        return len(self.duplicate_dates)
+
+    @property
+    def violations(self) -> List[str]:
+        return self.errors
+
+
 @dataclass
 class TechnicalSummary:
     ticker: str
@@ -216,3 +251,13 @@ class TechnicalSummary:
     benchmark_ticker: Optional[str] = None
     benchmark_change_1y: Optional[float] = None
     relative_performance_1y: Optional[float] = None
+    is_simulated_demo: bool = False
+    is_full_52w: bool = True
+    common_benchmark_bars: Optional[int] = None
+    common_benchmark_start: Optional[str] = None
+    common_benchmark_end: Optional[str] = None
+    benchmark_period_return: Optional[float] = None
+    relative_performance_period: Optional[float] = None
+    price_adjustment_basis: str = "UNKNOWN"
+    currency: str = "USD"
+

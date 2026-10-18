@@ -23,6 +23,7 @@ from fundamentals_lens.data_loader import (
     load_source_register,
     load_coverage_report,
     load_evidence_register,
+    load_discrepancy_ledger,
     get_company_by_ticker,
     get_facts_for_company
 )
@@ -37,9 +38,10 @@ from fundamentals_lens.validator import FundamentalsValidator
 from fundamentals_lens.insights import NarrativeEngine
 from fundamentals_lens.peers import PeerComparisonEngine, PEER_GROUP_METADATA
 from fundamentals_lens.exports import ExportGenerator
-from fundamentals_lens.models import ValidationStatus
+from fundamentals_lens.models import ValidationStatus, PriceAdjustmentBasis, OHLCVValidationReport
 from fundamentals_lens.technical import (
     validate_ohlcv_dataframe,
+    validate_ohlcv_dataframe_with_report,
     compute_technical_indicators,
     compute_technical_summary,
     create_price_candlestick_chart,
@@ -213,6 +215,7 @@ def get_app_data():
     sources = load_source_register()
     coverage = load_coverage_report()
     evidence_register = load_evidence_register()
+    discrepancy_ledger = load_discrepancy_ledger()
     
     facts_by_ticker = {}
     for f in facts:
@@ -221,12 +224,13 @@ def get_app_data():
     for ticker in facts_by_ticker:
         facts_by_ticker[ticker].sort(key=lambda x: x.fiscal_year)
         
-    return companies, facts_by_ticker, sources, coverage, evidence_register
+    return companies, facts_by_ticker, sources, coverage, evidence_register, discrepancy_ledger
 
 
-companies, facts_by_ticker, sources, coverage, evidence_register = get_app_data()
+companies, facts_by_ticker, sources, coverage, evidence_register, discrepancy_ledger = get_app_data()
 companies_map = {c.ticker: c for c in companies}
 coverage_map = {entry["ticker"]: entry for entry in coverage}
+discrepancies_count = len(discrepancy_ledger)
 
 # High-level universe statistics computed dynamically from loaded datasets
 total_comps = len(companies)
@@ -1124,7 +1128,7 @@ elif selected_page == "Price & Technical Analysis":
     source_choice = st.radio(
         "Select Price Data Source:",
         [
-            "📁 Pre-Packaged Demo Dataset",
+            "📁 Pre-Packaged Demo Dataset (Generic Synthetic)",
             "📤 Upload Custom Daily OHLCV CSV (In-Memory Only)"
         ],
         horizontal=True
@@ -1134,42 +1138,59 @@ elif selected_page == "Price & Technical Analysis":
     active_ticker = "DEMO"
     bench_df = None
     bench_ticker = None
+    selected_basis = PriceAdjustmentBasis.SPLIT_AND_DIVIDEND_ADJUSTED
+    is_sim = False
 
     ohlcv_dir = ROOT_DIR / "datasets" / "fundamentals_lens" / "ohlcv"
 
-    if source_choice == "📁 Pre-Packaged Demo Dataset":
+    if "Pre-Packaged Demo Dataset" in source_choice:
+        is_sim = True
+        st.warning(
+            "⚠️ **SIMULATED DEMO DATA — NOT ACTUAL MARKET HISTORY**\n\n"
+            "The pre-packaged demonstration datasets are synthetically generated for illustrative software "
+            "workflow and indicator algorithm verification only. They do **NOT** represent actual trading "
+            "history for Apple, Microsoft, TCS, SPY, or any real equity instrument. "
+            "To evaluate real equity securities, upload an official OHLCV CSV using the uploader option."
+        )
+
         demo_col1, demo_col2 = st.columns([3, 2])
         with demo_col1:
             demo_opts = {
-                "AAPL": "Apple Inc. (AAPL) — Daily Trading OHLCV",
-                "MSFT": "Microsoft Corporation (MSFT) — Daily Trading OHLCV",
-                "TCS": "Tata Consultancy Services (TCS) — Daily Trading OHLCV",
+                "SIMULATED_TECH_EQUITY": "[SIMULATED] Tech Growth Equity (Illustrative Demo)",
             }
             selected_demo = st.selectbox(
-                "Select Demo Asset:",
+                "Select Simulated Demo Asset:",
                 options=list(demo_opts.keys()),
                 format_func=lambda k: demo_opts[k]
             )
             active_ticker = selected_demo
-            demo_file = ohlcv_dir / f"{selected_demo}_daily_ohlcv.csv"
+            demo_file = ohlcv_dir / f"{selected_demo}.csv"
             if demo_file.exists():
                 raw_df = pd.read_csv(demo_file)
-                valid, err, clean_df = validate_ohlcv_dataframe(raw_df)
+                valid, err, clean_df, rep = validate_ohlcv_dataframe_with_report(
+                    raw_df,
+                    ticker=active_ticker,
+                    price_adjustment_basis=PriceAdjustmentBasis.SPLIT_AND_DIVIDEND_ADJUSTED
+                )
                 if not valid:
                     st.error(f"Error loading demo dataset: {err}")
             else:
-                st.warning(f"Demo file {demo_file.name} not found. Generating default data.")
+                st.warning(f"Demo file {demo_file.name} not found.")
 
         with demo_col2:
             bm_choice = st.selectbox(
                 "Comparative Benchmark:",
-                ["None", "SPY — S&P 500 ETF Benchmark (Pre-Packaged)"]
+                ["None", "SIMULATED_MARKET_BENCHMARK — Illustrative Market Benchmark (Pre-Packaged)"]
             )
-            if "SPY" in bm_choice:
-                bench_ticker = "SPY"
-                spy_file = ohlcv_dir / "SPY_benchmark_ohlcv.csv"
-                if spy_file.exists():
-                    _, _, bench_df = validate_ohlcv_dataframe(pd.read_csv(spy_file))
+            if "SIMULATED_MARKET_BENCHMARK" in bm_choice:
+                bench_ticker = "SIMULATED_MARKET_BENCHMARK"
+                bench_file = ohlcv_dir / "SIMULATED_MARKET_BENCHMARK.csv"
+                if bench_file.exists():
+                    valid_bm, _, bench_df, _ = validate_ohlcv_dataframe_with_report(
+                        pd.read_csv(bench_file),
+                        ticker=bench_ticker,
+                        price_adjustment_basis=PriceAdjustmentBasis.SPLIT_AND_DIVIDEND_ADJUSTED
+                    )
 
     else:
         # File uploader
@@ -1179,16 +1200,61 @@ elif selected_page == "Price & Technical Analysis":
             uploaded_file = st.file_uploader("Upload OHLCV CSV:", type=["csv"])
             custom_ticker_input = st.text_input("Asset Ticker / Symbol Label:", value="CUSTOM_ASSET")
             active_ticker = custom_ticker_input.strip().upper() or "CUSTOM"
-            
+            is_sim = active_ticker.startswith("SIMULATED")
+
+            basis_choice = st.selectbox(
+                "Price Adjustment Basis:",
+                options=[
+                    "Split & Dividend Adjusted (Total Return Basis - Recommended)",
+                    "Split Adjusted Only (Ex-Dividend Prices)",
+                    "Raw Unadjusted (May contain split/dividend artificial jumps)",
+                    "Unknown / Unspecified"
+                ]
+            )
+            if "Split & Dividend Adjusted" in basis_choice:
+                selected_basis = PriceAdjustmentBasis.SPLIT_AND_DIVIDEND_ADJUSTED
+            elif "Split Adjusted Only" in basis_choice:
+                selected_basis = PriceAdjustmentBasis.SPLIT_ADJUSTED_ONLY
+            elif "Raw Unadjusted" in basis_choice:
+                selected_basis = PriceAdjustmentBasis.RAW_UNADJUSTED
+            else:
+                selected_basis = PriceAdjustmentBasis.UNKNOWN
+
+            if selected_basis in (PriceAdjustmentBasis.RAW_UNADJUSTED, PriceAdjustmentBasis.UNKNOWN):
+                st.warning(
+                    "⚠️ **Price Adjustment Caveat:** Technical indicators and returns calculated on unadjusted "
+                    "or unknown price series may exhibit artificial price gaps and distorted momentum from stock splits or dividend drops."
+                )
+
+            validation_report = None
             if uploaded_file is not None:
                 try:
                     raw_df = pd.read_csv(uploaded_file)
-                    valid, err, clean_df = validate_ohlcv_dataframe(raw_df)
+                    valid, err, clean_df, validation_report = validate_ohlcv_dataframe_with_report(
+                        raw_df,
+                        ticker=active_ticker,
+                        price_adjustment_basis=selected_basis
+                    )
                     if not valid:
                         st.error(f"❌ **Validation Failed:** {err}")
                         clean_df = None
+                        with st.expander("🔍 Detailed Invariant Violation Diagnostics", expanded=True):
+                            st.write(f"**Total Records Inspected:** {validation_report.total_rows}")
+                            st.write(f"**Valid Bars Detected:** {validation_report.valid_rows}")
+                            st.write(f"**Violations Encountered:** {len(validation_report.violations)}")
+                            for v in validation_report.violations:
+                                st.markdown(f"- ❌ `{v}`")
+                            st.caption("Required invariants: Date uniqueness/monotonicity, High >= max(Open, Close, Low), Low <= min(Open, Close, High), Volume >= 0.")
                     else:
                         st.success(f"✅ Successfully validated {len(clean_df)} trading observations for `{active_ticker}`.")
+                        with st.expander("ℹ️ View Invariants Validation Summary"):
+                            st.write(f"**Total Valid Trading Bars:** {validation_report.valid_rows}")
+                            st.write(f"**Duplicate Dates Found & Handled:** {validation_report.duplicate_dates_count}")
+                            st.write(f"**Date Range:** {validation_report.start_date} to {validation_report.end_date}")
+                            st.write(f"**Adjustment Basis Recorded:** `{validation_report.price_adjustment_basis.value}`")
+                            st.write("**Invariants Passed:**")
+                            for inv in validation_report.invariants_checked:
+                                st.markdown(f"- ✅ `{inv}`")
                 except Exception as e:
                     st.error(f"❌ Failed to parse CSV: {str(e)}")
                     clean_df = None
@@ -1207,11 +1273,19 @@ elif selected_page == "Price & Technical Analysis":
     if clean_df is not None and not clean_df.empty:
         # Calculate indicators
         clean_df = compute_technical_indicators(clean_df)
-        summary = compute_technical_summary(clean_df, ticker=active_ticker, benchmark_df=bench_df, benchmark_ticker=bench_ticker)
+        summary = compute_technical_summary(
+            clean_df,
+            ticker=active_ticker,
+            benchmark_df=bench_df,
+            benchmark_ticker=bench_ticker,
+            price_adjustment_basis=selected_basis,
+            is_simulated_demo=is_sim
+        )
 
         st.markdown("---")
-        st.markdown(f"### **Quantitative Performance & Risk Snapshot — `{active_ticker}`**")
-        st.caption(f"Trading Horizon: `{clean_df['Date_Str'].iloc[0]}` to `{summary.last_date}` • `{summary.total_bars}` Observations")
+        badge_html = " <span class='badge-limited' style='background:#FEF3C7; color:#92400E; padding:2px 8px; border-radius:4px; font-size:0.8rem; font-weight:600;'>SIMULATED DEMO</span>" if is_sim else ""
+        st.markdown(f"### **Quantitative Performance & Risk Snapshot — `{active_ticker}`**{badge_html}", unsafe_allow_html=True)
+        st.caption(f"Trading Horizon: `{clean_df['Date_Str'].iloc[0]}` to `{summary.last_date}` • `{summary.total_bars}` Observations • Adjustment Basis: `{summary.price_adjustment_basis.value}`")
 
         # 4 Core KPI Cards
         tkpi1, tkpi2, tkpi3, tkpi4 = st.columns(4)
@@ -1224,18 +1298,30 @@ elif selected_page == "Price & Technical Analysis":
             </div>
             """, unsafe_allow_html=True)
         with tkpi2:
-            ret_1y_str = f"{summary.change_1y:+.2f}%" if summary.change_1y is not None else (f"{summary.change_6m:+.2f}% (6M)" if summary.change_6m is not None else "N/A")
+            if summary.change_1y is not None:
+                ret_1y_str = f"{summary.change_1y:+.2f}%"
+                ret_label = "1-Year Return"
+            elif summary.change_6m is not None:
+                ret_1y_str = f"{summary.change_6m:+.2f}% (6M)"
+                ret_label = "6-Month Return"
+            elif summary.change_3m is not None:
+                ret_1y_str = f"{summary.change_3m:+.2f}% (3M)"
+                ret_label = "3-Month Return"
+            else:
+                ret_1y_str = "N/A (<252 bars)"
+                ret_label = f"Period Return ({summary.total_bars} bars)"
             st.markdown(f"""
             <div class="kpi-card">
-                <div class="kpi-label">1-Year Return</div>
+                <div class="kpi-label">{ret_label}</div>
                 <div class="kpi-val">{ret_1y_str}</div>
                 <div class="kpi-delta neu">1M: {f"{summary.change_1m:+.1f}%" if summary.change_1m else "N/A"} | 3M: {f"{summary.change_3m:+.1f}%" if summary.change_3m else "N/A"}</div>
             </div>
             """, unsafe_allow_html=True)
         with tkpi3:
+            range_label = "52-Week Range" if summary.is_full_52w else f"Trading Range ({summary.total_bars} bars)"
             st.markdown(f"""
             <div class="kpi-card">
-                <div class="kpi-label">52-Week Range</div>
+                <div class="kpi-label">{range_label}</div>
                 <div class="kpi-val" style="font-size:1.2rem;">{summary.low_52w:,.1f} — {summary.high_52w:,.1f}</div>
                 <div class="kpi-delta neu">From High: {summary.dist_from_52w_high:+.1f}% | Low: {summary.dist_from_52w_low:+.1f}%</div>
             </div>
@@ -1284,18 +1370,19 @@ elif selected_page == "Price & Technical Analysis":
                 clean_df, 
                 ticker=active_ticker,
                 show_sma=show_sma_opt,
-                show_bb=show_bb_opt
+                show_bb=show_bb_opt,
+                is_simulated_demo=is_sim
             )
             if fig_candle:
                 st.plotly_chart(fig_candle, use_container_width=True)
 
         with tech_tab2:
             st.markdown("#### **Relative Strength Index (RSI) & MACD Momentum**")
-            fig_rsi = create_rsi_chart(clean_df, ticker=active_ticker)
+            fig_rsi = create_rsi_chart(clean_df, ticker=active_ticker, is_simulated_demo=is_sim)
             if fig_rsi:
                 st.plotly_chart(fig_rsi, use_container_width=True)
 
-            fig_macd = create_macd_chart(clean_df, ticker=active_ticker)
+            fig_macd = create_macd_chart(clean_df, ticker=active_ticker, is_simulated_demo=is_sim)
             if fig_macd:
                 st.plotly_chart(fig_macd, use_container_width=True)
 
@@ -1306,18 +1393,26 @@ elif selected_page == "Price & Technical Analysis":
                     clean_df,
                     bench_df,
                     asset_ticker=active_ticker,
-                    benchmark_ticker=bench_ticker or "SPY"
+                    benchmark_ticker=bench_ticker or "BENCHMARK",
+                    is_simulated_demo=is_sim
                 )
                 if fig_comp:
                     st.plotly_chart(fig_comp, use_container_width=True)
                 if summary.relative_performance_1y is not None:
+                    perf_label = "1-Year Relative Performance" if (summary.common_benchmark_bars or 0) >= 252 else f"Relative Performance ({summary.common_benchmark_bars} bars)"
                     st.info(
-                        f"🎯 **Relative Performance Summary:** `{active_ticker}` cumulative return diverged by "
+                        f"🎯 **{perf_label}:** `{active_ticker}` cumulative return diverged by "
                         f"**{summary.relative_performance_1y:+.2f}%** points relative to `{bench_ticker}` "
-                        f"({summary.change_1y:+.1f}% vs {summary.benchmark_change_1y:+.1f}%) over the shared trading period."
+                        f"({summary.change_1y:+.1f}% vs {summary.benchmark_change_1y:+.1f}%) over {summary.common_benchmark_bars} common trading days."
+                    )
+                elif summary.relative_performance_period is not None:
+                    st.info(
+                        f"🎯 **Relative Performance ({summary.common_benchmark_bars} bars):** `{active_ticker}` cumulative return diverged by "
+                        f"**{summary.relative_performance_period:+.2f}%** points relative to `{bench_ticker}` "
+                        f"over {summary.common_benchmark_bars} overlapping trading days."
                     )
             else:
-                st.info("ℹ️ Select a benchmark (e.g. `SPY Benchmark`) above to compare normalized relative returns.")
+                st.info("ℹ️ Select a benchmark above to compare normalized relative returns.")
 
         with tech_tab4:
             st.markdown("#### **Calculated Technical Indicators Table**")
@@ -1329,7 +1424,7 @@ elif selected_page == "Price & Technical Analysis":
             st.dataframe(clean_df[cols_present].tail(100), hide_index=True, use_container_width=True)
 
             st.markdown("#### **Exports**")
-            t_csv_str = ExportGenerator.generate_technical_csv(clean_df, active_ticker)
+            t_csv_str = ExportGenerator.generate_technical_csv(clean_df, active_ticker, summary=summary)
             t_brief_md = ExportGenerator.generate_technical_brief(summary, clean_df)
 
             t_exp1, t_exp2 = st.columns(2)
@@ -1488,6 +1583,28 @@ elif selected_page == "Data Integrity & Methodology":
         df_val = df_val[df_val["Dimension"] == filter_dim]
         
     st.dataframe(df_val, hide_index=True, use_container_width=True)
+
+    st.markdown("---")
+
+    # Regulatory Discrepancy Ledger
+    st.markdown(f"### **Regulatory Disclosure Discrepancy & Lineage Ledger ({len(discrepancy_ledger)} Logged)**")
+    st.caption("Immutable accounting audit trail of intentional taxonomy differences, proxy disclosures, and financial statement restatements.")
+    
+    with st.expander("⚖️ Expand Discrepancy & Lineage Ledger Table", expanded=True):
+        disc_rows = []
+        for d in discrepancy_ledger:
+            disc_rows.append({
+                "ID": d.get("discrepancy_id"),
+                "Ticker": d.get("ticker"),
+                "Period": d.get("fiscal_year"),
+                "Metric": d.get("metric"),
+                "Type": d.get("discrepancy_type"),
+                "Canonical": d.get("canonical_value"),
+                "Reported": d.get("reported_value"),
+                "Status": d.get("status"),
+                "Resolution Note": d.get("resolution_or_reconciliation_note") or d.get("description", "")
+            })
+        st.dataframe(pd.DataFrame(disc_rows), hide_index=True, use_container_width=True)
 
     st.markdown("---")
 

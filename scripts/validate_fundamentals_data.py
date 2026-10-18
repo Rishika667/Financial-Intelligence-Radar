@@ -20,6 +20,7 @@ from fundamentals_lens.data_loader import (
     load_source_register,
     load_coverage_report,
     load_evidence_register,
+    load_discrepancy_ledger,
     get_facts_for_company
 )
 from fundamentals_lens.validator import FundamentalsValidator
@@ -28,7 +29,7 @@ from fundamentals_lens.models import ValidationStatus
 
 def run_validation():
     print("=" * 80)
-    print("FUNDAMENTALS LENS: FINANCIAL DATA INTEGRITY VALIDATION (PHASE 7)")
+    print("FUNDAMENTALS LENS: FINANCIAL DATA INTEGRITY VALIDATION (PHASE 8)")
     print("=" * 80)
     
     companies = load_companies()
@@ -36,6 +37,7 @@ def run_validation():
     sources = load_source_register()
     coverage = load_coverage_report()
     evidence_register = load_evidence_register()
+    discrepancies = load_discrepancy_ledger()
     
     counts = FundamentalsValidator.get_metric_verification_counts(evidence_register)
     
@@ -133,7 +135,7 @@ def run_validation():
     print(f"4. Coverage Integrity Passed:            {coverage_passed} / {coverage_total} (Target Horizon Semantics & Chronology)")
     print(f"5. Comparability & Definitions Passed:   {comparability_passed} / {comparability_total} (Standardized GAAP & Ind AS Taxonomy)")
     print(f"6. Primary Metrics Reconciled:           {counts['independently_reconciled']} / {counts['total_primary_metrics']} ({counts['independently_reconciled'] / counts['total_primary_metrics'] * 100:.1f}%), {counts['source_linked_only']} source-linked only, {counts['unverified']} unverified")
-    print(f"7. Sourced Periods with Discrepancy Log: 6 documented items (Stored in discrepancy_ledger.json)")
+    print(f"7. Sourced Periods with Discrepancy Log: {len(discrepancies)} documented items (Stored in discrepancy_ledger.json)")
     print("=" * 80)
     
     if failed_checks > 0 or unverified_checks > 0:

@@ -101,7 +101,7 @@ def test_technical_exports():
         "Close": [102.0] * 25,
         "Volume": [500000] * 25
     })
-    _, _, clean_df = validate_ohlcv_dataframe(df)
+    _, _, clean_df, _ = validate_ohlcv_dataframe(df)
     clean_df = compute_technical_indicators(clean_df)
     summary = compute_technical_summary(clean_df, ticker="TEST")
 

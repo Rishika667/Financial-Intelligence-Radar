@@ -1,9 +1,11 @@
 """
-Generates genuine, realistic 260-trading-day demo OHLCV datasets for Technical Analysis MVP:
-- AAPL_daily_ohlcv.csv
-- MSFT_daily_ohlcv.csv
-- TCS_daily_ohlcv.csv
-- SPY_benchmark_ohlcv.csv
+Generates transparent, mathematically simulated demo OHLCV datasets for Technical Analysis:
+- SIMULATED_TECH_EQUITY.csv (Simulated high-growth technology equity, 260 trading bars)
+- SIMULATED_MARKET_BENCHMARK.csv (Simulated broad market index benchmark, 260 trading bars)
+
+NON-NEGOTIABLE POLICY:
+These files are strictly illustrative synthetic demonstrations generated via geometric Brownian motion.
+They must NEVER be represented or labeled as real AAPL, MSFT, TCS, or SPY market history.
 """
 
 import math
@@ -27,11 +29,11 @@ while len(trading_days) < 260:
     curr_dt -= timedelta(days=1)
 trading_days.reverse()
 
-# Deterministic seed for reproducible data
+# Deterministic seed for reproducible simulation
 random.seed(42)
 np.random.seed(42)
 
-def generate_series(start_price, drift, vol, base_vol, price_round=2, vol_round=0):
+def generate_series(start_price, drift, vol, base_vol, price_round=2):
     prices = [start_price]
     for _ in range(1, 260):
         # Geometric brownian motion step
@@ -48,6 +50,10 @@ def generate_series(start_price, drift, vol, base_vol, price_round=2, vol_round=
         high_p = max(open_p, close_p) * (1.0 + high_extra)
         low_p = min(open_p, close_p) * (1.0 - low_extra)
         
+        # Enforce invariant strictly: High >= max(Open, Close) and Low <= min(Open, Close)
+        high_p = max(high_p, max(open_p, close_p))
+        low_p = min(low_p, min(open_p, close_p))
+        
         # Volume
         vol_noise = np.random.uniform(0.7, 1.4)
         vol_val = int(base_vol * vol_noise)
@@ -62,26 +68,28 @@ def generate_series(start_price, drift, vol, base_vol, price_round=2, vol_round=
         })
     return pd.DataFrame(rows)
 
-# 1. AAPL
-df_aapl = generate_series(start_price=188.50, drift=0.0008, vol=0.012, base_vol=52000000)
-aapl_path = OHLCV_DIR / "AAPL_daily_ohlcv.csv"
-df_aapl.to_csv(aapl_path, index=False)
-print(f"Generated {aapl_path} ({len(df_aapl)} rows, close {df_aapl.iloc[0]['Close']} -> {df_aapl.iloc[-1]['Close']})")
 
-# 2. MSFT
-df_msft = generate_series(start_price=412.00, drift=0.0004, vol=0.011, base_vol=21000000)
-msft_path = OHLCV_DIR / "MSFT_daily_ohlcv.csv"
-df_msft.to_csv(msft_path, index=False)
-print(f"Generated {msft_path} ({len(df_msft)} rows, close {df_msft.iloc[0]['Close']} -> {df_msft.iloc[-1]['Close']})")
+def main():
+    # 1. Clean up any legacy misleading ticker CSVs
+    legacy_files = ["AAPL_daily_ohlcv.csv", "MSFT_daily_ohlcv.csv", "TCS_daily_ohlcv.csv", "SPY_benchmark_ohlcv.csv"]
+    for lf in legacy_files:
+        p = OHLCV_DIR / lf
+        if p.exists():
+            p.unlink()
+            print(f"Removed legacy synthetic file: {lf}")
 
-# 3. TCS (INR)
-df_tcs = generate_series(start_price=3750.00, drift=0.0005, vol=0.010, base_vol=2200000, price_round=2)
-tcs_path = OHLCV_DIR / "TCS_daily_ohlcv.csv"
-df_tcs.to_csv(tcs_path, index=False)
-print(f"Generated {tcs_path} ({len(df_tcs)} rows, close {df_tcs.iloc[0]['Close']} -> {df_tcs.iloc[-1]['Close']})")
+    # 2. Generate SIMULATED_TECH_EQUITY.csv
+    df_equity = generate_series(start_price=188.50, drift=0.0007, vol=0.012, base_vol=45000000)
+    equity_path = OHLCV_DIR / "SIMULATED_TECH_EQUITY.csv"
+    df_equity.to_csv(equity_path, index=False)
+    print(f"Generated {equity_path.name} ({len(df_equity)} bars, Close: {df_equity.iloc[0]['Close']} -> {df_equity.iloc[-1]['Close']})")
 
-# 4. SPY Benchmark
-df_spy = generate_series(start_price=512.50, drift=0.0006, vol=0.008, base_vol=61000000)
-spy_path = OHLCV_DIR / "SPY_benchmark_ohlcv.csv"
-df_spy.to_csv(spy_path, index=False)
-print(f"Generated {spy_path} ({len(df_spy)} rows, close {df_spy.iloc[0]['Close']} -> {df_spy.iloc[-1]['Close']})")
+    # 3. Generate SIMULATED_MARKET_BENCHMARK.csv
+    df_bench = generate_series(start_price=500.00, drift=0.0004, vol=0.007, base_vol=65000000)
+    bench_path = OHLCV_DIR / "SIMULATED_MARKET_BENCHMARK.csv"
+    df_bench.to_csv(bench_path, index=False)
+    print(f"Generated {bench_path.name} ({len(df_bench)} bars, Close: {df_bench.iloc[0]['Close']} -> {df_bench.iloc[-1]['Close']})")
+
+
+if __name__ == "__main__":
+    main()

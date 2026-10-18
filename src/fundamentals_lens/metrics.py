@@ -93,12 +93,12 @@ def calculate_operating_leverage(op_inc_growth: Optional[float], rev_growth: Opt
 def calculate_cagr(start_val: Optional[float], end_val: Optional[float], num_years: int) -> Tuple[Optional[float], Optional[str]]:
     """
     Computes Compound Annual Growth Rate (CAGR) with explicit guard rails.
-    num_years represents the number of intervals (e.g. 5 periods = 4 intervals).
+    num_years represents the number of elapsed growth intervals (e.g. 5 annual observations = 4 growth intervals).
     """
     if start_val is None or end_val is None:
         return None, "Missing start or end period values"
     if num_years <= 0:
-        return None, "Period span must be at least 1 interval"
+        return None, "Period span must be at least 1 interval (>= 2 observations)"
     if start_val <= 0:
         return None, "Base period value is non-positive; CAGR mathematically undefined"
     if end_val <= 0:
@@ -152,26 +152,60 @@ def evaluate_growth_consistency(growth_rates: List[Optional[float]]) -> Dict[str
 
 
 def calculate_cumulative_cash_flows(facts: List[FinancialFact]) -> Dict[str, Any]:
-    """Computes 5-year cumulative cash flow generation and reinvestment metrics."""
+    """
+    Computes cumulative cash flow generation and reinvestment metrics across complete sets of periods.
+    Suppresses incomplete aggregates if any period has missing OCF or Capex.
+    """
     if not facts:
         return {}
     sorted_facts = sorted(facts, key=lambda x: x.fiscal_year)
-    cum_ocf = sum(f.operating_cash_flow for f in sorted_facts if f.operating_cash_flow is not None)
-    cum_capex = sum(f.capital_expenditure for f in sorted_facts if f.capital_expenditure is not None)
+    total_periods = len(sorted_facts)
+
+    valid_facts = [
+        f for f in sorted_facts 
+        if f.operating_cash_flow is not None and f.capital_expenditure is not None
+    ]
+
+    is_complete = (len(valid_facts) == total_periods and total_periods >= 5)
+
+    if len(valid_facts) < 2:
+        return {
+            "cumulative_ocf": None,
+            "cumulative_capex": None,
+            "cumulative_fcf": None,
+            "cumulative_reinvestment_pct": None,
+            "cumulative_fcf_conversion_pct": None,
+            "periods_included": len(valid_facts),
+            "total_periods": total_periods,
+            "is_complete": False,
+            "suppressed": True,
+            "suppress_reason": "Insufficient periods with complete cash flow and capex disclosures",
+            "start_period": sorted_facts[0].fiscal_year_label if sorted_facts else "",
+            "end_period": sorted_facts[-1].fiscal_year_label if sorted_facts else "",
+            "currency": sorted_facts[0].currency if sorted_facts else "",
+            "unit": sorted_facts[0].unit if sorted_facts else "",
+        }
+
+    cum_ocf = sum(f.operating_cash_flow for f in valid_facts)
+    cum_capex = sum(f.capital_expenditure for f in valid_facts)
     cum_fcf = cum_ocf - cum_capex
     reinvest_pct = round((cum_capex / cum_ocf) * 100.0, 2) if cum_ocf > 0 else None
     fcf_conversion_pct = round((cum_fcf / cum_ocf) * 100.0, 2) if cum_ocf > 0 else None
+
     return {
         "cumulative_ocf": round(cum_ocf, 2),
         "cumulative_capex": round(cum_capex, 2),
         "cumulative_fcf": round(cum_fcf, 2),
         "cumulative_reinvestment_pct": reinvest_pct,
         "cumulative_fcf_conversion_pct": fcf_conversion_pct,
-        "periods_included": len(sorted_facts),
-        "start_period": sorted_facts[0].fiscal_year_label if sorted_facts else "",
-        "end_period": sorted_facts[-1].fiscal_year_label if sorted_facts else "",
-        "currency": sorted_facts[0].currency if sorted_facts else "",
-        "unit": sorted_facts[0].unit if sorted_facts else "",
+        "periods_included": len(valid_facts),
+        "total_periods": total_periods,
+        "is_complete": is_complete,
+        "suppressed": False,
+        "start_period": valid_facts[0].fiscal_year_label,
+        "end_period": valid_facts[-1].fiscal_year_label,
+        "currency": valid_facts[0].currency,
+        "unit": valid_facts[0].unit,
     }
 
 

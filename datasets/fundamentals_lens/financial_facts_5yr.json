@@ -674,7 +674,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2025-26"
@@ -843,8 +843,8 @@
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated financial statements in INR crores.",
     "comparability_flag": "DIRECT",
-    "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "accounting_notes": "Net income reflects Net profit attributable to owners of Rs 29,440 Cr. Total consolidated profit for period is Rs 29,474 Cr (DISC-009).",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2025-26"
@@ -1013,8 +1013,8 @@
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements; 25.0% operating margin.",
     "comparability_flag": "LIMITED",
-    "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "accounting_notes": "Operating income reflects Operating profit before exceptional items and other income (PBEI Proxy). 5-year trend reports EBIT of Rs 66,838 Cr (DISC-007).",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2025-26"
@@ -1184,7 +1184,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2025-26"
@@ -1354,7 +1354,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2025-26"
@@ -1524,7 +1524,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2025-26"
@@ -1693,8 +1693,8 @@
     "verification_status": "VERIFIED",
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
-    "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "accounting_notes": "Operating income reflects EBITDA of Rs 12,019 Cr (EBITDA Proxy). Depreciation is Rs 448.2 Cr, EBIT ~Rs 11,570.8 Cr (DISC-008).",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2025-26"
@@ -1864,7 +1864,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2025-26"
@@ -2034,7 +2034,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2025-26"

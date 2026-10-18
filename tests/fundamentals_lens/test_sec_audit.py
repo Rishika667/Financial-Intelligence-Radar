@@ -35,9 +35,10 @@ def test_accession_pattern_regex():
     assert not ACCESSION_PATTERN.match("0000320193-21-00105")  # Too short
 
 
-def test_offline_audit_canonical_facts():
+def test_offline_audit_canonical_facts(tmp_path):
     """Verify that canonical bundled facts all pass offline structure validation."""
-    summary = audit_sec_filings(offline=True, strict=True)
+    rep_file = tmp_path / "report.json"
+    summary = audit_sec_filings(offline=True, strict=True, report_path=rep_file)
     assert summary["mode"] == "OFFLINE"
     assert summary["total_us_periods"] == 30
     assert summary["failure_detected"] is False

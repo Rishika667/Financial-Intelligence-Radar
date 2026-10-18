@@ -26,13 +26,15 @@ class FundamentalsValidator:
         facts: List[FinancialFact],
         sources: Optional[List[Dict[str, Any]]] = None,
         coverage: Optional[List[Dict[str, Any]]] = None,
-        derived_metrics: Optional[List[DerivedMetrics]] = None
+        derived_metrics: Optional[List[DerivedMetrics]] = None,
+        evidence_register: Optional[List[Dict[str, Any]]] = None
     ) -> List[ValidationResult]:
         results: List[ValidationResult] = []
         
-        # Dimension 1: Structural Integrity (Completeness, Chronology & Uniqueness)
+        # Dimension 1: Structural Integrity (Completeness, Chronology, Uniqueness, Dates)
         results.append(cls._check_period_completeness(company, facts))
         results.append(cls._check_duplicate_observations(facts))
+        results.append(cls._check_period_date_formats(facts))
         
         # Dimension 2: Reporting Standards Integrity (Currency, Scale, Non-Coercion)
         results.append(cls._check_currency_and_unit_consistency(company, facts))
@@ -40,6 +42,7 @@ class FundamentalsValidator:
         
         # Dimension 3: Source Lineage & Provenance Traceability
         results.extend(cls._check_source_provenance(facts, sources))
+        results.append(cls._check_filing_reference_types(facts))
         
         # Dimension 4: Computational & Arithmetic Invariants
         results.extend(cls._check_arithmetic_invariants(facts, derived_metrics=derived_metrics))
@@ -51,7 +54,16 @@ class FundamentalsValidator:
         results.append(cls._check_comparability_integrity(company))
         results.append(cls._check_metric_definitions(facts, sources))
         
-        # Dimension 7: Statistical Anomaly & Outlier Review (Non-destructive)
+        # Dimension 7: Evidence Alignment & Reconciliation Tiers (Phase 6 Hardened)
+        if evidence_register is None:
+            try:
+                from .data_loader import load_evidence_register
+                evidence_register = load_evidence_register()
+            except Exception:
+                evidence_register = None
+        results.extend(cls._check_evidence_alignment_and_tiers(facts, evidence_register))
+        
+        # Dimension 8: Statistical Anomaly & Outlier Review (Non-destructive)
         results.extend(cls._check_anomalies_and_variances(facts))
         
         return results
@@ -763,6 +775,258 @@ class FundamentalsValidator:
             ))
             
         return results
+
+    @staticmethod
+    def _check_period_date_formats(facts: List[FinancialFact]) -> ValidationResult:
+        rule_id = "GATE_PERIOD_DATE_FORMAT"
+        rule_name = "ISO Period Date Formatting and Semantics"
+        errors = []
+        date_pattern = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+        for f in facts:
+            start_str = str(f.period_start) if f.period_start else ""
+            end_str = str(f.period_end) if f.period_end else ""
+
+            if not date_pattern.match(start_str):
+                errors.append(f"{f.ticker} {f.fiscal_year_label}: Invalid period_start date format '{start_str}'")
+            if not date_pattern.match(end_str):
+                errors.append(f"{f.ticker} {f.fiscal_year_label}: Invalid period_end date format '{end_str}'")
+
+        if errors:
+            return ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.FAIL,
+                message=f"Invalid period date formats detected: {errors[:3]}",
+                details={"errors": errors},
+                dimension="STRUCTURAL"
+            )
+
+        return ValidationResult(
+            rule_id=rule_id,
+            rule_name=rule_name,
+            status=ValidationStatus.PASS,
+            message="All period start and end dates conform to strict ISO 8601 YYYY-MM-DD format.",
+            details={"observation_count": len(facts)},
+            dimension="STRUCTURAL"
+        )
+
+    @staticmethod
+    def _check_filing_reference_types(facts: List[FinancialFact]) -> ValidationResult:
+        rule_id = "GATE_REFERENCE_TYPE_INTEGRITY"
+        rule_name = "Filing Reference Type and Accession Integrity"
+        errors = []
+
+        sec_accession_pattern = re.compile(r"^\d{10}-\d{2}-\d{6}$")
+
+        for f in facts:
+            ref_type = getattr(f, "reference_type", None)
+            acc_id = getattr(f, "accession_id", None)
+            official_id = getattr(f, "official_filing_id", None)
+            internal_key = getattr(f, "internal_document_key", None)
+
+            if not ref_type or ref_type not in ("SEC_ACCESSION", "INTERNAL_DOCUMENT_KEY", "EXCHANGE_FILING_ID"):
+                errors.append(f"{f.ticker} {f.fiscal_year_label}: Invalid or missing reference_type '{ref_type}'")
+                continue
+
+            if ref_type == "SEC_ACCESSION":
+                if not acc_id or not sec_accession_pattern.match(acc_id):
+                    errors.append(f"{f.ticker} {f.fiscal_year_label}: SEC accession '{acc_id}' does not match standard 20-digit pattern")
+                if acc_id and (acc_id.startswith("BSE-") or acc_id.startswith("NSE-") or "INTERNAL" in acc_id):
+                    errors.append(f"{f.ticker} {f.fiscal_year_label}: Internal document key '{acc_id}' falsely labeled as SEC_ACCESSION")
+                if official_id and official_id != acc_id:
+                    errors.append(f"{f.ticker} {f.fiscal_year_label}: official_filing_id '{official_id}' != accession_id '{acc_id}'")
+                if internal_key is not None:
+                    errors.append(f"{f.ticker} {f.fiscal_year_label}: SEC_ACCESSION record has internal_document_key set: {internal_key}")
+
+            elif ref_type == "INTERNAL_DOCUMENT_KEY":
+                if not internal_key or len(internal_key.strip()) < 5:
+                    errors.append(f"{f.ticker} {f.fiscal_year_label}: Missing internal_document_key for INTERNAL_DOCUMENT_KEY reference type")
+                if official_id is not None:
+                    errors.append(f"{f.ticker} {f.fiscal_year_label}: INTERNAL_DOCUMENT_KEY record falsely claims official_filing_id '{official_id}'")
+                if acc_id and sec_accession_pattern.match(acc_id):
+                    errors.append(f"{f.ticker} {f.fiscal_year_label}: SEC accession format used with INTERNAL_DOCUMENT_KEY type")
+
+        if errors:
+            return ValidationResult(
+                rule_id=rule_id,
+                rule_name=rule_name,
+                status=ValidationStatus.FAIL,
+                message=f"Filing reference type integrity violations: {errors[:3]}",
+                details={"errors": errors},
+                dimension="SOURCE_LINEAGE"
+            )
+
+        return ValidationResult(
+            rule_id=rule_id,
+            rule_name=rule_name,
+            status=ValidationStatus.PASS,
+            message="All observations have strictly typed filing references (SEC accession vs internal document keys).",
+            details={"observation_count": len(facts)},
+            dimension="SOURCE_LINEAGE"
+        )
+
+    @staticmethod
+    def _check_evidence_alignment_and_tiers(
+        facts: List[FinancialFact],
+        evidence_register: Optional[List[Dict[str, Any]]]
+    ) -> List[ValidationResult]:
+        results = []
+        
+        if evidence_register is None:
+            results.append(ValidationResult(
+                rule_id="GATE_FACT_EVIDENCE_ALIGNMENT",
+                rule_name="Fact-to-Evidence Exact Alignment",
+                status=ValidationStatus.UNVERIFIED,
+                message="Evidence register not provided; exact fact-to-evidence cross-verification skipped.",
+                dimension="SOURCE_LINEAGE"
+            ))
+            return results
+
+        evidence_map = {}
+        for reg in evidence_register:
+            key = (reg.get("ticker"), reg.get("fiscal_year_label"))
+            evidence_map[key] = reg
+            yr_key = (reg.get("ticker"), reg.get("fiscal_year"))
+            evidence_map[yr_key] = reg
+
+        alignment_errors = []
+        tier_errors = []
+        primary_metrics = ("revenue", "operating_income", "net_income", "operating_cash_flow", "capital_expenditure")
+
+        for f in facts:
+            key = (f.ticker, f.fiscal_year_label)
+            reg = evidence_map.get(key) or evidence_map.get((f.ticker, f.fiscal_year))
+            if not reg:
+                alignment_errors.append(f"No evidence register entry found for {f.ticker} {f.fiscal_year_label}")
+                continue
+
+            metrics = reg.get("metrics", {})
+            for m in primary_metrics:
+                m_ev = metrics.get(m)
+                if not m_ev:
+                    alignment_errors.append(f"Missing metric evidence for {f.ticker} {f.fiscal_year_label} ({m})")
+                    continue
+
+                fact_val = getattr(f, m, None)
+                canon_val = m_ev.get("canonical_value")
+
+                if fact_val is None or canon_val is None:
+                    alignment_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Fact value or evidence canonical value is None")
+                elif abs(fact_val - canon_val) > 0.001:
+                    alignment_errors.append(
+                        f"{f.ticker} {f.fiscal_year_label} {m}: Fact value {fact_val} != Evidence canonical value {canon_val}"
+                    )
+
+                tier = m_ev.get("reconciliation_tier")
+                if tier == "INDEPENDENTLY_RECONCILED":
+                    loc = m_ev.get("statement_locator") or ""
+                    line_item = m_ev.get("reported_line_item") or ""
+                    stmt_name = m_ev.get("statement_name") or ""
+                    if len(loc.strip()) < 5:
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Missing or inadequate statement locator for reconciled tier")
+                    if len(line_item.strip()) < 3:
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Missing reported line item for reconciled tier")
+                    if len(stmt_name.strip()) < 3:
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Missing statement name for reconciled tier")
+
+        if alignment_errors:
+            results.append(ValidationResult(
+                rule_id="GATE_FACT_EVIDENCE_ALIGNMENT",
+                rule_name="Fact-to-Evidence Exact Alignment",
+                status=ValidationStatus.FAIL,
+                message=f"Discrepancies detected between financial facts and primary evidence register: {alignment_errors[:3]}",
+                details={"errors": alignment_errors},
+                dimension="SOURCE_LINEAGE"
+            ))
+        else:
+            results.append(ValidationResult(
+                rule_id="GATE_FACT_EVIDENCE_ALIGNMENT",
+                rule_name="Fact-to-Evidence Exact Alignment",
+                status=ValidationStatus.PASS,
+                message="All primary financial facts match evidence register canonical values within 0.001 tolerance.",
+                details={"verified_periods": len(facts)},
+                dimension="SOURCE_LINEAGE"
+            ))
+
+        if tier_errors:
+            results.append(ValidationResult(
+                rule_id="GATE_EVIDENCE_TIER_CONSISTENCY",
+                rule_name="Evidence Verification Tier Consistency",
+                status=ValidationStatus.FAIL,
+                message=f"Reconciliation tier requirements violated: {tier_errors[:3]}",
+                details={"tier_errors": tier_errors},
+                dimension="SOURCE_LINEAGE"
+            ))
+        else:
+            results.append(ValidationResult(
+                rule_id="GATE_EVIDENCE_TIER_CONSISTENCY",
+                rule_name="Evidence Verification Tier Consistency",
+                status=ValidationStatus.PASS,
+                message="All reconciled metric tiers have documented statement names, line items, and audit locators.",
+                details={"reconciled_check": "passed"},
+                dimension="SOURCE_LINEAGE"
+            ))
+
+        return results
+
+    @classmethod
+    def get_metric_verification_counts(
+        cls, 
+        evidence_register: Optional[List[Dict[str, Any]]] = None
+    ) -> Dict[str, int]:
+        if evidence_register is None:
+            try:
+                from .data_loader import load_evidence_register
+                evidence_register = load_evidence_register()
+            except Exception:
+                evidence_register = []
+
+        reconciled = 0
+        source_linked = 0
+        unverified = 0
+        failed = 0
+        total_primary = 0
+        fcf_derived = 0
+
+        primary_metrics = ("revenue", "operating_income", "net_income", "operating_cash_flow", "capital_expenditure")
+
+        for reg in evidence_register:
+            metrics = reg.get("metrics", {})
+            has_reconciled_ocf = False
+            has_reconciled_capex = False
+
+            for m in primary_metrics:
+                m_ev = metrics.get(m)
+                if not m_ev:
+                    continue
+                total_primary += 1
+                tier = m_ev.get("reconciliation_tier")
+                if tier == "INDEPENDENTLY_RECONCILED":
+                    reconciled += 1
+                    if m == "operating_cash_flow":
+                        has_reconciled_ocf = True
+                    elif m == "capital_expenditure":
+                        has_reconciled_capex = True
+                elif tier == "SOURCE_LINKED_ONLY":
+                    source_linked += 1
+                elif tier == "FAILED":
+                    failed += 1
+                else:
+                    unverified += 1
+
+            if has_reconciled_ocf and has_reconciled_capex:
+                fcf_derived += 1
+
+        return {
+            "total_primary_metrics": total_primary,
+            "independently_reconciled": reconciled,
+            "source_linked_only": source_linked,
+            "unverified": unverified,
+            "failed": failed,
+            "fcf_derived": fcf_derived,
+            "total_periods": len(evidence_register)
+        }
 
     @classmethod
     def get_dimension_summary(cls, results: List[ValidationResult]) -> Dict[str, Dict[str, int]]:

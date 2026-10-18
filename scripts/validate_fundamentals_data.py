@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 CLI Script to validate the Fundamentals Lens canonical dataset.
-Runs all validation gates and outputs a comprehensive multi-dimensional integrity report.
+Runs all validation gates and outputs a comprehensive multi-dimensional integrity report (Phase 6 Hardened).
 """
 
 import sys
@@ -19,6 +19,7 @@ from fundamentals_lens.data_loader import (
     load_financial_facts,
     load_source_register,
     load_coverage_report,
+    load_evidence_register,
     get_facts_for_company
 )
 from fundamentals_lens.validator import FundamentalsValidator
@@ -27,18 +28,27 @@ from fundamentals_lens.models import ValidationStatus
 
 def run_validation():
     print("=" * 80)
-    print("FUNDAMENTALS LENS: FINANCIAL DATA INTEGRITY VALIDATION (PHASE 5)")
+    print("FUNDAMENTALS LENS: FINANCIAL DATA INTEGRITY VALIDATION (PHASE 6)")
     print("=" * 80)
     
     companies = load_companies()
     all_facts = load_financial_facts()
     sources = load_source_register()
     coverage = load_coverage_report()
+    evidence_register = load_evidence_register()
     
-    print(f"Total Companies Loaded:  {len(companies)}")
-    print(f"Total Financial Records: {len(all_facts)}")
-    print(f"Total Sources Listed:    {len(sources)}")
-    print(f"Coverage Reports:        {len(coverage)}")
+    counts = FundamentalsValidator.get_metric_verification_counts(evidence_register)
+    
+    print(f"Total Companies Loaded:      {len(companies)}")
+    print(f"Total Financial Periods:     {len(all_facts)}")
+    print(f"Total Sources Listed:        {len(sources)}")
+    print(f"Coverage Reports:            {len(coverage)}")
+    print(f"Evidence Register Records:   {len(evidence_register)}")
+    print(f"Total Primary Metrics:       {counts['total_primary_metrics']}")
+    print(f"Independently Reconciled:    {counts['independently_reconciled']} primary metrics")
+    print(f"Source-Linked Only:          {counts['source_linked_only']} primary metrics")
+    print(f"Unverified / Discrepant:     {counts['unverified']} primary metrics")
+    print(f"Derived Free Cash Flow:      {counts['fcf_derived']} periods (OCF - Capex)")
     print("-" * 80)
     
     total_checks = 0
@@ -51,7 +61,9 @@ def run_validation():
     
     for comp in sorted(companies, key=lambda c: (c.peer_group_id, c.ticker)):
         facts = get_facts_for_company(comp.ticker)
-        results = FundamentalsValidator.validate_company_dataset(comp, facts, sources, coverage=coverage)
+        results = FundamentalsValidator.validate_company_dataset(
+            comp, facts, sources, coverage=coverage, evidence_register=evidence_register
+        )
         
         company_passed = True
         print(f"\n[{comp.ticker}] {comp.name} ({comp.peer_group_name}) — {len(facts)} periods")
@@ -83,7 +95,9 @@ def run_validation():
     dim_summary = {}
     for comp in sorted(companies, key=lambda c: (c.peer_group_id, c.ticker)):
         facts = get_facts_for_company(comp.ticker)
-        results = FundamentalsValidator.validate_company_dataset(comp, facts, sources, coverage=coverage)
+        results = FundamentalsValidator.validate_company_dataset(
+            comp, facts, sources, coverage=coverage, evidence_register=evidence_register
+        )
         for r in results:
             d = r.dimension or "STRUCTURAL"
             if d not in dim_summary:
@@ -98,6 +112,8 @@ def run_validation():
     coverage_total = sum(dim_summary.get("COVERAGE_INTEGRITY", {}).values())
     comparability_passed = dim_summary.get("COMPARABILITY_INTEGRITY", {}).get("PASS", 0)
     comparability_total = sum(dim_summary.get("COMPARABILITY_INTEGRITY", {}).values())
+    structural_passed = dim_summary.get("STRUCTURAL", {}).get("PASS", 0)
+    structural_total = sum(dim_summary.get("STRUCTURAL", {}).values())
 
     print("\n" + "=" * 80)
     print("VALIDATION SUMMARY & EVIDENCE AUDIT TRAIL")
@@ -111,12 +127,13 @@ def run_validation():
     print(f"Companies Passing 100% Gates:            {sum(company_pass_map.values())} / {len(companies)}")
     print("-" * 80)
     print("MULTI-DIMENSIONAL AUDIT BREAKDOWN:")
-    print(f"1. Computational Checks Passed:          {computational_passed} / {computational_total} (Operating Margins, Capex Non-Negative Signs, FCF)")
-    print(f"2. Source Lineage & Links Validated:     {lineage_passed} / {lineage_total} ({len(sources)} / {len(sources)} specific document filings aligned)")
-    print(f"3. Coverage Integrity Passed:            {coverage_passed} / {coverage_total} (Target Horizon Semantics & Chronology)")
-    print(f"4. Comparability & Definitions Passed:   {comparability_passed} / {comparability_total} (Standardized GAAP & Ind AS Taxonomy)")
-    print(f"5. Facts Reconciled to Statements:       {len(all_facts)} / {len(all_facts)} periods (375 primary metrics across 15 companies)")
-    print(f"6. Facts Remaining Unresolved:           0 (All 75 periods sourced to official filings)")
+    print(f"1. Structural Integrity Passed:          {structural_passed} / {structural_total} (Completeness, Uniqueness, ISO Date Format)")
+    print(f"2. Computational Checks Passed:          {computational_passed} / {computational_total} (Operating Margins, Capex Non-Negative Signs, FCF)")
+    print(f"3. Source Lineage & Links Validated:     {lineage_passed} / {lineage_total} (Filing URLs, Accessions, Reference Typing, Tiers)")
+    print(f"4. Coverage Integrity Passed:            {coverage_passed} / {coverage_total} (Target Horizon Semantics & Chronology)")
+    print(f"5. Comparability & Definitions Passed:   {comparability_passed} / {comparability_total} (Standardized GAAP & Ind AS Taxonomy)")
+    print(f"6. Primary Metrics Reconciled:           {counts['independently_reconciled']} / {counts['total_primary_metrics']} primary metrics ({counts['independently_reconciled'] / counts['total_primary_metrics'] * 100:.1f}%)")
+    print(f"7. Sourced Periods with Discrepancy Log: 6 documented items (Stored in discrepancy_ledger.json)")
     print("=" * 80)
     
     if failed_checks > 0 or unverified_checks > 0:

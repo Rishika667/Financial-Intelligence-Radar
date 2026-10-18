@@ -8,13 +8,18 @@ from .models import (
     DerivedMetrics,
     ValidationResult,
     ValidationStatus,
-    DataQualityState
+    DataQualityState,
+    VerificationTier,
+    SourceReferenceType,
+    ComparabilityFlag,
+    MetricEvidence
 )
 from .data_loader import (
     load_companies,
     load_financial_facts,
     load_source_register,
     load_coverage_report,
+    load_evidence_register,
     get_company_by_ticker,
     get_facts_for_company
 )

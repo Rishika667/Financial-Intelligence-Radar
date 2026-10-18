@@ -1,0 +1,62 @@
+[
+  {
+    "discrepancy_id": "DISC-001",
+    "ticker": "GOOGL",
+    "fiscal_year_label": "FY2025",
+    "metric": "capital_expenditure",
+    "initial_dataset_value": 91400.0,
+    "primary_reported_value": 91447.0,
+    "investigation_finding": "Early IR presentation slides cited preliminary ~$91.4B rounded capex; official audited Form 10-K Consolidated Statements of Cash Flows reports exact cash payments for property and equipment of $91,447M under accession 0001652044-26-000018.",
+    "resolution": "Updated canonical value to 91,447.0 and aligned accession ID to 0001652044-26-000018."
+  },
+  {
+    "discrepancy_id": "DISC-002",
+    "ticker": "TGT",
+    "fiscal_year_label": "FY2023",
+    "metric": "operating_income",
+    "initial_dataset_value": 5711.0,
+    "primary_reported_value": 5707.0,
+    "investigation_finding": "Preliminary earnings release table cited $5,711M; official Form 10-K Consolidated Statements of Operations reports Operating Income of $5,707M for the 53-week fiscal year ended February 3, 2024.",
+    "resolution": "Updated canonical value to 5,707.0 to match official Item 8 Form 10-K disclosure."
+  },
+  {
+    "discrepancy_id": "DISC-003",
+    "ticker": "BAJAJ-AUTO",
+    "fiscal_year_label": "FY 2023\u201324",
+    "metric": "revenue",
+    "initial_dataset_value": 44870.0,
+    "primary_reported_value": 44685.23,
+    "investigation_finding": "Standalone revenue from operations was Rs 44,870.43 Cr; consolidated revenue from operations was Rs 44,685.23 Cr. To preserve the strict Consolidated basis mandate, the consolidated figure of 44,685.2 Cr is registered.",
+    "resolution": "Registered canonical consolidated value of 44,685.2 Cr and documented standalone vs consolidated delta in ledger."
+  },
+  {
+    "discrepancy_id": "DISC-004",
+    "ticker": "INFY",
+    "fiscal_year_label": "FY 2021\u201322",
+    "metric": "operating_income",
+    "initial_dataset_value": 28010.0,
+    "primary_reported_value": 28015.0,
+    "investigation_finding": "IFRS presentation cited Rs 28,010 Cr; Ind AS audited Consolidated Statement of Profit and Loss reports Operating profit of Rs 28,015 Cr.",
+    "resolution": "Reconciled to Ind AS Consolidated Statement of Profit and Loss at 28,015.0 Cr."
+  },
+  {
+    "discrepancy_id": "DISC-005",
+    "ticker": "WMT",
+    "fiscal_year_label": "FY2025",
+    "metric": "operating_income",
+    "initial_dataset_value": 27011.0,
+    "primary_reported_value": 29348.0,
+    "investigation_finding": "Initial dataset recorded adjusted non-GAAP operating income; official Form 10-K Item 8 Consolidated Statements of Income reports GAAP Operating Income of $29,348M.",
+    "resolution": "Updated canonical value to 29,348.0 to conform to strict GAAP reporting standard."
+  },
+  {
+    "discrepancy_id": "DISC-006",
+    "ticker": "WMT",
+    "fiscal_year_label": "FY2026",
+    "metric": "revenue",
+    "initial_dataset_value": 713158.0,
+    "primary_reported_value": 713163.0,
+    "investigation_finding": "Preliminary segment disclosure reported $713,158M; official Form 10-K Consolidated Statements of Income reports Total Revenues of $713,163M (Net sales $706,413M + Membership and other income $6,750M).",
+    "resolution": "Updated canonical value to 713,163.0 to match official 10-K statement."
+  }
+]

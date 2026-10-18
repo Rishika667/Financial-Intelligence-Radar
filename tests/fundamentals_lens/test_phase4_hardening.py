@@ -65,7 +65,8 @@ def test_target_reconciliation_integrity():
     assert fact_map[2022].net_income == 2780.0
     
     assert fact_map[2023].revenue == 107412.0
-    assert fact_map[2023].operating_income == 5711.0
+    # Reconciled to Form 10-K Consolidated Statements of Operations (DISC-002)
+    assert fact_map[2023].operating_income == 5707.0
     assert fact_map[2023].net_income == 4138.0
     
     assert fact_map[2024].revenue == 106566.0

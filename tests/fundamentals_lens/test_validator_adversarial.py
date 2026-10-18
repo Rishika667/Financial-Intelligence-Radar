@@ -193,3 +193,107 @@ def test_adversarial_negative_capex_sign(sample_company_dataset):
     capex_res = next(r for r in results if r.rule_id == "GATE_ARITHMETIC_CAPEX_SIGN")
     assert capex_res.status == ValidationStatus.FAIL
     assert "Capex must be expressed as a non-negative cash outflow magnitude" in capex_res.message
+
+
+def test_adversarial_subtle_financial_value_change(sample_company_dataset):
+    """12. Adversarial test: Plausible +$1M mutation in revenue fails fact-evidence alignment gate."""
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_facts = copy.deepcopy(facts)
+    # Slightly shift revenue by +1.0 (margin remains completely plausible, but violates evidence source)
+    mutated_facts[0].revenue += 1.0
+    
+    results = FundamentalsValidator.validate_company_dataset(company, mutated_facts, sources, coverage)
+    align_res = next(r for r in results if r.rule_id == "GATE_FACT_EVIDENCE_ALIGNMENT")
+    assert align_res.status == ValidationStatus.FAIL
+    assert "Discrepancies detected between financial facts and primary evidence register" in align_res.message
+
+
+def test_adversarial_fact_changed_without_evidence_change(sample_company_dataset):
+    """13. Adversarial test: Fact changed without evidence change is detected immediately."""
+    company, facts, sources, coverage = sample_company_dataset
+    from fundamentals_lens.data_loader import load_evidence_register
+    evidence_reg = copy.deepcopy(load_evidence_register())
+    mutated_facts = copy.deepcopy(facts)
+    mutated_facts[0].operating_income += 5.0
+    
+    results = FundamentalsValidator.validate_company_dataset(
+        company, mutated_facts, sources, coverage=coverage, evidence_register=evidence_reg
+    )
+    align_res = next(r for r in results if r.rule_id == "GATE_FACT_EVIDENCE_ALIGNMENT")
+    assert align_res.status == ValidationStatus.FAIL
+
+
+def test_adversarial_evidence_changed_without_fact_change(sample_company_dataset):
+    """14. Adversarial test: Evidence changed without corresponding fact change fails alignment."""
+    company, facts, sources, coverage = sample_company_dataset
+    from fundamentals_lens.data_loader import load_evidence_register
+    mutated_evidence = copy.deepcopy(load_evidence_register())
+    # Tamper with the evidence register canonical value
+    for item in mutated_evidence:
+        if item["ticker"] == "AAPL" and item["fiscal_year_label"] == "FY2021":
+            item["metrics"]["net_income"]["canonical_value"] += 10.0
+            break
+            
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=mutated_evidence
+    )
+    align_res = next(r for r in results if r.rule_id == "GATE_FACT_EVIDENCE_ALIGNMENT")
+    assert align_res.status == ValidationStatus.FAIL
+    assert "Discrepancies detected between financial facts and primary evidence register" in align_res.message
+
+
+def test_adversarial_fabricated_reconciliation_tier_without_locator(sample_company_dataset):
+    """15. Adversarial test: Claiming INDEPENDENTLY_RECONCILED without locator fails tier consistency gate."""
+    company, facts, sources, coverage = sample_company_dataset
+    from fundamentals_lens.data_loader import load_evidence_register
+    mutated_evidence = copy.deepcopy(load_evidence_register())
+    for item in mutated_evidence:
+        if item["ticker"] == "AAPL" and item["fiscal_year_label"] == "FY2021":
+            # Strip locator while claiming INDEPENDENTLY_RECONCILED
+            item["metrics"]["revenue"]["statement_locator"] = ""
+            break
+            
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=mutated_evidence
+    )
+    tier_res = next(r for r in results if r.rule_id == "GATE_EVIDENCE_TIER_CONSISTENCY")
+    assert tier_res.status == ValidationStatus.FAIL
+    assert "Reconciliation tier requirements violated" in tier_res.message
+
+
+def test_adversarial_internal_id_mislabeled_as_sec_accession(sample_company_dataset):
+    """16. Adversarial test: Internal document key mislabeled as SEC accession fails reference type gate."""
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_facts = copy.deepcopy(facts)
+    mutated_facts[0].reference_type = "SEC_ACCESSION"
+    mutated_facts[0].accession_id = "BSE-SCRIP-500325-AR-2021-22"
+    
+    results = FundamentalsValidator.validate_company_dataset(company, mutated_facts, sources, coverage)
+    ref_res = next(r for r in results if r.rule_id == "GATE_REFERENCE_TYPE_INTEGRITY")
+    assert ref_res.status == ValidationStatus.FAIL
+    assert "falsely labeled as SEC_ACCESSION" in ref_res.message
+
+
+def test_adversarial_sec_accession_with_internal_key(sample_company_dataset):
+    """17. Adversarial test: SEC_ACCESSION record having an internal document key fails integrity."""
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_facts = copy.deepcopy(facts)
+    mutated_facts[0].internal_document_key = "INTERNAL-BSE-KEY"
+    
+    results = FundamentalsValidator.validate_company_dataset(company, mutated_facts, sources, coverage)
+    ref_res = next(r for r in results if r.rule_id == "GATE_REFERENCE_TYPE_INTEGRITY")
+    assert ref_res.status == ValidationStatus.FAIL
+    assert "has internal_document_key set" in ref_res.message
+
+
+def test_adversarial_invalid_date_format(sample_company_dataset):
+    """18. Adversarial test: Non-ISO period date string fails date format gate."""
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_facts = copy.deepcopy(facts)
+    mutated_facts[0].period_end = "25/09/2021" # Slash-delimited non-ISO format
+    
+    results = FundamentalsValidator.validate_company_dataset(company, mutated_facts, sources, coverage)
+    date_res = next(r for r in results if r.rule_id == "GATE_PERIOD_DATE_FORMAT")
+    assert date_res.status == ValidationStatus.FAIL
+    assert "Invalid period_end date format" in date_res.message
+

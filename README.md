@@ -6,18 +6,18 @@ An evidence-first, zero-cost disclosure intelligence and fundamental equity rese
 
 ---
 
-## 🌟 Featured Product: Fundamentals Lens (80% Portfolio-Ready Milestone)
+## 🌟 Featured Product: Fundamentals Lens (100% In-Scope Release Candidate)
 
 **Fundamentals Lens** is the primary, lightweight financial research product in this repository. It provides transparent five-year financial performance exploration, rule-based inquiry ("What changed, why it matters, and what to investigate"), guarded peer comparisons, and one-click research exports without requiring API keys, live data feeds, or database setup.
 
 - **Primary Entry Point:** `fundamentals_lens_app.py`
-- **Portfolio Readiness:** **80% Production-Grade Milestone** (Phase 5 Closeout)
+- **Portfolio Readiness:** **100% Production-Grade Milestone** (Phase 6 Final Closeout)
 - **Architecture:** Zero-Cost, Pure-Python Static Application (Operating budget: ₹0 / $0)
 - **Target Universe:** 15 Global & Indian Leaders across 5 Peer Groups (75 Audited Annual Periods)
-- **Primary Source Lineage:** 100% of observations link to primary filings with verified statement locations, valid accession IDs, and direct annual report/PDF links (0 generic investor URLs).
-- **Evidence Assurance:** 57 periods (285 primary metrics) independently reconciled against financial statements; 18 periods (90 primary metrics) source-linked audited. Repeatable audit trail in `datasets/fundamentals_lens/evidence_register.csv`.
-- **Validation Gates:** 12-gate multi-dimensional deterministic validator (`scripts/validate_fundamentals_data.py`) with 100% pass rate (180/180 checks) and 12 adversarial mutation tests.
-- **Documentation:** [Phase 5 Closeout](docs/FUNDAMENTALS_LENS_PHASE5_CLOSEOUT.md) | [Phase 5 Gap Register](docs/FUNDAMENTALS_LENS_PHASE5_GAP_REGISTER.md) | [Data Foundation Report](docs/FUNDAMENTALS_LENS_DATA_FOUNDATION.md) | [Release Guide](docs/FUNDAMENTALS_LENS_RELEASE_GUIDE.md) | [Visual QA Screenshots](docs/screenshots/)
+- **Primary Source Lineage:** 100% of observations link to primary filings with verified statement locations, valid accession IDs / internal document keys, and direct annual report/PDF links.
+- **Evidence Assurance:** 375 primary metrics catalogued in `evidence_register.json` (285 independently reconciled with statement locators, 90 source-linked audited, 0 unverified), 75 derived FCF records, and 6 investigated/corrected figure discrepancies.
+- **Validation Gates:** 16-gate multi-dimensional deterministic validator (`scripts/validate_fundamentals_data.py`) with 100% pass rate (240/240 checks) and 19 adversarial mutation tests.
+- **Documentation:** [Phase 6 Closeout](docs/FUNDAMENTALS_LENS_PHASE6_CLOSEOUT.md) | [Phase 6 Gap Register](docs/FUNDAMENTALS_LENS_PHASE6_GAP_REGISTER.md) | [Discrepancy Ledger](docs/FUNDAMENTALS_LENS_DISCREPANCY_LEDGER.md) | [Data Foundation Report](docs/FUNDAMENTALS_LENS_DATA_FOUNDATION.md) | [Release Guide](docs/FUNDAMENTALS_LENS_RELEASE_GUIDE.md) | [Visual QA Screenshots](docs/screenshots/)
 
 ### Quick Start (Fundamentals Lens)
 

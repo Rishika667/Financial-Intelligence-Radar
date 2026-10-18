@@ -198,6 +198,10 @@ class PeerComparisonEngine:
                 data_points.append({
                     "fiscal_year": yr,
                     "fiscal_year_label": f.fiscal_year_label,
+                    "period_start": f.period_start,
+                    "period_end": f.period_end,
+                    "period_date_display": f"{f.fiscal_year_label} ({f.period_end})" if f.period_end else f.fiscal_year_label,
+                    "comparability_flag": getattr(f, "comparability_flag", "DIRECT") or "DIRECT",
                     "value": val
                 })
 
@@ -294,6 +298,10 @@ class PeerComparisonEngine:
                 indexed_data.append({
                     "fiscal_year": pt["fiscal_year"],
                     "fiscal_year_label": pt["fiscal_year_label"],
+                    "period_start": pt.get("period_start"),
+                    "period_end": pt.get("period_end"),
+                    "period_date_display": pt.get("period_date_display"),
+                    "comparability_flag": pt.get("comparability_flag"),
                     "value": idx_val,
                     "nominal_value": val
                 })

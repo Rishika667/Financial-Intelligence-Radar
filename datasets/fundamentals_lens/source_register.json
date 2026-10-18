@@ -29,7 +29,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000320193-21-000105",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_AAPL_10K_2022",
@@ -61,7 +66,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000320193-22-000108",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_AAPL_10K_2023",
@@ -93,7 +103,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000320193-23-000106",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_AAPL_10K_2024",
@@ -125,7 +140,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000320193-24-000123",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_AAPL_10K_2025",
@@ -157,7 +177,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000320193-25-000079",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2022",
@@ -189,7 +214,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532977-AR-2021-22",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2023",
@@ -221,7 +251,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532977-AR-2022-23",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2024",
@@ -253,7 +288,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532977-AR-2023-24",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2025",
@@ -285,7 +325,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532977-AR-2024-25",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_BAJAJ_AR_2026",
@@ -317,7 +362,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532977-AR-2025-26",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_BRIT_AR_2022",
@@ -349,7 +399,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500825-AR-2021-22",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_BRIT_AR_2023",
@@ -381,7 +436,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500825-AR-2022-23",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_BRIT_AR_2024",
@@ -413,7 +473,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500825-AR-2023-24",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_BRIT_AR_2025",
@@ -445,7 +510,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500825-AR-2024-25",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_BRIT_AR_2026",
@@ -477,7 +547,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500825-AR-2025-26",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_COST_10K_2022",
@@ -509,7 +584,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000909832-22-000018",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_COST_10K_2023",
@@ -541,7 +621,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000909832-23-000047",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_COST_10K_2024",
@@ -573,7 +658,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000909832-24-000049",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_COST_10K_2025",
@@ -605,7 +695,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000909832-25-000045",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_COST_10K_2026",
@@ -637,7 +732,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000909832-26-000052",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_DABUR_AR_2022",
@@ -669,7 +769,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500096-AR-2021-22",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_DABUR_AR_2023",
@@ -701,7 +806,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500096-AR-2022-23",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_DABUR_AR_2024",
@@ -733,7 +843,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500096-AR-2023-24",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_DABUR_AR_2025",
@@ -765,7 +880,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500096-AR-2024-25",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_DABUR_AR_2026",
@@ -797,7 +917,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500096-AR-2025-26",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_GOOGL_10K_2021",
@@ -829,7 +954,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0001652044-22-000015",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_GOOGL_10K_2022",
@@ -861,7 +991,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0001652044-23-000016",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_GOOGL_10K_2023",
@@ -893,7 +1028,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0001652044-24-000022",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_GOOGL_10K_2024",
@@ -925,7 +1065,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0001652044-25-000014",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_GOOGL_10K_2025",
@@ -936,7 +1081,7 @@
     "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000012/goog-20251231.htm",
     "filing_date": "2026-02-04",
     "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
-    "accession_id": "0001652044-26-000012",
+    "accession_id": "0001652044-26-000018",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements.",
     "line_item_mappings": {
@@ -957,7 +1102,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0001652044-26-000018",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2022",
@@ -989,7 +1139,12 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532281-AR-2021-22",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2023",
@@ -1021,7 +1176,12 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532281-AR-2022-23",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2024",
@@ -1053,7 +1213,12 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532281-AR-2023-24",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2025",
@@ -1085,7 +1250,12 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532281-AR-2024-25",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2026",
@@ -1117,7 +1287,12 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532281-AR-2025-26",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HERO_AR_2022",
@@ -1149,7 +1324,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500182-AR-2021-22",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HERO_AR_2023",
@@ -1181,7 +1361,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500182-AR-2022-23",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HERO_AR_2024",
@@ -1213,7 +1398,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500182-AR-2023-24",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HERO_AR_2025",
@@ -1245,7 +1435,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500182-AR-2024-25",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HERO_AR_2026",
@@ -1277,7 +1472,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500182-AR-2025-26",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HUL_AR_2022",
@@ -1309,7 +1509,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500696-AR-2021-22",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HUL_AR_2023",
@@ -1341,7 +1546,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500696-AR-2022-23",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HUL_AR_2024",
@@ -1373,7 +1583,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500696-AR-2023-24",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HUL_AR_2025",
@@ -1405,7 +1620,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500696-AR-2024-25",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_HUL_AR_2026",
@@ -1437,7 +1657,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500696-AR-2025-26",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_INFY_AR_2022",
@@ -1469,7 +1694,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500209-AR-2021-22",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_INFY_AR_2023",
@@ -1501,7 +1731,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500209-AR-2022-23",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_INFY_AR_2024",
@@ -1533,7 +1768,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500209-AR-2023-24",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_INFY_AR_2025",
@@ -1565,7 +1805,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500209-AR-2024-25",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_INFY_AR_2026",
@@ -1597,7 +1842,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500209-AR-2025-26",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_MARUTI_AR_2022",
@@ -1629,7 +1879,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532500-AR-2021-22",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_MARUTI_AR_2023",
@@ -1661,7 +1916,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532500-AR-2022-23",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_MARUTI_AR_2024",
@@ -1693,7 +1953,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532500-AR-2023-24",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_MARUTI_AR_2025",
@@ -1725,7 +1990,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532500-AR-2024-25",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_MARUTI_AR_2026",
@@ -1757,7 +2027,12 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532500-AR-2025-26",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_MSFT_10K_2022",
@@ -1789,7 +2064,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000950170-22-013661",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_MSFT_10K_2023",
@@ -1821,7 +2101,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000950170-23-035122",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_MSFT_10K_2024",
@@ -1853,7 +2138,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000950170-24-087843",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_MSFT_10K_2025",
@@ -1885,7 +2175,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000789019-25-000038",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_MSFT_10K_2026",
@@ -1917,7 +2212,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000789019-26-000041",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_TCS_AR_2022",
@@ -1949,7 +2249,12 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532540-AR-2021-22",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_TCS_AR_2023",
@@ -1981,7 +2286,12 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532540-AR-2022-23",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_TCS_AR_2024",
@@ -2013,7 +2323,12 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532540-AR-2023-24",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_TCS_AR_2025",
@@ -2045,7 +2360,12 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532540-AR-2024-25",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_TCS_AR_2026",
@@ -2077,7 +2397,12 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532540-AR-2025-26",
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "ticker": "TGT",
@@ -2109,7 +2434,12 @@
     },
     "verification_status": "VERIFIED",
     "fiscal_year": 2021,
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000027419-22-000007",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "ticker": "TGT",
@@ -2141,7 +2471,12 @@
     },
     "verification_status": "VERIFIED",
     "fiscal_year": 2022,
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000027419-23-000014",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "ticker": "TGT",
@@ -2173,7 +2508,12 @@
     },
     "verification_status": "VERIFIED",
     "fiscal_year": 2023,
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000027419-24-000032",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "ticker": "TGT",
@@ -2205,7 +2545,12 @@
     },
     "verification_status": "VERIFIED",
     "fiscal_year": 2024,
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000027419-25-000018",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "ticker": "TGT",
@@ -2237,7 +2582,12 @@
     },
     "verification_status": "VERIFIED",
     "fiscal_year": 2025,
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000027419-26-000016",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_WMT_10K_2022",
@@ -2269,7 +2619,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000104169-22-000012",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_WMT_10K_2023",
@@ -2301,7 +2656,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000104169-23-000020",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_WMT_10K_2024",
@@ -2333,7 +2693,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000104169-24-000056",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_WMT_10K_2025",
@@ -2365,7 +2730,12 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000104169-25-000019",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   },
   {
     "source_id": "SRC_WMT_10K_2026",
@@ -2397,6 +2767,11 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000104169-26-000021",
+    "internal_document_key": null,
+    "source_check_status": "VERIFIED_PRIMARY_SOURCE",
+    "last_checked_date": "2026-10-18"
   }
 ]

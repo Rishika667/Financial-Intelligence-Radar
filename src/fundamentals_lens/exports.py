@@ -35,7 +35,7 @@ class ExportGenerator:
         output = io.StringIO()
         writer = csv.writer(output)
 
-        # Header (Index 10 is Revenue for backward compatibility)
+        # Header (Index 10 is Revenue, Index 27 is Comparability Flag, Index 29 is Reconciliation Tier)
         writer.writerow([
             "Ticker",
             "Company Name",
@@ -66,7 +66,10 @@ class ExportGenerator:
             "Source URL",
             "Comparability Flag",
             "Accounting Notes",
-            "Reconciliation Tier"
+            "Reconciliation Tier",
+            "Official Filing ID",
+            "Internal Document Key",
+            "Reference Type"
         ])
 
         for f in sorted(facts, key=lambda x: x.fiscal_year):
@@ -94,14 +97,17 @@ class ExportGenerator:
                 f"{d.cash_conversion_ratio:.2f}" if (d and d.cash_conversion_ratio is not None) else "",
                 d.cash_conversion_qualified_reason if (d and d.cash_conversion_qualified_reason) else "",
                 f.statement_basis,
-                f.verification_status,
+                getattr(f, "verification_status", "UNVERIFIED") or "UNVERIFIED",
                 f.source_id,
                 f.filing_date,
                 f.accession_id,
                 f.source_url,
-                getattr(f, "comparability_flag", "DIRECT"),
-                getattr(f, "accounting_notes", ""),
-                getattr(f, "reconciliation_tier", "INDEPENDENTLY_RECONCILED")
+                getattr(f, "comparability_flag", None) or "UNKNOWN",
+                getattr(f, "accounting_notes", "") or "",
+                getattr(f, "verification_tier", None) or getattr(f, "reconciliation_tier", None) or "UNVERIFIED",
+                getattr(f, "official_filing_id", None) or "",
+                getattr(f, "internal_document_key", None) or "",
+                getattr(f, "reference_type", None) or "UNKNOWN"
             ])
 
         return output.getvalue()
@@ -185,7 +191,7 @@ class ExportGenerator:
         lines.append(f"## {company.name} ({company.ticker})")
         lines.append(f"**Peer Group:** {company.peer_group_name} | **Exchange:** {company.exchange} | **Country:** {company.country}")
         lines.append(f"**Dataset Snapshot Cutoff:** `{snapshot_date}` | **Brief Generation Date:** `{report_date}`")
-        lines.append(f"**Statement Basis:** CONSOLIDATED (100% Audited Regulatory Disclosures)")
+        lines.append(f"**Statement Basis:** CONSOLIDATED (Primary Audited Regulatory Disclosures)")
         lines.append(f"**Latest Verified Period:** {latest_fact.fiscal_year_label if latest_fact else 'N/A'}")
         lines.append("")
         lines.append("---")
@@ -203,7 +209,7 @@ class ExportGenerator:
         lines.append("| Fiscal Period | Period Dates | Revenue | Operating Income | Net Income | Operating Cash Flow | Capex | Comparability |")
         lines.append("|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|")
         for f in sorted_facts:
-            comp_flag = getattr(f, "comparability_flag", "DIRECT")
+            comp_flag = getattr(f, "comparability_flag", None) or "UNKNOWN"
             lines.append(
                 f"| {f.fiscal_year_label} | {f.period_start} to {f.period_end} | "
                 f"{f.revenue:,.1f} | {f.operating_income:,.1f} | {f.net_income:,.1f} | "
@@ -255,8 +261,10 @@ class ExportGenerator:
         lines.append("| Period | Source Document | Filing Date | Statement Location | Filing Reference ID | Tier |")
         lines.append("|:---|:---|:---:|:---|:---|:---:|")
         for f in sorted_facts:
-            tier = getattr(f, "reconciliation_tier", "INDEPENDENTLY_RECONCILED")
-            lines.append(f"| {f.fiscal_year_label} | [{f.source_title}]({f.source_url}) | {f.filing_date} | {f.statement_location} | `{f.accession_id}` | `{tier}` |")
+            tier = getattr(f, "verification_tier", None) or getattr(f, "reconciliation_tier", None) or "UNVERIFIED"
+            ref_type = getattr(f, "reference_type", "UNKNOWN") or "UNKNOWN"
+            ref_key = f.official_filing_id if ref_type == "SEC_ACCESSION" and f.official_filing_id else (f.internal_document_key or f.accession_id)
+            lines.append(f"| {f.fiscal_year_label} | [{f.source_title}]({f.source_url}) | {f.filing_date} | {f.statement_location} | `{ref_key}` | `{tier}` |")
         lines.append("")
 
         # 7. Disclaimers & Methodology

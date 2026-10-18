@@ -38,7 +38,19 @@ def load_financial_facts(dataset_dir: Optional[Path] = None) -> List[FinancialFa
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
         
-    return [FinancialFact(**item) for item in data]
+    import dataclasses
+    fact_fields = {f.name for f in dataclasses.fields(FinancialFact)}
+    return [FinancialFact(**{k: v for k, v in item.items() if k in fact_fields}) for item in data]
+
+
+def load_evidence_register(dataset_dir: Optional[Path] = None) -> List[Dict[str, Any]]:
+    base_dir = dataset_dir or get_dataset_dir()
+    file_path = base_dir / "evidence_register.json"
+    if not file_path.exists():
+        raise FileNotFoundError(f"Evidence register file not found at {file_path}")
+    
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 def load_source_register(dataset_dir: Optional[Path] = None) -> List[Dict[str, Any]]:

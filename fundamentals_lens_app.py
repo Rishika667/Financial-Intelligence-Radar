@@ -20,6 +20,7 @@ from fundamentals_lens.data_loader import (
     load_financial_facts,
     load_source_register,
     load_coverage_report,
+    load_evidence_register,
     get_company_by_ticker,
     get_facts_for_company
 )
@@ -186,6 +187,7 @@ def get_app_data():
     facts = load_financial_facts()
     sources = load_source_register()
     coverage = load_coverage_report()
+    evidence_register = load_evidence_register()
     
     facts_by_ticker = {}
     for f in facts:
@@ -194,10 +196,10 @@ def get_app_data():
     for ticker in facts_by_ticker:
         facts_by_ticker[ticker].sort(key=lambda x: x.fiscal_year)
         
-    return companies, facts_by_ticker, sources, coverage
+    return companies, facts_by_ticker, sources, coverage, evidence_register
 
 
-companies, facts_by_ticker, sources, coverage = get_app_data()
+companies, facts_by_ticker, sources, coverage, evidence_register = get_app_data()
 companies_map = {c.ticker: c for c in companies}
 coverage_map = {entry["ticker"]: entry for entry in coverage}
 
@@ -208,9 +210,11 @@ total_datapoints = total_periods * 5
 target_verified_count = sum(1 for c in coverage if c.get("target_period_status_code") == 0)
 target_pending_count = sum(1 for c in coverage if c.get("target_period_status_code") == 1)
 
-all_facts_flat = [f for fl in facts_by_ticker.values() for f in fl]
-reconciled_metrics = sum(5 for f in all_facts_flat if getattr(f, "reconciliation_tier", "") == "INDEPENDENTLY_RECONCILED")
-source_audited_metrics = sum(5 for f in all_facts_flat if getattr(f, "reconciliation_tier", "") == "SOURCE_LINKED_AUDITED")
+metric_counts = FundamentalsValidator.get_metric_verification_counts(evidence_register)
+reconciled_metrics = metric_counts["independently_reconciled"]
+source_linked_metrics = metric_counts["source_linked_only"]
+unverified_metrics = metric_counts["unverified"]
+fcf_derived_count = metric_counts["fcf_derived"]
 
 # --- SIDEBAR NAVIGATION ---
 st.sidebar.markdown("### **Fundamentals Lens**")
@@ -227,19 +231,21 @@ query_page = st.query_params.get("page", "")
 default_page_idx = 0
 if query_page:
     qp = str(query_page).lower().strip()
-    if "comp" in qp:
-        default_page_idx = 1
-    elif "peer" in qp:
+    if "peer" in qp:
         default_page_idx = 2
+    elif "company" in qp or "analysis" in qp:
+        default_page_idx = 1
     elif "data" in qp or "integ" in qp or "method" in qp:
         default_page_idx = 3
+    elif "over" in qp:
+        default_page_idx = 0
 
 selected_page = st.sidebar.radio("Navigation", pages, index=default_page_idx)
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("**Dataset Snapshot:** `2026-10-18`")
 st.sidebar.markdown("**Universe:** 15 Companies across 5 Peer Groups")
-st.sidebar.markdown("**Architecture:** Zero-Cost Static Engine (100% Sourced)")
+st.sidebar.markdown("**Architecture:** Zero-Cost Deterministic Engine (Primary Disclosures)")
 st.sidebar.caption("Not investment advice. For financial research only.")
 
 # --- HELPER FUNCTIONS FOR CHARTS ---
@@ -392,8 +398,8 @@ if selected_page == "Overview":
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Reconciliation Scope</div>
-            <div class="kpi-val">{reconciled_metrics} <span style="font-size:0.9rem;font-weight:400;">Reconciled</span></div>
-            <div class="kpi-delta pos">{source_audited_metrics} Source-Linked Audited (0 Unverified)</div>
+            <div class="kpi-val">{reconciled_metrics} <span style="font-size:0.9rem;font-weight:400;">/ {total_datapoints}</span></div>
+            <div class="kpi-delta pos">{reconciled_metrics / total_datapoints * 100:.1f}% Reconciled ({unverified_metrics} Sourced / Discrepancy Log)</div>
         </div>
         """, unsafe_allow_html=True)
     with col4:
@@ -878,7 +884,7 @@ elif selected_page == "Data Integrity & Methodology":
     ### **Our Data Integrity Philosophy**
     1. **Primary Sources Only:** Every financial observation is sourced directly from audited annual statements filed with the US SEC or Indian stock exchanges (BSE/NSE).
     2. **Zero Synthetic Coercion:** Missing data points are never converted into synthetic zeroes (`0.0`). Missing data is preserved as `None` with transparent explanations.
-    3. **Consolidated Financial Basis:** 100% of reported figures reflect the consolidated operations of the parent company and its subsidiaries.
+    3. **Consolidated Financial Basis:** Primary reported figures reflect the consolidated operations of the parent company and its subsidiaries.
     4. **Zero Operational Cost:** The product runs without paid APIs, runtime scraping, external cloud databases, or mandatory configuration.
     """)
 
@@ -886,7 +892,7 @@ elif selected_page == "Data Integrity & Methodology":
 
     # Coverage Report Table
     st.markdown("### **Company-Level Target Reporting Horizon & Period Coverage**")
-    st.caption(f"Dataset Snapshot Cutoff: `2026-10-18` • Universe: {total_comps} Companies across {total_periods} Completed Annual Periods • {reconciled_metrics} Primary Disclosures Reconciled, {source_audited_metrics} Source-Linked Audited (0 Unverified).")
+    st.caption(f"Dataset Snapshot Cutoff: `2026-10-18` • Universe: {total_comps} Companies across {total_periods} Completed Annual Periods • {reconciled_metrics} Primary Disclosures Independently Reconciled ({reconciled_metrics / total_datapoints * 100:.1f}%), {unverified_metrics} Sourced / Discrepancy Log.")
     
     cov_rows = []
     for c in companies:
@@ -927,7 +933,7 @@ elif selected_page == "Data Integrity & Methodology":
     
     for c in companies:
         c_facts = facts_by_ticker.get(c.ticker, [])
-        res = FundamentalsValidator.validate_company_dataset(c, c_facts, sources, coverage=coverage)
+        res = FundamentalsValidator.validate_company_dataset(c, c_facts, sources, coverage=coverage, evidence_register=evidence_register)
         all_raw_results.extend(res)
         for r in res:
             total_checks += 1

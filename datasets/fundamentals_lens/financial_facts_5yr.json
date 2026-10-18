@@ -28,7 +28,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000320193-21-000105",
+    "internal_document_key": null
   },
   {
     "ticker": "AAPL",
@@ -59,7 +62,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000320193-22-000108",
+    "internal_document_key": null
   },
   {
     "ticker": "AAPL",
@@ -90,7 +96,10 @@
     "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000320193-23-000106",
+    "internal_document_key": null
   },
   {
     "ticker": "AAPL",
@@ -121,7 +130,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000320193-24-000123",
+    "internal_document_key": null
   },
   {
     "ticker": "AAPL",
@@ -152,7 +164,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000320193-25-000079",
+    "internal_document_key": null
   },
   {
     "ticker": "GOOGL",
@@ -183,7 +198,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0001652044-22-000015",
+    "internal_document_key": null
   },
   {
     "ticker": "GOOGL",
@@ -214,7 +232,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0001652044-23-000016",
+    "internal_document_key": null
   },
   {
     "ticker": "GOOGL",
@@ -245,7 +266,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0001652044-24-000022",
+    "internal_document_key": null
   },
   {
     "ticker": "GOOGL",
@@ -276,7 +300,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0001652044-25-000014",
+    "internal_document_key": null
   },
   {
     "ticker": "GOOGL",
@@ -295,19 +322,22 @@
     "operating_income": 129039.0,
     "net_income": 132170.0,
     "operating_cash_flow": 164713.0,
-    "capital_expenditure": 91400.0,
+    "capital_expenditure": 91447.0,
     "source_id": "SRC_GOOGL_10K_2025",
     "source_title": "Alphabet Inc. Form 10-K (FY 2025)",
     "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000012/goog-20251231.htm",
     "filing_date": "2026-02-04",
     "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
-    "accession_id": "0001652044-26-000012",
+    "accession_id": "0001652044-26-000018",
     "reported_status": "REPORTED",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "official_filing_id": "0001652044-26-000018",
+    "reference_type": "SEC_ACCESSION",
+    "internal_document_key": null
   },
   {
     "ticker": "MSFT",
@@ -338,7 +368,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000950170-22-013661",
+    "internal_document_key": null
   },
   {
     "ticker": "MSFT",
@@ -369,7 +402,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000950170-23-035122",
+    "internal_document_key": null
   },
   {
     "ticker": "MSFT",
@@ -400,7 +436,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000950170-24-087843",
+    "internal_document_key": null
   },
   {
     "ticker": "MSFT",
@@ -431,7 +470,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000789019-25-000038",
+    "internal_document_key": null
   },
   {
     "ticker": "MSFT",
@@ -462,7 +504,10 @@
     "notes": "Audited primary 10-K consolidated financial statements; substantial AI datacenter capex.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000789019-26-000041",
+    "internal_document_key": null
   },
   {
     "ticker": "HCLTECH",
@@ -493,7 +538,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532281-AR-2021-22"
   },
   {
     "ticker": "HCLTECH",
@@ -524,7 +572,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532281-AR-2022-23"
   },
   {
     "ticker": "HCLTECH",
@@ -555,7 +606,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532281-AR-2023-24"
   },
   {
     "ticker": "HCLTECH",
@@ -586,7 +640,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532281-AR-2024-25"
   },
   {
     "ticker": "HCLTECH",
@@ -617,7 +674,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532281-AR-2025-26"
   },
   {
     "ticker": "INFY",
@@ -633,7 +693,7 @@
     "period_end": "2022-03-31",
     "statement_basis": "CONSOLIDATED",
     "revenue": 121641.0,
-    "operating_income": 26823.0,
+    "operating_income": 28015.0,
     "net_income": 22110.0,
     "operating_cash_flow": 22096.0,
     "capital_expenditure": 1787.0,
@@ -648,7 +708,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500209-AR-2021-22"
   },
   {
     "ticker": "INFY",
@@ -679,7 +742,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500209-AR-2022-23"
   },
   {
     "ticker": "INFY",
@@ -710,7 +776,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500209-AR-2023-24"
   },
   {
     "ticker": "INFY",
@@ -741,7 +810,10 @@
     "notes": "Audited consolidated financial statements in INR crores.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500209-AR-2024-25"
   },
   {
     "ticker": "INFY",
@@ -772,7 +844,10 @@
     "notes": "Audited consolidated financial statements in INR crores.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500209-AR-2025-26"
   },
   {
     "ticker": "TCS",
@@ -803,7 +878,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532540-AR-2021-22"
   },
   {
     "ticker": "TCS",
@@ -834,7 +912,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532540-AR-2022-23"
   },
   {
     "ticker": "TCS",
@@ -865,7 +946,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532540-AR-2023-24"
   },
   {
     "ticker": "TCS",
@@ -896,7 +980,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532540-AR-2024-25"
   },
   {
     "ticker": "TCS",
@@ -927,7 +1014,10 @@
     "notes": "Audited consolidated Ind AS financial statements; 25.0% operating margin.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532540-AR-2025-26"
   },
   {
     "ticker": "BRITANNIA",
@@ -958,7 +1048,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500825-AR-2021-22"
   },
   {
     "ticker": "BRITANNIA",
@@ -989,7 +1082,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500825-AR-2022-23"
   },
   {
     "ticker": "BRITANNIA",
@@ -1020,7 +1116,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500825-AR-2023-24"
   },
   {
     "ticker": "BRITANNIA",
@@ -1051,7 +1150,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500825-AR-2024-25"
   },
   {
     "ticker": "BRITANNIA",
@@ -1082,7 +1184,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500825-AR-2025-26"
   },
   {
     "ticker": "DABUR",
@@ -1113,7 +1218,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500096-AR-2021-22"
   },
   {
     "ticker": "DABUR",
@@ -1144,7 +1252,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500096-AR-2022-23"
   },
   {
     "ticker": "DABUR",
@@ -1175,7 +1286,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500096-AR-2023-24"
   },
   {
     "ticker": "DABUR",
@@ -1206,7 +1320,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500096-AR-2024-25"
   },
   {
     "ticker": "DABUR",
@@ -1237,7 +1354,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500096-AR-2025-26"
   },
   {
     "ticker": "HINDUNILVR",
@@ -1268,7 +1388,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500696-AR-2021-22"
   },
   {
     "ticker": "HINDUNILVR",
@@ -1299,7 +1422,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500696-AR-2022-23"
   },
   {
     "ticker": "HINDUNILVR",
@@ -1330,7 +1456,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500696-AR-2023-24"
   },
   {
     "ticker": "HINDUNILVR",
@@ -1361,7 +1490,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500696-AR-2024-25"
   },
   {
     "ticker": "HINDUNILVR",
@@ -1392,7 +1524,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500696-AR-2025-26"
   },
   {
     "ticker": "BAJAJ-AUTO",
@@ -1423,7 +1558,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532977-AR-2021-22"
   },
   {
     "ticker": "BAJAJ-AUTO",
@@ -1454,7 +1592,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532977-AR-2022-23"
   },
   {
     "ticker": "BAJAJ-AUTO",
@@ -1469,7 +1610,7 @@
     "period_start": "2023-04-01",
     "period_end": "2024-03-31",
     "statement_basis": "CONSOLIDATED",
-    "revenue": 44870.0,
+    "revenue": 44685.2,
     "operating_income": 8422.0,
     "net_income": 7708.0,
     "operating_cash_flow": 6558.0,
@@ -1485,7 +1626,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532977-AR-2023-24"
   },
   {
     "ticker": "BAJAJ-AUTO",
@@ -1516,7 +1660,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532977-AR-2024-25"
   },
   {
     "ticker": "BAJAJ-AUTO",
@@ -1547,7 +1694,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532977-AR-2025-26"
   },
   {
     "ticker": "HEROMOTOCO",
@@ -1578,7 +1728,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500182-AR-2021-22"
   },
   {
     "ticker": "HEROMOTOCO",
@@ -1609,7 +1762,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500182-AR-2022-23"
   },
   {
     "ticker": "HEROMOTOCO",
@@ -1640,7 +1796,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500182-AR-2023-24"
   },
   {
     "ticker": "HEROMOTOCO",
@@ -1671,7 +1830,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500182-AR-2024-25"
   },
   {
     "ticker": "HEROMOTOCO",
@@ -1702,7 +1864,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-500182-AR-2025-26"
   },
   {
     "ticker": "MARUTI",
@@ -1733,7 +1898,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532500-AR-2021-22"
   },
   {
     "ticker": "MARUTI",
@@ -1764,7 +1932,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532500-AR-2022-23"
   },
   {
     "ticker": "MARUTI",
@@ -1795,7 +1966,10 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532500-AR-2023-24"
   },
   {
     "ticker": "MARUTI",
@@ -1826,7 +2000,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532500-AR-2024-25"
   },
   {
     "ticker": "MARUTI",
@@ -1857,7 +2034,10 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED"
+    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reference_type": "INTERNAL_DOCUMENT_KEY",
+    "official_filing_id": null,
+    "internal_document_key": "BSE-SCRIP-532500-AR-2025-26"
   },
   {
     "ticker": "COST",
@@ -1888,7 +2068,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000909832-22-000018",
+    "internal_document_key": null
   },
   {
     "ticker": "COST",
@@ -1919,7 +2102,10 @@
     "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000909832-23-000047",
+    "internal_document_key": null
   },
   {
     "ticker": "COST",
@@ -1950,7 +2136,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000909832-24-000049",
+    "internal_document_key": null
   },
   {
     "ticker": "COST",
@@ -1981,7 +2170,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000909832-25-000045",
+    "internal_document_key": null
   },
   {
     "ticker": "COST",
@@ -2012,7 +2204,10 @@
     "notes": "Audited primary 10-K consolidated financial statements; 52-week period.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000909832-26-000052",
+    "internal_document_key": null
   },
   {
     "ticker": "TGT",
@@ -2043,7 +2238,10 @@
     "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 29, 2022.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000027419-22-000007",
+    "internal_document_key": null
   },
   {
     "ticker": "TGT",
@@ -2074,7 +2272,10 @@
     "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 28, 2023.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000027419-23-000014",
+    "internal_document_key": null
   },
   {
     "ticker": "TGT",
@@ -2090,7 +2291,7 @@
     "period_end": "2024-02-03",
     "statement_basis": "CONSOLIDATED",
     "revenue": 107412.0,
-    "operating_income": 5711.0,
+    "operating_income": 5707.0,
     "net_income": 4138.0,
     "operating_cash_flow": 8621.0,
     "capital_expenditure": 4806.0,
@@ -2105,7 +2306,10 @@
     "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year ended February 3, 2024.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000027419-24-000032",
+    "internal_document_key": null
   },
   {
     "ticker": "TGT",
@@ -2136,7 +2340,10 @@
     "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended February 1, 2025.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000027419-25-000018",
+    "internal_document_key": null
   },
   {
     "ticker": "TGT",
@@ -2167,7 +2374,10 @@
     "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 31, 2026.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000027419-26-000016",
+    "internal_document_key": null
   },
   {
     "ticker": "WMT",
@@ -2198,7 +2408,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000104169-22-000012",
+    "internal_document_key": null
   },
   {
     "ticker": "WMT",
@@ -2229,7 +2442,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000104169-23-000020",
+    "internal_document_key": null
   },
   {
     "ticker": "WMT",
@@ -2260,7 +2476,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000104169-24-000056",
+    "internal_document_key": null
   },
   {
     "ticker": "WMT",
@@ -2276,7 +2495,7 @@
     "period_end": "2025-01-31",
     "statement_basis": "CONSOLIDATED",
     "revenue": 680985.0,
-    "operating_income": 27011.0,
+    "operating_income": 29348.0,
     "net_income": 19549.0,
     "operating_cash_flow": 36443.0,
     "capital_expenditure": 23783.0,
@@ -2291,7 +2510,10 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000104169-25-000019",
+    "internal_document_key": null
   },
   {
     "ticker": "WMT",
@@ -2306,7 +2528,7 @@
     "period_start": "2025-02-01",
     "period_end": "2026-01-31",
     "statement_basis": "CONSOLIDATED",
-    "revenue": 713158.0,
+    "revenue": 713163.0,
     "operating_income": 29825.0,
     "net_income": 22279.0,
     "operating_cash_flow": 41565.0,
@@ -2322,6 +2544,9 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED"
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reference_type": "SEC_ACCESSION",
+    "official_filing_id": "0000104169-26-000021",
+    "internal_document_key": null
   }
 ]

@@ -304,7 +304,8 @@ def main():
         }
     }
 
-    with open(BUILD_REPORT_FILE, "w", encoding="utf-8") as f:
+    report_file = (out_f.parent / "source_observation_build_report.json") if args.output_file else BUILD_REPORT_FILE
+    with open(report_file, "w", encoding="utf-8") as f:
         json.dump(build_report, f, indent=2)
 
     print(f"\nExtracted {total_obs} observations across 15 companies (75 company-periods):")

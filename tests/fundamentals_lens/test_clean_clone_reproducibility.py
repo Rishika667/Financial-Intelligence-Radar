@@ -126,13 +126,15 @@ def test_genuine_source_independence_with_fact_and_extract_mutations():
 def test_offline_rebuild_script_cli_execution():
     """Verify that `python scripts/build_source_observations_phase13.py --offline` runs cleanly."""
     script_path = REPO_ROOT / "scripts" / "build_source_observations_phase13.py"
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_out = Path(tmpdir) / "source_observations.json"
+        cmd = [sys.executable, str(script_path), "--offline", "--output-file", str(tmp_out)]
+        result = subprocess.run(cmd, cwd=str(REPO_ROOT), capture_output=True, text=True)
 
-    cmd = [sys.executable, str(script_path), "--offline"]
-    result = subprocess.run(cmd, cwd=str(REPO_ROOT), capture_output=True, text=True)
-
-    assert result.returncode == 0, f"Script failed with output:\n{result.stderr}"
-    assert "Extracted 375 observations" in result.stdout
-    assert "Summary: Reconciled=375 (100.0%), Source-Linked=0 (0.0%)" in result.stdout
+        assert result.returncode == 0, f"Script failed with output:\n{result.stderr}"
+        assert "Extracted 375 observations" in result.stdout
+        assert "Summary: Reconciled=375 (100.0%), Source-Linked=0 (0.0%)" in result.stdout
+        assert tmp_out.exists()
 
 
 def test_substantive_determinism():

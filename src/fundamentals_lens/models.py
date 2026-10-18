@@ -23,6 +23,22 @@ class VerificationTier(str, Enum):
     SOURCE_LINKED_ONLY = "SOURCE_LINKED_ONLY"
     UNVERIFIED = "UNVERIFIED"
     FAILED = "FAILED"
+    DERIVED_VERIFIED = "DERIVED_VERIFIED"
+
+
+def normalize_verification_tier(tier: Optional[str]) -> str:
+    if not tier:
+        return VerificationTier.UNVERIFIED.value
+    t_upper = tier.strip().upper()
+    if t_upper in ("SOURCE_LINKED_AUDITED", "SOURCE_LINKED", "SOURCE_LINKED_ONLY"):
+        return VerificationTier.SOURCE_LINKED_ONLY.value
+    if t_upper in ("INDEPENDENTLY_RECONCILED", "AUDITED_RECONCILED"):
+        return VerificationTier.INDEPENDENTLY_RECONCILED.value
+    if t_upper in ("DERIVED_VERIFIED", "DERIVED_RECONCILED", "DERIVED"):
+        return VerificationTier.DERIVED_VERIFIED.value
+    if t_upper == "FAILED":
+        return VerificationTier.FAILED.value
+    return VerificationTier.UNVERIFIED.value
 
 
 class SourceReferenceType(str, Enum):
@@ -139,3 +155,64 @@ class DerivedMetrics:
     free_cash_flow: Optional[float]
     cash_conversion_ratio: Optional[float]
     cash_conversion_qualified_reason: Optional[str] = None
+    operating_margin_change_bps: Optional[float] = None
+    net_margin_change_bps: Optional[float] = None
+    fcf_margin: Optional[float] = None
+    capex_intensity: Optional[float] = None
+    reinvestment_rate: Optional[float] = None
+    operating_leverage: Optional[float] = None
+
+
+@dataclass
+class OHLCVBar:
+    date: str
+    open: float
+    high: float
+    low: float
+    close: float
+    volume: float
+
+
+@dataclass
+class TechnicalIndicators:
+    date: str
+    close: float
+    volume: float
+    sma_20: Optional[float] = None
+    sma_50: Optional[float] = None
+    sma_200: Optional[float] = None
+    rsi_14: Optional[float] = None
+    macd: Optional[float] = None
+    macd_signal: Optional[float] = None
+    macd_hist: Optional[float] = None
+    bb_upper: Optional[float] = None
+    bb_middle: Optional[float] = None
+    bb_lower: Optional[float] = None
+    atr_14: Optional[float] = None
+    daily_return: Optional[float] = None
+
+
+@dataclass
+class TechnicalSummary:
+    ticker: str
+    last_date: str
+    last_close: float
+    total_bars: int
+    change_1m: Optional[float] = None
+    change_3m: Optional[float] = None
+    change_6m: Optional[float] = None
+    change_1y: Optional[float] = None
+    high_52w: Optional[float] = None
+    low_52w: Optional[float] = None
+    dist_from_52w_high: Optional[float] = None
+    dist_from_52w_low: Optional[float] = None
+    annualized_volatility: Optional[float] = None
+    max_drawdown: Optional[float] = None
+    current_rsi: Optional[float] = None
+    rsi_status: str = "NEUTRAL"
+    sma_20_status: str = "N/A"
+    sma_50_status: str = "N/A"
+    sma_200_status: str = "N/A"
+    benchmark_ticker: Optional[str] = None
+    benchmark_change_1y: Optional[float] = None
+    relative_performance_1y: Optional[float] = None

@@ -6,18 +6,20 @@ An evidence-first, zero-cost disclosure intelligence and fundamental equity rese
 
 ---
 
-## 🌟 Featured Product: Fundamentals Lens (100% In-Scope Release Candidate)
+## 🌟 Featured Product: Fundamentals Lens (Phase 7 Expanded Research Workbench)
 
-**Fundamentals Lens** is the primary, lightweight financial research product in this repository. It provides transparent five-year financial performance exploration, rule-based inquiry ("What changed, why it matters, and what to investigate"), guarded peer comparisons, and one-click research exports without requiring API keys, live data feeds, or database setup.
+**Fundamentals Lens** is the primary financial research product in this repository. It provides transparent five-year financial performance exploration, deeper fundamental analytics (CAGR, margin shifts in basis points, operating leverage, cumulative reinvestment), rule-based inquiry ("What changed, why it matters, and what to investigate"), guarded peer comparisons, an in-memory pure-Python Technical Analysis MVP, and one-click research exports—all without requiring API keys, live data feeds, or database setup.
 
 - **Primary Entry Point:** `fundamentals_lens_app.py`
-- **Portfolio Readiness:** **100% Production-Grade Milestone** (Phase 6 Final Closeout)
-- **Architecture:** Zero-Cost, Pure-Python Static Application (Operating budget: ₹0 / $0)
-- **Target Universe:** 15 Global & Indian Leaders across 5 Peer Groups (75 Audited Annual Periods)
-- **Primary Source Lineage:** 100% of observations link to primary filings with verified statement locations, valid accession IDs / internal document keys, and direct annual report/PDF links.
-- **Evidence Assurance:** 375 primary metrics catalogued in `evidence_register.json` (285 independently reconciled with statement locators, 90 source-linked audited, 0 unverified), 75 derived FCF records, and 6 investigated/corrected figure discrepancies.
+- **Portfolio Readiness:** **91.4% Expanded Research Workbench Milestone** (Phase 7 Closeout, exceeding the 70% threshold)
+- **Architecture:** Zero-Cost, Pure-Python Static Application (Operating budget: ₹0 / $0, zero external TA libraries)
+- **Target Universe:** 15 Global & Indian Leaders across 5 Peer Groups (75 Audited Annual Periods, FY 2021–2026)
+- **Primary Source Lineage:** 100% of observations link to primary filings with verified statement locations, valid SEC Form 10-K accession IDs / BSE internal document keys, and direct filing links.
+- **Evidence Assurance:** 375 primary metrics catalogued in `evidence_register.json` (285 independently reconciled with statement locators, 90 source-linked audited, 0 unverified) and 75 derived FCF records mathematically validated ($FCF = OCF - Capex$).
+- **Deeper Fundamentals Engine:** Multi-year CAGR, growth consistency classification, margin shifts in basis points, operating leverage divergence, and 5-year cumulative cash generation & reinvestment rates.
+- **Pure-Python Technical Analysis MVP:** Memory-only OHLCV validation ($H \ge L$, positive prices, $\ge 20$ bars), SMA(20/50/200), Wilder's RSI(14), MACD(12,26,9), Bollinger Bands(20, 2.0 std), ATR(14), risk & return statistics, normalized Base=100 benchmark relative charts, downloadable CSV template, and pre-packaged demo datasets (AAPL, MSFT, TCS, SPY).
 - **Validation Gates:** 16-gate multi-dimensional deterministic validator (`scripts/validate_fundamentals_data.py`) with 100% pass rate (240/240 checks) and 19 adversarial mutation tests.
-- **Documentation:** [Phase 6 Closeout](docs/FUNDAMENTALS_LENS_PHASE6_CLOSEOUT.md) | [Phase 6 Gap Register](docs/FUNDAMENTALS_LENS_PHASE6_GAP_REGISTER.md) | [Discrepancy Ledger](docs/FUNDAMENTALS_LENS_DISCREPANCY_LEDGER.md) | [Data Foundation Report](docs/FUNDAMENTALS_LENS_DATA_FOUNDATION.md) | [Release Guide](docs/FUNDAMENTALS_LENS_RELEASE_GUIDE.md) | [Visual QA Screenshots](docs/screenshots/)
+- **Documentation:** [Phase 7 Closeout](docs/FUNDAMENTALS_LENS_PHASE7_CLOSEOUT.md) | [Phase 7 Gap Register](docs/FUNDAMENTALS_LENS_PHASE7_GAP_REGISTER.md) | [Technical Analysis Methodology](docs/TECHNICAL_ANALYSIS_METHODOLOGY.md) | [Discrepancy Ledger](docs/FUNDAMENTALS_LENS_DISCREPANCY_LEDGER.md) | [Data Foundation Report](docs/FUNDAMENTALS_LENS_DATA_FOUNDATION.md) | [Release Guide](docs/FUNDAMENTALS_LENS_RELEASE_GUIDE.md)
 
 ### Quick Start (Fundamentals Lens)
 
@@ -36,11 +38,13 @@ streamlit run fundamentals_lens_app.py
 
 ### Visual Walkthrough
 
-| Overview & Snapshot | Company Fundamentals & Inquiries |
+| Overview & Health Snapshot | Company Fundamentals (4-Tab Layout) |
 |:---:|:---:|
 | ![Overview](docs/screenshots/01_overview_desktop.png) | ![Company Analysis](docs/screenshots/02_company_analysis_desktop.png) |
-| **Guarded Peer Comparison** | **Data Integrity & Methodology** |
-| ![Peer Comparison](docs/screenshots/03_peer_comparison_desktop.png) | ![Data Integrity](docs/screenshots/04_data_integrity_desktop.png) |
+| **Guarded Peer Comparison** | **Price & Technical Analysis (Pure-Python MVP)** |
+| ![Peer Comparison](docs/screenshots/03_peer_comparison_desktop.png) | ![Technical Analysis](docs/screenshots/04_technical_analysis_desktop.png) |
+| **Data Integrity & Methodology Gates** | **Responsive Viewport Verification (Mobile)** |
+| ![Data Integrity](docs/screenshots/05_data_integrity_desktop.png) | ![Mobile Technical Analysis](docs/screenshots/07_technical_analysis_mobile.png) |
 
 ---
 

@@ -325,7 +325,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2024-25",
@@ -362,7 +362,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2025-26",
@@ -510,7 +510,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2024-25",
@@ -547,7 +547,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2025-26",
@@ -560,10 +560,10 @@
     "fiscal_year": 2022,
     "fiscal_year_label": "FY2022",
     "source_title": "Costco Wholesale Form 10-K (FY 2022)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983222000018/cost-20220828.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983222000021/cost-20220828.htm",
     "filing_date": "2022-10-05",
     "statement_location": "Item 8 - Operations & Cash Flows",
-    "accession_id": "0000909832-22-000018",
+    "accession_id": "0000909832-22-000021",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements.",
     "line_item_mappings": {
@@ -586,10 +586,11 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000909832-22-000018",
+    "official_filing_id": "0000909832-22-000021",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-08-28"
   },
   {
     "source_id": "SRC_COST_10K_2023",
@@ -597,10 +598,10 @@
     "fiscal_year": 2023,
     "fiscal_year_label": "FY2023",
     "source_title": "Costco Wholesale Form 10-K (FY 2023)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983223000047/cost-20230903.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983223000042/cost-20230903.htm",
     "filing_date": "2023-10-11",
     "statement_location": "Item 8 - Operations & Cash Flows",
-    "accession_id": "0000909832-23-000047",
+    "accession_id": "0000909832-23-000042",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year.",
     "line_item_mappings": {
@@ -623,10 +624,11 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000909832-23-000047",
+    "official_filing_id": "0000909832-23-000042",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-09-03"
   },
   {
     "source_id": "SRC_COST_10K_2024",
@@ -634,10 +636,10 @@
     "fiscal_year": 2024,
     "fiscal_year_label": "FY2024",
     "source_title": "Costco Wholesale Form 10-K (FY 2024)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983224000049/cost-20240901.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983224000084/cost-20240901.htm",
     "filing_date": "2024-10-09",
     "statement_location": "Item 8 - Operations & Cash Flows",
-    "accession_id": "0000909832-24-000049",
+    "accession_id": "0000909832-24-000084",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements.",
     "line_item_mappings": {
@@ -660,10 +662,11 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000909832-24-000049",
+    "official_filing_id": "0000909832-24-000084",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-09-01"
   },
   {
     "source_id": "SRC_COST_10K_2025",
@@ -671,10 +674,10 @@
     "fiscal_year": 2025,
     "fiscal_year_label": "FY2025",
     "source_title": "Costco Wholesale Corporation Form 10-K (FY 2025)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983225000045/cost-20250831.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983225000101/cost-20250831.htm",
     "filing_date": "2025-10-08",
     "statement_location": "Item 8 - Consolidated Statements of Operations & Cash Flows",
-    "accession_id": "0000909832-25-000045",
+    "accession_id": "0000909832-25-000101",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements.",
     "line_item_mappings": {
@@ -697,10 +700,11 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000909832-25-000045",
+    "official_filing_id": "0000909832-25-000101",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-08-31"
   },
   {
     "source_id": "SRC_COST_10K_2026",
@@ -708,10 +712,10 @@
     "fiscal_year": 2026,
     "fiscal_year_label": "FY2026",
     "source_title": "Costco Wholesale Corporation Form 10-K (FY 2026)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983226000052/cost-20260830.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983226000093/cost-20260830.htm",
     "filing_date": "2026-10-07",
     "statement_location": "Item 8 - Consolidated Statements of Operations & Cash Flows",
-    "accession_id": "0000909832-26-000052",
+    "accession_id": "0000909832-26-000093",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements; 52-week period.",
     "line_item_mappings": {
@@ -734,10 +738,11 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000909832-26-000052",
+    "official_filing_id": "0000909832-26-000093",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-08-30"
   },
   {
     "source_id": "SRC_DABUR_AR_2022",
@@ -880,7 +885,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2024-25",
@@ -917,7 +922,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2025-26",
@@ -930,10 +935,10 @@
     "fiscal_year": 2021,
     "fiscal_year_label": "FY2021",
     "source_title": "Alphabet Inc. Form 10-K (FY 2021)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204422000015/goog-20211231.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204422000019/goog-20211231.htm",
     "filing_date": "2022-02-02",
     "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
-    "accession_id": "0001652044-22-000015",
+    "accession_id": "0001652044-22-000019",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements.",
     "line_item_mappings": {
@@ -956,10 +961,11 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0001652044-22-000015",
+    "official_filing_id": "0001652044-22-000019",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2021-12-31"
   },
   {
     "source_id": "SRC_GOOGL_10K_2022",
@@ -996,7 +1002,8 @@
     "official_filing_id": "0001652044-23-000016",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-12-31"
   },
   {
     "source_id": "SRC_GOOGL_10K_2023",
@@ -1033,7 +1040,8 @@
     "official_filing_id": "0001652044-24-000022",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-12-31"
   },
   {
     "source_id": "SRC_GOOGL_10K_2024",
@@ -1070,7 +1078,8 @@
     "official_filing_id": "0001652044-25-000014",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-12-31"
   },
   {
     "source_id": "SRC_GOOGL_10K_2025",
@@ -1078,8 +1087,8 @@
     "fiscal_year": 2025,
     "fiscal_year_label": "FY2025",
     "source_title": "Alphabet Inc. Form 10-K (FY 2025)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000012/goog-20251231.htm",
-    "filing_date": "2026-02-04",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+    "filing_date": "2026-02-05",
     "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
     "accession_id": "0001652044-26-000018",
     "verification_status": "VERIFIED",
@@ -1107,7 +1116,8 @@
     "official_filing_id": "0001652044-26-000018",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-12-31"
   },
   {
     "source_id": "SRC_HCLTECH_AR_2022",
@@ -1250,7 +1260,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2024-25",
@@ -1287,7 +1297,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2025-26",
@@ -1435,7 +1445,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2024-25",
@@ -1472,7 +1482,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2025-26",
@@ -1620,7 +1630,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2024-25",
@@ -1657,7 +1667,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2025-26",
@@ -1805,7 +1815,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2024-25",
@@ -1842,7 +1852,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2025-26",
@@ -1990,7 +2000,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2024-25",
@@ -2027,7 +2037,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2025-26",
@@ -2040,10 +2050,10 @@
     "fiscal_year": 2022,
     "fiscal_year_label": "FY2022",
     "source_title": "Microsoft Corp Form 10-K (FY 2022)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017022013661/msft-20220630.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000156459022026876/msft-10k_20220630.htm",
     "filing_date": "2022-07-28",
     "statement_location": "Item 8 - Income Statements & Cash Flows",
-    "accession_id": "0000950170-22-013661",
+    "accession_id": "0001564590-22-026876",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements.",
     "line_item_mappings": {
@@ -2066,10 +2076,11 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000950170-22-013661",
+    "official_filing_id": "0001564590-22-026876",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-06-30"
   },
   {
     "source_id": "SRC_MSFT_10K_2023",
@@ -2106,7 +2117,8 @@
     "official_filing_id": "0000950170-23-035122",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-06-30"
   },
   {
     "source_id": "SRC_MSFT_10K_2024",
@@ -2143,7 +2155,8 @@
     "official_filing_id": "0000950170-24-087843",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-06-30"
   },
   {
     "source_id": "SRC_MSFT_10K_2025",
@@ -2151,10 +2164,10 @@
     "fiscal_year": 2025,
     "fiscal_year_label": "FY2025",
     "source_title": "Microsoft Corporation Form 10-K (FY 2025)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000078901925000038/msft-20250630.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
     "filing_date": "2025-07-30",
     "statement_location": "Item 8 - Income Statements & Cash Flows Statements",
-    "accession_id": "0000789019-25-000038",
+    "accession_id": "0000950170-25-100235",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements.",
     "line_item_mappings": {
@@ -2177,10 +2190,11 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000789019-25-000038",
+    "official_filing_id": "0000950170-25-100235",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-06-30"
   },
   {
     "source_id": "SRC_MSFT_10K_2026",
@@ -2188,10 +2202,10 @@
     "fiscal_year": 2026,
     "fiscal_year_label": "FY2026",
     "source_title": "Microsoft Corporation Form 10-K (FY 2026)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000078901926000041/msft-20260630.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/msft-20260630.htm",
     "filing_date": "2026-07-29",
     "statement_location": "Item 8 - Income Statements & Cash Flows Statements",
-    "accession_id": "0000789019-26-000041",
+    "accession_id": "0001193125-26-323660",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements; substantial AI datacenter capex.",
     "line_item_mappings": {
@@ -2214,10 +2228,11 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000789019-26-000041",
+    "official_filing_id": "0001193125-26-323660",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-06-30"
   },
   {
     "source_id": "SRC_TCS_AR_2022",
@@ -2360,7 +2375,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2024-25",
@@ -2397,7 +2412,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "SOURCE_LINKED_AUDITED",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2025-26",
@@ -2447,9 +2462,9 @@
     "fiscal_year_label": "FY2022",
     "source_id": "SRC_TGT_10K_2022",
     "source_title": "Target Corporation Form 10-K (Fiscal 2022)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741923000014/tgt-20230128.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741923000015/tgt-20230128.htm",
     "filing_date": "2023-03-08",
-    "accession_id": "0000027419-23-000014",
+    "accession_id": "0000027419-23-000015",
     "statement_location": "Consolidated Statements of Operations & Consolidated Statements of Cash Flows",
     "line_item_mappings": {
       "revenue": "Total revenue (Consolidated Statements of Operations)",
@@ -2473,10 +2488,11 @@
     "fiscal_year": 2022,
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000027419-23-000014",
+    "official_filing_id": "0000027419-23-000015",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-01-28"
   },
   {
     "ticker": "TGT",
@@ -2624,7 +2640,8 @@
     "official_filing_id": "0000104169-22-000012",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2022-01-31"
   },
   {
     "source_id": "SRC_WMT_10K_2023",
@@ -2661,7 +2678,8 @@
     "official_filing_id": "0000104169-23-000020",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2023-01-31"
   },
   {
     "source_id": "SRC_WMT_10K_2024",
@@ -2698,7 +2716,8 @@
     "official_filing_id": "0000104169-24-000056",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2024-01-31"
   },
   {
     "source_id": "SRC_WMT_10K_2025",
@@ -2706,10 +2725,10 @@
     "fiscal_year": 2025,
     "fiscal_year_label": "FY2025",
     "source_title": "Walmart Inc. Form 10-K (FY 2025)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416925000019/wmt-20250131.htm",
-    "filing_date": "2025-03-21",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416925000021/wmt-20250131.htm",
+    "filing_date": "2025-03-14",
     "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
-    "accession_id": "0000104169-25-000019",
+    "accession_id": "0000104169-25-000021",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements.",
     "line_item_mappings": {
@@ -2732,10 +2751,11 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000104169-25-000019",
+    "official_filing_id": "0000104169-25-000021",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2025-01-31"
   },
   {
     "source_id": "SRC_WMT_10K_2026",
@@ -2743,10 +2763,10 @@
     "fiscal_year": 2026,
     "fiscal_year_label": "FY2026",
     "source_title": "Walmart Inc. Form 10-K (FY 2026)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416926000021/wmt-20260131.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416926000055/wmt-20260131.htm",
     "filing_date": "2026-03-13",
     "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
-    "accession_id": "0000104169-26-000021",
+    "accession_id": "0000104169-26-000055",
     "verification_status": "VERIFIED",
     "notes": "Audited primary 10-K consolidated financial statements.",
     "line_item_mappings": {
@@ -2769,9 +2789,10 @@
     },
     "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000104169-26-000021",
+    "official_filing_id": "0000104169-26-000055",
     "internal_document_key": null,
     "source_check_status": "VERIFIED_PRIMARY_SOURCE",
-    "last_checked_date": "2026-10-18"
+    "last_checked_date": "2026-10-18",
+    "period_end": "2026-01-31"
   }
 ]

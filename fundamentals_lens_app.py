@@ -1,11 +1,13 @@
 """
 Fundamentals Lens: Evidence-First Financial Intelligence & Research Application
-Entry point for Streamlit Community Cloud and local research workflows.
+Entry point for Streamlit Community Cloud and local research workbench.
+Phase 7 Expanded-Scope Milestone: Deep Fundamentals & Technical Analysis MVP.
 """
 import sys
 import io
 import streamlit as st
 import pandas as pd
+import numpy as np
 import plotly.graph_objects as go
 from pathlib import Path
 
@@ -24,12 +26,28 @@ from fundamentals_lens.data_loader import (
     get_company_by_ticker,
     get_facts_for_company
 )
-from fundamentals_lens.metrics import compute_derived_metrics_for_company
+from fundamentals_lens.metrics import (
+    compute_derived_metrics_for_company,
+    calculate_cagr,
+    evaluate_growth_consistency,
+    calculate_cumulative_cash_flows,
+    calculate_margin_volatility
+)
 from fundamentals_lens.validator import FundamentalsValidator
 from fundamentals_lens.insights import NarrativeEngine
 from fundamentals_lens.peers import PeerComparisonEngine, PEER_GROUP_METADATA
 from fundamentals_lens.exports import ExportGenerator
 from fundamentals_lens.models import ValidationStatus
+from fundamentals_lens.technical import (
+    validate_ohlcv_dataframe,
+    compute_technical_indicators,
+    compute_technical_summary,
+    create_price_candlestick_chart,
+    create_rsi_chart,
+    create_macd_chart,
+    create_benchmark_comparison_chart,
+    get_ohlcv_csv_template
+)
 
 # Page configuration
 st.set_page_config(
@@ -96,37 +114,34 @@ st.markdown("""
         letter-spacing: 0.05em;
     }
     .kpi-val {
-        font-size: 1.6rem;
+        font-size: 1.55rem;
         font-weight: 700;
         color: #0F172A;
         margin: 4px 0;
     }
     .kpi-delta {
         font-size: 0.82rem;
-        font-weight: 600;
+        font-weight: 500;
     }
     .kpi-delta.pos { color: #0D9488; }
     .kpi-delta.neg { color: #E11D48; }
     .kpi-delta.neu { color: #64748B; }
 
-    /* Narrative Insight Box */
+    /* Analytical Insight Boxes */
     .insight-box {
         background-color: #FFFFFF;
-        border-left: 4px solid #0EA5E9;
-        border-top: 1px solid #E2E8F0;
-        border-right: 1px solid #E2E8F0;
-        border-bottom: 1px solid #E2E8F0;
+        border: 1px solid #E2E8F0;
+        border-left: 4px solid #0284C7;
         border-radius: 6px;
-        padding: 16px 20px;
+        padding: 14px 18px;
         margin-bottom: 14px;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.02);
     }
     .insight-cat {
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         font-weight: 700;
-        color: #0284C7;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.06em;
+        color: #0284C7;
     }
     .insight-headline {
         font-size: 1.05rem;
@@ -176,6 +191,16 @@ st.markdown("""
         border: 1px solid #FDE68A;
         display: inline-block;
     }
+    .badge-neutral {
+        background-color: #F1F5F9;
+        color: #334155;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid #CBD5E1;
+        display: inline-block;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -218,12 +243,13 @@ fcf_derived_count = metric_counts["fcf_derived"]
 
 # --- SIDEBAR NAVIGATION ---
 st.sidebar.markdown("### **Fundamentals Lens**")
-st.sidebar.caption("Evidence-First Financial Research")
+st.sidebar.caption("Evidence-First Financial & Technical Workbench")
 
 pages = [
     "Overview",
     "Company Analysis",
     "Peer Comparison",
+    "Price & Technical Analysis",
     "Data Integrity & Methodology"
 ]
 
@@ -231,12 +257,14 @@ query_page = st.query_params.get("page", "")
 default_page_idx = 0
 if query_page:
     qp = str(query_page).lower().strip()
-    if "peer" in qp:
+    if "tech" in qp or "price" in qp:
+        default_page_idx = 3
+    elif "peer" in qp:
         default_page_idx = 2
     elif "company" in qp or "analysis" in qp:
         default_page_idx = 1
     elif "data" in qp or "integ" in qp or "method" in qp:
-        default_page_idx = 3
+        default_page_idx = 4
     elif "over" in qp:
         default_page_idx = 0
 
@@ -245,7 +273,10 @@ selected_page = st.sidebar.radio("Navigation", pages, index=default_page_idx)
 st.sidebar.markdown("---")
 st.sidebar.markdown("**Dataset Snapshot:** `2026-10-18`")
 st.sidebar.markdown("**Universe:** 15 Companies across 5 Peer Groups")
-st.sidebar.markdown("**Architecture:** Zero-Cost Deterministic Engine (Primary Disclosures)")
+st.sidebar.markdown(f"**Reconciled Metrics:** {reconciled_metrics} / {total_datapoints} ({reconciled_metrics / total_datapoints * 100:.1f}%)")
+st.sidebar.markdown(f"**Source-Linked Only:** {source_linked_metrics} metrics")
+st.sidebar.markdown(f"**Derived Invariants:** {fcf_derived_count} FCF metrics")
+st.sidebar.markdown("**Architecture:** Zero-Cost Deterministic Engine")
 st.sidebar.caption("Not investment advice. For financial research only.")
 
 # --- HELPER FUNCTIONS FOR CHARTS ---
@@ -371,11 +402,11 @@ if selected_page == "Overview":
     st.markdown("""
     <div class="lens-header">
         <h1 class="lens-title">🔍 Fundamentals Lens</h1>
-        <div class="lens-subtitle">Transparent Five-Year Financial Disclosure Intelligence & Analytical Research</div>
+        <div class="lens-subtitle">Transparent Five-Year Financial Disclosure Intelligence & Quantitative Research Workbench</div>
     </div>
     """, unsafe_allow_html=True)
     
-    st.info("ℹ️ **Historical Research Notice:** This application provides historical financial analysis based on audited annual disclosures. It is not a live trading feed, stock price prediction tool, or investment advisory service.")
+    st.info("ℹ️ **Historical Research Notice:** Fundamentals Lens provides deterministic financial research based on audited annual filings and quantitative technical indicators. It is not an automated trading feed, stock price prediction tool, or investment advisory service.")
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -398,16 +429,52 @@ if selected_page == "Overview":
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Reconciliation Scope</div>
-            <div class="kpi-val">{reconciled_metrics} <span style="font-size:0.9rem;font-weight:400;">/ {total_datapoints}</span></div>
-            <div class="kpi-delta pos">{reconciled_metrics / total_datapoints * 100:.1f}% Reconciled ({unverified_metrics} Sourced / Discrepancy Log)</div>
+            <div class="kpi-val">{reconciled_metrics} <span style="font-size:0.85rem;font-weight:400;">/ {total_datapoints}</span></div>
+            <div class="kpi-delta pos">{reconciled_metrics / total_datapoints * 100:.1f}% Reconciled ({source_linked_metrics} Source-Linked)</div>
         </div>
         """, unsafe_allow_html=True)
     with col4:
         st.markdown(f"""
         <div class="kpi-card">
-            <div class="kpi-label">Target Reporting Horizon</div>
-            <div class="kpi-val">{target_verified_count} <span style="font-size:0.9rem;font-weight:400;">Included</span></div>
+            <div class="kpi-label">Target Horizon Coverage</div>
+            <div class="kpi-val">{target_verified_count} <span style="font-size:0.85rem;font-weight:400;">Included</span></div>
             <div class="kpi-delta neu">{target_pending_count} Horizon Pending 10-K (AAPL, GOOGL, TGT)</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # Research Inquiry Navigation Cards
+    st.markdown("### **Research Inquiry Navigation**")
+    inq_c1, inq_c2, inq_c3 = st.columns(3)
+    with inq_c1:
+        st.markdown("""
+        <div class="kpi-card">
+            <div class="kpi-label">Company Analysis</div>
+            <div class="kpi-val" style="font-size:1.15rem;">📊 Deeper Fundamentals</div>
+            <p style="font-size:0.85rem; color:#64748B; margin-top:4px;">
+                Explore 4 focused tabs: Growth & Scale, Profitability & Margins, Cash Flow & Reinvestment, and Statements & Evidence.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    with inq_c2:
+        st.markdown("""
+        <div class="kpi-card">
+            <div class="kpi-label">Peer Comparison</div>
+            <div class="kpi-val" style="font-size:1.15rem;">👥 Guarded Benchmarks</div>
+            <p style="font-size:0.85rem; color:#64748B; margin-top:4px;">
+                Multi-company trajectory analysis, normalized Base=100 indexing, and accounting comparability caveats across 5 peer groups.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    with inq_c3:
+        st.markdown("""
+        <div class="kpi-card">
+            <div class="kpi-label">Price & Technical Analysis</div>
+            <div class="kpi-val" style="font-size:1.15rem;">📈 Technical MVP</div>
+            <p style="font-size:0.85rem; color:#64748B; margin-top:4px;">
+                Pure-Python daily OHLCV charts, SMA(20/50/200), RSI(14), MACD(12,26,9), Bollinger Bands, and benchmark normalization.
+            </p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -428,7 +495,7 @@ if selected_page == "Overview":
     
     latest_fact = c_facts[-1]
     latest_der = c_derived[-1]
-    prior_fact = c_facts[-2] if len(c_facts) >= 2 else None
+    first_fact = c_facts[0]
     
     # 4 Quick Snapshot KPIs
     kpi_c1, kpi_c2, kpi_c3, kpi_c4 = st.columns(4)
@@ -453,7 +520,8 @@ if selected_page == "Overview":
         """, unsafe_allow_html=True)
         
     with kpi_c3:
-        fcf_str = f"{latest_der.free_cash_flow:,.1f} {unit}" if latest_der.free_cash_flow is not None else "N/A"
+        fcf = latest_der.free_cash_flow
+        fcf_str = f"{fcf:,.1f} {unit}" if fcf is not None else "N/A"
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Free Cash Flow</div>
@@ -488,7 +556,7 @@ if selected_page == "Overview":
     with insight_col:
         st.markdown("#### **What Changed, Why It Matters & What to Investigate**")
         insights = NarrativeEngine.generate_company_insights(c_facts, c_derived)
-        for i in insights[:2]: # Show top 2 insights on landing page
+        for i in insights[:2]:
             st.markdown(f"""
             <div class="insight-box">
                 <div class="insight-cat">{i.category.replace('_', ' ')}</div>
@@ -499,7 +567,7 @@ if selected_page == "Overview":
             </div>
             """, unsafe_allow_html=True)
             
-        st.caption("👉 Navigate to **Company Analysis** for complete multi-year disclosures, all analytical insights, and official filing citations.")
+        st.caption("👉 Navigate to **Company Analysis** for complete multi-year disclosures, deeper fundamental tabs, and official filing citations.")
 
 
 # ==============================================================================
@@ -532,6 +600,7 @@ elif selected_page == "Company Analysis":
     
     latest_fact = c_facts[-1]
     latest_der = c_derived[-1]
+    first_fact = c_facts[0]
 
     # Target Horizon Status Badge
     status_badge = (
@@ -549,144 +618,304 @@ elif selected_page == "Company Analysis":
     st.caption(f"{comp.business_description} • *Peer Context:* {comp.peer_notes}")
     st.markdown("---")
 
-    # 6 Core KPI Cards
-    r1_col1, r1_col2, r1_col3 = st.columns(3)
-    with r1_col1:
-        growth_str = f"{latest_der.revenue_growth_yoy:+.1f}% YoY" if latest_der.revenue_growth_yoy is not None else "N/A"
-        st.markdown(f"""
-        <div class="kpi-card">
-            <div class="kpi-label">Revenue ({latest_fact.fiscal_year_label})</div>
-            <div class="kpi-val">{latest_fact.revenue:,.1f} <span style="font-size:0.9rem;font-weight:400;">{unit}</span></div>
-            <div class="kpi-delta {'pos' if (latest_der.revenue_growth_yoy or 0) >= 0 else 'neg'}">YoY Growth: {growth_str}</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with r1_col2:
-        op_m_str = f"{latest_der.operating_margin:.2f}%" if latest_der.operating_margin is not None else "N/A"
-        st.markdown(f"""
-        <div class="kpi-card">
-            <div class="kpi-label">Operating Income / EBIT</div>
-            <div class="kpi-val">{latest_fact.operating_income:,.1f} <span style="font-size:0.9rem;font-weight:400;">{unit}</span></div>
-            <div class="kpi-delta neu">Operating Margin: {op_m_str}</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with r1_col3:
-        net_m_str = f"{latest_der.net_margin:.2f}%" if latest_der.net_margin is not None else "N/A"
-        st.markdown(f"""
-        <div class="kpi-card">
-            <div class="kpi-label">Net Income (Consolidated)</div>
-            <div class="kpi-val">{latest_fact.net_income:,.1f} <span style="font-size:0.9rem;font-weight:400;">{unit}</span></div>
-            <div class="kpi-delta neu">Net Margin: {net_m_str}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("")
-    r2_col1, r2_col2, r2_col3 = st.columns(3)
-    with r2_col1:
-        st.markdown(f"""
-        <div class="kpi-card">
-            <div class="kpi-label">Operating Cash Flow</div>
-            <div class="kpi-val">{latest_fact.operating_cash_flow:,.1f} <span style="font-size:0.9rem;font-weight:400;">{unit}</span></div>
-            <div class="kpi-delta pos">Cash from operations</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with r2_col2:
-        capex_ratio = round((latest_fact.capital_expenditure / latest_fact.revenue) * 100.0, 1) if latest_fact.revenue > 0 else 0
-        st.markdown(f"""
-        <div class="kpi-card">
-            <div class="kpi-label">Capital Expenditure (Capex)</div>
-            <div class="kpi-val">{latest_fact.capital_expenditure:,.1f} <span style="font-size:0.9rem;font-weight:400;">{unit}</span></div>
-            <div class="kpi-delta neu">Capex Intensity: {capex_ratio:.1f}% of revenue</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with r2_col3:
-        fcf = latest_der.free_cash_flow
-        fcf_str = f"{fcf:,.1f} {unit}" if fcf is not None else "N/A"
-        if latest_der.cash_conversion_ratio is not None:
-            conv_str = f"Cash Conversion: {latest_der.cash_conversion_ratio:.2f}x"
-        else:
-            conv_str = f"Conversion: {latest_der.cash_conversion_qualified_reason}"
-        st.markdown(f"""
-        <div class="kpi-card">
-            <div class="kpi-label">Free Cash Flow (OCF - Capex)</div>
-            <div class="kpi-val">{fcf_str}</div>
-            <div class="kpi-delta {'pos' if (fcf or 0) >= 0 else 'neg'}">{conv_str}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("---")
-
-    # Visual Charts
-    tab_chart1, tab_chart2, tab_chart3 = st.tabs([
-        "📈 Revenue & Operating Profit",
-        "📊 Profitability Margins (%)",
-        "💵 Cash Generation & FCF"
-    ])
-    with tab_chart1:
-        st.plotly_chart(plot_revenue_and_operating_profit(c_facts, c_derived, unit), use_container_width=True)
-    with tab_chart2:
-        st.plotly_chart(plot_margins(c_derived), use_container_width=True)
-    with tab_chart3:
-        st.plotly_chart(plot_cash_flows(c_facts, c_derived, unit), use_container_width=True)
-
-    st.markdown("---")
-
-    # Historical Disclosures Table
-    st.markdown(f"### **Audited Multi-Year Financial Disclosures (in {unit})**")
-    
-    table_rows = []
-    derived_map = {d.fiscal_year: d for d in c_derived}
-    for f in c_facts:
-        d = derived_map.get(f.fiscal_year)
-        comp_badge = getattr(f, "comparability_flag", "DIRECT")
-        tier_label = getattr(f, "reconciliation_tier", "INDEPENDENTLY_RECONCILED")
-        table_rows.append({
-            "Fiscal Period": f.fiscal_year_label,
-            "Period End": f.period_end,
-            "Basis": f.statement_basis,
-            f"Revenue ({unit})": f"{f.revenue:,.1f}",
-            "YoY Growth": f"{d.revenue_growth_yoy:+.1f}%" if d and d.revenue_growth_yoy is not None else "—",
-            f"Operating Income ({unit})": f"{f.operating_income:,.1f}",
-            "Operating Margin": f"{d.operating_margin:.2f}%" if d and d.operating_margin is not None else "—",
-            f"Net Income ({unit})": f"{f.net_income:,.1f}",
-            "Net Margin": f"{d.net_margin:.2f}%" if d and d.net_margin is not None else "—",
-            f"Operating Cash Flow ({unit})": f"{f.operating_cash_flow:,.1f}",
-            f"Capex ({unit})": f"{f.capital_expenditure:,.1f}",
-            f"Free Cash Flow ({unit})": f"{d.free_cash_flow:,.1f}" if d and d.free_cash_flow is not None else "—",
-            "Cash Conversion (x)": f"{d.cash_conversion_ratio:.2f}x" if d and d.cash_conversion_ratio is not None else f"Suppressed ({d.cash_conversion_qualified_reason or 'Guarded'})",
-            "Comparability": comp_badge,
-            "Reconciliation": "Reconciled" if tier_label == "INDEPENDENTLY_RECONCILED" else "Source-Linked"
-        })
-    df_history = pd.DataFrame(table_rows)
-    st.dataframe(df_history, hide_index=True, use_container_width=True)
-
-    if latest_fact.accounting_notes:
-        st.info(f"💡 **Accounting Comparability Note:** {latest_fact.accounting_notes}")
-
-    st.markdown("---")
-
-    # Analytical Section: What changed, why it matters, what to investigate
-    st.markdown("### **What Changed, Why It Matters, and What to Investigate**")
-    st.caption("Deterministic, rule-based analytical insights grounded exclusively in audited numerical observations.")
-    
+    # Generate insights once for the company
     insights = NarrativeEngine.generate_company_insights(c_facts, c_derived)
-    for idx, insight in enumerate(insights, 1):
-        with st.expander(f"**{idx}. {insight.headline}**", expanded=(idx <= 2)):
+    insights_by_cat = {i.category: i for i in insights}
+
+    # 4 FOCUSED TABS: Growth & Scale, Profitability & Margins, Cash Flow & Reinvestment, Statements & Evidence
+    tab_growth, tab_margins, tab_cashflow, tab_evidence = st.tabs([
+        "📈 Growth & Scale",
+        "📊 Profitability & Margins",
+        "💵 Cash Flow & Reinvestment",
+        "📑 Statements & Evidence"
+    ])
+
+    # --------------------------------------------------------------------------
+    # TAB 1: GROWTH & SCALE
+    # --------------------------------------------------------------------------
+    with tab_growth:
+        st.markdown("#### **Top-Line Scale & Growth Trajectory**")
+        
+        cagr, cagr_reason = calculate_cagr(first_fact.revenue, latest_fact.revenue, len(c_facts) - 1)
+        cagr_str = f"{cagr:+.2f}%" if cagr is not None else f"N/A ({cagr_reason})"
+        growth_rates = [d.revenue_growth_yoy for d in c_derived[1:]]
+        consistency = evaluate_growth_consistency(growth_rates)
+        abs_change = latest_fact.revenue - first_fact.revenue
+        pct_change = ((latest_fact.revenue / first_fact.revenue) - 1.0) * 100.0 if first_fact.revenue > 0 else 0.0
+
+        g_col1, g_col2, g_col3, g_col4 = st.columns(4)
+        with g_col1:
             st.markdown(f"""
-            <div class="insight-box">
-                <div class="insight-cat">{insight.category.replace('_', ' ')}</div>
-                <div class="insight-section"><strong>What changed:</strong> {insight.what_changed}</div>
-                <div class="insight-section"><strong>Numerical Evidence:</strong> <code>{insight.evidence}</code></div>
-                <div class="insight-section"><strong>Why it matters:</strong> {insight.why_it_matters}</div>
-                <div class="insight-section"><strong>What to investigate:</strong> {insight.what_to_investigate}</div>
-                <div class="insight-section" style="color:#64748B;"><em>Analytical limitations:</em> {insight.limitations}</div>
+            <div class="kpi-card">
+                <div class="kpi-label">5-Year Revenue CAGR</div>
+                <div class="kpi-val">{cagr_str}</div>
+                <div class="kpi-delta neu">{len(c_facts) - 1} Annual Intervals</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with g_col2:
+            latest_growth = latest_der.revenue_growth_yoy
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">Latest YoY Growth</div>
+                <div class="kpi-val">{f"{latest_growth:+.2f}%" if latest_growth is not None else "N/A"}</div>
+                <div class="kpi-delta {'pos' if (latest_growth or 0) >= 0 else 'neg'}">{latest_fact.fiscal_year_label} vs {c_facts[-2].fiscal_year_label}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with g_col3:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">5-Year Absolute Expansion</div>
+                <div class="kpi-val">{abs_change:+,.1f} <span style="font-size:0.85rem;font-weight:400;">{unit}</span></div>
+                <div class="kpi-delta pos">{pct_change:+.1f}% cumulative change</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with g_col4:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">Growth Consistency</div>
+                <div class="kpi-val" style="font-size:1.15rem;">{consistency['label'].replace('_', ' ')}</div>
+                <div class="kpi-delta neu">{consistency['positive_years']} of {consistency['total_years']} intervals positive</div>
             </div>
             """, unsafe_allow_html=True)
 
-    st.markdown("---")
+        st.markdown("")
+        st.plotly_chart(plot_revenue_and_operating_profit(c_facts, c_derived, unit), use_container_width=True)
 
-    # Primary Source Provenance Audit
-    with st.expander("🔍 **Primary Source Provenance & Regulatory Filing Links**", expanded=False):
-        st.markdown("Every observation in Fundamentals Lens is traceable to official, audited annual regulatory filings.")
+        # Revenue trajectory data table
+        rev_table = []
+        for i, f in enumerate(c_facts):
+            d = c_derived[i]
+            prior_rev = c_facts[i-1].revenue if i > 0 else None
+            abs_delta = f.revenue - prior_rev if prior_rev is not None else None
+            rev_table.append({
+                "Fiscal Period": f.fiscal_year_label,
+                "Period End": f.period_end,
+                f"Revenue ({unit})": f"{f.revenue:,.1f}",
+                f"Absolute Change ({unit})": f"{abs_delta:+,.1f}" if abs_delta is not None else "— (Baseline)",
+                "YoY Growth Rate": f"{d.revenue_growth_yoy:+.2f}%" if d.revenue_growth_yoy is not None else "— (Baseline)",
+            })
+        st.dataframe(pd.DataFrame(rev_table), hide_index=True, use_container_width=True)
+
+        # Analytical Insight Card
+        if "TOP_LINE_GROWTH" in insights_by_cat:
+            i = insights_by_cat["TOP_LINE_GROWTH"]
+            st.markdown(f"""
+            <div class="insight-box">
+                <div class="insight-cat">Top-Line Growth Analysis</div>
+                <div class="insight-headline">{i.headline}</div>
+                <div class="insight-section"><strong>What changed:</strong> {i.what_changed}</div>
+                <div class="insight-section"><strong>Evidence:</strong> <code>{i.evidence}</code></div>
+                <div class="insight-section"><strong>Why it matters:</strong> {i.why_it_matters}</div>
+                <div class="insight-section"><strong>What to investigate:</strong> {i.what_to_investigate}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    # --------------------------------------------------------------------------
+    # TAB 2: PROFITABILITY & MARGINS
+    # --------------------------------------------------------------------------
+    with tab_margins:
+        st.markdown("#### **Operating Efficiency & Profitability Margins**")
+
+        op_bps = latest_der.operating_margin_change_bps
+        net_bps = latest_der.net_margin_change_bps
+        op_lev = latest_der.operating_leverage
+        margins = [d.operating_margin for d in c_derived]
+        margin_vol = calculate_margin_volatility(margins)
+
+        m_col1, m_col2, m_col3, m_col4 = st.columns(4)
+        with m_col1:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">Operating Margin</div>
+                <div class="kpi-val">{latest_der.operating_margin:.2f}%</div>
+                <div class="kpi-delta neu">EBIT: {latest_fact.operating_income:,.1f} {unit}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with m_col2:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">YoY Margin Shift</div>
+                <div class="kpi-val">{f"{op_bps:+.1f} bps" if op_bps is not None else "N/A"}</div>
+                <div class="kpi-delta {'pos' if (op_bps or 0) >= 0 else 'neg'}">1% = 100 bps</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with m_col3:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">Operating Leverage</div>
+                <div class="kpi-val">{f"{op_lev:+.2f}%" if op_lev is not None else "N/A"}</div>
+                <div class="kpi-delta neu">EBIT Growth − Revenue Growth</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with m_col4:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">5-Yr Margin Volatility</div>
+                <div class="kpi-val">{f"{margin_vol:.2f}%" if margin_vol is not None else "N/A"}</div>
+                <div class="kpi-delta neu">Sample Standard Deviation (σ)</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("")
+        st.plotly_chart(plot_margins(c_derived), use_container_width=True)
+
+        # Margin details table
+        margin_table = []
+        for i, f in enumerate(c_facts):
+            d = c_derived[i]
+            margin_table.append({
+                "Fiscal Period": f.fiscal_year_label,
+                f"Operating Income ({unit})": f"{f.operating_income:,.1f}",
+                "Operating Margin (%)": f"{d.operating_margin:.2f}%" if d.operating_margin is not None else "—",
+                "Op Margin YoY Shift": f"{d.operating_margin_change_bps:+.1f} bps" if d.operating_margin_change_bps is not None else "— (Baseline)",
+                "Operating Leverage Spread": f"{d.operating_leverage:+.2f}%" if d.operating_leverage is not None else "— (Baseline)",
+                f"Net Income ({unit})": f"{f.net_income:,.1f}",
+                "Net Margin (%)": f"{d.net_margin:.2f}%" if d.net_margin is not None else "—",
+                "Net Margin YoY Shift": f"{d.net_margin_change_bps:+.1f} bps" if d.net_margin_change_bps is not None else "— (Baseline)",
+            })
+        st.dataframe(pd.DataFrame(margin_table), hide_index=True, use_container_width=True)
+
+        # Analytical Insight Card
+        if "OPERATING_MARGINS" in insights_by_cat:
+            i = insights_by_cat["OPERATING_MARGINS"]
+            st.markdown(f"""
+            <div class="insight-box">
+                <div class="insight-cat">Operating Profitability Analysis</div>
+                <div class="insight-headline">{i.headline}</div>
+                <div class="insight-section"><strong>What changed:</strong> {i.what_changed}</div>
+                <div class="insight-section"><strong>Evidence:</strong> <code>{i.evidence}</code></div>
+                <div class="insight-section"><strong>Why it matters:</strong> {i.why_it_matters}</div>
+                <div class="insight-section"><strong>What to investigate:</strong> {i.what_to_investigate}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    # --------------------------------------------------------------------------
+    # TAB 3: CASH FLOW & REINVESTMENT
+    # --------------------------------------------------------------------------
+    with tab_cashflow:
+        st.markdown("#### **Cash Flow Generation & Capital Reinvestment**")
+
+        cum_flows = calculate_cumulative_cash_flows(c_facts)
+        cum_ocf = cum_flows.get("cumulative_ocf", 0.0)
+        cum_capex = cum_flows.get("cumulative_capex", 0.0)
+        cum_fcf = cum_flows.get("cumulative_fcf", 0.0)
+        cum_reinvest = cum_flows.get("cumulative_reinvestment_pct")
+
+        cf_c1, cf_c2, cf_c3, cf_c4 = st.columns(4)
+        with cf_c1:
+            fcf = latest_der.free_cash_flow
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">Free Cash Flow</div>
+                <div class="kpi-val">{f"{fcf:,.1f}" if fcf is not None else "N/A"} <span style="font-size:0.85rem;font-weight:400;">{unit}</span></div>
+                <div class="kpi-delta {'pos' if (fcf or 0) >= 0 else 'neg'}">OCF − Capex</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with cf_c2:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">FCF Margin</div>
+                <div class="kpi-val">{f"{latest_der.fcf_margin:.2f}%" if latest_der.fcf_margin is not None else "N/A"}</div>
+                <div class="kpi-delta neu">FCF as % of Revenue</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with cf_c3:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">Capex Intensity</div>
+                <div class="kpi-val">{f"{latest_der.capex_intensity:.2f}%" if latest_der.capex_intensity is not None else "N/A"}</div>
+                <div class="kpi-delta neu">Capex as % of Revenue</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with cf_c4:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">Reinvestment Rate</div>
+                <div class="kpi-val">{f"{latest_der.reinvestment_rate:.1f}%" if latest_der.reinvestment_rate is not None else "N/A"}</div>
+                <div class="kpi-delta neu">Capex as % of OCF</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("")
+        # 5-Year Cumulative Cash Flow Passport
+        st.markdown(f"""
+        <div class="kpi-card" style="margin-bottom:16px;">
+            <div class="kpi-label">5-Year Cumulative Cash Flow Passport ({cum_flows.get('start_period', '')} to {cum_flows.get('end_period', '')})</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; flex-wrap:wrap; gap:12px;">
+                <div><strong>Cumulative OCF:</strong> {cum_ocf:,.1f} {unit}</div>
+                <div><strong>Cumulative Capex:</strong> {cum_capex:,.1f} {unit}</div>
+                <div><strong>Cumulative FCF:</strong> {cum_fcf:,.1f} {unit}</div>
+                <div><strong>Cumulative Reinvestment:</strong> {f"{cum_reinvest:.1f}%" if cum_reinvest is not None else "N/A"} of OCF</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.plotly_chart(plot_cash_flows(c_facts, c_derived, unit), use_container_width=True)
+
+        # Cash flow table
+        cf_table = []
+        for i, f in enumerate(c_facts):
+            d = c_derived[i]
+            cf_table.append({
+                "Fiscal Period": f.fiscal_year_label,
+                f"Operating Cash Flow ({unit})": f"{f.operating_cash_flow:,.1f}",
+                f"Capital Expenditure ({unit})": f"{f.capital_expenditure:,.1f}",
+                f"Free Cash Flow ({unit})": f"{d.free_cash_flow:,.1f}" if d.free_cash_flow is not None else "—",
+                "FCF Margin (%)": f"{d.fcf_margin:.2f}%" if d.fcf_margin is not None else "—",
+                "Capex Intensity (%)": f"{d.capex_intensity:.2f}%" if d.capex_intensity is not None else "—",
+                "Reinvestment Rate (%)": f"{d.reinvestment_rate:.1f}%" if d.reinvestment_rate is not None else "—",
+                "Cash Conversion (x)": f"{d.cash_conversion_ratio:.2f}x" if d.cash_conversion_ratio is not None else f"Suppressed ({d.cash_conversion_qualified_reason or 'Guarded'})"
+            })
+        st.dataframe(pd.DataFrame(cf_table), hide_index=True, use_container_width=True)
+
+        # Analytical Insight Cards for Cash Flow
+        for cat in ["CASH_GENERATION", "CASH_CONVERSION", "CAPITAL_INTENSITY"]:
+            if cat in insights_by_cat:
+                i = insights_by_cat[cat]
+                st.markdown(f"""
+                <div class="insight-box">
+                    <div class="insight-cat">{cat.replace('_', ' ')}</div>
+                    <div class="insight-headline">{i.headline}</div>
+                    <div class="insight-section"><strong>What changed:</strong> {i.what_changed}</div>
+                    <div class="insight-section"><strong>Evidence:</strong> <code>{i.evidence}</code></div>
+                    <div class="insight-section"><strong>Why it matters:</strong> {i.why_it_matters}</div>
+                </div>
+                """, unsafe_allow_html=True)
+
+    # --------------------------------------------------------------------------
+    # TAB 4: STATEMENTS & EVIDENCE
+    # --------------------------------------------------------------------------
+    with tab_evidence:
+        st.markdown(f"#### **Audited Financial Facts & Reconciliation Register (in {unit})**")
+
+        table_rows = []
+        derived_map = {d.fiscal_year: d for d in c_derived}
+        for f in c_facts:
+            d = derived_map.get(f.fiscal_year)
+            comp_badge = getattr(f, "comparability_flag", "DIRECT")
+            tier_label = getattr(f, "reconciliation_tier", "INDEPENDENTLY_RECONCILED")
+            table_rows.append({
+                "Fiscal Period": f.fiscal_year_label,
+                "Period End": f.period_end,
+                "Basis": f.statement_basis,
+                f"Revenue ({unit})": f"{f.revenue:,.1f}",
+                f"Operating Income ({unit})": f"{f.operating_income:,.1f}",
+                f"Net Income ({unit})": f"{f.net_income:,.1f}",
+                f"Operating Cash Flow ({unit})": f"{f.operating_cash_flow:,.1f}",
+                f"Capex ({unit})": f"{f.capital_expenditure:,.1f}",
+                f"Free Cash Flow ({unit})": f"{d.free_cash_flow:,.1f}" if d and d.free_cash_flow is not None else "—",
+                "Comparability": comp_badge,
+                "Reconciliation Tier": tier_label
+            })
+        df_history = pd.DataFrame(table_rows)
+        st.dataframe(df_history, hide_index=True, use_container_width=True)
+
+        if latest_fact.accounting_notes:
+            st.info(f"💡 **Accounting Comparability Note:** {latest_fact.accounting_notes}")
+
+        st.markdown("---")
+        st.markdown("#### **Primary Source Provenance & Regulatory Filing Links**")
+        st.caption("Every observation in Fundamentals Lens is traceable to official, audited annual regulatory filings.")
         prov_rows = []
         for f in c_facts:
             prov_rows.append({
@@ -694,33 +923,35 @@ elif selected_page == "Company Analysis":
                 "Filing Title": f.source_title,
                 "Filing Date": f.filing_date,
                 "Statement Location": f.statement_location,
-                "Accession ID": f.accession_id,
+                "Accession / Doc ID": f.accession_id,
+                "Reference Type": getattr(f, "reference_type", "SEC_ACCESSION"),
                 "Source Link": f.source_url
             })
         st.dataframe(pd.DataFrame(prov_rows), hide_index=True, use_container_width=True)
 
-    # Export Center
-    st.markdown("### **Research Exports**")
-    csv_str = ExportGenerator.generate_company_csv(comp, c_facts, c_derived)
-    brief_md = ExportGenerator.generate_research_brief(comp, c_facts, c_derived, insights)
-    
-    exp_c1, exp_c2 = st.columns(2)
-    with exp_c1:
-        st.download_button(
-            label=f"📥 Download {comp.ticker} 5-Year Financials (CSV)",
-            data=csv_str,
-            file_name=f"{comp.ticker}_fundamentals_5yr.csv",
-            mime="text/csv",
-            use_container_width=True
-        )
-    with exp_c2:
-        st.download_button(
-            label=f"📄 Download {comp.ticker} Research Brief (Markdown)",
-            data=brief_md,
-            file_name=f"{comp.ticker}_research_brief.md",
-            mime="text/markdown",
-            use_container_width=True
-        )
+        # Export Center
+        st.markdown("---")
+        st.markdown("#### **Research Exports**")
+        csv_str = ExportGenerator.generate_company_csv(comp, c_facts, c_derived)
+        brief_md = ExportGenerator.generate_research_brief(comp, c_facts, c_derived, insights)
+        
+        exp_c1, exp_c2 = st.columns(2)
+        with exp_c1:
+            st.download_button(
+                label=f"📥 Download {comp.ticker} 5-Year Financials (CSV)",
+                data=csv_str,
+                file_name=f"{comp.ticker}_fundamentals_5yr.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+        with exp_c2:
+            st.download_button(
+                label=f"📄 Download {comp.ticker} Research Brief (Markdown)",
+                data=brief_md,
+                file_name=f"{comp.ticker}_research_brief.md",
+                mime="text/markdown",
+                use_container_width=True
+            )
 
 
 # ==============================================================================
@@ -826,7 +1057,6 @@ elif selected_page == "Peer Comparison":
     if matrix.get("metric_note"):
         st.info(f"💡 **Accounting Definition Note:** {matrix['metric_note']}")
     
-    # Build pivoted dataframe safely supporting differing fiscal years
     period_year_map = {}
     for s in matrix["series"]:
         for pt in s["data"]:
@@ -870,7 +1100,259 @@ elif selected_page == "Peer Comparison":
 
 
 # ==============================================================================
-# PAGE 4: DATA INTEGRITY & METHODOLOGY
+# PAGE 4: PRICE & TECHNICAL ANALYSIS (MVP)
+# ==============================================================================
+elif selected_page == "Price & Technical Analysis":
+    st.markdown("""
+    <div class="lens-header">
+        <h1 class="lens-title">📈 Price & Technical Analysis MVP</h1>
+        <div class="lens-subtitle">Quantitative Research: Daily OHLCV, Moving Averages, Momentum & Risk Profile</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Analyst disclaimer banner
+    st.markdown("""
+    <div class="caveat-banner">
+        <strong>⚠️ Technical Analysis Notice & Scope Guard:</strong><br>
+        Historical technical indicators reflect deterministic mathematical observations of past trading action and volume. 
+        They do <strong>NOT</strong> constitute price targets, buy/sell recommendations, automated trading signals, or investment advice. 
+        Technical analysis should only be used as supplementary quantitative context alongside primary financial disclosures.
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Data Source Selection
+    source_choice = st.radio(
+        "Select Price Data Source:",
+        [
+            "📁 Pre-Packaged Demo Dataset",
+            "📤 Upload Custom Daily OHLCV CSV (In-Memory Only)"
+        ],
+        horizontal=True
+    )
+
+    clean_df = None
+    active_ticker = "DEMO"
+    bench_df = None
+    bench_ticker = None
+
+    ohlcv_dir = ROOT_DIR / "datasets" / "fundamentals_lens" / "ohlcv"
+
+    if source_choice == "📁 Pre-Packaged Demo Dataset":
+        demo_col1, demo_col2 = st.columns([3, 2])
+        with demo_col1:
+            demo_opts = {
+                "AAPL": "Apple Inc. (AAPL) — Daily Trading OHLCV",
+                "MSFT": "Microsoft Corporation (MSFT) — Daily Trading OHLCV",
+                "TCS": "Tata Consultancy Services (TCS) — Daily Trading OHLCV",
+            }
+            selected_demo = st.selectbox(
+                "Select Demo Asset:",
+                options=list(demo_opts.keys()),
+                format_func=lambda k: demo_opts[k]
+            )
+            active_ticker = selected_demo
+            demo_file = ohlcv_dir / f"{selected_demo}_daily_ohlcv.csv"
+            if demo_file.exists():
+                raw_df = pd.read_csv(demo_file)
+                valid, err, clean_df = validate_ohlcv_dataframe(raw_df)
+                if not valid:
+                    st.error(f"Error loading demo dataset: {err}")
+            else:
+                st.warning(f"Demo file {demo_file.name} not found. Generating default data.")
+
+        with demo_col2:
+            bm_choice = st.selectbox(
+                "Comparative Benchmark:",
+                ["None", "SPY — S&P 500 ETF Benchmark (Pre-Packaged)"]
+            )
+            if "SPY" in bm_choice:
+                bench_ticker = "SPY"
+                spy_file = ohlcv_dir / "SPY_benchmark_ohlcv.csv"
+                if spy_file.exists():
+                    _, _, bench_df = validate_ohlcv_dataframe(pd.read_csv(spy_file))
+
+    else:
+        # File uploader
+        up_col1, up_col2 = st.columns([3, 2])
+        with up_col1:
+            st.markdown("Upload a daily OHLCV CSV file (headers: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`):")
+            uploaded_file = st.file_uploader("Upload OHLCV CSV:", type=["csv"])
+            custom_ticker_input = st.text_input("Asset Ticker / Symbol Label:", value="CUSTOM_ASSET")
+            active_ticker = custom_ticker_input.strip().upper() or "CUSTOM"
+            
+            if uploaded_file is not None:
+                try:
+                    raw_df = pd.read_csv(uploaded_file)
+                    valid, err, clean_df = validate_ohlcv_dataframe(raw_df)
+                    if not valid:
+                        st.error(f"❌ **Validation Failed:** {err}")
+                        clean_df = None
+                    else:
+                        st.success(f"✅ Successfully validated {len(clean_df)} trading observations for `{active_ticker}`.")
+                except Exception as e:
+                    st.error(f"❌ Failed to parse CSV: {str(e)}")
+                    clean_df = None
+
+        with up_col2:
+            st.markdown("**Need a CSV template?**")
+            st.caption("Download the standardized template to prepare your OHLCV data:")
+            st.download_button(
+                label="📥 Download OHLCV CSV Template",
+                data=get_ohlcv_csv_template(),
+                file_name="ohlcv_template.csv",
+                mime="text/csv"
+            )
+
+    # Render technical workbench if valid data is present
+    if clean_df is not None and not clean_df.empty:
+        # Calculate indicators
+        clean_df = compute_technical_indicators(clean_df)
+        summary = compute_technical_summary(clean_df, ticker=active_ticker, benchmark_df=bench_df, benchmark_ticker=bench_ticker)
+
+        st.markdown("---")
+        st.markdown(f"### **Quantitative Performance & Risk Snapshot — `{active_ticker}`**")
+        st.caption(f"Trading Horizon: `{clean_df['Date_Str'].iloc[0]}` to `{summary.last_date}` • `{summary.total_bars}` Observations")
+
+        # 4 Core KPI Cards
+        tkpi1, tkpi2, tkpi3, tkpi4 = st.columns(4)
+        with tkpi1:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">Latest Close Price</div>
+                <div class="kpi-val">{summary.last_close:,.2f}</div>
+                <div class="kpi-delta neu">As of {summary.last_date}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with tkpi2:
+            ret_1y_str = f"{summary.change_1y:+.2f}%" if summary.change_1y is not None else (f"{summary.change_6m:+.2f}% (6M)" if summary.change_6m is not None else "N/A")
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">1-Year Return</div>
+                <div class="kpi-val">{ret_1y_str}</div>
+                <div class="kpi-delta neu">1M: {f"{summary.change_1m:+.1f}%" if summary.change_1m else "N/A"} | 3M: {f"{summary.change_3m:+.1f}%" if summary.change_3m else "N/A"}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with tkpi3:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">52-Week Range</div>
+                <div class="kpi-val" style="font-size:1.2rem;">{summary.low_52w:,.1f} — {summary.high_52w:,.1f}</div>
+                <div class="kpi-delta neu">From High: {summary.dist_from_52w_high:+.1f}% | Low: {summary.dist_from_52w_low:+.1f}%</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with tkpi4:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">Risk Profile</div>
+                <div class="kpi-val" style="font-size:1.25rem;">{f"σ = {summary.annualized_volatility:.1f}%" if summary.annualized_volatility else "N/A"}</div>
+                <div class="kpi-delta neg">Max Drawdown: {f"{summary.max_drawdown:.1f}%" if summary.max_drawdown else "N/A"}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("")
+
+        # Indicator Status Bar
+        stat_c1, stat_c2, stat_c3, stat_c4 = st.columns(4)
+        with stat_c1:
+            st.markdown(f"**RSI (14):** `{summary.current_rsi:.1f}` <span class='badge-neutral'>{summary.rsi_status}</span>", unsafe_allow_html=True)
+        with stat_c2:
+            st.markdown(f"**SMA 20:** <span class='badge-neutral'>{summary.sma_20_status}</span>", unsafe_allow_html=True)
+        with stat_c3:
+            st.markdown(f"**SMA 50:** <span class='badge-neutral'>{summary.sma_50_status}</span>", unsafe_allow_html=True)
+        with stat_c4:
+            st.markdown(f"**SMA 200:** <span class='badge-neutral'>{summary.sma_200_status}</span>", unsafe_allow_html=True)
+
+        st.markdown("---")
+
+        # Technical Tabs
+        tech_tab1, tech_tab2, tech_tab3, tech_tab4 = st.tabs([
+            "📊 Price Action & Trend",
+            "⚡ Momentum & Oscillators",
+            "🎯 Benchmark & Relative Return",
+            "📑 Technical Data & Exports"
+        ])
+
+        with tech_tab1:
+            st.markdown("#### **Candlestick Price Action, Moving Averages & Volume**")
+            chart_ctrl1, chart_ctrl2 = st.columns(2)
+            with chart_ctrl1:
+                show_sma_opt = st.checkbox("Show Simple Moving Averages (20 / 50 / 200)", value=True)
+            with chart_ctrl2:
+                show_bb_opt = st.checkbox("Show Bollinger Bands (20, 2.0σ)", value=True)
+
+            fig_candle = create_price_candlestick_chart(
+                clean_df, 
+                ticker=active_ticker,
+                show_sma=show_sma_opt,
+                show_bb=show_bb_opt
+            )
+            if fig_candle:
+                st.plotly_chart(fig_candle, use_container_width=True)
+
+        with tech_tab2:
+            st.markdown("#### **Relative Strength Index (RSI) & MACD Momentum**")
+            fig_rsi = create_rsi_chart(clean_df, ticker=active_ticker)
+            if fig_rsi:
+                st.plotly_chart(fig_rsi, use_container_width=True)
+
+            fig_macd = create_macd_chart(clean_df, ticker=active_ticker)
+            if fig_macd:
+                st.plotly_chart(fig_macd, use_container_width=True)
+
+        with tech_tab3:
+            st.markdown("#### **Benchmark Comparison (Normalized Base = 100)**")
+            if bench_df is not None and not bench_df.empty:
+                fig_comp = create_benchmark_comparison_chart(
+                    clean_df,
+                    bench_df,
+                    asset_ticker=active_ticker,
+                    benchmark_ticker=bench_ticker or "SPY"
+                )
+                if fig_comp:
+                    st.plotly_chart(fig_comp, use_container_width=True)
+                if summary.relative_performance_1y is not None:
+                    st.info(
+                        f"🎯 **Relative Performance Summary:** `{active_ticker}` cumulative return diverged by "
+                        f"**{summary.relative_performance_1y:+.2f}%** points relative to `{bench_ticker}` "
+                        f"({summary.change_1y:+.1f}% vs {summary.benchmark_change_1y:+.1f}%) over the shared trading period."
+                    )
+            else:
+                st.info("ℹ️ Select a benchmark (e.g. `SPY Benchmark`) above to compare normalized relative returns.")
+
+        with tech_tab4:
+            st.markdown("#### **Calculated Technical Indicators Table**")
+            cols_to_show = [
+                "Date_Str", "Open", "High", "Low", "Close", "Volume",
+                "SMA_20", "SMA_50", "SMA_200", "RSI_14", "MACD", "MACD_Hist", "Daily_Return"
+            ]
+            cols_present = [c for c in cols_to_show if c in clean_df.columns]
+            st.dataframe(clean_df[cols_present].tail(100), hide_index=True, use_container_width=True)
+
+            st.markdown("#### **Exports**")
+            t_csv_str = ExportGenerator.generate_technical_csv(clean_df, active_ticker)
+            t_brief_md = ExportGenerator.generate_technical_brief(summary, clean_df)
+
+            t_exp1, t_exp2 = st.columns(2)
+            with t_exp1:
+                st.download_button(
+                    label=f"📥 Download {active_ticker} Technical Data (CSV)",
+                    data=t_csv_str,
+                    file_name=f"{active_ticker}_technical_indicators.csv",
+                    mime="text/csv",
+                    use_container_width=True
+                )
+            with t_exp2:
+                st.download_button(
+                    label=f"📄 Download {active_ticker} Technical Brief (Markdown)",
+                    data=t_brief_md,
+                    file_name=f"{active_ticker}_technical_brief.md",
+                    mime="text/markdown",
+                    use_container_width=True
+                )
+
+
+# ==============================================================================
+# PAGE 5: DATA INTEGRITY & METHODOLOGY
 # ==============================================================================
 elif selected_page == "Data Integrity & Methodology":
     st.markdown("""
@@ -882,7 +1364,7 @@ elif selected_page == "Data Integrity & Methodology":
 
     st.markdown("""
     ### **Our Data Integrity Philosophy**
-    1. **Primary Sources Only:** Every financial observation is sourced directly from audited annual statements filed with the US SEC or Indian stock exchanges (BSE/NSE).
+    1. **Primary Sources Only:** Every financial observation is sourced directly from audited annual statements filed with the US SEC (Form 10-K) or Indian stock exchanges (BSE/NSE Annual Reports).
     2. **Zero Synthetic Coercion:** Missing data points are never converted into synthetic zeroes (`0.0`). Missing data is preserved as `None` with transparent explanations.
     3. **Consolidated Financial Basis:** Primary reported figures reflect the consolidated operations of the parent company and its subsidiaries.
     4. **Zero Operational Cost:** The product runs without paid APIs, runtime scraping, external cloud databases, or mandatory configuration.
@@ -892,7 +1374,7 @@ elif selected_page == "Data Integrity & Methodology":
 
     # Coverage Report Table
     st.markdown("### **Company-Level Target Reporting Horizon & Period Coverage**")
-    st.caption(f"Dataset Snapshot Cutoff: `2026-10-18` • Universe: {total_comps} Companies across {total_periods} Completed Annual Periods • {reconciled_metrics} Primary Disclosures Independently Reconciled ({reconciled_metrics / total_datapoints * 100:.1f}%), {unverified_metrics} Sourced / Discrepancy Log.")
+    st.caption(f"Dataset Snapshot Cutoff: `2026-10-18` • Universe: {total_comps} Companies across {total_periods} Completed Annual Periods • {reconciled_metrics} Primary Disclosures Independently Reconciled ({reconciled_metrics / total_datapoints * 100:.1f}%), {source_linked_metrics} Source-Linked Only, {fcf_derived_count} Derived Verified Invariants.")
     
     cov_rows = []
     for c in companies:

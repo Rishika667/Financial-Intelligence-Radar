@@ -7,7 +7,9 @@ from .models import (
     FinancialFact,
     DerivedMetrics,
     ValidationResult,
-    ValidationStatus
+    ValidationStatus,
+    VerificationTier,
+    normalize_verification_tier
 )
 from .metrics import compute_derived_metrics_for_company
 
@@ -919,7 +921,8 @@ class FundamentalsValidator:
                     )
 
                 tier = m_ev.get("reconciliation_tier")
-                if tier == "INDEPENDENTLY_RECONCILED":
+                norm_tier = normalize_verification_tier(tier)
+                if norm_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
                     loc = m_ev.get("statement_locator") or ""
                     line_item = m_ev.get("reported_line_item") or ""
                     stmt_name = m_ev.get("statement_name") or ""
@@ -1002,20 +1005,24 @@ class FundamentalsValidator:
                     continue
                 total_primary += 1
                 tier = m_ev.get("reconciliation_tier")
-                if tier == "INDEPENDENTLY_RECONCILED":
+                norm_tier = normalize_verification_tier(tier)
+                if norm_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
                     reconciled += 1
                     if m == "operating_cash_flow":
                         has_reconciled_ocf = True
                     elif m == "capital_expenditure":
                         has_reconciled_capex = True
-                elif tier == "SOURCE_LINKED_ONLY":
+                elif norm_tier == VerificationTier.SOURCE_LINKED_ONLY.value:
                     source_linked += 1
-                elif tier == "FAILED":
+                elif norm_tier == VerificationTier.FAILED.value:
                     failed += 1
                 else:
                     unverified += 1
 
-            if has_reconciled_ocf and has_reconciled_capex:
+            fcf_entry = metrics.get("free_cash_flow")
+            if fcf_entry and normalize_verification_tier(fcf_entry.get("reconciliation_tier")) == VerificationTier.DERIVED_VERIFIED.value:
+                fcf_derived += 1
+            elif has_reconciled_ocf and has_reconciled_capex:
                 fcf_derived += 1
 
         return {

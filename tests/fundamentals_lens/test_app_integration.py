@@ -66,3 +66,15 @@ def test_streamlit_app_data_integrity_page():
     at.sidebar.radio[0].set_value("Data Integrity & Methodology")
     at.run()
     assert len(at.exception) == 0, [e.value for e in at.exception]
+
+
+def test_streamlit_app_technical_analysis_page():
+    at = AppTest.from_file(str(APP_PATH), default_timeout=30)
+    at.run()
+    assert len(at.exception) == 0
+    # Switch to Price & Technical Analysis
+    at.sidebar.radio[0].set_value("Price & Technical Analysis")
+    at.run()
+    assert len(at.exception) == 0, [e.value for e in at.exception]
+    # Check that radio or selectbox exists
+    assert len(at.radio) > 0

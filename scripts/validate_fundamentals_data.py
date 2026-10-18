@@ -28,7 +28,7 @@ from fundamentals_lens.models import ValidationStatus
 
 def run_validation():
     print("=" * 80)
-    print("FUNDAMENTALS LENS: FINANCIAL DATA INTEGRITY VALIDATION (PHASE 6)")
+    print("FUNDAMENTALS LENS: FINANCIAL DATA INTEGRITY VALIDATION (PHASE 7)")
     print("=" * 80)
     
     companies = load_companies()
@@ -48,7 +48,7 @@ def run_validation():
     print(f"Independently Reconciled:    {counts['independently_reconciled']} primary metrics")
     print(f"Source-Linked Only:          {counts['source_linked_only']} primary metrics")
     print(f"Unverified / Discrepant:     {counts['unverified']} primary metrics")
-    print(f"Derived Free Cash Flow:      {counts['fcf_derived']} periods (OCF - Capex)")
+    print(f"Derived Free Cash Flow:      {counts['fcf_derived']} periods (DERIVED_VERIFIED)")
     print("-" * 80)
     
     total_checks = 0
@@ -132,7 +132,7 @@ def run_validation():
     print(f"3. Source Lineage & Links Validated:     {lineage_passed} / {lineage_total} (Filing URLs, Accessions, Reference Typing, Tiers)")
     print(f"4. Coverage Integrity Passed:            {coverage_passed} / {coverage_total} (Target Horizon Semantics & Chronology)")
     print(f"5. Comparability & Definitions Passed:   {comparability_passed} / {comparability_total} (Standardized GAAP & Ind AS Taxonomy)")
-    print(f"6. Primary Metrics Reconciled:           {counts['independently_reconciled']} / {counts['total_primary_metrics']} primary metrics ({counts['independently_reconciled'] / counts['total_primary_metrics'] * 100:.1f}%)")
+    print(f"6. Primary Metrics Reconciled:           {counts['independently_reconciled']} / {counts['total_primary_metrics']} ({counts['independently_reconciled'] / counts['total_primary_metrics'] * 100:.1f}%), {counts['source_linked_only']} source-linked only, {counts['unverified']} unverified")
     print(f"7. Sourced Periods with Discrepancy Log: 6 documented items (Stored in discrepancy_ledger.json)")
     print("=" * 80)
     

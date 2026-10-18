@@ -1,0 +1,467 @@
+"""
+Pure-Python Technical Analysis MVP Engine for Fundamentals Lens.
+Zero external heavy TA dependencies: built purely with standard library, pandas, numpy, and plotly.
+
+Capabilities:
+1. Strict in-memory OHLCV validation with descriptive analyst errors.
+2. Core indicators: SMA(20/50/200), RSI(14), MACD(12,26,9), Bollinger Bands(20,2), ATR(14).
+3. Performance & Risk: 1M/3M/6M/1Y returns, 52W High/Low distance, annualized volatility, Max Drawdown.
+4. Benchmark alignment: Normalized rebased performance (Base 100).
+5. Interactive Plotly charts & exportable technical summary tables.
+"""
+
+import math
+from typing import Optional, Tuple, Dict, Any, List
+import pandas as pd
+import numpy as np
+
+try:
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+    PLOTLY_AVAILABLE = True
+except ImportError:
+    PLOTLY_AVAILABLE = False
+
+from .models import TechnicalSummary
+
+
+def get_ohlcv_csv_template() -> str:
+    """Returns a sample downloadable CSV template string."""
+    return (
+        "Date,Open,High,Low,Close,Volume\n"
+        "2026-10-12,228.50,231.20,227.80,230.10,48200000\n"
+        "2026-10-13,230.00,232.40,229.10,231.85,51400000\n"
+        "2026-10-14,232.00,233.10,229.90,230.70,44300000\n"
+        "2026-10-15,230.50,234.00,230.10,233.60,59100000\n"
+        "2026-10-16,233.80,235.50,232.20,234.90,62000000\n"
+    )
+
+
+def validate_ohlcv_dataframe(df: pd.DataFrame) -> Tuple[bool, Optional[str], Optional[pd.DataFrame]]:
+    """
+    Validates and standardizes an OHLCV dataframe.
+    Returns: (is_valid, error_message, sanitized_dataframe)
+    """
+    if df is None or df.empty:
+        return False, "Uploaded file contains no data or could not be parsed.", None
+
+    # Case-insensitive column resolution
+    col_map = {str(c).strip().lower(): c for c in df.columns}
+    required = ["date", "open", "high", "low", "close", "volume"]
+    missing = [req for req in required if req not in col_map]
+
+    if missing:
+        return False, f"Missing required columns: {', '.join(m.capitalize() for m in missing)}. Required headers: Date, Open, High, Low, Close, Volume.", None
+
+    clean_df = pd.DataFrame()
+    clean_df["Date"] = pd.to_datetime(df[col_map["date"]], errors="coerce")
+
+    # Drop rows where date could not be parsed
+    invalid_dates = clean_df["Date"].isna().sum()
+    if invalid_dates == len(clean_df):
+        return False, "Failed to parse any valid dates in 'Date' column. Format must conform to YYYY-MM-DD or standard datetime.", None
+
+    for col in ["open", "high", "low", "close", "volume"]:
+        clean_df[col.capitalize()] = pd.to_numeric(df[col_map[col]], errors="coerce")
+
+    # Drop NaNs
+    clean_df = clean_df.dropna().sort_values("Date").drop_duplicates(subset=["Date"]).reset_index(drop=True)
+
+    if len(clean_df) < 20:
+        return False, f"Insufficient trading observations ({len(clean_df)} bars found). Technical analysis requires at least 20 trading periods.", None
+
+    # Sanity checks
+    non_positive = (clean_df[["Open", "High", "Low", "Close"]] <= 0).any().any()
+    if non_positive:
+        return False, "Price values (Open, High, Low, Close) must be strictly positive non-zero numbers.", None
+
+    invalid_volume = (clean_df["Volume"] < 0).any()
+    if invalid_volume:
+        return False, "Volume values cannot be negative.", None
+
+    # High/Low bounds invariant
+    hl_violations = clean_df["High"] < clean_df["Low"]
+    if hl_violations.any():
+        bad_dates = clean_df.loc[hl_violations, "Date"].dt.strftime("%Y-%m-%d").tolist()[:3]
+        return False, f"Price invariant violation (High < Low) detected on dates: {bad_dates}.", None
+
+    clean_df["Date_Str"] = clean_df["Date"].dt.strftime("%Y-%m-%d")
+    return True, None, clean_df
+
+
+def calculate_sma(series: pd.Series, period: int) -> pd.Series:
+    """Calculates Simple Moving Average."""
+    return series.rolling(window=period, min_periods=period).mean()
+
+
+def calculate_ema(series: pd.Series, period: int) -> pd.Series:
+    """Calculates Exponential Moving Average."""
+    return series.ewm(span=period, adjust=False).mean()
+
+
+def calculate_rsi(series: pd.Series, period: int = 14) -> pd.Series:
+    """Calculates Relative Strength Index using Wilder's smoothed moving average."""
+    delta = series.diff()
+    gain = delta.clip(lower=0.0)
+    loss = (-delta).clip(lower=0.0)
+
+    # Wilder's smoothing uses alpha = 1 / period
+    avg_gain = gain.ewm(alpha=1.0 / period, min_periods=period, adjust=False).mean()
+    avg_loss = loss.ewm(alpha=1.0 / period, min_periods=period, adjust=False).mean()
+
+    rs = avg_gain / avg_loss.replace(0, np.nan)
+    rsi = 100.0 - (100.0 / (1.0 + rs))
+
+    # Corner cases
+    rsi = rsi.where(avg_loss != 0, 100.0)
+    rsi = rsi.where(avg_gain != 0, 0.0)
+    return rsi.round(2)
+
+
+def calculate_macd(
+    series: pd.Series, 
+    fast: int = 12, 
+    slow: int = 26, 
+    signal: int = 9
+) -> Tuple[pd.Series, pd.Series, pd.Series]:
+    """Calculates MACD Line, Signal Line, and MACD Histogram."""
+    fast_ema = calculate_ema(series, fast)
+    slow_ema = calculate_ema(series, slow)
+    macd_line = fast_ema - slow_ema
+    signal_line = calculate_ema(macd_line, signal)
+    macd_hist = macd_line - signal_line
+    return macd_line.round(2), signal_line.round(2), macd_hist.round(2)
+
+
+def calculate_bollinger_bands(
+    series: pd.Series, 
+    period: int = 20, 
+    num_std: float = 2.0
+) -> Tuple[pd.Series, pd.Series, pd.Series]:
+    """Calculates Bollinger Bands (Upper, Middle, Lower)."""
+    middle = calculate_sma(series, period)
+    std = series.rolling(window=period, min_periods=period).std()
+    upper = middle + (std * num_std)
+    lower = middle - (std * num_std)
+    return upper.round(2), middle.round(2), lower.round(2)
+
+
+def calculate_atr(
+    high: pd.Series, 
+    low: pd.Series, 
+    close: pd.Series, 
+    period: int = 14
+) -> pd.Series:
+    """Calculates Average True Range."""
+    prior_close = close.shift(1)
+    tr1 = high - low
+    tr2 = (high - prior_close).abs()
+    tr3 = (low - prior_close).abs()
+    tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+    atr = tr.ewm(alpha=1.0 / period, min_periods=period, adjust=False).mean()
+    return atr.round(2)
+
+
+def compute_technical_indicators(df: pd.DataFrame) -> pd.DataFrame:
+    """Computes all technical indicators and appends them to dataframe."""
+    out = df.copy()
+    close = out["Close"]
+    high = out["High"]
+    low = out["Low"]
+
+    # Moving Averages
+    out["SMA_20"] = calculate_sma(close, 20).round(2)
+    out["SMA_50"] = calculate_sma(close, 50).round(2)
+    out["SMA_200"] = calculate_sma(close, 200).round(2)
+
+    # Momentum & Trend
+    out["RSI_14"] = calculate_rsi(close, 14)
+    macd, signal, hist = calculate_macd(close, 12, 26, 9)
+    out["MACD"] = macd
+    out["MACD_Signal"] = signal
+    out["MACD_Hist"] = hist
+
+    # Volatility Bands
+    upper, mid, lower = calculate_bollinger_bands(close, 20, 2.0)
+    out["BB_Upper"] = upper
+    out["BB_Middle"] = mid
+    out["BB_Lower"] = lower
+    out["ATR_14"] = calculate_atr(high, low, close, 14)
+
+    # Returns
+    out["Daily_Return"] = close.pct_change().round(4)
+    return out
+
+
+def compute_technical_summary(
+    df: pd.DataFrame, 
+    ticker: str = "ASSET",
+    benchmark_df: Optional[pd.DataFrame] = None,
+    benchmark_ticker: Optional[str] = None
+) -> TechnicalSummary:
+    """Computes high-level technical summary cards and risk statistics."""
+    if "RSI_14" not in df.columns:
+        df = compute_technical_indicators(df)
+
+    n = len(df)
+    last_row = df.iloc[-1]
+    last_close = float(last_row["Close"])
+    last_date = str(last_row["Date_Str"])
+
+    # Multi-period returns
+    def get_pct_change(lookback: int) -> Optional[float]:
+        if n > lookback:
+            prior_close = float(df.iloc[-1 - lookback]["Close"])
+            if prior_close > 0:
+                return round(((last_close / prior_close) - 1.0) * 100.0, 2)
+        return None
+
+    ret_1m = get_pct_change(21)
+    ret_3m = get_pct_change(63)
+    ret_6m = get_pct_change(126)
+    ret_1y = get_pct_change(252)
+
+    # 52-Week High & Low (up to last 252 bars)
+    w52_bars = df.tail(min(252, n))
+    high_52w = float(w52_bars["High"].max())
+    low_52w = float(w52_bars["Low"].min())
+    dist_high = round(((last_close / high_52w) - 1.0) * 100.0, 2) if high_52w > 0 else None
+    dist_low = round(((last_close / low_52w) - 1.0) * 100.0, 2) if low_52w > 0 else None
+
+    # Annualized Volatility
+    daily_returns = df["Close"].pct_change().dropna()
+    if len(daily_returns) >= 10:
+        ann_vol = round(float(daily_returns.std() * math.sqrt(252) * 100.0), 2)
+    else:
+        ann_vol = None
+
+    # Maximum Drawdown
+    cum_max = df["Close"].cummax()
+    drawdowns = (df["Close"] - cum_max) / cum_max
+    max_dd = round(float(drawdowns.min() * 100.0), 2) if len(drawdowns) > 0 else None
+
+    # Current RSI Status
+    curr_rsi = float(last_row["RSI_14"]) if pd.notna(last_row["RSI_14"]) else None
+    if curr_rsi is not None:
+        if curr_rsi >= 70.0:
+            rsi_status = f"OVERBOUGHT ({curr_rsi:.1f} >= 70)"
+        elif curr_rsi <= 30.0:
+            rsi_status = f"OVERSOLD ({curr_rsi:.1f} <= 30)"
+        else:
+            rsi_status = f"NEUTRAL ({curr_rsi:.1f})"
+    else:
+        rsi_status = "N/A"
+
+    # SMA Statuses
+    def sma_stat(col: str) -> str:
+        if pd.notna(last_row[col]):
+            val = float(last_row[col])
+            diff = ((last_close / val) - 1.0) * 100.0
+            pos = "ABOVE" if diff >= 0 else "BELOW"
+            return f"{pos} ({abs(diff):.1f}%)"
+        return "N/A (< 200 bars)" if col == "SMA_200" and n < 200 else "N/A"
+
+    sma_20_stat = sma_stat("SMA_20")
+    sma_50_stat = sma_stat("SMA_50")
+    sma_200_stat = sma_stat("SMA_200")
+
+    # Benchmark comparison
+    bm_1y = None
+    rel_perf = None
+    if benchmark_df is not None and not benchmark_df.empty:
+        # Align on dates
+        merged = pd.merge(
+            df[["Date", "Close"]].rename(columns={"Close": "Asset_Close"}),
+            benchmark_df[["Date", "Close"]].rename(columns={"Close": "Bench_Close"}),
+            on="Date",
+            how="inner"
+        ).sort_values("Date")
+        if len(merged) >= 20:
+            first_b = merged.iloc[0]["Bench_Close"]
+            last_b = merged.iloc[-1]["Bench_Close"]
+            first_a = merged.iloc[0]["Asset_Close"]
+            last_a = merged.iloc[-1]["Asset_Close"]
+            if first_b > 0 and first_a > 0:
+                bm_1y = round(((last_b / first_b) - 1.0) * 100.0, 2)
+                asset_tot = round(((last_a / first_a) - 1.0) * 100.0, 2)
+                rel_perf = round(asset_tot - bm_1y, 2)
+
+    return TechnicalSummary(
+        ticker=ticker,
+        last_date=last_date,
+        last_close=last_close,
+        total_bars=n,
+        change_1m=ret_1m,
+        change_3m=ret_3m,
+        change_6m=ret_6m,
+        change_1y=ret_1y,
+        high_52w=high_52w,
+        low_52w=low_52w,
+        dist_from_52w_high=dist_high,
+        dist_from_52w_low=dist_low,
+        annualized_volatility=ann_vol,
+        max_drawdown=max_dd,
+        current_rsi=curr_rsi,
+        rsi_status=rsi_status,
+        sma_20_status=sma_20_stat,
+        sma_50_status=sma_50_stat,
+        sma_200_status=sma_200_stat,
+        benchmark_ticker=benchmark_ticker,
+        benchmark_change_1y=bm_1y,
+        relative_performance_1y=rel_perf
+    )
+
+
+def create_price_candlestick_chart(
+    df: pd.DataFrame, 
+    ticker: str = "ASSET",
+    show_bb: bool = True,
+    show_sma: bool = True
+) -> Any:
+    """Generates an interactive Plotly candlestick chart with SMA, Bollinger Bands, and Volume."""
+    if not PLOTLY_AVAILABLE:
+        return None
+
+    fig = make_subplots(
+        rows=2, cols=1,
+        shared_xaxes=True,
+        vertical_spacing=0.04,
+        row_heights=[0.75, 0.25],
+        subplot_titles=(f"{ticker} Daily Price Action & Moving Averages", "Trading Volume")
+    )
+
+    # Candlestick
+    fig.add_trace(
+        go.Candlestick(
+            x=df["Date"],
+            open=df["Open"],
+            high=df["High"],
+            low=df["Low"],
+            close=df["Close"],
+            name="OHLC",
+            increasing_line_color="#00C805",
+            decreasing_line_color="#FF3B30",
+        ),
+        row=1, col=1
+    )
+
+    # SMAs
+    if show_sma:
+        if "SMA_20" in df.columns and df["SMA_20"].notna().any():
+            fig.add_trace(go.Scatter(x=df["Date"], y=df["SMA_20"], name="SMA 20", line=dict(color="#FF9500", width=1.5)), row=1, col=1)
+        if "SMA_50" in df.columns and df["SMA_50"].notna().any():
+            fig.add_trace(go.Scatter(x=df["Date"], y=df["SMA_50"], name="SMA 50", line=dict(color="#007AFF", width=1.5)), row=1, col=1)
+        if "SMA_200" in df.columns and df["SMA_200"].notna().any():
+            fig.add_trace(go.Scatter(x=df["Date"], y=df["SMA_200"], name="SMA 200", line=dict(color="#AF52DE", width=2.0, dash="dot")), row=1, col=1)
+
+    # Bollinger Bands
+    if show_bb and "BB_Upper" in df.columns and df["BB_Upper"].notna().any():
+        fig.add_trace(go.Scatter(x=df["Date"], y=df["BB_Upper"], name="BB Upper (2.0σ)", line=dict(color="#8E8E93", width=1, dash="dash")), row=1, col=1)
+        fig.add_trace(go.Scatter(x=df["Date"], y=df["BB_Lower"], name="BB Lower (2.0σ)", line=dict(color="#8E8E93", width=1, dash="dash"), fill="tonexty", fillcolor="rgba(142,142,147,0.08)"), row=1, col=1)
+
+    # Volume Subplot
+    colors = ["#00C805" if c >= o else "#FF3B30" for c, o in zip(df["Close"], df["Open"])]
+    fig.add_trace(
+        go.Bar(x=df["Date"], y=df["Volume"], name="Volume", marker_color=colors, opacity=0.7),
+        row=2, col=1
+    )
+
+    fig.update_layout(
+        xaxis_rangeslider_visible=False,
+        height=560,
+        margin=dict(l=40, r=40, t=50, b=30),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        template="plotly_white",
+        hovermode="x unified"
+    )
+    return fig
+
+
+def create_rsi_chart(df: pd.DataFrame, ticker: str = "ASSET") -> Any:
+    """Generates an RSI(14) indicator chart with 70 and 30 threshold lines."""
+    if not PLOTLY_AVAILABLE or "RSI_14" not in df.columns:
+        return None
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df["Date"], y=df["RSI_14"], name="RSI (14)", line=dict(color="#5856D6", width=1.8)))
+
+    # Overbought/Oversold thresholds
+    fig.add_hline(y=70, line_dash="dash", line_color="#FF3B30", annotation_text="Overbought (70)", annotation_position="top left")
+    fig.add_hline(y=30, line_dash="dash", line_color="#00C805", annotation_text="Oversold (30)", annotation_position="bottom left")
+    fig.add_hline(y=50, line_dash="dot", line_color="#8E8E93", opacity=0.5)
+
+    fig.update_layout(
+        title=f"{ticker} 14-Day Relative Strength Index (RSI)",
+        yaxis=dict(range=[0, 100], title="RSI Value"),
+        xaxis=dict(title="Date"),
+        height=280,
+        margin=dict(l=40, r=40, t=50, b=30),
+        template="plotly_white",
+        hovermode="x unified"
+    )
+    return fig
+
+
+def create_macd_chart(df: pd.DataFrame, ticker: str = "ASSET") -> Any:
+    """Generates MACD(12,26,9) line, Signal line, and Histogram chart."""
+    if not PLOTLY_AVAILABLE or "MACD" not in df.columns:
+        return None
+
+    fig = go.Figure()
+    # Histogram
+    hist_colors = ["#00C805" if h >= 0 else "#FF3B30" for h in df["MACD_Hist"]]
+    fig.add_trace(go.Bar(x=df["Date"], y=df["MACD_Hist"], name="Histogram", marker_color=hist_colors, opacity=0.65))
+
+    # MACD Line & Signal Line
+    fig.add_trace(go.Scatter(x=df["Date"], y=df["MACD"], name="MACD (12,26)", line=dict(color="#007AFF", width=1.8)))
+    fig.add_trace(go.Scatter(x=df["Date"], y=df["MACD_Signal"], name="Signal (9)", line=dict(color="#FF9500", width=1.5, dash="dash")))
+
+    fig.update_layout(
+        title=f"{ticker} MACD Momentum Oscillator (12, 26, 9)",
+        yaxis=dict(title="MACD"),
+        xaxis=dict(title="Date"),
+        height=280,
+        margin=dict(l=40, r=40, t=50, b=30),
+        template="plotly_white",
+        hovermode="x unified"
+    )
+    return fig
+
+
+def create_benchmark_comparison_chart(
+    df: pd.DataFrame, 
+    benchmark_df: pd.DataFrame,
+    asset_ticker: str = "Asset",
+    benchmark_ticker: str = "Benchmark"
+) -> Any:
+    """Generates normalized performance chart rebased to 100 on common start date."""
+    if not PLOTLY_AVAILABLE or df is None or benchmark_df is None:
+        return None
+
+    merged = pd.merge(
+        df[["Date", "Close"]].rename(columns={"Close": "Asset"}),
+        benchmark_df[["Date", "Close"]].rename(columns={"Close": "Bench"}),
+        on="Date",
+        how="inner"
+    ).sort_values("Date")
+
+    if len(merged) < 5:
+        return None
+
+    merged["Asset_Norm"] = (merged["Asset"] / merged["Asset"].iloc[0]) * 100.0
+    merged["Bench_Norm"] = (merged["Bench"] / merged["Bench"].iloc[0]) * 100.0
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=merged["Date"], y=merged["Asset_Norm"], name=asset_ticker, line=dict(color="#007AFF", width=2.2)))
+    fig.add_trace(go.Scatter(x=merged["Date"], y=merged["Bench_Norm"], name=benchmark_ticker, line=dict(color="#8E8E93", width=1.8, dash="dash")))
+
+    fig.update_layout(
+        title=f"Relative Price Performance vs. {benchmark_ticker} (Base = 100)",
+        yaxis=dict(title="Normalized Performance (Base 100)"),
+        xaxis=dict(title="Date"),
+        height=340,
+        margin=dict(l=40, r=40, t=50, b=30),
+        template="plotly_white",
+        hovermode="x unified"
+    )
+    return fig

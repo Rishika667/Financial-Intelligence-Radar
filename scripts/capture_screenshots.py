@@ -175,21 +175,35 @@ async def run_capture_pipeline():
                 width=1280, height=950, is_mobile=False, wait_sec=4
             )
 
-            # 4. Page 4: Data Integrity Desktop
+            # 4. Page 4: Price & Technical Analysis Desktop
             await capture_page(
-                ws, f"{streamlit_url}/?page=Data+Integrity+%26+Methodology",
-                OUTPUT_DIR / "04_data_integrity_desktop.png",
+                ws, f"{streamlit_url}/?page=Price+%26+Technical+Analysis",
+                OUTPUT_DIR / "04_technical_analysis_desktop.png",
                 width=1280, height=950, is_mobile=False, wait_sec=4
             )
 
-            # 5. Page 2: Company Analysis Mobile
+            # 5. Page 5: Data Integrity Desktop
+            await capture_page(
+                ws, f"{streamlit_url}/?page=Data+Integrity+%26+Methodology",
+                OUTPUT_DIR / "05_data_integrity_desktop.png",
+                width=1280, height=950, is_mobile=False, wait_sec=4
+            )
+
+            # 6. Page 2: Company Analysis Mobile View
             await capture_page(
                 ws, f"{streamlit_url}/?page=Company+Analysis",
-                OUTPUT_DIR / "05_company_analysis_mobile.png",
+                OUTPUT_DIR / "06_company_analysis_mobile.png",
                 width=390, height=844, is_mobile=True, wait_sec=4
             )
 
-        print("\nAll 5 visual QA screenshots successfully captured into docs/screenshots/!")
+            # 7. Page 4: Price & Technical Analysis Mobile View
+            await capture_page(
+                ws, f"{streamlit_url}/?page=Price+%26+Technical+Analysis",
+                OUTPUT_DIR / "07_technical_analysis_mobile.png",
+                width=390, height=844, is_mobile=True, wait_sec=4
+            )
+
+        print("\nAll 7 visual QA screenshots successfully captured into docs/screenshots/!")
         ret = 0
     except Exception as e:
         print(f"Error during screenshot capture: {e}")

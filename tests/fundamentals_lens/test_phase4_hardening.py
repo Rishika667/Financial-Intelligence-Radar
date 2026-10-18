@@ -49,7 +49,7 @@ def test_target_reconciliation_integrity():
     accessions = [f.accession_id for f in facts]
     assert len(set(accessions)) == 5
     assert "0000027419-22-000007" in accessions
-    assert "0000027419-23-000014" in accessions
+    assert "0000027419-23-000015" in accessions
     assert "0000027419-24-000032" in accessions
     assert "0000027419-25-000018" in accessions
     assert "0000027419-26-000016" in accessions

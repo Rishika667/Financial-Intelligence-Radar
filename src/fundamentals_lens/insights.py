@@ -6,7 +6,13 @@ Generates deterministic, evidence-linked insights:
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Any
 from .models import FinancialFact, DerivedMetrics
-from .metrics import compute_derived_metrics_for_company
+from .metrics import (
+    compute_derived_metrics_for_company,
+    calculate_cagr,
+    evaluate_growth_consistency,
+    calculate_cumulative_cash_flows,
+    calculate_margin_volatility
+)
 
 
 @dataclass
@@ -133,10 +139,17 @@ class NarrativeEngine:
             why_it_matters = "Single-digit top-line changes may reflect mature operational scale or market conditions; however, underlying volume versus pricing trends cannot be established from consolidated top-line figures alone and warrant segment investigation."
             what_to_investigate = "Examine geographic and product-mix variations that may diverge from the consolidated growth rate."
 
+        # Multi-year revenue CAGR and consistency analysis
+        num_intervals = len(facts) - 1
+        cagr, cagr_reason = calculate_cagr(first_rev, latest_rev, num_intervals)
+        cagr_str = f"{cagr:+.1f}%" if cagr is not None else f"N/A ({cagr_reason})"
+        growth_rates = [d.revenue_growth_yoy for d in derived[1:]]
+        consistency = evaluate_growth_consistency(growth_rates)
+
         evidence = (
             f"5-Year Revenue: {first_rev:,.0f} {unit} ({first_fact.fiscal_year_label}) -> "
-            f"{latest_rev:,.0f} {unit} ({latest_fact.fiscal_year_label}) [{total_growth_str} overall]. "
-            f"Latest YoY Growth: {growth_str}."
+            f"{latest_rev:,.0f} {unit} ({latest_fact.fiscal_year_label}) [{total_growth_str} overall, CAGR: {cagr_str}]. "
+            f"Latest YoY Growth: {growth_str} | Trajectory Consistency: {consistency['label']} ({consistency['description']})."
         )
 
         limitations = "Historical revenue figures reflect consolidated GAAP/Ind AS accounting and exclude subsequent forward guidance."
@@ -184,10 +197,18 @@ class NarrativeEngine:
                 why_it_matters = "Predictable operating margins suggest consistent operational execution; however, underlying gross margins and overhead dynamics may warrant investigation to confirm sustainable cost structures."
                 what_to_investigate = "Compare margin stability against direct peers who may have faced industry-wide cost fluctuations."
             
+            op_bps = latest_der.operating_margin_change_bps
+            op_bps_str = f"{op_bps:+.0f} bps" if op_bps is not None else "N/A"
+            op_lev = latest_der.operating_leverage
+            op_lev_str = f"{op_lev:+.1f}% spread" if op_lev is not None else "N/A"
+            margins = [d.operating_margin for d in derived]
+            margin_vol = calculate_margin_volatility(margins)
+            margin_vol_str = f"{margin_vol:.2f}%" if margin_vol is not None else "N/A"
+
             evidence = (
                 f"Operating Margin: {curr_op_margin:.2f}% in {latest_der.fiscal_year_label} vs "
-                f"{prior_op_margin:.2f}% in {prior_der.fiscal_year_label} (Delta: {margin_delta:+.2f} pts). "
-                f"Net Margin: {latest_der.net_margin:.2f}%."
+                f"{prior_op_margin:.2f}% in {prior_der.fiscal_year_label} (Delta: {margin_delta:+.2f} pts / {op_bps_str}). "
+                f"Operating Leverage: {op_lev_str} | 5-Yr Margin Volatility (std dev): {margin_vol_str}. Net Margin: {latest_der.net_margin:.2f}%."
             )
         else:
             headline = f"Operating Margin Reported at {curr_op_margin:.1f}%"
@@ -331,7 +352,17 @@ class NarrativeEngine:
             why_it_matters = "Reflects standard ongoing maintenance and selective capacity growth."
             what_to_investigate = "Compare against peer capital reinvestment rates across the cycle."
 
-        evidence = f"Capex: {latest_fact.capital_expenditure:,.0f} {unit} on Revenue: {latest_fact.revenue:,.0f} {unit} = {capex_intensity:.1f}% Capex Intensity ({latest_fact.fiscal_year_label})."
+        cum_flows = calculate_cumulative_cash_flows(facts)
+        cum_reinvest_pct = cum_flows.get("cumulative_reinvestment_pct")
+        reinvest_str = f"{cum_reinvest_pct:.1f}%" if cum_reinvest_pct is not None else "N/A"
+        cum_ocf = cum_flows.get("cumulative_ocf", 0.0)
+        cum_capex = cum_flows.get("cumulative_capex", 0.0)
+        cum_fcf = cum_flows.get("cumulative_fcf", 0.0)
+
+        evidence = (
+            f"Capex: {latest_fact.capital_expenditure:,.0f} {unit} on Revenue: {latest_fact.revenue:,.0f} {unit} = {capex_intensity:.1f}% Capex Intensity ({latest_fact.fiscal_year_label}). "
+            f"5-Year Cumulative OCF: {cum_ocf:,.0f} {unit} | Capex: {cum_capex:,.0f} {unit} | FCF: {cum_fcf:,.0f} {unit} | Cumulative Reinvestment: {reinvest_str} of OCF."
+        )
         limitations = "Capex reflects cash outflows for property, plant, and equipment; does not include R&D expensed directly on the income statement."
 
         return FinancialInsight(

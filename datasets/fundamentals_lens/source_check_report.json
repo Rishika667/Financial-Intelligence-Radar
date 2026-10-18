@@ -13,6 +13,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -29,6 +30,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -45,6 +47,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -61,6 +64,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -77,6 +81,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -93,6 +98,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -109,6 +115,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -125,6 +132,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -141,6 +149,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -157,6 +166,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -173,6 +183,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -189,6 +200,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -205,6 +217,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -221,6 +234,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -237,6 +251,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -245,14 +260,15 @@
     "fiscal_year": 2022,
     "fiscal_year_label": "FY2022",
     "source_title": "Costco Wholesale Form 10-K (FY 2022)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983222000018/cost-20220828.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983222000021/cost-20220828.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000909832-22-000018",
+    "official_filing_id": "0000909832-22-000021",
     "internal_document_key": null,
     "statement_location": "Item 8 - Operations & Cash Flows",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -261,14 +277,15 @@
     "fiscal_year": 2023,
     "fiscal_year_label": "FY2023",
     "source_title": "Costco Wholesale Form 10-K (FY 2023)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983223000047/cost-20230903.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983223000042/cost-20230903.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000909832-23-000047",
+    "official_filing_id": "0000909832-23-000042",
     "internal_document_key": null,
     "statement_location": "Item 8 - Operations & Cash Flows",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -277,14 +294,15 @@
     "fiscal_year": 2024,
     "fiscal_year_label": "FY2024",
     "source_title": "Costco Wholesale Form 10-K (FY 2024)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983224000049/cost-20240901.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983224000084/cost-20240901.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000909832-24-000049",
+    "official_filing_id": "0000909832-24-000084",
     "internal_document_key": null,
     "statement_location": "Item 8 - Operations & Cash Flows",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -293,14 +311,15 @@
     "fiscal_year": 2025,
     "fiscal_year_label": "FY2025",
     "source_title": "Costco Wholesale Corporation Form 10-K (FY 2025)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983225000045/cost-20250831.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983225000101/cost-20250831.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000909832-25-000045",
+    "official_filing_id": "0000909832-25-000101",
     "internal_document_key": null,
     "statement_location": "Item 8 - Consolidated Statements of Operations & Cash Flows",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -309,14 +328,15 @@
     "fiscal_year": 2026,
     "fiscal_year_label": "FY2026",
     "source_title": "Costco Wholesale Corporation Form 10-K (FY 2026)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983226000052/cost-20260830.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983226000093/cost-20260830.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000909832-26-000052",
+    "official_filing_id": "0000909832-26-000093",
     "internal_document_key": null,
     "statement_location": "Item 8 - Consolidated Statements of Operations & Cash Flows",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -333,6 +353,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -349,6 +370,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -365,6 +387,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -381,6 +404,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -397,6 +421,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -405,14 +430,15 @@
     "fiscal_year": 2021,
     "fiscal_year_label": "FY2021",
     "source_title": "Alphabet Inc. Form 10-K (FY 2021)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204422000015/goog-20211231.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204422000019/goog-20211231.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0001652044-22-000015",
+    "official_filing_id": "0001652044-22-000019",
     "internal_document_key": null,
     "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -429,6 +455,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -445,6 +472,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -461,6 +489,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -469,7 +498,7 @@
     "fiscal_year": 2025,
     "fiscal_year_label": "FY2025",
     "source_title": "Alphabet Inc. Form 10-K (FY 2025)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000012/goog-20251231.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-26-000018",
     "internal_document_key": null,
@@ -477,6 +506,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -493,6 +523,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -509,6 +540,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -525,6 +557,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -541,6 +574,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -557,6 +591,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -573,6 +608,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -589,6 +625,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -605,6 +642,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -621,6 +659,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -637,6 +676,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -653,6 +693,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -669,6 +710,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -685,6 +727,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -701,6 +744,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -717,6 +761,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -733,6 +778,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -749,6 +795,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -765,6 +812,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -781,6 +829,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -797,6 +846,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -813,6 +863,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -829,6 +880,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -845,6 +897,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -861,6 +914,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -877,6 +931,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -885,14 +940,15 @@
     "fiscal_year": 2022,
     "fiscal_year_label": "FY2022",
     "source_title": "Microsoft Corp Form 10-K (FY 2022)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017022013661/msft-20220630.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000156459022026876/msft-10k_20220630.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000950170-22-013661",
+    "official_filing_id": "0001564590-22-026876",
     "internal_document_key": null,
     "statement_location": "Item 8 - Income Statements & Cash Flows",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -909,6 +965,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -925,6 +982,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -933,14 +991,15 @@
     "fiscal_year": 2025,
     "fiscal_year_label": "FY2025",
     "source_title": "Microsoft Corporation Form 10-K (FY 2025)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000078901925000038/msft-20250630.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000789019-25-000038",
+    "official_filing_id": "0000950170-25-100235",
     "internal_document_key": null,
     "statement_location": "Item 8 - Income Statements & Cash Flows Statements",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -949,14 +1008,15 @@
     "fiscal_year": 2026,
     "fiscal_year_label": "FY2026",
     "source_title": "Microsoft Corporation Form 10-K (FY 2026)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000078901926000041/msft-20260630.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/msft-20260630.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000789019-26-000041",
+    "official_filing_id": "0001193125-26-323660",
     "internal_document_key": null,
     "statement_location": "Item 8 - Income Statements & Cash Flows Statements",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -973,6 +1033,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -989,6 +1050,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1005,6 +1067,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1021,6 +1084,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1037,6 +1101,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "SOURCE_LINKED_ONLY",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1053,6 +1118,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1061,14 +1127,15 @@
     "fiscal_year": 2022,
     "fiscal_year_label": "FY2022",
     "source_title": "Target Corporation Form 10-K (Fiscal 2022)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741923000014/tgt-20230128.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741923000015/tgt-20230128.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000027419-23-000014",
+    "official_filing_id": "0000027419-23-000015",
     "internal_document_key": null,
     "statement_location": "Consolidated Statements of Operations & Consolidated Statements of Cash Flows",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1085,6 +1152,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1101,6 +1169,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1117,6 +1186,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1133,6 +1203,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1149,6 +1220,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1165,6 +1237,7 @@
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1173,14 +1246,15 @@
     "fiscal_year": 2025,
     "fiscal_year_label": "FY2025",
     "source_title": "Walmart Inc. Form 10-K (FY 2025)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416925000019/wmt-20250131.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416925000021/wmt-20250131.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000104169-25-000019",
+    "official_filing_id": "0000104169-25-000021",
     "internal_document_key": null,
     "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   },
   {
@@ -1189,14 +1263,15 @@
     "fiscal_year": 2026,
     "fiscal_year_label": "FY2026",
     "source_title": "Walmart Inc. Form 10-K (FY 2026)",
-    "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416926000021/wmt-20260131.htm",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416926000055/wmt-20260131.htm",
     "reference_type": "SEC_ACCESSION",
-    "official_filing_id": "0000104169-26-000021",
+    "official_filing_id": "0000104169-26-000055",
     "internal_document_key": null,
     "statement_location": "Item 8 - Consolidated Statements of Income & Cash Flows",
     "statement_basis": "CONSOLIDATED",
     "document_identity_verified": true,
     "check_status": "VERIFIED_PRIMARY_SOURCE",
+    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
     "last_checked_date": "2026-10-18"
   }
 ]

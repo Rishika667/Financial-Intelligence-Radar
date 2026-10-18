@@ -1,6 +1,7 @@
 import pytest
 import csv
 import io
+import pandas as pd
 from fundamentals_lens.data_loader import load_companies, load_financial_facts
 from fundamentals_lens.exports import ExportGenerator
 
@@ -87,3 +88,30 @@ def test_peer_comparison_csv_export():
     assert header[0] == "Fiscal Period"
     assert any("MSFT" in col for col in header)
     assert any("GOOGL" in col for col in header)
+
+
+def test_technical_exports():
+    from fundamentals_lens.technical import validate_ohlcv_dataframe, compute_technical_indicators, compute_technical_summary
+    dates = pd.date_range("2026-01-01", periods=25, freq="D")
+    df = pd.DataFrame({
+        "Date": dates,
+        "Open": [100.0] * 25,
+        "High": [105.0] * 25,
+        "Low": [98.0] * 25,
+        "Close": [102.0] * 25,
+        "Volume": [500000] * 25
+    })
+    _, _, clean_df = validate_ohlcv_dataframe(df)
+    clean_df = compute_technical_indicators(clean_df)
+    summary = compute_technical_summary(clean_df, ticker="TEST")
+
+    tech_csv = ExportGenerator.generate_technical_csv(clean_df, "TEST")
+    assert isinstance(tech_csv, str)
+    assert "Close" in tech_csv
+    assert "RSI_14" in tech_csv
+
+    tech_brief = ExportGenerator.generate_technical_brief(summary, clean_df)
+    assert isinstance(tech_brief, str)
+    assert "PRICE & TECHNICAL ANALYSIS BRIEF" in tech_brief
+    assert "TEST" in tech_brief
+    assert "Analyst Disclaimer" in tech_brief

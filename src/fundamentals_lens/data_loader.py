@@ -82,6 +82,29 @@ def load_discrepancy_ledger(dataset_dir: Optional[Path] = None) -> List[Dict[str
         return json.load(f)
 
 
+def load_dataset_metadata(dataset_dir: Optional[Path] = None) -> Dict[str, Any]:
+    base_dir = dataset_dir or get_dataset_dir()
+    file_path = base_dir / "dataset_metadata.json"
+    if not file_path.exists():
+        return {
+            "product_name": "Fundamentals Lens",
+            "creator_name": "Rishika Dangayach",
+            "dataset_snapshot_date": "2026-10-18"
+        }
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def load_ohlcv_manifest(dataset_dir: Optional[Path] = None) -> Dict[str, Any]:
+    base_dir = dataset_dir or get_dataset_dir()
+    file_path = base_dir / "ohlcv" / "manifest.json"
+    if not file_path.exists():
+        return {"assets": {}}
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+
 
 def get_company_by_ticker(ticker: str, dataset_dir: Optional[Path] = None) -> Optional[Company]:
     companies = load_companies(dataset_dir)

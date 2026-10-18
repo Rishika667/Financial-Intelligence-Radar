@@ -360,13 +360,17 @@ class NarrativeEngine:
         cum_flows = calculate_cumulative_cash_flows(facts)
         cum_reinvest_pct = cum_flows.get("cumulative_reinvestment_pct")
         reinvest_str = f"{cum_reinvest_pct:.1f}%" if cum_reinvest_pct is not None else "N/A"
-        cum_ocf = cum_flows.get("cumulative_ocf", 0.0)
-        cum_capex = cum_flows.get("cumulative_capex", 0.0)
-        cum_fcf = cum_flows.get("cumulative_fcf", 0.0)
+        cum_ocf = cum_flows.get("cumulative_ocf")
+        cum_capex = cum_flows.get("cumulative_capex")
+        cum_fcf = cum_flows.get("cumulative_fcf")
+
+        cum_ocf_str = f"{cum_ocf:,.0f} {unit}" if cum_ocf is not None else "N/A"
+        cum_capex_str = f"{cum_capex:,.0f} {unit}" if cum_capex is not None else "N/A"
+        cum_fcf_str = f"{cum_fcf:,.0f} {unit}" if cum_fcf is not None else "N/A"
 
         evidence = (
             f"Capex: {latest_fact.capital_expenditure:,.0f} {unit} on Revenue: {latest_fact.revenue:,.0f} {unit} = {capex_intensity:.1f}% Capex Intensity ({latest_fact.fiscal_year_label}). "
-            f"5-Year Cumulative OCF: {cum_ocf:,.0f} {unit} | Capex: {cum_capex:,.0f} {unit} | FCF: {cum_fcf:,.0f} {unit} | Cumulative Reinvestment: {reinvest_str} of OCF."
+            f"5-Year Cumulative OCF: {cum_ocf_str} | Capex: {cum_capex_str} | FCF: {cum_fcf_str} | Cumulative Reinvestment: {reinvest_str} of OCF."
         )
         limitations = "Capex reflects cash outflows for property, plant, and equipment; does not include R&D expensed directly on the income statement."
 

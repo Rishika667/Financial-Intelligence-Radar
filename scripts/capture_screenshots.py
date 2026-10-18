@@ -154,11 +154,12 @@ async def run_capture_pipeline():
         async with websockets.connect(ws_url, max_size=50 * 1024 * 1024) as ws:
             await send_cdp(ws, "Page.enable", msg_id=1)
 
+            await asyncio.sleep(2)  # Initial Streamlit websocket connection stabilization
             # 1. Page 1: Overview Desktop
             await capture_page(
                 ws, f"{streamlit_url}/?page=Overview",
                 OUTPUT_DIR / "01_overview_desktop.png",
-                width=1280, height=900, is_mobile=False, wait_sec=4
+                width=1280, height=900, is_mobile=False, wait_sec=6
             )
 
             # 2. Page 2: Company Analysis Desktop

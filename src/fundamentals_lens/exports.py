@@ -184,7 +184,7 @@ class ExportGenerator:
                 p_end = pt.get("period_end", "")
                 val = pt.get("value")
                 comp_flag = pt.get("comparability", "DIRECT")
-                tier = pt.get("verification_tier", "INDEPENDENTLY_RECONCILED")
+                tier = pt.get("verification_tier") or "UNVERIFIED"
 
                 writer.writerow([
                     peer_group_name,
@@ -299,6 +299,7 @@ class ExportGenerator:
         """Generates a formatted markdown brief of technical analysis and risk metrics."""
         lines = []
         lines.append(f"# FUNDAMENTALS LENS — PRICE & TECHNICAL ANALYSIS BRIEF")
+        lines.append(f"**Research Platform:** Fundamentals Lens • Created by Rishika Dangayach")
         lines.append(f"## Asset / Ticker: `{summary.ticker}`")
         if summary.is_simulated_demo:
             lines.append("")
@@ -391,7 +392,15 @@ class ExportGenerator:
         unit = company.standard_unit_label
         curr = company.reporting_currency
         report_date = date.today().isoformat()
-        snap_date = snapshot_date or (latest_fact.filing_date if latest_fact else report_date)
+        if snapshot_date is None:
+            try:
+                from .data_loader import load_dataset_metadata
+                meta = load_dataset_metadata()
+                snap_date = meta.get("dataset_snapshot_date", "2026-10-18")
+            except Exception:
+                snap_date = latest_fact.filing_date if latest_fact else report_date
+        else:
+            snap_date = snapshot_date
 
         # Cumulative cash flows
         cum_flows = calculate_cumulative_cash_flows(sorted_facts)
@@ -403,6 +412,7 @@ class ExportGenerator:
 
         lines = []
         lines.append(f"# FUNDAMENTALS LENS — FINANCIAL RESEARCH BRIEF")
+        lines.append(f"**Research Platform:** Fundamentals Lens • Created by Rishika Dangayach")
         lines.append(f"## {company.name} ({company.ticker})")
         lines.append(f"**Peer Group:** {company.peer_group_name} | **Exchange:** {company.exchange} | **Country:** {company.country}")
         lines.append(f"**Dataset Snapshot Cutoff:** `{snap_date}` | **Brief Generation Date:** `{report_date}`")

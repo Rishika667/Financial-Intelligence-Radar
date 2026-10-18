@@ -903,6 +903,22 @@ class FundamentalsValidator:
                 alignment_errors.append(f"No evidence register entry found for {f.ticker} {f.fiscal_year_label}")
                 continue
 
+            # Accession alignment check
+            reg_acc = reg.get("official_filing_id") or reg.get("accession_id")
+            fact_acc = getattr(f, "accession_id", None) or getattr(f, "official_filing_id", None)
+            if reg_acc and fact_acc and reg_acc != fact_acc:
+                alignment_errors.append(
+                    f"{f.ticker} {f.fiscal_year_label}: Fact accession '{fact_acc}' != Evidence register accession '{reg_acc}'"
+                )
+
+            # Source URL alignment check
+            reg_url = reg.get("source_url")
+            fact_url = getattr(f, "source_url", None)
+            if reg_url and fact_url and reg_url != fact_url:
+                alignment_errors.append(
+                    f"{f.ticker} {f.fiscal_year_label}: Fact source_url '{fact_url}' != Evidence register source_url '{reg_url}'"
+                )
+
             metrics = reg.get("metrics", {})
             for m in primary_metrics:
                 m_ev = metrics.get(m)
@@ -922,6 +938,9 @@ class FundamentalsValidator:
 
                 tier = m_ev.get("reconciliation_tier")
                 norm_tier = normalize_verification_tier(tier)
+                rep_val = m_ev.get("reported_value")
+                comp_res = m_ev.get("comparison_result")
+
                 if norm_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
                     loc = m_ev.get("statement_locator") or ""
                     line_item = m_ev.get("reported_line_item") or ""
@@ -932,6 +951,20 @@ class FundamentalsValidator:
                         tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Missing reported line item for reconciled tier")
                     if len(stmt_name.strip()) < 3:
                         tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Missing statement name for reconciled tier")
+                    if rep_val is None:
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED requires non-null reported_value")
+                    if comp_res == "NOT_RECONCILED" or not comp_res:
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED cannot have comparison_result '{comp_res}'")
+                    if comp_res == "EXACT_STATEMENT_MATCH":
+                        if rep_val is not None and canon_val is not None and abs(float(rep_val) - float(canon_val)) > 0.001:
+                            tier_errors.append(
+                                f"{f.ticker} {f.fiscal_year_label} {m}: EXACT_STATEMENT_MATCH reported_value {rep_val} != canonical_value {canon_val}"
+                            )
+                elif norm_tier == VerificationTier.SOURCE_LINKED_ONLY.value:
+                    if comp_res == "EXACT_STATEMENT_MATCH":
+                        tier_errors.append(
+                            f"{f.ticker} {f.fiscal_year_label} {m}: SOURCE_LINKED_ONLY cannot claim comparison_result 'EXACT_STATEMENT_MATCH'"
+                        )
 
         if alignment_errors:
             results.append(ValidationResult(

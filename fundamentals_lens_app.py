@@ -24,6 +24,7 @@ from fundamentals_lens.data_loader import (
     load_coverage_report,
     load_evidence_register,
     load_discrepancy_ledger,
+    load_ohlcv_manifest,
     get_company_by_ticker,
     get_facts_for_company
 )
@@ -248,6 +249,7 @@ fcf_derived_count = metric_counts["fcf_derived"]
 # --- SIDEBAR NAVIGATION ---
 st.sidebar.markdown("### **Fundamentals Lens**")
 st.sidebar.caption("Evidence-First Financial & Technical Workbench")
+st.sidebar.markdown("<div style='font-size:0.85rem; font-weight:600; color:#334155; margin-bottom:8px;'>Created by Rishika Dangayach</div>", unsafe_allow_html=True)
 
 pages = [
     "Overview",
@@ -405,6 +407,7 @@ def plot_cash_flows(facts, derived, unit):
 if selected_page == "Overview":
     st.markdown("""
     <div class="lens-header">
+        <div style="float:right; font-weight:600; color:#1E293B; font-size:0.95rem; background:#F1F5F9; padding:4px 12px; border-radius:6px; border:1px solid #CBD5E1; margin-top:2px;">Created by Rishika Dangayach</div>
         <h1 class="lens-title">🔍 Fundamentals Lens</h1>
         <div class="lens-subtitle">Transparent Five-Year Financial Disclosure Intelligence & Quantitative Research Workbench</div>
     </div>
@@ -580,6 +583,7 @@ if selected_page == "Overview":
 elif selected_page == "Company Analysis":
     st.markdown("""
     <div class="lens-header">
+        <div style="float:right; font-weight:600; color:#1E293B; font-size:0.95rem; background:#F1F5F9; padding:4px 12px; border-radius:6px; border:1px solid #CBD5E1; margin-top:2px;">Created by Rishika Dangayach</div>
         <h1 class="lens-title">📊 Company Fundamentals Analysis</h1>
         <div class="lens-subtitle">Five-Year Audited Statements, Margin Invariants, and Analytical Inquiries</div>
     </div>
@@ -964,6 +968,7 @@ elif selected_page == "Company Analysis":
 elif selected_page == "Peer Comparison":
     st.markdown("""
     <div class="lens-header">
+        <div style="float:right; font-weight:600; color:#1E293B; font-size:0.95rem; background:#F1F5F9; padding:4px 12px; border-radius:6px; border:1px solid #CBD5E1; margin-top:2px;">Created by Rishika Dangayach</div>
         <h1 class="lens-title">👥 Guarded Peer Comparison</h1>
         <div class="lens-subtitle">Contextual Peer Performance, Normalized Growth & Structural Caveats</div>
     </div>
@@ -1109,6 +1114,7 @@ elif selected_page == "Peer Comparison":
 elif selected_page == "Price & Technical Analysis":
     st.markdown("""
     <div class="lens-header">
+        <div style="float:right; font-weight:600; color:#1E293B; font-size:0.95rem; background:#F1F5F9; padding:4px 12px; border-radius:6px; border:1px solid #CBD5E1; margin-top:2px;">Created by Rishika Dangayach</div>
         <h1 class="lens-title">📈 Price & Technical Analysis MVP</h1>
         <div class="lens-subtitle">Quantitative Research: Daily OHLCV, Moving Averages, Momentum & Risk Profile</div>
     </div>
@@ -1136,12 +1142,15 @@ elif selected_page == "Price & Technical Analysis":
 
     clean_df = None
     active_ticker = "DEMO"
+    active_currency = "USD"
     bench_df = None
     bench_ticker = None
     selected_basis = PriceAdjustmentBasis.SPLIT_AND_DIVIDEND_ADJUSTED
     is_sim = False
 
     ohlcv_dir = ROOT_DIR / "datasets" / "fundamentals_lens" / "ohlcv"
+    ohlcv_manifest = load_ohlcv_manifest()
+    manifest_assets = ohlcv_manifest.get("assets", {})
 
     if "Pre-Packaged Demo Dataset" in source_choice:
         is_sim = True
@@ -1156,6 +1165,10 @@ elif selected_page == "Price & Technical Analysis":
         demo_col1, demo_col2 = st.columns([3, 2])
         with demo_col1:
             demo_opts = {
+                k: v.get("display_name", k)
+                for k, v in manifest_assets.items()
+                if not k.endswith("BENCHMARK")
+            } if manifest_assets else {
                 "SIMULATED_TECH_EQUITY": "[SIMULATED] Tech Growth Equity (Illustrative Demo)",
             }
             selected_demo = st.selectbox(
@@ -1164,6 +1177,7 @@ elif selected_page == "Price & Technical Analysis":
                 format_func=lambda k: demo_opts[k]
             )
             active_ticker = selected_demo
+            active_currency = manifest_assets.get(selected_demo, {}).get("currency", "USD")
             demo_file = ohlcv_dir / f"{selected_demo}.csv"
             if demo_file.exists():
                 raw_df = pd.read_csv(demo_file)
@@ -1198,9 +1212,25 @@ elif selected_page == "Price & Technical Analysis":
         with up_col1:
             st.markdown("Upload a daily OHLCV CSV file (headers: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`):")
             uploaded_file = st.file_uploader("Upload OHLCV CSV:", type=["csv"])
-            custom_ticker_input = st.text_input("Asset Ticker / Symbol Label:", value="CUSTOM_ASSET")
-            active_ticker = custom_ticker_input.strip().upper() or "CUSTOM"
-            is_sim = active_ticker.startswith("SIMULATED")
+            
+            c_input1, c_input2 = st.columns(2)
+            with c_input1:
+                custom_ticker_input = st.text_input("Asset Symbol / Label:", value="CUSTOM_ASSET")
+                active_ticker = custom_ticker_input.strip().upper() or "CUSTOM"
+                is_sim = active_ticker.startswith("SIMULATED")
+            with c_input2:
+                curr_select = st.selectbox("Currency:", ["USD ($)", "INR (₹)", "EUR (€)", "GBP (£)", "Custom Code..."])
+                if "Custom Code" in curr_select:
+                    custom_curr_code = st.text_input("3-Letter Code:", value="USD", max_chars=5)
+                    active_currency = custom_curr_code.strip().upper() or "USD"
+                elif "INR" in curr_select:
+                    active_currency = "INR"
+                elif "EUR" in curr_select:
+                    active_currency = "EUR"
+                elif "GBP" in curr_select:
+                    active_currency = "GBP"
+                else:
+                    active_currency = "USD"
 
             basis_choice = st.selectbox(
                 "Price Adjustment Basis:",
@@ -1279,7 +1309,8 @@ elif selected_page == "Price & Technical Analysis":
             benchmark_df=bench_df,
             benchmark_ticker=bench_ticker,
             price_adjustment_basis=selected_basis,
-            is_simulated_demo=is_sim
+            is_simulated_demo=is_sim,
+            currency=active_currency
         )
 
         st.markdown("---")
@@ -1293,7 +1324,7 @@ elif selected_page == "Price & Technical Analysis":
             st.markdown(f"""
             <div class="kpi-card">
                 <div class="kpi-label">Latest Close Price</div>
-                <div class="kpi-val">{summary.last_close:,.2f}</div>
+                <div class="kpi-val">{summary.last_close:,.2f} <span style="font-size:0.9rem; font-weight:600; color:#64748B;">{summary.currency}</span></div>
                 <div class="kpi-delta neu">As of {summary.last_date}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -1452,6 +1483,7 @@ elif selected_page == "Price & Technical Analysis":
 elif selected_page == "Data Integrity & Methodology":
     st.markdown("""
     <div class="lens-header">
+        <div style="float:right; font-weight:600; color:#1E293B; font-size:0.95rem; background:#F1F5F9; padding:4px 12px; border-radius:6px; border:1px solid #CBD5E1; margin-top:2px;">Created by Rishika Dangayach</div>
         <h1 class="lens-title">🛡️ Data Integrity, Validation & Methodology</h1>
         <div class="lens-subtitle">Deterministic 7-Gate Validation Suite, Zero-Coercion Policy & Primary Provenance</div>
     </div>
@@ -1650,6 +1682,6 @@ elif selected_page == "Data Integrity & Methodology":
 st.markdown("---")
 st.markdown("""
 <div style="text-align:center; color:#64748B; font-size:0.8rem; padding: 12px 0;">
-    Fundamentals Lens • Evidence-First SEC & Indian Corporate Disclosure Intelligence • Built with Streamlit & Plotly • Verified Public Regulatory Filings
+    Fundamentals Lens • Evidence-First SEC & Indian Corporate Disclosure Intelligence • Created by Rishika Dangayach • Built with Streamlit & Plotly • Verified Public Regulatory Filings
 </div>
 """, unsafe_allow_html=True)

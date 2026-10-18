@@ -1,0 +1,44 @@
+{
+  "product_name": "Fundamentals Lens",
+  "product_tagline": "Evidence-First SEC & Indian Corporate Disclosure Intelligence",
+  "creator_name": "Rishika Dangayach",
+  "dataset_version": "1.0.0-phase9",
+  "dataset_snapshot_date": "2026-10-18",
+  "universe_size": 15,
+  "total_annual_periods": 75,
+  "total_primary_metrics": 375,
+  "primary_metric_keys": [
+    "revenue",
+    "operating_income",
+    "net_income",
+    "operating_cash_flow",
+    "capital_expenditure"
+  ],
+  "peer_groups": [
+    {
+      "id": "group_a_tech",
+      "name": "Global Technology Leaders",
+      "tickers": ["AAPL", "MSFT", "GOOGL"]
+    },
+    {
+      "id": "group_b_india_it",
+      "name": "Indian IT Services",
+      "tickers": ["TCS", "INFY", "HCLTECH"]
+    },
+    {
+      "id": "group_c_india_fmcg",
+      "name": "Indian Consumer Brands",
+      "tickers": ["HINDUNILVR", "BRITANNIA", "DABUR"]
+    },
+    {
+      "id": "group_d_india_auto",
+      "name": "Indian Auto & Mobility",
+      "tickers": ["MARUTI", "BAJAJ-AUTO", "HEROMOTOCO"]
+    },
+    {
+      "id": "group_e_us_retail",
+      "name": "US Retailers",
+      "tickers": ["WMT", "COST", "TGT"]
+    }
+  ]
+}

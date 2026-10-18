@@ -297,3 +297,114 @@ def test_adversarial_invalid_date_format(sample_company_dataset):
     assert date_res.status == ValidationStatus.FAIL
     assert "Invalid period_end date format" in date_res.message
 
+
+def test_adversarial_reconciled_with_null_reported_value(sample_company_dataset):
+    """19. Adversarial test: INDEPENDENTLY_RECONCILED with null reported_value fails tier gate."""
+    from fundamentals_lens.data_loader import load_evidence_register
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_evidence = copy.deepcopy(load_evidence_register())
+    for item in mutated_evidence:
+        if item["ticker"] == "AAPL" and item["fiscal_year_label"] == "FY2021":
+            item["metrics"]["revenue"]["reported_value"] = None
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=mutated_evidence
+    )
+    tier_res = next(r for r in results if r.rule_id == "GATE_EVIDENCE_TIER_CONSISTENCY")
+    assert tier_res.status == ValidationStatus.FAIL
+    assert "requires non-null reported_value" in tier_res.details["tier_errors"][0]
+
+
+def test_adversarial_reconciled_with_not_reconciled_result(sample_company_dataset):
+    """20. Adversarial test: INDEPENDENTLY_RECONCILED with NOT_RECONCILED fails tier gate."""
+    from fundamentals_lens.data_loader import load_evidence_register
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_evidence = copy.deepcopy(load_evidence_register())
+    for item in mutated_evidence:
+        if item["ticker"] == "AAPL" and item["fiscal_year_label"] == "FY2021":
+            item["metrics"]["revenue"]["comparison_result"] = "NOT_RECONCILED"
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=mutated_evidence
+    )
+    tier_res = next(r for r in results if r.rule_id == "GATE_EVIDENCE_TIER_CONSISTENCY")
+    assert tier_res.status == ValidationStatus.FAIL
+    assert "cannot have comparison_result 'NOT_RECONCILED'" in tier_res.details["tier_errors"][0]
+
+
+def test_adversarial_reconciled_exact_match_value_discrepancy(sample_company_dataset):
+    """21. Adversarial test: EXACT_STATEMENT_MATCH reported_value differing from canonical fails tier gate."""
+    from fundamentals_lens.data_loader import load_evidence_register
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_evidence = copy.deepcopy(load_evidence_register())
+    for item in mutated_evidence:
+        if item["ticker"] == "AAPL" and item["fiscal_year_label"] == "FY2021":
+            # Change reported_value so it no longer matches canonical_value
+            item["metrics"]["revenue"]["reported_value"] = item["metrics"]["revenue"]["canonical_value"] + 100.0
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=mutated_evidence
+    )
+    tier_res = next(r for r in results if r.rule_id == "GATE_EVIDENCE_TIER_CONSISTENCY")
+    assert tier_res.status == ValidationStatus.FAIL
+    assert "EXACT_STATEMENT_MATCH reported_value" in tier_res.details["tier_errors"][0]
+
+
+def test_adversarial_source_linked_claiming_exact_match(sample_company_dataset):
+    """22. Adversarial test: SOURCE_LINKED_ONLY claiming EXACT_STATEMENT_MATCH fails tier gate."""
+    from fundamentals_lens.data_loader import load_evidence_register
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_evidence = copy.deepcopy(load_evidence_register())
+    for item in mutated_evidence:
+        if item["ticker"] == "AAPL" and item["fiscal_year_label"] == "FY2021":
+            # Demote tier to SOURCE_LINKED_ONLY but claim EXACT_STATEMENT_MATCH
+            item["metrics"]["revenue"]["reconciliation_tier"] = "SOURCE_LINKED_ONLY"
+            item["metrics"]["revenue"]["comparison_result"] = "EXACT_STATEMENT_MATCH"
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=mutated_evidence
+    )
+    tier_res = next(r for r in results if r.rule_id == "GATE_EVIDENCE_TIER_CONSISTENCY")
+    assert tier_res.status == ValidationStatus.FAIL
+    assert "cannot claim comparison_result 'EXACT_STATEMENT_MATCH'" in tier_res.details["tier_errors"][0]
+
+
+def test_adversarial_accession_mismatch_between_fact_and_evidence(sample_company_dataset):
+    """23. Adversarial test: Accession ID mismatch between fact and evidence register fails alignment gate."""
+    from fundamentals_lens.data_loader import load_evidence_register
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_evidence = copy.deepcopy(load_evidence_register())
+    for item in mutated_evidence:
+        if item["ticker"] == "AAPL" and item["fiscal_year_label"] == "FY2021":
+            item["official_filing_id"] = "0000320193-99-999999"
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=mutated_evidence
+    )
+    align_res = next(r for r in results if r.rule_id == "GATE_FACT_EVIDENCE_ALIGNMENT")
+    assert align_res.status == ValidationStatus.FAIL
+    assert "Fact accession" in align_res.details["errors"][0]
+
+
+def test_adversarial_url_mismatch_between_fact_and_evidence(sample_company_dataset):
+    """24. Adversarial test: Source URL mismatch between fact and evidence register fails alignment gate."""
+    from fundamentals_lens.data_loader import load_evidence_register
+    company, facts, sources, coverage = sample_company_dataset
+    mutated_evidence = copy.deepcopy(load_evidence_register())
+    for item in mutated_evidence:
+        if item["ticker"] == "AAPL" and item["fiscal_year_label"] == "FY2021":
+            item["source_url"] = "https://www.sec.gov/Archives/edgar/data/320193/000032019321000105/tampered.htm"
+            break
+
+    results = FundamentalsValidator.validate_company_dataset(
+        company, facts, sources, coverage=coverage, evidence_register=mutated_evidence
+    )
+    align_res = next(r for r in results if r.rule_id == "GATE_FACT_EVIDENCE_ALIGNMENT")
+    assert align_res.status == ValidationStatus.FAIL
+    assert "Fact source_url" in align_res.details["errors"][0]
+

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_snapshot_date": "2026-10-18",
+  "creator": "Rishika Dangayach",
+  "product": "Fundamentals Lens",
+  "description": "Machine-readable sidecar manifest for bundled OHLCV datasets. Preserves standard CSV tabular headers without comment row pollution.",
+  "assets": {
+    "SIMULATED_TECH_EQUITY": {
+      "filename": "SIMULATED_TECH_EQUITY.csv",
+      "symbol": "SIMULATED_TECH_EQUITY",
+      "display_name": "Simulated Tech Growth Equity (Illustrative Demo)",
+      "asset_class": "Equities",
+      "is_synthetic": true,
+      "simulation_method": "Geometric Brownian Motion with drift=0.12, vol=0.25",
+      "currency": "USD",
+      "price_adjustment_basis": "SPLIT_AND_DIVIDEND_ADJUSTED",
+      "start_date": "2025-10-20",
+      "end_date": "2026-10-16",
+      "total_bars": 260,
+      "invariants_verified": true,
+      "disclaimer": "Simulated demonstration dataset for software verification and workflow testing. Not actual market transactions."
+    },
+    "SIMULATED_MARKET_BENCHMARK": {
+      "filename": "SIMULATED_MARKET_BENCHMARK.csv",
+      "symbol": "SIMULATED_MARKET_BENCHMARK",
+      "display_name": "Simulated Market Benchmark Index (Illustrative Demo)",
+      "asset_class": "Benchmark Index",
+      "is_synthetic": true,
+      "simulation_method": "Geometric Brownian Motion with drift=0.08, vol=0.16",
+      "currency": "USD",
+      "price_adjustment_basis": "SPLIT_AND_DIVIDEND_ADJUSTED",
+      "start_date": "2025-10-20",
+      "end_date": "2026-10-16",
+      "total_bars": 260,
+      "invariants_verified": true,
+      "disclaimer": "Simulated demonstration dataset for software verification and benchmark comparison testing. Not actual market transactions."
+    }
+  }
+}

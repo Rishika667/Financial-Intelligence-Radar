@@ -20,6 +20,9 @@ from .data_loader import (
     load_source_register,
     load_coverage_report,
     load_evidence_register,
+    load_discrepancy_ledger,
+    load_dataset_metadata,
+    load_ohlcv_manifest,
     get_company_by_ticker,
     get_facts_for_company
 )
@@ -47,6 +50,10 @@ __all__ = [
     "load_financial_facts",
     "load_source_register",
     "load_coverage_report",
+    "load_evidence_register",
+    "load_discrepancy_ledger",
+    "load_dataset_metadata",
+    "load_ohlcv_manifest",
     "get_company_by_ticker",
     "get_facts_for_company",
     "calculate_revenue_growth",

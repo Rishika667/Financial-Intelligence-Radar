@@ -166,9 +166,21 @@ def calculate_cumulative_cash_flows(facts: List[FinancialFact]) -> Dict[str, Any
         if f.operating_cash_flow is not None and f.capital_expenditure is not None
     ]
 
-    is_complete = (len(valid_facts) == total_periods and total_periods >= 5)
+    # Check for consecutive fiscal periods
+    has_gap = False
+    for i in range(1, len(valid_facts)):
+        if valid_facts[i].fiscal_year != valid_facts[i - 1].fiscal_year + 1:
+            has_gap = True
+            break
 
-    if len(valid_facts) < 2:
+    is_complete = (len(valid_facts) == total_periods and total_periods >= 5 and not has_gap)
+
+    if len(valid_facts) < 2 or len(valid_facts) != total_periods or has_gap:
+        suppress_reason = (
+            "Non-consecutive fiscal periods detected in cash flow series" if has_gap
+            else "Incomplete cash flow disclosures across fiscal horizon" if len(valid_facts) != total_periods
+            else "Insufficient periods with complete cash flow and capex disclosures"
+        )
         return {
             "cumulative_ocf": None,
             "cumulative_capex": None,
@@ -179,7 +191,7 @@ def calculate_cumulative_cash_flows(facts: List[FinancialFact]) -> Dict[str, Any
             "total_periods": total_periods,
             "is_complete": False,
             "suppressed": True,
-            "suppress_reason": "Insufficient periods with complete cash flow and capex disclosures",
+            "suppress_reason": suppress_reason,
             "start_period": sorted_facts[0].fiscal_year_label if sorted_facts else "",
             "end_period": sorted_facts[-1].fiscal_year_label if sorted_facts else "",
             "currency": sorted_facts[0].currency if sorted_facts else "",

@@ -1,6 +1,12 @@
 {
-  "audit_timestamp": "2026-10-18T11:05:14Z",
+  "audit_timestamp": "2026-10-18T13:18:37Z",
+  "mode": "OFFLINE",
+  "strict": true,
   "total_us_periods": 30,
+  "status_counts": {
+    "OFFLINE_STRUCTURE_ONLY": 30
+  },
+  "failure_detected": false,
   "results": [
     {
       "ticker": "AAPL",
@@ -8,8 +14,11 @@
       "fiscal_year_label": "FY2021",
       "accession_id": "0000320193-21-000105",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019321000105/aapl-20210925.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2021-10-29",
+      "period_end": "2021-09-25",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019321000105/aapl-20210925.htm",
+      "error": null
     },
     {
       "ticker": "AAPL",
@@ -17,8 +26,11 @@
       "fiscal_year_label": "FY2022",
       "accession_id": "0000320193-22-000108",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019322000108/aapl-20220924.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2022-10-28",
+      "period_end": "2022-09-24",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019322000108/aapl-20220924.htm",
+      "error": null
     },
     {
       "ticker": "AAPL",
@@ -26,8 +38,11 @@
       "fiscal_year_label": "FY2023",
       "accession_id": "0000320193-23-000106",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019323000106/aapl-20230930.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2023-11-03",
+      "period_end": "2023-09-30",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019323000106/aapl-20230930.htm",
+      "error": null
     },
     {
       "ticker": "AAPL",
@@ -35,8 +50,11 @@
       "fiscal_year_label": "FY2024",
       "accession_id": "0000320193-24-000123",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019324000123/aapl-20240928.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2024-11-01",
+      "period_end": "2024-09-28",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019324000123/aapl-20240928.htm",
+      "error": null
     },
     {
       "ticker": "AAPL",
@@ -44,8 +62,11 @@
       "fiscal_year_label": "FY2025",
       "accession_id": "0000320193-25-000079",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2025-10-31",
+      "period_end": "2025-09-27",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm",
+      "error": null
     },
     {
       "ticker": "MSFT",
@@ -53,8 +74,11 @@
       "fiscal_year_label": "FY2022",
       "accession_id": "0001564590-22-026876",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000156459022026876/msft-10k_20220630.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2022-07-28",
+      "period_end": "2022-06-30",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000156459022026876/msft-10k_20220630.htm",
+      "error": null
     },
     {
       "ticker": "MSFT",
@@ -62,8 +86,11 @@
       "fiscal_year_label": "FY2023",
       "accession_id": "0000950170-23-035122",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017023035122/msft-20230630.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2023-07-27",
+      "period_end": "2023-06-30",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017023035122/msft-20230630.htm",
+      "error": null
     },
     {
       "ticker": "MSFT",
@@ -71,8 +98,11 @@
       "fiscal_year_label": "FY2024",
       "accession_id": "0000950170-24-087843",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024087843/msft-20240630.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2024-07-30",
+      "period_end": "2024-06-30",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024087843/msft-20240630.htm",
+      "error": null
     },
     {
       "ticker": "MSFT",
@@ -80,8 +110,11 @@
       "fiscal_year_label": "FY2025",
       "accession_id": "0000950170-25-100235",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2025-07-30",
+      "period_end": "2025-06-30",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+      "error": null
     },
     {
       "ticker": "MSFT",
@@ -89,8 +122,11 @@
       "fiscal_year_label": "FY2026",
       "accession_id": "0001193125-26-323660",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/msft-20260630.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2026-07-29",
+      "period_end": "2026-06-30",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/msft-20260630.htm",
+      "error": null
     },
     {
       "ticker": "GOOGL",
@@ -98,8 +134,11 @@
       "fiscal_year_label": "FY2021",
       "accession_id": "0001652044-22-000019",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204422000019/goog-20211231.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2022-02-02",
+      "period_end": "2021-12-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204422000019/goog-20211231.htm",
+      "error": null
     },
     {
       "ticker": "GOOGL",
@@ -107,8 +146,11 @@
       "fiscal_year_label": "FY2022",
       "accession_id": "0001652044-23-000016",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204423000016/goog-20221231.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2023-02-03",
+      "period_end": "2022-12-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204423000016/goog-20221231.htm",
+      "error": null
     },
     {
       "ticker": "GOOGL",
@@ -116,8 +158,11 @@
       "fiscal_year_label": "FY2023",
       "accession_id": "0001652044-24-000022",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000022/goog-20231231.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2024-01-31",
+      "period_end": "2023-12-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000022/goog-20231231.htm",
+      "error": null
     },
     {
       "ticker": "GOOGL",
@@ -125,8 +170,11 @@
       "fiscal_year_label": "FY2024",
       "accession_id": "0001652044-25-000014",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000014/goog-20241231.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2025-02-05",
+      "period_end": "2024-12-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000014/goog-20241231.htm",
+      "error": null
     },
     {
       "ticker": "GOOGL",
@@ -134,8 +182,11 @@
       "fiscal_year_label": "FY2025",
       "accession_id": "0001652044-26-000018",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2026-02-05",
+      "period_end": "2025-12-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+      "error": null
     },
     {
       "ticker": "COST",
@@ -143,8 +194,11 @@
       "fiscal_year_label": "FY2022",
       "accession_id": "0000909832-22-000021",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983222000021/cost-20220828.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2022-10-05",
+      "period_end": "2022-08-28",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983222000021/cost-20220828.htm",
+      "error": null
     },
     {
       "ticker": "COST",
@@ -152,8 +206,11 @@
       "fiscal_year_label": "FY2023",
       "accession_id": "0000909832-23-000042",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983223000042/cost-20230903.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2023-10-11",
+      "period_end": "2023-09-03",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983223000042/cost-20230903.htm",
+      "error": null
     },
     {
       "ticker": "COST",
@@ -161,8 +218,11 @@
       "fiscal_year_label": "FY2024",
       "accession_id": "0000909832-24-000084",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983224000084/cost-20240901.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2024-10-09",
+      "period_end": "2024-09-01",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983224000084/cost-20240901.htm",
+      "error": null
     },
     {
       "ticker": "COST",
@@ -170,8 +230,11 @@
       "fiscal_year_label": "FY2025",
       "accession_id": "0000909832-25-000101",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983225000101/cost-20250831.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2025-10-08",
+      "period_end": "2025-08-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983225000101/cost-20250831.htm",
+      "error": null
     },
     {
       "ticker": "COST",
@@ -179,8 +242,11 @@
       "fiscal_year_label": "FY2026",
       "accession_id": "0000909832-26-000093",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983226000093/cost-20260830.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2026-10-07",
+      "period_end": "2026-08-30",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983226000093/cost-20260830.htm",
+      "error": null
     },
     {
       "ticker": "TGT",
@@ -188,8 +254,11 @@
       "fiscal_year_label": "FY2021",
       "accession_id": "0000027419-22-000007",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741922000007/tgt-20220129.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2022-03-09",
+      "period_end": "2022-01-29",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741922000007/tgt-20220129.htm",
+      "error": null
     },
     {
       "ticker": "TGT",
@@ -197,8 +266,11 @@
       "fiscal_year_label": "FY2022",
       "accession_id": "0000027419-23-000015",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741923000015/tgt-20230128.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2023-03-08",
+      "period_end": "2023-01-28",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741923000015/tgt-20230128.htm",
+      "error": null
     },
     {
       "ticker": "TGT",
@@ -206,8 +278,11 @@
       "fiscal_year_label": "FY2023",
       "accession_id": "0000027419-24-000032",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741924000032/tgt-20240203.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2024-03-13",
+      "period_end": "2024-02-03",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741924000032/tgt-20240203.htm",
+      "error": null
     },
     {
       "ticker": "TGT",
@@ -215,8 +290,11 @@
       "fiscal_year_label": "FY2024",
       "accession_id": "0000027419-25-000018",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741925000018/tgt-20250201.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2025-03-12",
+      "period_end": "2025-02-01",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741925000018/tgt-20250201.htm",
+      "error": null
     },
     {
       "ticker": "TGT",
@@ -224,8 +302,11 @@
       "fiscal_year_label": "FY2025",
       "accession_id": "0000027419-26-000016",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741926000016/tgt-20260131.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2026-03-11",
+      "period_end": "2026-01-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741926000016/tgt-20260131.htm",
+      "error": null
     },
     {
       "ticker": "WMT",
@@ -233,8 +314,11 @@
       "fiscal_year_label": "FY2022",
       "accession_id": "0000104169-22-000012",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416922000012/wmt-20220131.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2022-03-18",
+      "period_end": "2022-01-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416922000012/wmt-20220131.htm",
+      "error": null
     },
     {
       "ticker": "WMT",
@@ -242,8 +326,11 @@
       "fiscal_year_label": "FY2023",
       "accession_id": "0000104169-23-000020",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416923000020/wmt-20230131.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2023-03-17",
+      "period_end": "2023-01-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416923000020/wmt-20230131.htm",
+      "error": null
     },
     {
       "ticker": "WMT",
@@ -251,8 +338,11 @@
       "fiscal_year_label": "FY2024",
       "accession_id": "0000104169-24-000056",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416924000056/wmt-20240131.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2024-03-15",
+      "period_end": "2024-01-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416924000056/wmt-20240131.htm",
+      "error": null
     },
     {
       "ticker": "WMT",
@@ -260,8 +350,11 @@
       "fiscal_year_label": "FY2025",
       "accession_id": "0000104169-25-000021",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416925000021/wmt-20250131.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2025-03-14",
+      "period_end": "2025-01-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416925000021/wmt-20250131.htm",
+      "error": null
     },
     {
       "ticker": "WMT",
@@ -269,8 +362,11 @@
       "fiscal_year_label": "FY2026",
       "accession_id": "0000104169-26-000055",
       "form": "10-K",
-      "status": "OFFLINE_STRUCTURE_VERIFIED",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416926000055/wmt-20260131.htm"
+      "status": "OFFLINE_STRUCTURE_ONLY",
+      "filing_date": "2026-03-13",
+      "period_end": "2026-01-31",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416926000055/wmt-20260131.htm",
+      "error": null
     }
   ]
 }

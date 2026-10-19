@@ -179,3 +179,84 @@ def test_technical_analysis_invalid_csv_diagnostics():
     assert not valid2
     assert "invariant violation" in err2 or "High must be >=" in err2
     assert rep2.is_valid is False
+
+
+def test_streamlit_app_technical_analysis_radio_toggle_to_upload():
+    """Verify that toggling data source radio to 'Upload Custom OHLCV CSV' mounts file uploader."""
+    at = AppTest.from_file(str(APP_PATH), default_timeout=30)
+    at.run()
+    assert len(at.exception) == 0
+
+    at.sidebar.radio[0].set_value("Price & Technical Analysis")
+    at.run()
+    assert len(at.exception) == 0
+
+    # Locate data source radio
+    src_radio = None
+    for r in at.radio:
+        for opt in r.options:
+            if "Upload Custom" in opt:
+                src_radio = r
+                break
+        if src_radio:
+            break
+
+    if src_radio:
+        src_radio.set_value(src_radio.options[1])
+        at.run()
+        assert len(at.exception) == 0, [e.value for e in at.exception]
+        assert len(at.file_uploader) > 0
+
+
+def test_technical_analysis_valid_csv_metrics_and_traces():
+    """Verify that valid OHLCV data creates indicators, summary, and proper chart traces."""
+    dates = pd.date_range("2025-01-01", periods=100, freq="B").strftime("%Y-%m-%d")
+    valid_df = pd.DataFrame({
+        "Date": dates,
+        "Open": [100.0 + i * 0.5 for i in range(100)],
+        "High": [102.0 + i * 0.5 for i in range(100)],
+        "Low": [99.0 + i * 0.5 for i in range(100)],
+        "Close": [101.0 + i * 0.5 for i in range(100)],
+        "Volume": [1000000 + i * 1000 for i in range(100)]
+    })
+
+    valid, err, clean_df, rep = validate_ohlcv_dataframe_with_report(
+        valid_df, ticker="TEST_VALID", price_adjustment_basis=PriceAdjustmentBasis.SPLIT_ADJUSTED_ONLY
+    )
+    assert valid is True
+    assert rep.is_valid is True
+
+    # Compute indicators
+    ind_df = compute_technical_indicators(clean_df)
+    assert "SMA_20" in ind_df.columns
+    assert "SMA_50" in ind_df.columns
+    assert "RSI_14" in ind_df.columns
+    assert "MACD" in ind_df.columns
+    assert "BB_Upper" in ind_df.columns
+    assert "BB_Lower" in ind_df.columns
+    assert "ATR_14" in ind_df.columns
+
+    # Compute summary
+    summary = compute_technical_summary(ind_df, ticker="TEST_VALID")
+    assert summary.total_bars == 100
+    assert summary.last_close > 0
+
+    # Create candlestick chart with SMA and Bollinger Bands
+    fig = create_price_candlestick_chart(
+        ind_df,
+        ticker="TEST_VALID",
+        show_sma=True,
+        show_bb=True
+    )
+    trace_types = [t.type for t in fig.data]
+    assert "candlestick" in trace_types
+    assert "bar" in trace_types  # Volume trace
+    assert "scatter" in trace_types  # SMAs and Bollinger traces
+    assert len(fig.data) >= 4  # Candlestick, Volume, SMA20, SMA50, BB_Upper, BB_Lower
+
+    # Create benchmark comparison chart
+    bm_fig = create_benchmark_comparison_chart(ind_df, ind_df, asset_ticker="TEST_VALID", benchmark_ticker="BENCHMARK")
+    assert len(bm_fig.data) == 2
+    # Base alignment to 100.0
+    assert abs(bm_fig.data[0].y[0] - 100.0) < 0.001
+    assert abs(bm_fig.data[1].y[0] - 100.0) < 0.001

@@ -92,19 +92,39 @@ def derive_document_identity_verified(
     if not url or not url.startswith("https://"):
         return False, f"Insecure or missing source_url: '{url}'"
 
+    import urllib.parse
+    try:
+        parsed_url = urllib.parse.urlparse(url)
+    except Exception as e:
+        return False, f"Unparseable source_url '{url}': {e}"
+
+    host = (parsed_url.netloc or "").lower().split(":")[0]
+    path = parsed_url.path or ""
+
     if is_us:
         acc = source_entry.get("official_filing_id") or source_entry.get("accession_id", "")
         cik = company_meta.get("cik") or company_meta.get("sec_cik", "")
         if not acc or not SEC_ACCESSION_PATTERN.match(acc):
             return False, f"SEC accession '{acc}' does not match standard 20-digit pattern"
-        if not url or not url.startswith("https://www.sec.gov/Archives/edgar/data/"):
-            return False, f"US SEC filing URL does not originate from sec.gov archives: '{url}'"
+        if host not in ("www.sec.gov", "sec.gov"):
+            return False, f"US SEC filing URL host '{host}' does not originate from official sec.gov"
+        if not path.startswith("/Archives/edgar/data/"):
+            return False, f"US SEC filing URL path '{path}' does not originate from /Archives/edgar/data/"
         cik_clean = cik.lstrip("0") if cik else ""
         acc_clean = acc.replace("-", "")
-        if cik_clean and f"/data/{cik_clean}/" not in url and f"/data/{cik}/" not in url:
+        if cik_clean and f"/data/{cik_clean}/" not in path and f"/data/{cik}/" not in path:
             return False, f"SEC filing URL path does not contain company CIK {cik}"
-        if acc_clean not in url:
+        if acc_clean not in path:
             return False, f"SEC filing URL path does not contain accession {acc}"
+
+        # Filing Form check: Form 10-K required for annual US filings
+        form = source_entry.get("form") or ""
+        title = source_entry.get("source_title") or ""
+        if form and form != "10-K":
+            return False, f"US annual filing form must be '10-K' (found '{form}')"
+        if not form and "10-K" not in title and "10K" not in title:
+            return False, f"US annual filing source title does not reference Form 10-K: '{title}'"
+
         return True, "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified"
     else:
         key = source_entry.get("internal_document_key") or source_entry.get("accession_id", "")
@@ -119,8 +139,15 @@ def derive_document_identity_verified(
         if expected_domain:
             allowed_domains.append(expected_domain)
 
-        if not any(domain in url for domain in allowed_domains):
-            return False, f"Indian source URL domain invalid: '{url}' (expected registered corporate domain '{expected_domain}' or official exchange)"
+        domain_valid = False
+        for allowed in allowed_domains:
+            if host == allowed or host.endswith("." + allowed):
+                domain_valid = True
+                break
+
+        if not domain_valid:
+            return False, f"Indian source URL domain invalid / Indian source URL host invalid: '{host}' from '{url}' (expected registered corporate domain '{expected_domain}' or official exchange)"
+
         return True, f"BSE scrip ({scrip}) document key format and official corporate URL verified"
 
 
@@ -266,7 +293,25 @@ def reconcile_metric_observation(
         "consolidated statements"
     }
 
-    if reported_val is None or not loc or len(loc) < 10 or loc.lower() in generic_locators or len(line_item) < 3 or len(stmt_name) < 3:
+    unit = (obs_entry.get("source_unit") or obs_entry.get("reported_unit") or "").strip()
+    sign = (obs_entry.get("reported_sign") or "").strip()
+    raw_basis = (obs_entry.get("statement_basis") or "").strip().upper()
+    basis = raw_basis or ("CONSOLIDATED" if "consolidated" in stmt_name.lower() else "")
+    ext_method = (obs_entry.get("extraction_method") or "").strip()
+
+    if (
+        reported_val is None
+        or not loc
+        or len(loc) < 10
+        or loc.lower() in generic_locators
+        or len(line_item) < 3
+        or len(stmt_name) < 3
+        or not unit
+        or not sign
+        or basis == "STANDALONE"
+        or (basis and basis != "CONSOLIDATED")
+        or (ext_method and ext_method not in ("MANUAL_AUDITED_STATEMENT_EXTRACT", "SEC_XBRL_FACTS_PRIMARY"))
+    ):
         metric_extraction_status = MetricExtractionStatus.VALUE_NOT_LOCATED.value
     else:
         metric_extraction_status = MetricExtractionStatus.EXTRACTED_LINE_ITEM.value

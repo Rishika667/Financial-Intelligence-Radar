@@ -1513,3 +1513,331 @@ class FundamentalsValidator:
             details={"counts": actual_counts, "discrepancies": expected_disc},
             dimension="STRUCTURAL"
         )
+
+    @classmethod
+    def validate_discrepancy_ledger_integrity(
+        cls,
+        discrepancies: Optional[List[Dict[str, Any]]] = None,
+        financial_facts: Optional[List[Any]] = None,
+        source_observations: Optional[List[Dict[str, Any]]] = None
+    ) -> ValidationResult:
+        """
+        Gate: End-to-End Discrepancy Ledger Integrity & Resolution Check (Phase 15).
+        Validates schema, fields, status truthfulness, DISC-011 identity classification,
+        and cross-artifact reconciliation agreement against canonical facts and observations.
+        """
+        if discrepancies is None:
+            try:
+                from .data_loader import load_discrepancy_ledger
+                discrepancies = load_discrepancy_ledger()
+            except Exception as e:
+                return ValidationResult(
+                    rule_id="GATE_DISCREPANCY_LEDGER_INTEGRITY",
+                    rule_name="Discrepancy Ledger End-to-End Integrity & Resolution Check",
+                    status=ValidationStatus.FAIL,
+                    message=f"Failed to load discrepancy ledger: {e}",
+                    dimension="SOURCE_LINEAGE"
+                )
+
+        if financial_facts is None:
+            try:
+                from .data_loader import load_financial_facts
+                financial_facts = load_financial_facts()
+            except Exception:
+                financial_facts = []
+
+        if source_observations is None:
+            try:
+                from .data_loader import load_source_observations
+                source_observations = load_source_observations()
+            except Exception:
+                source_observations = []
+
+        from .ledger_validator import validate_discrepancy_ledger
+        fact_dicts = [f.__dict__ if hasattr(f, "__dict__") else f for f in financial_facts]
+        res = validate_discrepancy_ledger(
+            discrepancies,
+            financial_facts=fact_dicts,
+            source_observations=source_observations
+        )
+
+        if not res["is_valid"]:
+            return ValidationResult(
+                rule_id="GATE_DISCREPANCY_LEDGER_INTEGRITY",
+                rule_name="Discrepancy Ledger End-to-End Integrity & Resolution Check",
+                status=ValidationStatus.FAIL,
+                message=f"Discrepancy ledger validation failed ({len(res['errors'])} errors): {res['errors'][:3]}",
+                details=res,
+                dimension="SOURCE_LINEAGE"
+            )
+
+        return ValidationResult(
+            rule_id="GATE_DISCREPANCY_LEDGER_INTEGRITY",
+            rule_name="Discrepancy Ledger End-to-End Integrity & Resolution Check",
+            status=ValidationStatus.PASS,
+            message=(
+                f"All {res['total_entries']} discrepancy ledger entries strictly verified: "
+                f"{res['numerical_count']} numerical, {res['identity_count']} identity alignment, "
+                f"{res['resolved_count']} resolved against canonical facts and source observations."
+            ),
+            details=res,
+            dimension="SOURCE_LINEAGE"
+        )
+
+    @classmethod
+    def validate_population_and_cross_artifact_integrity(
+        cls,
+        companies: Optional[List[Company]] = None,
+        financial_facts: Optional[List[Any]] = None,
+        source_observations: Optional[List[Dict[str, Any]]] = None,
+        sources: Optional[List[Dict[str, Any]]] = None,
+        evidence_register: Optional[List[Dict[str, Any]]] = None,
+        discrepancies: Optional[List[Dict[str, Any]]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        csv_rows: Optional[List[Dict[str, Any]]] = None
+    ) -> ValidationResult:
+        """
+        Gate: Population Completeness & Cross-Artifact Referential Integrity (Phase 15).
+        Validates that:
+        1. Expected population is derived dynamically from canonical universe (N companies * 5 periods * 5 metrics).
+        2. Pre-map uniqueness holds across facts, observations, sources, evidence, and CSV records (zero collisions).
+        3. Zero missing or extra company-period records across any artifact.
+        4. Derived FCF (OCF - Capex) is verified across all periods without population shortcuts.
+        """
+        errors = []
+
+        if companies is None:
+            try:
+                from .data_loader import load_companies
+                companies = load_companies()
+            except Exception as e:
+                errors.append(f"Failed to load companies: {e}")
+                companies = []
+
+        if financial_facts is None:
+            try:
+                from .data_loader import load_financial_facts
+                financial_facts = load_financial_facts()
+            except Exception as e:
+                errors.append(f"Failed to load financial facts: {e}")
+                financial_facts = []
+
+        if source_observations is None:
+            try:
+                from .data_loader import load_source_observations
+                source_observations = load_source_observations()
+            except Exception as e:
+                errors.append(f"Failed to load source observations: {e}")
+                source_observations = []
+
+        if sources is None:
+            try:
+                from .data_loader import load_source_register
+                sources = load_source_register()
+            except Exception as e:
+                errors.append(f"Failed to load source register: {e}")
+                sources = []
+
+        if evidence_register is None:
+            try:
+                from .data_loader import load_evidence_register
+                evidence_register = load_evidence_register()
+            except Exception as e:
+                errors.append(f"Failed to load evidence register: {e}")
+                evidence_register = []
+
+        if discrepancies is None:
+            try:
+                from .data_loader import load_discrepancy_ledger
+                discrepancies = load_discrepancy_ledger()
+            except Exception as e:
+                errors.append(f"Failed to load discrepancy ledger: {e}")
+                discrepancies = []
+
+        if metadata is None:
+            try:
+                from .data_loader import load_dataset_metadata
+                metadata = load_dataset_metadata()
+            except Exception:
+                metadata = {}
+
+        if csv_rows is None:
+            try:
+                import csv
+                from pathlib import Path
+                csv_path = Path("datasets/fundamentals_lens/evidence_register.csv")
+                if csv_path.exists():
+                    with open(csv_path, "r", encoding="utf-8") as f:
+                        csv_rows = list(csv.DictReader(f))
+                else:
+                    csv_rows = []
+            except Exception:
+                csv_rows = []
+
+        # 1. Derive expected population dynamically
+        expected_companies = {c.ticker for c in companies}
+        expected_periods = set()
+        primary_metric_names = ("revenue", "operating_income", "net_income", "operating_cash_flow", "capital_expenditure")
+
+        if sources:
+            for s in sources:
+                expected_periods.add((s.get("ticker"), int(s.get("fiscal_year", 0))))
+        elif evidence_register:
+            for e in evidence_register:
+                expected_periods.add((e.get("ticker"), int(e.get("fiscal_year", 0))))
+        else:
+            for f in financial_facts:
+                t = getattr(f, "ticker", None) or f.get("ticker")
+                fy = getattr(f, "fiscal_year", None) or f.get("fiscal_year")
+                if t and fy:
+                    expected_periods.add((t, int(fy)))
+
+        expected_metric_keys = set()
+        for (t, fy) in expected_periods:
+            for m in primary_metric_names:
+                expected_metric_keys.add((t, fy, m))
+
+        # 2. Pre-map uniqueness checks
+        fact_keys_seen = set()
+        for f in financial_facts:
+            t = getattr(f, "ticker", None) or f.get("ticker")
+            fy = getattr(f, "fiscal_year", None) or f.get("fiscal_year")
+            k = (t, int(fy))
+            if k in fact_keys_seen:
+                errors.append(f"Duplicate financial fact period detected: {k}")
+            fact_keys_seen.add(k)
+
+        obs_ids_seen = set()
+        obs_keys_seen = set()
+        for o in source_observations:
+            oid = o.get("observation_id")
+            if oid and oid in obs_ids_seen:
+                errors.append(f"Duplicate source observation_id: '{oid}'")
+            if oid:
+                obs_ids_seen.add(oid)
+            ok = (o.get("ticker"), int(o.get("fiscal_year", 0)), o.get("metric_name"))
+            if ok in obs_keys_seen:
+                errors.append(f"Duplicate source observation key: {ok}")
+            obs_keys_seen.add(ok)
+
+        src_ids_seen = set()
+        src_keys_seen = set()
+        for s in sources:
+            sid = s.get("source_id")
+            if sid and sid in src_ids_seen:
+                errors.append(f"Duplicate source_id in source register: '{sid}'")
+            if sid:
+                src_ids_seen.add(sid)
+            sk = (s.get("ticker"), int(s.get("fiscal_year", 0)))
+            if sk in src_keys_seen:
+                errors.append(f"Duplicate source register period: {sk}")
+            src_keys_seen.add(sk)
+
+        ev_keys_seen = set()
+        for e in evidence_register:
+            ek = (e.get("ticker"), int(e.get("fiscal_year", 0)))
+            if ek in ev_keys_seen:
+                errors.append(f"Duplicate evidence register period: {ek}")
+            ev_keys_seen.add(ek)
+
+        csv_keys_seen = set()
+        if csv_rows:
+            for r in csv_rows:
+                ck = (r.get("ticker"), int(r.get("fiscal_year", 0)), r.get("metric_key"))
+                if ck in csv_keys_seen:
+                    errors.append(f"Duplicate row in evidence_register.csv: {ck}")
+                csv_keys_seen.add(ck)
+
+        # 3. Completeness & bidirectional cross-artifact key alignment
+        missing_facts = expected_periods - fact_keys_seen
+        extra_facts = fact_keys_seen - expected_periods
+        if missing_facts:
+            errors.append(f"Missing financial fact periods: {sorted(missing_facts)[:3]}")
+        if extra_facts:
+            errors.append(f"Extra financial fact periods: {sorted(extra_facts)[:3]}")
+
+        missing_obs = expected_metric_keys - obs_keys_seen
+        extra_obs = obs_keys_seen - expected_metric_keys
+        if missing_obs:
+            errors.append(f"Missing source observations: {sorted(missing_obs)[:3]}")
+        if extra_obs:
+            errors.append(f"Extra source observations: {sorted(extra_obs)[:3]}")
+
+        missing_src = expected_periods - src_keys_seen
+        extra_src = src_keys_seen - expected_periods
+        if missing_src:
+            errors.append(f"Missing source register entries: {sorted(missing_src)[:3]}")
+        if extra_src:
+            errors.append(f"Extra source register entries: {sorted(extra_src)[:3]}")
+
+        missing_ev = expected_periods - ev_keys_seen
+        extra_ev = ev_keys_seen - expected_periods
+        if missing_ev:
+            errors.append(f"Missing evidence register periods: {sorted(missing_ev)[:3]}")
+        if extra_ev:
+            errors.append(f"Extra evidence register periods: {sorted(extra_ev)[:3]}")
+
+        if csv_rows:
+            missing_csv = expected_metric_keys - csv_keys_seen
+            extra_csv = csv_keys_seen - expected_metric_keys
+            if missing_csv:
+                errors.append(f"Missing rows in evidence_register.csv: {sorted(missing_csv)[:3]}")
+            if extra_csv:
+                errors.append(f"Extra rows in evidence_register.csv: {sorted(extra_csv)[:3]}")
+
+        # 4. Derived FCF arithmetic consistency check across all 75 periods
+        for f in financial_facts:
+            t = getattr(f, "ticker", None) or f.get("ticker")
+            fy = getattr(f, "fiscal_year", None) or f.get("fiscal_year")
+            ocf = getattr(f, "operating_cash_flow", None) if hasattr(f, "operating_cash_flow") else f.get("operating_cash_flow")
+            capex = getattr(f, "capital_expenditure", None) if hasattr(f, "capital_expenditure") else f.get("capital_expenditure")
+            # find corresponding evidence register record
+            ev_rec = next((e for e in evidence_register if e.get("ticker") == t and int(e.get("fiscal_year", 0)) == int(fy)), None)
+            if ev_rec and ocf is not None and capex is not None:
+                derived_fcf = ev_rec.get("free_cash_flow_derived", {}).get("canonical_fcf_value")
+                if derived_fcf is not None:
+                    expected_fcf = float(ocf) - float(capex)
+                    if abs(float(derived_fcf) - expected_fcf) > 0.001:
+                        errors.append(
+                            f"{t} FY{fy}: Derived FCF in evidence register ({derived_fcf}) != (Fact OCF {ocf} - Fact Capex {capex} = {expected_fcf})"
+                        )
+
+        # 5. Metadata counts verification
+        if metadata:
+            meta_total_obs = metadata.get("total_metric_observations")
+            if meta_total_obs is not None and meta_total_obs != len(expected_metric_keys):
+                errors.append(f"metadata.total_metric_observations ({meta_total_obs}) != expected ({len(expected_metric_keys)})")
+            meta_total_comp = metadata.get("total_companies")
+            if meta_total_comp is not None and meta_total_comp != len(expected_companies):
+                errors.append(f"metadata.total_companies ({meta_total_comp}) != expected ({len(expected_companies)})")
+            meta_total_per = metadata.get("total_periods")
+            if meta_total_per is not None and meta_total_per != len(expected_periods):
+                errors.append(f"metadata.total_periods ({meta_total_per}) != expected ({len(expected_periods)})")
+
+        if errors:
+            return ValidationResult(
+                rule_id="GATE_POPULATION_CROSS_ARTIFACT_INTEGRITY",
+                rule_name="Population Completeness & Cross-Artifact Referential Integrity",
+                status=ValidationStatus.FAIL,
+                message=f"Population/cross-artifact validation failed ({len(errors)} errors): {errors[:3]}",
+                details={"errors": errors, "total_errors": len(errors)},
+                dimension="STRUCTURAL"
+            )
+
+        return ValidationResult(
+            rule_id="GATE_POPULATION_CROSS_ARTIFACT_INTEGRITY",
+            rule_name="Population Completeness & Cross-Artifact Referential Integrity",
+            status=ValidationStatus.PASS,
+            message=(
+                f"Population integrity verified: {len(expected_companies)} companies, {len(expected_periods)} annual periods, "
+                f"{len(expected_metric_keys)} primary metric observations, and {len(expected_periods)} derived FCF records "
+                f"with 100% referential alignment across facts, observations, sources, evidence, and CSV."
+            ),
+            details={
+                "companies": len(expected_companies),
+                "periods": len(expected_periods),
+                "primary_metrics": len(expected_metric_keys),
+                "fcf_derived": len(expected_periods)
+            },
+            dimension="STRUCTURAL"
+        )

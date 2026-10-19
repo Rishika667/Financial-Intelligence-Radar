@@ -107,6 +107,40 @@ def run_validation():
         passed_checks += 1
         print(f"\n[DATASET-METADATA] [PASS      ] {meta_res.rule_name}: {meta_res.message}")
 
+    # Discrepancy ledger end-to-end integrity check (Phase 15)
+    from fundamentals_lens.data_loader import load_source_observations
+    source_observations = load_source_observations()
+
+    disc_res = FundamentalsValidator.validate_discrepancy_ledger_integrity(
+        discrepancies=discrepancies,
+        financial_facts=all_facts,
+        source_observations=source_observations
+    )
+    total_checks += 1
+    if disc_res.status == ValidationStatus.FAIL:
+        failed_checks += 1
+        print(f"[DISCREPANCY-LEDGER] [FAIL      ] {disc_res.rule_name}: {disc_res.message}")
+    else:
+        passed_checks += 1
+        print(f"[DISCREPANCY-LEDGER] [PASS      ] {disc_res.rule_name}: {disc_res.message}")
+
+    # Population and cross-artifact referential integrity check (Phase 15)
+    pop_res = FundamentalsValidator.validate_population_and_cross_artifact_integrity(
+        companies=companies,
+        financial_facts=all_facts,
+        source_observations=source_observations,
+        sources=sources,
+        evidence_register=evidence_register,
+        discrepancies=discrepancies
+    )
+    total_checks += 1
+    if pop_res.status == ValidationStatus.FAIL:
+        failed_checks += 1
+        print(f"[POPULATION-INTEGRITY] [FAIL      ] {pop_res.rule_name}: {pop_res.message}")
+    else:
+        passed_checks += 1
+        print(f"[POPULATION-INTEGRITY] [PASS      ] {pop_res.rule_name}: {pop_res.message}")
+
     dim_summary = {}
     for comp in sorted(companies, key=lambda c: (c.peer_group_id, c.ticker)):
         facts = get_facts_for_company(comp.ticker)

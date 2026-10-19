@@ -71,11 +71,26 @@ async def verify_dom_and_charts(ws, require_chart=False, timeout_sec=15):
         const chart = document.querySelector('[data-testid="stPlotlyChart"], .js-plotly-plot');
         const scrollW = document.documentElement.scrollWidth;
         const rect = chart ? chart.getBoundingClientRect() : null;
+
+        let traceTypes = [];
+        let traceCount = 0;
+        if (chart && chart.data && Array.isArray(chart.data)) {
+            traceCount = chart.data.length;
+            traceTypes = chart.data.map(t => t.type || 'scatter');
+        }
+
+        const kpiCount = document.querySelectorAll('[data-testid="stMetric"]').length;
+        const controlsCount = document.querySelectorAll('select, [data-testid="stSelectbox"], [data-testid="stCheckbox"], [data-testid="stRadio"]').length;
+
         return {
             dom_ready: body && container && markdowns > 0,
             chart_mounted: Boolean(chart),
             chart_width: rect ? Math.round(rect.width) : 0,
             chart_height: rect ? Math.round(rect.height) : 0,
+            trace_count: traceCount,
+            trace_types: traceTypes,
+            kpi_count: kpiCount,
+            controls_count: controlsCount,
             scroll_width: scrollW,
             has_overflow: scrollW > 1290
         };
@@ -89,7 +104,7 @@ async def verify_dom_and_charts(ws, require_chart=False, timeout_sec=15):
         val = res.get("result", {}).get("value", {})
         last_geom = val
         if val.get("dom_ready"):
-            if not require_chart or (val.get("chart_mounted") and val.get("chart_height", 0) > 0):
+            if not require_chart or (val.get("chart_mounted") and val.get("chart_height", 0) >= 200 and val.get("chart_width", 0) >= 250):
                 return val
         await asyncio.sleep(0.5)
 

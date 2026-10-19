@@ -1028,7 +1028,17 @@ class FundamentalsValidator:
 
                 if doc_id_stat and doc_id_stat not in ("VALIDATED", "INVALID_FORMAT", "UNVERIFIED"):
                     tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Invalid document_identity_status '{doc_id_stat}'")
-                if doc_ret_stat and doc_ret_stat not in ("RETRIEVED_OFFLINE_EXTRACT", "RETRIEVED_ONLINE_EDGAR", "RETRIEVED_ONLINE_BSE", "PENDING_RETRIEVAL"):
+                if doc_ret_stat and doc_ret_stat not in (
+                    "RETRIEVED_OFFLINE_EXTRACT",
+                    "OFFLINE_AUDITED",
+                    "OFFLINE_SOURCE_RECORDED",
+                    "RETRIEVED_ONLINE_EDGAR",
+                    "RETRIEVED_ONLINE_BSE",
+                    "PENDING_RETRIEVAL",
+                    "NOT_CHECKED",
+                    "INCONCLUSIVE",
+                    "FAILED",
+                ):
                     tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Invalid document_retrieval_status '{doc_ret_stat}'")
                 if period_match_stat and period_match_stat not in ("EXACT_PERIOD_MATCH", "PERIOD_MISMATCH"):
                     tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Invalid period_match_status '{period_match_stat}'")

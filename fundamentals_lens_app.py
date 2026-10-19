@@ -1261,8 +1261,10 @@ elif selected_page == "Price & Technical Analysis":
             if selected_basis in (PriceAdjustmentBasis.RAW_UNADJUSTED, PriceAdjustmentBasis.UNKNOWN):
                 st.warning(
                     "⚠️ **Price Adjustment Caveat:** Technical indicators and returns calculated on unadjusted "
-                    "or unknown price series may exhibit artificial price gaps and distorted momentum from stock splits or dividend drops."
+                    "or unknown price series may exhibit artificial price gaps and distorted momentum from stock splits or dividend drops. "
+                    "True total return analysis requires split-and-dividend-adjusted prices."
                 )
+            st.caption("ℹ️ *Note: Adjustment basis is user-declared for uploaded files rather than externally verified by third-party exchange feeds. Uploaded data is processed purely in-memory and is not persisted to disk.*")
 
             validation_report = None
             if uploaded_file is not None:
@@ -1427,10 +1429,12 @@ elif selected_page == "Price & Technical Analysis":
                     st.plotly_chart(fig_comp, use_container_width=True)
                 if summary.relative_performance_1y is not None:
                     perf_label = "1-Year Relative Performance" if (summary.common_benchmark_bars or 0) >= 252 else f"Relative Performance ({summary.common_benchmark_bars} bars)"
+                    ret_a_str = f"{summary.change_1y:+.1f}%" if summary.change_1y is not None else "N/A"
+                    ret_b_str = f"{summary.benchmark_change_1y:+.1f}%" if summary.benchmark_change_1y is not None else "N/A"
                     st.info(
                         f"🎯 **{perf_label}:** `{active_ticker}` cumulative return diverged by "
                         f"**{summary.relative_performance_1y:+.2f}%** points relative to `{bench_ticker}` "
-                        f"({summary.change_1y:+.1f}% vs {summary.benchmark_change_1y:+.1f}%) over {summary.common_benchmark_bars} common trading days."
+                        f"({ret_a_str} vs {ret_b_str}) over {summary.common_benchmark_bars} common trading days."
                     )
                 elif summary.relative_performance_period is not None:
                     st.info(

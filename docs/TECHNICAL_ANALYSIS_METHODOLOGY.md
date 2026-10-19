@@ -82,21 +82,29 @@ $$\text{ATR}_t = \frac{1}{14} \text{True Range}_t + \frac{13}{14} \text{ATR}_{t-
 
 ## 4. Performance & Risk Measures
 
-### 4.1 Multi-Period Return Horizons
-- **1-Month Return:** Lookback of 21 trading bars: $((P_t / P_{t-21}) - 1) \times 100$.
-- **3-Month Return:** Lookback of 63 trading bars: $((P_t / P_{t-63}) - 1) \times 100$.
-- **6-Month Return:** Lookback of 126 trading bars: $((P_t / P_{t-126}) - 1) \times 100$.
-- **1-Year Return:** Lookback of 252 trading bars: $((P_t / P_{t-252}) - 1) \times 100$.
+### 4.1 Multi-Period Return Horizons & Indexing Conventions
+- **Return Horizon Definition:** An $N$-bar return reflects percentage price change across $N$ trading intervals:
+  $$R_t(N) = \left(\frac{P_t}{P_{t-N}} - 1\right) \times 100\%$$
+- **Observation Requirements ($N$ vs $N+1$):**
+  - Point-to-point comparison over $N$ trading periods requires at least $N + 1$ chronological observations ($P_0, \dots, P_N$) so that index $(t - N) \ge 0$.
+  - When a dataset has length $M > N$, $P_{t-N} = \text{df.iloc}[-1 - N]$.
+  - When $M = N$, the available series spans $N - 1$ return intervals over the full window ($P_{last} / P_0 - 1$).
+- **Supported Return Horizons:**
+  - **1-Month Return (~21 trading bars):** Requires $\ge 21$ bars. Evaluates $(P_t / P_{t-21}) - 1$.
+  - **3-Month Return (~63 trading bars):** Requires $\ge 63$ bars. Evaluates $(P_t / P_{t-63}) - 1$.
+  - **6-Month Return (~126 trading bars):** Requires $\ge 126$ bars. Evaluates $(P_t / P_{t-126}) - 1$.
+  - **1-Year Return (252 trading bars):** Requires **both** $\ge 252$ trading bars **and** verified annual calendar coverage (340 to 395 calendar days with max consecutive gap $\le 14$ days). Suppressed if calendar coverage is inadequate or history $< 252$ bars.
 
-### 4.2 52-Week Range & Distance Metrics
-Over the most recent $\min(252, N)$ bars:
+### 4.2 52-Week Range & Duration Guard
+Over the most recent trailing window of $\min(252, N)$ bars:
 $$\text{High}_{52\text{W}} = \max(\text{High}_{\text{window}}), \quad \text{Low}_{52\text{W}} = \min(\text{Low}_{\text{window}})$$
-$$\text{Distance from High} = \left(\frac{P_{\text{last}}}{\text{High}_{52\text{W}}} - 1\right) \times 100$$
-$$\text{Distance from Low} = \left(\frac{P_{\text{last}}}{\text{Low}_{52\text{W}}} - 1\right) \times 100$$
+$$\text{Distance from High} = \left(\frac{P_{\text{last}}}{\text{High}_{52\text{W}}} - 1\right) \times 100\%$$
+$$\text{Distance from Low} = \left(\frac{P_{\text{last}}}{\text{Low}_{52\text{W}}} - 1\right) \times 100\%$$
+- **Labeling Guard:** The range is explicitly designated as `52-Week Range` **only** when history is $\ge 252$ bars and calendar coverage meets the 340–395 day requirement. Otherwise, it is transparently labeled as `Available-History Range (N bars)` to prevent false annual claims.
 
 ### 4.3 Annualized Volatility
 Daily return is $R_t = (P_t / P_{t-1}) - 1$.
-The sample standard deviation of daily returns $\sigma_d$ is annualized across standard 252 trading days:
+The sample standard deviation of daily returns $\sigma_d$ (computed across $\ge 10$ return observations) is annualized across standard 252 trading days:
 $$\sigma_{\text{ann}} = \sigma_d \times \sqrt{252} \times 100\%$$
 
 ### 4.4 Maximum Historical Drawdown
@@ -105,15 +113,33 @@ $$\text{Drawdown}_t = \frac{P_t - \text{Peak}_t}{\text{Peak}_t} \times 100\%$$
 $$\text{Max Drawdown} = \min_{t} \text{Drawdown}_t$$
 
 ### 4.5 Comparative Benchmark Alignment (Base = 100)
-When an asset price series $A$ is compared against a benchmark series $B$, an inner join on common trading dates aligns the timelines. Both series are normalized to a base of 100 at the initial shared date $t_0$:
-$$A^*_t = \frac{A_t}{A_{t_0}} \times 100, \quad B^*_t = \frac{B_t}{B_{t_0}} \times 100$$
-Relative Performance Spread:
-$$\text{Relative Spread} = \left( \frac{A_{\text{last}}}{A_{t_0}} - 1 \right) \times 100 - \left( \frac{B_{\text{last}}}{B_{t_0}} - 1 \right) \times 100$$
+When an asset price series $A$ is compared against a benchmark series $B$:
+1. **Common-Date Inner Join:** An inner join on unique dates aligns observations. Non-finite values and non-positive prices are eliminated.
+2. **Normalized Performance Series:** Both series are rebased to 100 on the initial common date $t_0$:
+   $$A^*_t = \frac{A_t}{A_{t_0}} \times 100, \quad B^*_t = \frac{B_t}{B_{t_0}} \times 100$$
+3. **Common-Period Relative Spread:**
+   $$\text{Relative Spread}_{\text{period}} = \left( \frac{A_{\text{last}}}{A_{t_0}} - 1 \right) \times 100\% - \left( \frac{B_{\text{last}}}{B_{t_0}} - 1 \right) \times 100\%$$
+4. **1-Year Relative Spread Guard:**
+   1-Year relative return is populated **only** if the common overlapping window spans $\ge 252$ trading bars **and** satisfies calendar coverage (340–395 calendar days, max gap $\le 14$ days). Overlapping windows shorter than 252 bars are strictly reported as common-period returns.
 
 ---
 
-## 5. Analytical Notice & Limitations
+## 5. Parameter Validation & Edge Case Guarantees
 
-1. **Non-Predictive:** Past volatility and volume distributions do not guarantee future price action.
+| Indicator / Function | Input Parameter Guard | Zero / Negative Value Behavior | Flat Series Handling |
+|:---|:---|:---|:---|
+| **SMA** | `period >= 1` | `ValueError` raised on $\le 0$ | Constant value output |
+| **EMA** | `period >= 1` | `ValueError` raised on $\le 0$ | Constant value output |
+| **RSI(14)** | `period >= 1` | `ValueError` raised on $\le 0$ | Returns exactly 50.0 (neutral) |
+| **MACD(12, 26, 9)** | `fast, slow, signal >= 1`, `fast < slow` | `ValueError` raised on invalid params | Line = 0, Signal = 0, Hist = 0 |
+| **Bollinger Bands** | `period >= 1`, `num_std >= 0` | `ValueError` raised on invalid params | $\sigma = 0 \implies$ Upper = Middle = Lower |
+| **ATR(14)** | `period >= 1` | `ValueError` raised on $\le 0$ | Constant bar range $High - Low$ |
+
+---
+
+## 6. Analytical Notice & Limitations
+
+1. **Non-Predictive:** Past volatility, moving average crosses, and oscillator extremes reflect past price distribution only; they do not guarantee future performance or provide automated buy/sell signals.
 2. **Lagging Indicators:** Moving averages and MACD are inherently trend-following lagging indicators that experience slippage during regime shifts.
-3. **Data Quality Dependency:** Indicator accuracy depends strictly on the integrity and granularity of the ingested OHLCV data. Corporate actions (stock splits, special cash dividends) must be adjusted prior to upload.
+3. **Data Quality & Corporate Action Dependency:** Indicator accuracy depends strictly on the integrity and adjustment basis of ingested OHLCV data. Unadjusted raw series will produce artificial jumps upon stock splits or cash dividends.
+4. **Volatile In-Memory Processing:** Custom user CSV uploads are processed entirely in-memory and are never written to disk or transmitted to external servers. Invariant checks verify internal mathematical consistency, not third-party data provider authenticity.

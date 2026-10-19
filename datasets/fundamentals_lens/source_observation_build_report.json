@@ -1,6 +1,6 @@
 {
   "pipeline_version": "Phase 14 Hardened Release Candidate",
-  "build_timestamp": "2026-10-18T21:16:44Z",
+  "build_timestamp": "2026-10-19T08:29:06Z",
   "mode": "OFFLINE",
   "inputs": {
     "us_tracked_extracts": "datasets\\fundamentals_lens\\source_inputs\\sec_company_facts_extracts.json",
@@ -10,7 +10,7 @@
   },
   "output": {
     "source_observations_file": "datasets\\fundamentals_lens\\source_observations.json",
-    "output_sha256": "bd4502c4e1e71e992f06985d3f50e882618973542ba6871d453294a1f1b3a9f8"
+    "output_sha256": "d827199eabb25048f4ff688b7fed32ace60eb680aad1b5da1b829df919d5ce3b"
   },
   "statistics": {
     "total_observations": 375,

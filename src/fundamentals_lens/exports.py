@@ -279,11 +279,13 @@ class ExportGenerator:
         if summary:
             writer.writerow([f"# TICKER: {summary.ticker}"])
             writer.writerow([f"# CURRENCY: {summary.currency}"])
-            writer.writerow([f"# PRICE_ADJUSTMENT_BASIS: {summary.price_adjustment_basis}"])
+            writer.writerow([f"# PRICE_ADJUSTMENT_BASIS: {summary.price_adjustment_basis} (User-declared or recorded)"])
             writer.writerow([f"# DATE_RANGE: {df['Date_Str'].iloc[0] if 'Date_Str' in df.columns else df['Date'].iloc[0]} to {summary.last_date}"])
             writer.writerow([f"# OBSERVATIONS: {summary.total_bars} bars"])
             if summary.benchmark_ticker:
                 writer.writerow([f"# BENCHMARK: {summary.benchmark_ticker} ({summary.common_benchmark_bars or 0} common bars)"])
+        writer.writerow(["# STORAGE_POLICY: In-memory volatile processing; custom uploads are never persisted to disk."])
+        writer.writerow(["# PROVENANCE_POLICY: Mathematical invariant checks only; does not externally verify provider authenticity."])
         writer.writerow(["# INDICATOR_CONVENTIONS: SMA(20,50,200), Wilder's RSI(14), MACD(12,26,9), Bollinger Bands(20, 2.0 std, ddof=1), ATR(14)"])
         writer.writerow([])
 
@@ -313,7 +315,7 @@ class ExportGenerator:
 
         lines.append(f"**Latest Trading Date:** `{summary.last_date}` | **Latest Close:** `{summary.last_close:,.2f} {summary.currency}`")
         lines.append(f"**Total Trading Observations:** `{summary.total_bars}` bars")
-        lines.append(f"**Price Adjustment Basis:** `{summary.price_adjustment_basis}`")
+        lines.append(f"**Price Adjustment Basis:** `{summary.price_adjustment_basis}` (User-declared)")
         if summary.benchmark_ticker:
             lines.append(f"**Benchmark Reference:** `{summary.benchmark_ticker}` (Common bars: `{summary.common_benchmark_bars or 0}`)")
         lines.append("")
@@ -363,7 +365,9 @@ class ExportGenerator:
         )
         if summary.price_adjustment_basis in ("RAW_UNADJUSTED", "UNKNOWN"):
             lines.append("")
-            lines.append("> ⚠️ **Corporate Action Caveat**: Price data adjustment basis is unconfirmed or raw. Stock splits, dividend payouts, or capital restructuring can cause sharp discontinuous price steps not reflective of economic returns.")
+            lines.append("> ⚠️ **Corporate Action Caveat**: Price data adjustment basis is unconfirmed or raw. Stock splits, dividend payouts, or capital restructuring can cause sharp discontinuous price steps not reflective of economic returns. True total return analysis requires split-and-dividend-adjusted prices.")
+        lines.append("")
+        lines.append("> ℹ️ **Provenance & Data Privacy Notice**: Custom OHLCV uploads are evaluated purely in volatile memory and are not persisted to disk. Invariant validation verifies mathematical consistency only and does not externally verify market data provider authenticity.")
 
         lines.append("")
         lines.append("---")

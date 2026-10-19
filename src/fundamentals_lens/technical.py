@@ -96,7 +96,24 @@ def validate_ohlcv_dataframe_with_report(
 
     total_rows = len(df)
 
-    # 1. Header Resolution
+    # 1. Header Resolution & Ambiguity Check
+    lower_cols = [str(c).strip().lower() for c in df.columns]
+    dup_headers = [c for c in set(lower_cols) if lower_cols.count(c) > 1]
+    if dup_headers:
+        err = f"Ambiguous duplicate headers detected: {sorted(dup_headers)}. Each column header must appear uniquely."
+        errors.append(err)
+        report = OHLCVValidationReport(
+            is_valid=False,
+            total_rows=total_rows,
+            valid_rows=0,
+            error_count=len(errors),
+            warning_count=0,
+            errors=errors,
+            ticker=ticker,
+            price_adjustment_basis=basis_enum
+        )
+        return False, err, None, report
+
     col_map = {str(c).strip().lower(): c for c in df.columns}
     required = ["date", "open", "high", "low", "close", "volume"]
     missing = [req for req in required if req not in col_map]
@@ -110,7 +127,9 @@ def validate_ohlcv_dataframe_with_report(
             valid_rows=0,
             error_count=len(errors),
             warning_count=0,
-            errors=errors
+            errors=errors,
+            ticker=ticker,
+            price_adjustment_basis=basis_enum
         )
         return False, err, None, report
 
@@ -239,6 +258,8 @@ def validate_ohlcv_dataframe_with_report(
         return False, errors[0], None, report
 
     # 7. Sorting & Final deduplication
+    if not clean_df["Date"].is_monotonic_increasing:
+        warnings.append("Input dates were not in ascending chronological order; normalized into ascending order.")
     clean_df = clean_df.sort_values("Date")
     if clean_df["Date"].duplicated().any():
         clean_df = clean_df.drop_duplicates(subset=["Date"]).reset_index(drop=True)
@@ -318,14 +339,17 @@ def validate_ohlcv_dataframe(
     )
 
 
-
 def calculate_sma(series: pd.Series, period: int) -> pd.Series:
     """Calculates Simple Moving Average."""
+    if period <= 0:
+        raise ValueError(f"period must be a positive integer >= 1 (got {period})")
     return series.rolling(window=period, min_periods=period).mean()
 
 
 def calculate_ema(series: pd.Series, period: int) -> pd.Series:
     """Calculates Exponential Moving Average."""
+    if period <= 0:
+        raise ValueError(f"period must be a positive integer >= 1 (got {period})")
     return series.ewm(span=period, adjust=False).mean()
 
 
@@ -337,10 +361,14 @@ def calculate_rsi(series: pd.Series, period: int = 14) -> pd.Series:
     - If all changes are non-negative and sum > 0 (no loss): returns 100.0.
     - If all changes are non-positive and sum < 0 (no gain): returns 0.0.
     """
+    if period <= 0:
+        raise ValueError(f"period must be a positive integer >= 1 (got {period})")
     if len(series) < 2:
         return pd.Series([np.nan] * len(series), index=series.index)
 
-    delta = series.diff()
+    # Protect against non-finite values in series
+    clean_series = pd.to_numeric(series, errors="coerce")
+    delta = clean_series.diff()
     gain = delta.clip(lower=0.0)
     loss = (-delta).clip(lower=0.0)
 
@@ -361,6 +389,9 @@ def calculate_rsi(series: pd.Series, period: int = 14) -> pd.Series:
     # 3. Completely flat series (both avg_gain == 0 and avg_loss == 0) -> 50.0
     rsi = rsi.where(~((avg_gain == 0) & (avg_loss == 0)), 50.0)
 
+    # Ensure strictly bounded in [0.0, 100.0]
+    rsi = rsi.clip(lower=0.0, upper=100.0)
+
     return rsi.round(2)
 
 
@@ -371,8 +402,13 @@ def calculate_macd(
     signal: int = 9
 ) -> Tuple[pd.Series, pd.Series, pd.Series]:
     """Calculates MACD Line, Signal Line, and MACD Histogram."""
-    fast_ema = calculate_ema(series, fast)
-    slow_ema = calculate_ema(series, slow)
+    if fast <= 0 or slow <= 0 or signal <= 0:
+        raise ValueError(f"MACD periods must be positive integers >= 1 (got fast={fast}, slow={slow}, signal={signal})")
+    if fast >= slow:
+        raise ValueError(f"fast period must be strictly less than slow period (got fast={fast}, slow={slow})")
+    clean_series = pd.to_numeric(series, errors="coerce")
+    fast_ema = calculate_ema(clean_series, fast)
+    slow_ema = calculate_ema(clean_series, slow)
     macd_line = fast_ema - slow_ema
     signal_line = calculate_ema(macd_line, signal)
     macd_hist = macd_line - signal_line
@@ -385,8 +421,13 @@ def calculate_bollinger_bands(
     num_std: float = 2.0
 ) -> Tuple[pd.Series, pd.Series, pd.Series]:
     """Calculates Bollinger Bands (Upper, Middle, Lower) using sample standard deviation (ddof=1)."""
-    middle = calculate_sma(series, period)
-    std = series.rolling(window=period, min_periods=period).std(ddof=1)
+    if period <= 0:
+        raise ValueError(f"period must be a positive integer >= 1 (got {period})")
+    if num_std < 0:
+        raise ValueError(f"num_std must be non-negative (got {num_std})")
+    clean_series = pd.to_numeric(series, errors="coerce")
+    middle = calculate_sma(clean_series, period)
+    std = clean_series.rolling(window=period, min_periods=period).std(ddof=1)
     upper = middle + (std * num_std)
     lower = middle - (std * num_std)
     return upper.round(2), middle.round(2), lower.round(2)
@@ -405,10 +446,15 @@ def calculate_atr(
     First valid ATR at index (period-1) is the SMA of TR over first period bars.
     Subsequent ATR values smoothed by Wilder's recurrence.
     """
-    prior_close = close.shift(1)
-    tr1 = high - low
-    tr2 = (high - prior_close).abs()
-    tr3 = (low - prior_close).abs()
+    if period <= 0:
+        raise ValueError(f"period must be a positive integer >= 1 (got {period})")
+    clean_h = pd.to_numeric(high, errors="coerce")
+    clean_l = pd.to_numeric(low, errors="coerce")
+    clean_c = pd.to_numeric(close, errors="coerce")
+    prior_close = clean_c.shift(1)
+    tr1 = clean_h - clean_l
+    tr2 = (clean_h - prior_close).abs()
+    tr3 = (clean_l - prior_close).abs()
     tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
 
     # Initial period-bar SMA, then Wilder's exponential smoothing
@@ -596,13 +642,23 @@ def compute_technical_summary(
     common_end = None
 
     if benchmark_df is not None and not benchmark_df.empty:
-        # Align strictly on common dates
+        # Align strictly on common dates with unique date index
+        df_bench_src = df[["Date", "Date_Str", "Close"]].drop_duplicates(subset=["Date"])
+        bm_bench_src = benchmark_df[["Date", "Close"]].drop_duplicates(subset=["Date"])
+
         merged = pd.merge(
-            df[["Date", "Date_Str", "Close"]].rename(columns={"Close": "Asset_Close"}),
-            benchmark_df[["Date", "Close"]].rename(columns={"Close": "Bench_Close"}),
+            df_bench_src.rename(columns={"Close": "Asset_Close"}),
+            bm_bench_src.rename(columns={"Close": "Bench_Close"}),
             on="Date",
             how="inner"
-        ).sort_values("Date")
+        ).sort_values("Date").reset_index(drop=True)
+
+        # Filter out rows with non-finite or non-positive prices
+        merged = merged.dropna(subset=["Asset_Close", "Bench_Close"])
+        merged = merged[
+            (pd.to_numeric(merged["Asset_Close"], errors="coerce") > 0) &
+            (pd.to_numeric(merged["Bench_Close"], errors="coerce") > 0)
+        ].reset_index(drop=True)
 
         common_bars = len(merged)
         if common_bars >= 20:
@@ -625,8 +681,9 @@ def compute_technical_summary(
                     common_gaps = common_dates_win.diff().dt.days.dropna()
                     common_max_gap = int(common_gaps.max()) if len(common_gaps) > 0 else 0
                     if 340 <= common_cal_days <= 395 and common_max_gap <= 14:
-                        b_win_first = float(merged.iloc[-252]["Bench_Close"])
-                        a_win_first = float(merged.iloc[-252]["Asset_Close"])
+                        win_idx = -253 if common_bars > 252 else 0
+                        b_win_first = float(merged.iloc[win_idx]["Bench_Close"])
+                        a_win_first = float(merged.iloc[win_idx]["Asset_Close"])
                         if b_win_first > 0 and a_win_first > 0:
                             bm_1y = round(((last_b / b_win_first) - 1.0) * 100.0, 2)
                             a_1y = round(((last_a / a_win_first) - 1.0) * 100.0, 2)
@@ -810,18 +867,33 @@ def create_benchmark_comparison_chart(
     if not PLOTLY_AVAILABLE or df is None or benchmark_df is None:
         return None
 
+    df_bench_src = df[["Date", "Close"]].drop_duplicates(subset=["Date"])
+    bm_bench_src = benchmark_df[["Date", "Close"]].drop_duplicates(subset=["Date"])
+
     merged = pd.merge(
-        df[["Date", "Close"]].rename(columns={"Close": "Asset"}),
-        benchmark_df[["Date", "Close"]].rename(columns={"Close": "Bench"}),
+        df_bench_src.rename(columns={"Close": "Asset"}),
+        bm_bench_src.rename(columns={"Close": "Bench"}),
         on="Date",
         how="inner"
-    ).sort_values("Date")
+    ).sort_values("Date").reset_index(drop=True)
+
+    # Filter out non-finite or non-positive prices
+    merged = merged.dropna(subset=["Asset", "Bench"])
+    merged = merged[
+        (pd.to_numeric(merged["Asset"], errors="coerce") > 0) &
+        (pd.to_numeric(merged["Bench"], errors="coerce") > 0)
+    ].reset_index(drop=True)
 
     if len(merged) < 5:
         return None
 
-    merged["Asset_Norm"] = (merged["Asset"] / merged["Asset"].iloc[0]) * 100.0
-    merged["Bench_Norm"] = (merged["Bench"] / merged["Bench"].iloc[0]) * 100.0
+    first_asset = float(merged["Asset"].iloc[0])
+    first_bench = float(merged["Bench"].iloc[0])
+    if first_asset <= 0 or first_bench <= 0 or np.isnan(first_asset) or np.isnan(first_bench):
+        return None
+
+    merged["Asset_Norm"] = (merged["Asset"] / first_asset) * 100.0
+    merged["Bench_Norm"] = (merged["Bench"] / first_bench) * 100.0
 
     badge = " [SIMULATED DEMO]" if is_simulated_demo else ""
     fig = go.Figure()

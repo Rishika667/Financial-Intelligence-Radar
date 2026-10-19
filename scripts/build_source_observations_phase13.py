@@ -73,6 +73,25 @@ def build_observations_offline(
 
     observations: List[Dict[str, Any]] = []
 
+    disc_lookup: Dict[tuple, str] = {}
+    disc_file = DATASETS_DIR / "discrepancy_ledger.json"
+    if disc_file.exists():
+        with open(disc_file, "r", encoding="utf-8") as f:
+            disc_entries = json.load(f)
+            for d in disc_entries:
+                t = d.get("ticker")
+                m = d.get("metric")
+                d_id = d.get("discrepancy_id")
+                if t and m and d_id:
+                    for p in d.get("affected_periods", [d.get("fiscal_year")]):
+                        if p is not None:
+                            disc_lookup[(t, p, m)] = d_id
+                    for det in d.get("affected_metrics_detail", []):
+                        det_fy = det.get("fiscal_year") or d.get("fiscal_year")
+                        det_m = det.get("metric") or m
+                        if det_fy is not None and det_m:
+                            disc_lookup[(t, det_fy, det_m)] = d_id
+
     # Process US extracts
     for item in us_extracts:
         ticker = item["ticker"]
@@ -81,6 +100,17 @@ def build_observations_offline(
         metric = item["metric_name"]
         clean_lbl = lbl.replace(" ", "_").replace("–", "_").replace("-", "_")
         obs_id = f"OBS_{ticker}_{clean_lbl}_{metric}"
+
+        disc_ref = disc_lookup.get((ticker, fy, metric)) or item.get("discrepancy_reference")
+        if disc_ref:
+            conf_tier = "INDEPENDENTLY_RECONCILED"
+            ass_state = "APPROVED_ADJUSTMENT_RESOLVED"
+        elif item.get("reported_value") is None:
+            conf_tier = "SOURCE_LINKED_ONLY"
+            ass_state = "SOURCE_REFERENCE_RECORDED"
+        else:
+            conf_tier = "TRACKED_OFFLINE_EXTRACT"
+            ass_state = "OFFLINE_EXTRACT_RECORDED"
 
         obs = {
             "observation_id": obs_id,
@@ -111,8 +141,9 @@ def build_observations_offline(
             "verification_mode": "OFFLINE",
             "verification_timestamp": build_timestamp,
             "source_document_status": "OFFLINE_AUDITED",
-            "confidence_tier": item["confidence_tier"],
-            "discrepancy_reference": item.get("discrepancy_reference"),
+            "confidence_tier": conf_tier,
+            "assurance_state": ass_state,
+            "discrepancy_reference": disc_ref,
             "data_provenance": item["data_provenance"]
         }
         observations.append(obs)
@@ -127,6 +158,16 @@ def build_observations_offline(
         obs_id = f"OBS_{ticker}_{clean_lbl}_{metric}"
 
         is_pending = (item.get("reported_value") is None)
+        disc_ref = disc_lookup.get((ticker, fy, metric)) or item.get("discrepancy_reference")
+        if disc_ref:
+            conf_tier = "INDEPENDENTLY_RECONCILED"
+            ass_state = "APPROVED_ADJUSTMENT_RESOLVED"
+        elif is_pending:
+            conf_tier = "SOURCE_LINKED_ONLY"
+            ass_state = "SOURCE_REFERENCE_RECORDED"
+        else:
+            conf_tier = "TRACKED_OFFLINE_EXTRACT"
+            ass_state = "OFFLINE_EXTRACT_RECORDED"
 
         obs = {
             "observation_id": obs_id,
@@ -157,8 +198,9 @@ def build_observations_offline(
             "verification_mode": "OFFLINE",
             "verification_timestamp": build_timestamp,
             "source_document_status": "OFFLINE_AUDITED",
-            "confidence_tier": item["confidence_tier"],
-            "discrepancy_reference": item.get("discrepancy_reference"),
+            "confidence_tier": conf_tier,
+            "assurance_state": ass_state,
+            "discrepancy_reference": disc_ref,
             "data_provenance": item["data_provenance"]
         }
         observations.append(obs)

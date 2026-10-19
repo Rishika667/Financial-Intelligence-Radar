@@ -20,10 +20,22 @@ class DataQualityState(str, Enum):
 
 class VerificationTier(str, Enum):
     INDEPENDENTLY_RECONCILED = "INDEPENDENTLY_RECONCILED"
+    TRACKED_OFFLINE_EXTRACT = "TRACKED_OFFLINE_EXTRACT"
     SOURCE_LINKED_ONLY = "SOURCE_LINKED_ONLY"
     UNVERIFIED = "UNVERIFIED"
     FAILED = "FAILED"
     DERIVED_VERIFIED = "DERIVED_VERIFIED"
+
+
+class AssuranceState(str, Enum):
+    SOURCE_REFERENCE_RECORDED = "SOURCE_REFERENCE_RECORDED"
+    SOURCE_IDENTITY_CHECKED = "SOURCE_IDENTITY_CHECKED"
+    OFFLINE_EXTRACT_RECORDED = "OFFLINE_EXTRACT_RECORDED"
+    DOCUMENT_SNAPSHOT_HASHED = "DOCUMENT_SNAPSHOT_HASHED"
+    PRIMARY_STATEMENT_LINE_ITEM_AUDITED = "PRIMARY_STATEMENT_LINE_ITEM_AUDITED"
+    LIVE_RETRIEVAL_SUCCEEDED = "LIVE_RETRIEVAL_SUCCEEDED"
+    APPROVED_ADJUSTMENT_RESOLVED = "APPROVED_ADJUSTMENT_RESOLVED"
+    PENDING_OR_DISCREPANT = "PENDING_OR_DISCREPANT"
 
 
 def normalize_verification_tier(tier: Optional[str]) -> str:
@@ -32,6 +44,8 @@ def normalize_verification_tier(tier: Optional[str]) -> str:
     t_upper = tier.strip().upper()
     if t_upper in ("SOURCE_LINKED_AUDITED", "SOURCE_LINKED", "SOURCE_LINKED_ONLY"):
         return VerificationTier.SOURCE_LINKED_ONLY.value
+    if t_upper in ("TRACKED_OFFLINE_EXTRACT", "OFFLINE_EXTRACT", "TRACKED_EXTRACT", "OFFLINE_AUDITED"):
+        return VerificationTier.TRACKED_OFFLINE_EXTRACT.value
     if t_upper in ("INDEPENDENTLY_RECONCILED", "AUDITED_RECONCILED"):
         return VerificationTier.INDEPENDENTLY_RECONCILED.value
     if t_upper in ("DERIVED_VERIFIED", "DERIVED_RECONCILED", "DERIVED"):
@@ -232,8 +246,8 @@ class OHLCVValidationReport:
 class TechnicalSummary:
     ticker: str
     last_date: str
-    last_close: float
-    total_bars: int
+    last_close: Optional[float] = None
+    total_bars: int = 0
     change_1m: Optional[float] = None
     change_3m: Optional[float] = None
     change_6m: Optional[float] = None

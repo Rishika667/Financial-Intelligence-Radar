@@ -29,7 +29,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-21-000105",
     "internal_document_key": null,
@@ -69,7 +69,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-22-000108",
     "internal_document_key": null,
@@ -109,7 +109,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-23-000106",
     "internal_document_key": null,
@@ -149,7 +149,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-24-000123",
     "internal_document_key": null,
@@ -189,7 +189,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-25-000079",
     "internal_document_key": null,
@@ -229,7 +229,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2021-22",
@@ -269,7 +269,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2022-23",
@@ -309,7 +309,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2023-24",
@@ -349,7 +349,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2024-25",
@@ -389,7 +389,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2025-26",
@@ -429,7 +429,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2021-22",
@@ -469,7 +469,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2022-23",
@@ -509,7 +509,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2023-24",
@@ -549,7 +549,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2024-25",
@@ -589,7 +589,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2025-26",
@@ -629,7 +629,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-22-000021",
     "internal_document_key": null,
@@ -669,7 +669,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-23-000042",
     "internal_document_key": null,
@@ -709,7 +709,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-24-000049",
     "internal_document_key": null,
@@ -749,7 +749,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-25-000101",
     "internal_document_key": null,
@@ -789,7 +789,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-26-000093",
     "internal_document_key": null,
@@ -829,7 +829,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2021-22",
@@ -869,7 +869,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2022-23",
@@ -909,7 +909,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2023-24",
@@ -949,7 +949,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2024-25",
@@ -989,7 +989,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2025-26",
@@ -1029,7 +1029,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-22-000019",
     "internal_document_key": null,
@@ -1069,7 +1069,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-23-000016",
     "internal_document_key": null,
@@ -1109,7 +1109,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-24-000022",
     "internal_document_key": null,
@@ -1149,7 +1149,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-25-000014",
     "internal_document_key": null,
@@ -1189,7 +1189,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-26-000018",
     "internal_document_key": null,
@@ -1229,7 +1229,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2021-22",
@@ -1269,7 +1269,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2022-23",
@@ -1309,7 +1309,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2023-24",
@@ -1349,7 +1349,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2024-25",
@@ -1389,7 +1389,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2025-26",
@@ -1429,7 +1429,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2021-22",
@@ -1469,7 +1469,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2022-23",
@@ -1509,7 +1509,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2023-24",
@@ -1549,7 +1549,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2024-25",
@@ -1589,7 +1589,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2025-26",
@@ -1629,7 +1629,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2021-22",
@@ -1669,7 +1669,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2022-23",
@@ -1709,7 +1709,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2023-24",
@@ -1749,7 +1749,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2024-25",
@@ -1789,7 +1789,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2025-26",
@@ -1829,7 +1829,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2021-22",
@@ -1869,7 +1869,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2022-23",
@@ -1909,7 +1909,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2023-24",
@@ -1949,7 +1949,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2024-25",
@@ -1989,7 +1989,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2025-26",
@@ -2029,7 +2029,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2021-22",
@@ -2069,7 +2069,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2022-23",
@@ -2109,7 +2109,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2023-24",
@@ -2149,7 +2149,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2024-25",
@@ -2189,7 +2189,7 @@
       "overall_comparability": "PROXY",
       "comparability_caveat": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2025-26",
@@ -2229,7 +2229,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001564590-22-026876",
     "internal_document_key": null,
@@ -2269,7 +2269,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000950170-23-035122",
     "internal_document_key": null,
@@ -2309,7 +2309,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000950170-24-087843",
     "internal_document_key": null,
@@ -2349,7 +2349,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000950170-25-100235",
     "internal_document_key": null,
@@ -2389,7 +2389,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001193125-26-323660",
     "internal_document_key": null,
@@ -2429,7 +2429,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2021-22",
@@ -2469,7 +2469,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2022-23",
@@ -2509,7 +2509,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2023-24",
@@ -2549,7 +2549,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2024-25",
@@ -2589,7 +2589,7 @@
       "overall_comparability": "LIMITED",
       "comparability_caveat": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2025-26",
@@ -2629,7 +2629,7 @@
     },
     "verification_status": "VERIFIED",
     "fiscal_year": 2021,
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-22-000007",
     "internal_document_key": null,
@@ -2669,7 +2669,7 @@
     },
     "verification_status": "VERIFIED",
     "fiscal_year": 2022,
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-23-000015",
     "internal_document_key": null,
@@ -2709,7 +2709,7 @@
     },
     "verification_status": "VERIFIED",
     "fiscal_year": 2023,
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-24-000032",
     "internal_document_key": null,
@@ -2749,7 +2749,7 @@
     },
     "verification_status": "VERIFIED",
     "fiscal_year": 2024,
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-25-000018",
     "internal_document_key": null,
@@ -2789,7 +2789,7 @@
     },
     "verification_status": "VERIFIED",
     "fiscal_year": 2025,
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-26-000016",
     "internal_document_key": null,
@@ -2829,7 +2829,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-22-000012",
     "internal_document_key": null,
@@ -2869,7 +2869,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-23-000020",
     "internal_document_key": null,
@@ -2909,7 +2909,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-24-000056",
     "internal_document_key": null,
@@ -2949,7 +2949,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-25-000021",
     "internal_document_key": null,
@@ -2989,7 +2989,7 @@
       "overall_comparability": "DIRECT",
       "comparability_caveat": "Direct primary statement disclosure; directly comparable within peer group."
     },
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-26-000055",
     "internal_document_key": null,

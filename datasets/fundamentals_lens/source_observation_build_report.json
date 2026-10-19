@@ -1,20 +1,20 @@
 {
   "pipeline_version": "Phase 14 Hardened Release Candidate",
-  "build_timestamp": "2026-10-19T08:29:06Z",
+  "build_timestamp": "2026-10-19T13:35:04Z",
   "mode": "OFFLINE",
   "inputs": {
     "us_tracked_extracts": "datasets\\fundamentals_lens\\source_inputs\\sec_company_facts_extracts.json",
     "us_input_sha256": "2ab1cf1de2aba0489058155fc0e8b8b85c28daf2bf21e7cff72298928e6e26dd",
     "indian_tracked_extracts": "datasets\\fundamentals_lens\\source_inputs\\indian_statement_extracts.json",
-    "indian_input_sha256": "1f6ea5bd1e949031f9e1af8051857661b093790725fcd01761dcc1b1847123b5"
+    "indian_input_sha256": "378c6636a925c509f3a42455d2a1e9fc0c69829d96f202f79bf45d5478b35216"
   },
   "output": {
     "source_observations_file": "datasets\\fundamentals_lens\\source_observations.json",
-    "output_sha256": "d827199eabb25048f4ff688b7fed32ace60eb680aad1b5da1b829df919d5ce3b"
+    "output_sha256": "4408f1dd6f979bf3b012002fab77dbff29f1124a95b06457e41f9902ad29fd11"
   },
   "statistics": {
     "total_observations": 375,
-    "independently_reconciled": 375,
+    "independently_reconciled": 22,
     "source_linked_only": 0,
     "us_observations": 150,
     "indian_observations": 225,
@@ -23,6 +23,6 @@
     "source_document_status_breakdown": {
       "OFFLINE_AUDITED": 375
     },
-    "reconciliation_percentage": 100.0
+    "reconciliation_percentage": 5.87
   }
 }

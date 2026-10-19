@@ -796,6 +796,7 @@ def build_evidence_pipeline(
     evidence_flat_rows = []
 
     reconciled_metric_count = 0
+    tracked_offline_metric_count = 0
     source_linked_metric_count = 0
     unverified_metric_count = 0
 
@@ -842,6 +843,8 @@ def build_evidence_pipeline(
             tier = rec_result["reconciliation_tier"]
             if tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value:
                 reconciled_metric_count += 1
+            elif tier == ReconciliationTier.TRACKED_OFFLINE_EXTRACT.value:
+                tracked_offline_metric_count += 1
             elif tier == ReconciliationTier.SOURCE_LINKED_ONLY.value:
                 source_linked_metric_count += 1
             else:
@@ -863,6 +866,7 @@ def build_evidence_pipeline(
                 "canonical_value": rec_result["canonical_value"],
                 "unit": fact["unit"],
                 "reconciliation_tier": rec_result["reconciliation_tier"],
+                "assurance_state": rec_result.get("assurance_state", "OFFLINE_EXTRACT_RECORDED"),
                 "reconciliation_method": rec_result["reconciliation_method"],
                 "comparison_result": rec_result["comparison_result"],
                 "comparability_flag": rec_result["comparability"],
@@ -990,7 +994,7 @@ def build_evidence_pipeline(
         "ticker", "company_name", "fiscal_year", "fiscal_year_label", "period_end",
         "country", "currency", "metric_key", "statement_name", "statement_locator",
         "reported_line_item", "reported_value", "canonical_value", "unit",
-        "reconciliation_tier", "reconciliation_method", "comparison_result",
+        "reconciliation_tier", "assurance_state", "reconciliation_method", "comparison_result",
         "comparability_flag", "discrepancy_note", "source_title", "accession_or_key",
         "source_url", "evidence_check_date", "observation_id",
         "document_identity_status", "document_retrieval_status", "period_match_status",
@@ -1021,9 +1025,9 @@ def build_evidence_pipeline(
         "product_name": "Fundamentals Lens",
         "product_tagline": "Evidence-First SEC & Indian Corporate Disclosure Intelligence",
         "creator_name": "Rishika Dangayach",
-        "version": "1.0.0-phase18",
-        "dataset_version": "1.0.0-phase18",
-        "phase": "Phase 18 — Independent Data Authenticity Audit, Primary-Source Reconciliation, Evidence Lineage, Research Synthesis & Documentation Integrity",
+        "version": "1.0.0-phase19",
+        "dataset_version": "1.0.0-phase19",
+        "phase": "Phase 19 — Analytical Integrity, Evidence-State Correction, Financial Comparability & Overview Visualization Redesign",
         "dataset_snapshot_date": check_dt,
         "build_timestamp": build_ts,
         "last_updated": build_ts,
@@ -1036,6 +1040,9 @@ def build_evidence_pipeline(
         "primary_metric_keys": metric_keys,
         "peer_groups": peer_groups_data,
         "independently_reconciled_metrics": reconciled_metric_count,
+        "tracked_offline_extract_metrics": tracked_offline_metric_count,
+        "verified_and_evidenced_metrics": reconciled_metric_count + tracked_offline_metric_count,
+        "live_retrieval_metrics": 0,
         "reconciled_metric_observations": reconciled_metric_count,
         "source_linked_only_metrics": source_linked_metric_count,
         "source_linked_metric_observations": source_linked_metric_count,
@@ -1055,9 +1062,13 @@ def build_evidence_pipeline(
 
     print("\nEvidence pipeline complete:")
     print(f"  Total primary metric observations: {len(evidence_flat_rows)}")
-    print(f"  Independently reconciled:          {reconciled_metric_count} ({reconciled_metric_count/len(evidence_flat_rows)*100:.1f}%)")
+    print(f"  Tracked offline extracts:          {tracked_offline_metric_count} ({tracked_offline_metric_count/len(evidence_flat_rows)*100:.1f}%)")
+    print(f"  Independently reconciled (Audited): {reconciled_metric_count} ({reconciled_metric_count/len(evidence_flat_rows)*100:.1f}%)")
+    print(f"  Total verified and evidenced:      {reconciled_metric_count + tracked_offline_metric_count} ({(reconciled_metric_count + tracked_offline_metric_count)/len(evidence_flat_rows)*100:.1f}%)")
+    print(f"  Live regulatory retrievals:        0 (Offline reproducible build)")
     print(f"  Source-linked only:                {source_linked_metric_count} ({source_linked_metric_count/len(evidence_flat_rows)*100:.1f}%)")
     print(f"  Unverified / Discrepant:           {unverified_metric_count}")
+    print(f"  Discrepancies catalogued:          {len(discrepancy_ledger)}")
     print(f"  Discrepancies catalogued:          {len(discrepancy_ledger)}")
 
     return {

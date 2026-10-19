@@ -6,7 +6,7 @@ and official document identity verification.
 """
 from enum import Enum
 import re
-from datetime import date
+from datetime import date, datetime, timezone, timedelta
 from typing import Dict, Any, Optional, Tuple, List
 
 SEC_ACCESSION_PATTERN = re.compile(r"^\d{10}-\d{2}-\d{6}$")
@@ -91,9 +91,21 @@ class NumericReconciliationStatus(str, Enum):
 
 class ReconciliationTier(str, Enum):
     INDEPENDENTLY_RECONCILED = "INDEPENDENTLY_RECONCILED"
+    TRACKED_OFFLINE_EXTRACT = "TRACKED_OFFLINE_EXTRACT"
     SOURCE_LINKED_ONLY = "SOURCE_LINKED_ONLY"
     DISCREPANT = "DISCREPANT"
     UNVERIFIED = "UNVERIFIED"
+
+
+class AssuranceState(str, Enum):
+    SOURCE_REFERENCE_RECORDED = "SOURCE_REFERENCE_RECORDED"
+    SOURCE_IDENTITY_CHECKED = "SOURCE_IDENTITY_CHECKED"
+    OFFLINE_EXTRACT_RECORDED = "OFFLINE_EXTRACT_RECORDED"
+    DOCUMENT_SNAPSHOT_HASHED = "DOCUMENT_SNAPSHOT_HASHED"
+    PRIMARY_STATEMENT_LINE_ITEM_AUDITED = "PRIMARY_STATEMENT_LINE_ITEM_AUDITED"
+    LIVE_RETRIEVAL_SUCCEEDED = "LIVE_RETRIEVAL_SUCCEEDED"
+    APPROVED_ADJUSTMENT_RESOLVED = "APPROVED_ADJUSTMENT_RESOLVED"
+    PENDING_OR_DISCREPANT = "PENDING_OR_DISCREPANT"
 
 
 def derive_document_identity_verified(
@@ -395,9 +407,11 @@ def reconcile_metric_observation(
 
     # Numeric reconciliation logic
     matched_disc = None
+    assurance_state = AssuranceState.PENDING_OR_DISCREPANT.value
     if not is_identity_verified:
         numeric_status = NumericReconciliationStatus.IDENTITY_UNVERIFIED.value
         tier = ReconciliationTier.UNVERIFIED.value
+        assurance_state = AssuranceState.PENDING_OR_DISCREPANT.value
         is_reconciled = False
         disc_note = "Filing document identity check failed (malformed accession, CIK path mismatch, or invalid filing key)."
         conv_formula = "None (Filing document identity could not be validated)"
@@ -408,51 +422,77 @@ def reconcile_metric_observation(
     ):
         numeric_status = NumericReconciliationStatus.NOT_RECONCILED.value
         tier = ReconciliationTier.SOURCE_LINKED_ONLY.value
+        assurance_state = AssuranceState.PENDING_OR_DISCREPANT.value
         is_reconciled = False
         disc_note = f"Online document retrieval outcome was '{doc_retrieval_status}'; fresh online independent reconciliation unconfirmed; cannot earn INDEPENDENTLY_RECONCILED tier without verified live retrieval."
         conv_formula = "None (Online retrieval outcome unconfirmed)"
     elif reported_val is None or metric_extraction_status == MetricExtractionStatus.VALUE_NOT_LOCATED.value:
         numeric_status = NumericReconciliationStatus.NOT_RECONCILED.value
         tier = ReconciliationTier.SOURCE_LINKED_ONLY.value
+        assurance_state = AssuranceState.SOURCE_REFERENCE_RECORDED.value
         is_reconciled = False
         disc_note = "Metric linked to registered primary source; independent line-item statement reconciliation pending."
         conv_formula = "None (Independent line-item statement reconciliation pending)"
     elif period_match_status == PeriodMatchStatus.PERIOD_MISMATCH.value:
         numeric_status = NumericReconciliationStatus.UNEXPLAINED_DISCREPANCY.value
         tier = ReconciliationTier.DISCREPANT.value
+        assurance_state = AssuranceState.PENDING_OR_DISCREPANT.value
         is_reconciled = False
         disc_note = f"Period chronology mismatch: {period_mismatch_reason or f'period_start={obs_pstart}, period_end={obs_pend} does not span valid fiscal year {fiscal_year}.'}"
         conv_formula = "None (Period duration or fiscal calendar mismatch)"
     else:
-        diff = abs(float(reported_val) - float(canonical_val))
-        if diff < 0.001:
-            numeric_status = NumericReconciliationStatus.EXACT_STATEMENT_MATCH.value
+        # First check for exact approved discrepancy adjustment in ledger
+        matched_disc = find_matching_approved_discrepancy(
+            ticker=ticker,
+            metric_key=metric_key,
+            fiscal_year=fiscal_year,
+            fiscal_year_label=fiscal_year_label,
+            reported_val=float(reported_val),
+            canonical_val=float(canonical_val),
+            discrepancy_ledger=discrepancy_ledger
+        )
+        if not matched_disc and obs_entry.get("discrepancy_reference"):
+            disc_ref = obs_entry.get("discrepancy_reference")
+            for d in discrepancy_ledger:
+                if d.get("discrepancy_id") == disc_ref:
+                    matched_disc = d
+                    break
+
+        if matched_disc is not None:
+            numeric_status = NumericReconciliationStatus.RECONCILED_WITH_APPROVED_ADJUSTMENT.value
             tier = ReconciliationTier.INDEPENDENTLY_RECONCILED.value
+            assurance_state = AssuranceState.APPROVED_ADJUSTMENT_RESOLVED.value
             is_reconciled = True
-            acc_id = src_entry.get("official_filing_id") or src_entry.get("accession_id", "")
-            if is_us:
-                disc_note = f"Reconciled to Form 10-K {stmt_name} under accession {acc_id}."
-            else:
-                disc_note = f"Reconciled to Ind AS Consolidated {stmt_name} ({acc_id})."
+            disc_note = f"Audited reconciliation ({matched_disc['discrepancy_id']}): {matched_disc.get('investigation_finding')}"
         else:
-            # Check for exact approved adjustment in ledger
-            matched_disc = find_matching_approved_discrepancy(
-                ticker=ticker,
-                metric_key=metric_key,
-                fiscal_year=fiscal_year,
-                fiscal_year_label=fiscal_year_label,
-                reported_val=float(reported_val),
-                canonical_val=float(canonical_val),
-                discrepancy_ledger=discrepancy_ledger
-            )
-            if matched_disc is not None:
-                numeric_status = NumericReconciliationStatus.RECONCILED_WITH_APPROVED_ADJUSTMENT.value
-                tier = ReconciliationTier.INDEPENDENTLY_RECONCILED.value
+            diff = abs(float(reported_val) - float(canonical_val))
+            if diff < 0.001:
+                numeric_status = NumericReconciliationStatus.EXACT_STATEMENT_MATCH.value
                 is_reconciled = True
-                disc_note = f"Audited reconciliation ({matched_disc['discrepancy_id']}): {matched_disc.get('investigation_finding')}"
+                acc_id = src_entry.get("official_filing_id") or src_entry.get("accession_id", "")
+                if is_us:
+                    disc_note = f"Reconciled to Form 10-K {stmt_name} under accession {acc_id}."
+                else:
+                    disc_note = f"Reconciled to Ind AS Consolidated {stmt_name} ({acc_id}).."
+
+                # Evidentiary gate: Live retrieval or hashed artifact earns INDEPENDENTLY_RECONCILED;
+                # Tracked extract matching canonical fact earns TRACKED_OFFLINE_EXTRACT.
+                if verification_mode == "ONLINE" and doc_retrieval_status in (
+                    DocumentRetrievalStatus.RETRIEVED_ONLINE_EDGAR.value,
+                    DocumentRetrievalStatus.RETRIEVED_ONLINE_BSE.value
+                ):
+                    tier = ReconciliationTier.INDEPENDENTLY_RECONCILED.value
+                    assurance_state = AssuranceState.LIVE_RETRIEVAL_SUCCEEDED.value
+                elif obs_entry.get("document_snapshot_hash"):
+                    tier = ReconciliationTier.INDEPENDENTLY_RECONCILED.value
+                    assurance_state = AssuranceState.PRIMARY_STATEMENT_LINE_ITEM_AUDITED.value
+                else:
+                    tier = ReconciliationTier.TRACKED_OFFLINE_EXTRACT.value
+                    assurance_state = AssuranceState.OFFLINE_EXTRACT_RECORDED.value
             else:
                 numeric_status = NumericReconciliationStatus.UNEXPLAINED_DISCREPANCY.value
                 tier = ReconciliationTier.DISCREPANT.value
+                assurance_state = AssuranceState.PENDING_OR_DISCREPANT.value
                 is_reconciled = False
                 disc_note = f"Unexplained numerical delta: reported {reported_val} != canonical {canonical_val} (diff: {diff:.2f}). No matching approved adjustment in ledger."
 
@@ -474,6 +514,7 @@ def reconcile_metric_observation(
         "conversion_formula": conv_formula,
         "statement_locator": obs_entry.get("statement_locator", ""),
         "reconciliation_tier": tier,
+        "assurance_state": assurance_state,
         "reconciliation_method": obs_entry.get("extraction_method", ""),
         "comparison_result": numeric_status,
         "discrepancy_note": disc_note,
@@ -502,8 +543,8 @@ def derive_source_reconciliation_status(
 ) -> str:
     """
     Derives the source-level reconciliation status from its underlying metric results.
-    A source cannot be INDEPENDENTLY_RECONCILED if document identity is unverified
-    or if any metric observation is discrepant or unverified.
+    A source cannot be INDEPENDENTLY_RECONCILED or TRACKED_OFFLINE_EXTRACT if document identity
+    is unverified or if any metric observation is discrepant or unverified.
     """
     if not source_entry.get("document_identity_verified", False):
         return ReconciliationTier.UNVERIFIED.value
@@ -527,6 +568,13 @@ def derive_source_reconciliation_status(
     all_reconciled = all(m.get("reconciliation_tier") == ReconciliationTier.INDEPENDENTLY_RECONCILED.value for m in metric_results)
     if all_reconciled:
         return ReconciliationTier.INDEPENDENTLY_RECONCILED.value
+
+    all_verified = all(
+        m.get("reconciliation_tier") in (ReconciliationTier.INDEPENDENTLY_RECONCILED.value, ReconciliationTier.TRACKED_OFFLINE_EXTRACT.value)
+        for m in metric_results
+    )
+    if all_verified:
+        return ReconciliationTier.TRACKED_OFFLINE_EXTRACT.value
 
     return ReconciliationTier.SOURCE_LINKED_ONLY.value
 
@@ -574,13 +622,16 @@ def validate_reconciliation_telemetry(record: Dict[str, Any]) -> Tuple[bool, Lis
     if period_status == PeriodMatchStatus.PERIOD_MISMATCH.value and tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value:
         errors.append("Contradictory telemetry: reconciliation_tier is INDEPENDENTLY_RECONCILED but period_match_status is PERIOD_MISMATCH.")
 
-    # 5. Missing line item extraction earning INDEPENDENTLY_RECONCILED
-    if ext_status == MetricExtractionStatus.VALUE_NOT_LOCATED.value and tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value:
-        errors.append("Contradictory telemetry: reconciliation_tier is INDEPENDENTLY_RECONCILED but metric_extraction_status is VALUE_NOT_LOCATED.")
+    # 5. Missing line item extraction earning INDEPENDENTLY_RECONCILED or TRACKED_OFFLINE_EXTRACT
+    if ext_status == MetricExtractionStatus.VALUE_NOT_LOCATED.value and tier in (
+        ReconciliationTier.INDEPENDENTLY_RECONCILED.value,
+        ReconciliationTier.TRACKED_OFFLINE_EXTRACT.value
+    ):
+        errors.append(f"Contradictory telemetry: reconciliation_tier is {tier} but metric_extraction_status is VALUE_NOT_LOCATED.")
 
     # 6. Reconciled tier without verification timestamp
-    if tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value and not timestamp:
-        errors.append("Contradictory telemetry: reconciliation_tier is INDEPENDENTLY_RECONCILED but verification_timestamp is empty.")
+    if tier in (ReconciliationTier.INDEPENDENTLY_RECONCILED.value, ReconciliationTier.TRACKED_OFFLINE_EXTRACT.value) and not timestamp:
+        errors.append(f"Contradictory telemetry: reconciliation_tier is {tier} but verification_timestamp is empty.")
 
     # 7. Online retrieved status without verification timestamp
     if ret_status in (
@@ -588,5 +639,30 @@ def validate_reconciliation_telemetry(record: Dict[str, Any]) -> Tuple[bool, Lis
         DocumentRetrievalStatus.RETRIEVED_ONLINE_BSE.value
     ) and not timestamp:
         errors.append(f"Contradictory telemetry: document_retrieval_status is '{ret_status}' but verification_timestamp is empty.")
+
+    # 8. Unverified identity or period mismatch claiming TRACKED_OFFLINE_EXTRACT
+    if id_status == DocumentIdentityStatus.UNVERIFIED.value and tier == ReconciliationTier.TRACKED_OFFLINE_EXTRACT.value:
+        errors.append("Contradictory telemetry: reconciliation_tier is TRACKED_OFFLINE_EXTRACT but document_identity_status is UNVERIFIED.")
+    if period_status == PeriodMatchStatus.PERIOD_MISMATCH.value and tier == ReconciliationTier.TRACKED_OFFLINE_EXTRACT.value:
+        errors.append("Contradictory telemetry: reconciliation_tier is TRACKED_OFFLINE_EXTRACT but period_match_status is PERIOD_MISMATCH.")
+
+    # 9. Offline extract claiming INDEPENDENTLY_RECONCILED without approved discrepancy or document snapshot hash
+    if mode == "OFFLINE" and tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value:
+        if not record.get("approved_discrepancy_id") and not record.get("document_snapshot_hash"):
+            errors.append(
+                "Contradictory telemetry: reconciliation_tier is INDEPENDENTLY_RECONCILED in OFFLINE mode "
+                "without approved_discrepancy_id or document_snapshot_hash."
+            )
+
+    # 10. Timestamp format and future date validation
+    if timestamp:
+        try:
+            clean_ts = timestamp.replace("Z", "+00:00")
+            dt = datetime.fromisoformat(clean_ts)
+            now_utc = datetime.now(timezone.utc)
+            if dt > now_utc + timedelta(days=1):
+                errors.append(f"Contradictory telemetry: verification_timestamp '{timestamp}' is in the future.")
+        except Exception as e:
+            errors.append(f"Contradictory telemetry: verification_timestamp '{timestamp}' is not valid ISO 8601: {e}")
 
     return len(errors) == 0, errors

@@ -36,7 +36,7 @@ def test_company_csv_export():
         assert row[0] == company.ticker
         assert float(row[10]) > 0  # Revenue > 0
         assert row[27] in ["DIRECT", "PROXY", "LIMITED"]
-        assert row[29] in ["INDEPENDENTLY_RECONCILED", "SOURCE_LINKED_AUDITED"]
+        assert row[29] in ["INDEPENDENTLY_RECONCILED", "TRACKED_OFFLINE_EXTRACT", "SOURCE_LINKED_AUDITED"]
 
 
 def test_research_brief_export():

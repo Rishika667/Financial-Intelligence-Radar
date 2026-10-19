@@ -207,7 +207,7 @@ def test_offline_rebuild_emits_offline_status(base_us_source, base_obs_entry, ba
     )
     assert res["document_retrieval_status"] == DocumentRetrievalStatus.RETRIEVED_OFFLINE_EXTRACT.value
     assert res["verification_mode"] == "OFFLINE"
-    assert res["reconciliation_tier"] == ReconciliationTier.INDEPENDENTLY_RECONCILED.value
+    assert res["reconciliation_tier"] == ReconciliationTier.TRACKED_OFFLINE_EXTRACT.value
 
 
 # ------------------------------------------------------------------------------

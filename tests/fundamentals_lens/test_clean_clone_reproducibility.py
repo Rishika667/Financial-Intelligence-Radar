@@ -51,7 +51,7 @@ def test_build_observations_offline_without_scratch_cache():
     observations = build_observations_offline("2026-10-18T00:00:00Z")
     assert len(observations) > 0, "Observations list should not be empty"
 
-    valid_tiers = {"INDEPENDENTLY_RECONCILED", "SOURCE_LINKED_ONLY", "DISCREPANT", "UNVERIFIED"}
+    valid_tiers = {"INDEPENDENTLY_RECONCILED", "TRACKED_OFFLINE_EXTRACT", "SOURCE_LINKED_ONLY", "DISCREPANT", "UNVERIFIED"}
     for obs in observations:
         assert obs["confidence_tier"] in valid_tiers
         assert obs["verification_mode"] == "OFFLINE", "Offline build must strictly emit OFFLINE verification mode"

@@ -286,7 +286,7 @@ class ExportGenerator:
                 writer.writerow([f"# BENCHMARK: {summary.benchmark_ticker} ({summary.common_benchmark_bars or 0} common bars)"])
         writer.writerow(["# STORAGE_POLICY: In-memory volatile processing; custom uploads are never persisted to disk."])
         writer.writerow(["# PROVENANCE_POLICY: Mathematical invariant checks only; does not externally verify provider authenticity."])
-        writer.writerow(["# INDICATOR_CONVENTIONS: SMA(20,50,200), Wilder's RSI(14), MACD(12,26,9), Bollinger Bands(20, 2.0 std, ddof=1), ATR(14)"])
+        writer.writerow(["# INDICATOR_CONVENTIONS: SMA(20,50,200), Wilder's RSI(14), MACD(12,26,9), Bollinger Bands(20, 2.0 std, ddof=0 population std), ATR(14)"])
         writer.writerow([])
 
         cols = [c for c in df.columns if c not in ("Date_Str",)]
@@ -313,7 +313,8 @@ class ExportGenerator:
             lines.append("> ⚠️ **SIMULATED DEMO DATA — NOT ACTUAL MARKET HISTORY**: This technical brief reflects mathematically simulated prices generated via geometric Brownian motion. It does NOT represent real-world market transactions or historical pricing for any actual corporate security.")
             lines.append("")
 
-        lines.append(f"**Latest Trading Date:** `{summary.last_date}` | **Latest Close:** `{summary.last_close:,.2f} {summary.currency}`")
+        close_str = f"{summary.last_close:,.2f} {summary.currency}" if summary.last_close is not None else "N/A"
+        lines.append(f"**Latest Trading Date:** `{summary.last_date}` | **Latest Close:** `{close_str}`")
         lines.append(f"**Total Trading Observations:** `{summary.total_bars}` bars")
         lines.append(f"**Price Adjustment Basis:** `{summary.price_adjustment_basis}` (User-declared)")
         if summary.benchmark_ticker:
@@ -329,15 +330,17 @@ class ExportGenerator:
         lines.append(f"| 1-Month (~21 bars) | {f'{summary.change_1m:+.2f}%' if summary.change_1m is not None else 'N/A'} | Short-term momentum |")
         lines.append(f"| 3-Month (~63 bars) | {f'{summary.change_3m:+.2f}%' if summary.change_3m is not None else 'N/A'} | Quarterly horizon |")
         lines.append(f"| 6-Month (~126 bars) | {f'{summary.change_6m:+.2f}%' if summary.change_6m is not None else 'N/A'} | Semi-annual horizon |")
-        ret_1y_str = f"{summary.change_1y:+.2f}%" if summary.change_1y is not None else "N/A (< 252 bars)"
+        ret_1y_str = f"{summary.change_1y:+.2f}%" if summary.change_1y is not None else "N/A (< 253 bars or coverage)"
         lines.append(f"| 1-Year (252 bars) | {ret_1y_str} | Annual trading horizon |")
         lines.append("")
 
         # 2. Range & Risk Indicators
         range_label = "52-Week Range" if summary.is_full_52w else f"Available-History Range ({summary.total_bars} bars)"
         lines.append(f"### 2. {range_label} & Risk Profile")
-        lines.append(f"- **High:** `{summary.high_52w:,.2f}` ({f'{summary.dist_from_52w_high:+.2f}%' if summary.dist_from_52w_high is not None else 'N/A'} distance)")
-        lines.append(f"- **Low:** `{summary.low_52w:,.2f}` ({f'{summary.dist_from_52w_low:+.2f}%' if summary.dist_from_52w_low is not None else 'N/A'} distance)")
+        high_str = f"{summary.high_52w:,.2f}" if summary.high_52w is not None else "N/A"
+        low_str = f"{summary.low_52w:,.2f}" if summary.low_52w is not None else "N/A"
+        lines.append(f"- **High:** `{high_str}` ({f'{summary.dist_from_52w_high:+.2f}%' if summary.dist_from_52w_high is not None else 'N/A'} distance)")
+        lines.append(f"- **Low:** `{low_str}` ({f'{summary.dist_from_52w_low:+.2f}%' if summary.dist_from_52w_low is not None else 'N/A'} distance)")
         lines.append(f"- **Annualized Daily Volatility (252-day scaled):** `{summary.annualized_volatility:.2f}%`" if summary.annualized_volatility is not None else "- **Annualized Volatility:** N/A")
         lines.append(f"- **Maximum Historical Drawdown:** `{summary.max_drawdown:.2f}%`" if summary.max_drawdown is not None else "- **Maximum Drawdown:** N/A")
         lines.append("")
@@ -673,6 +676,12 @@ class ExportGenerator:
             ref_type = getattr(f, "reference_type", "UNKNOWN") or "UNKNOWN"
             ref_key = f.official_filing_id if ref_type == "SEC_ACCESSION" and f.official_filing_id else (f.internal_document_key or f.accession_id)
             lines.append(f"| {f.fiscal_year_label} | [{f.source_title}]({f.source_url}) | {f.filing_date} | {f.statement_location} | `{ref_key}` | `{tier}` |")
+        lines.append("")
+        lines.append(
+            "> **Assurance Note:** Disclosures are tracked under the Fundamentals Lens 8-state assurance taxonomy. "
+            "Offline verified statement extracts are categorized as `TRACKED_OFFLINE_EXTRACT`, while disclosures "
+            "with approved discrepancy adjustments or verified live regulatory retrievals earn `INDEPENDENTLY_RECONCILED`."
+        )
         lines.append("")
 
         lines.append("#### 7.3 Methodology & Research Disclaimer")

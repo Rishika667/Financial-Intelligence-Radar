@@ -48,15 +48,21 @@ where the smoothing multiplier is:
 $$\alpha = \frac{2}{N + 1}$$
 
 ### 3.3 Relative Strength Index (RSI - 14)
-The Relative Strength Index measures momentum and velocity of price movements using Wilder's smoothed exponential moving average ($\alpha = 1 / 14$):
+The Relative Strength Index measures momentum and velocity of price movements using Wilder's smoothed moving average ($\alpha = 1 / 14$):
 $$\Delta P_t = P_t - P_{t-1}$$
 $$\text{Gain}_t = \max(\Delta P_t, 0), \quad \text{Loss}_t = \max(-\Delta P_t, 0)$$
-$$\text{AvgGain}_t = \frac{1}{14} \text{Gain}_t + \frac{13}{14} \text{AvgGain}_{t-1}$$
-$$\text{AvgLoss}_t = \frac{1}{14} \text{Loss}_t + \frac{13}{14} \text{AvgLoss}_{t-1}$$
-$$\text{RS}_t = \frac{\text{AvgGain}_t}{\text{AvgLoss}_t}$$
-$$\text{RSI}_t = 100 - \left(\frac{100}{1 + \text{RS}_t}\right)$$
-- If $\text{AvgLoss}_t = 0$, $\text{RSI}_t = 100$.
-- If $\text{AvgGain}_t = 0$, $\text{RSI}_t = 0$.
+
+**Exact Wilder Initialization:**
+- The first 14 price changes ($t = 1 \dots 14$) are seeded using their Simple Moving Average (SMA):
+  $$\text{AvgGain}_{14} = \frac{1}{14} \sum_{i=1}^{14} \text{Gain}_i, \quad \text{AvgLoss}_{14} = \frac{1}{14} \sum_{i=1}^{14} \text{Loss}_i$$
+- First valid RSI appears at observation index 14 (15th price observation).
+- Subsequent bars ($t > 14$) follow Wilder's exponential recurrence:
+  $$\text{AvgGain}_t = \frac{\text{AvgGain}_{t-1} \cdot 13 + \text{Gain}_t}{14}$$
+  $$\text{AvgLoss}_t = \frac{\text{AvgLoss}_{t-1} \cdot 13 + \text{Loss}_t}{14}$$
+$$\text{RS}_t = \frac{\text{AvgGain}_t}{\text{AvgLoss}_t}, \quad \text{RSI}_t = 100 - \left(\frac{100}{1 + \text{RS}_t}\right)$$
+- If $\text{AvgLoss}_t = 0$ and $\text{AvgGain}_t > 0$, $\text{RSI}_t = 100.0$.
+- If $\text{AvgGain}_t = 0$ and $\text{AvgLoss}_t > 0$, $\text{RSI}_t = 0.0$.
+- If $\text{AvgGain}_t = 0$ and $\text{AvgLoss}_t = 0$ (completely flat series), $\text{RSI}_t = 50.0$ (neutral).
 - Standard thresholds:
   - $\text{RSI} \ge 70$: Overbought indicator.
   - $\text{RSI} \le 30$: Oversold indicator.
@@ -73,27 +79,33 @@ $$\text{Middle Band}_t = \text{SMA}_t(20)$$
 $$\sigma_t(20) = \sqrt{\frac{1}{20} \sum_{i=0}^{19} (P_{t-i} - \text{Middle Band}_t)^2}$$
 $$\text{Upper Band}_t = \text{Middle Band}_t + 2.0 \cdot \sigma_t(20)$$
 $$\text{Lower Band}_t = \text{Middle Band}_t - 2.0 \cdot \sigma_t(20)$$
+- **Standard Deviation Convention:** Bollinger Bands use population standard deviation ($\text{ddof}=0$, divisor $N=20$) by default per John Bollinger's canonical definition. Sample standard deviation ($\text{ddof}=1$, divisor $N-1=19$) is optionally supported via the `ddof` parameter.
 
 ### 3.6 Average True Range (ATR - 14)
+$$\text{True Range}_0 = \text{High}_0 - \text{Low}_0$$
 $$\text{True Range}_t = \max\left( \text{High}_t - \text{Low}_t, \; |\text{High}_t - \text{Close}_{t-1}|, \; |\text{Low}_t - \text{Close}_{t-1}| \right)$$
-$$\text{ATR}_t = \frac{1}{14} \text{True Range}_t + \frac{13}{14} \text{ATR}_{t-1}$$
+**Exact Wilder Initialization:**
+- The first valid ATR at index 13 (the 14th bar) is the Simple Moving Average of the first 14 True Ranges:
+  $$\text{ATR}_{13} = \frac{1}{14} \sum_{i=0}^{13} \text{True Range}_i$$
+- Subsequent bars ($t \ge 14$) follow Wilder's exponential smoothing:
+  $$\text{ATR}_t = \frac{\text{ATR}_{t-1} \cdot 13 + \text{True Range}_t}{14}$$
 
 ---
 
 ## 4. Performance & Risk Measures
 
 ### 4.1 Multi-Period Return Horizons & Indexing Conventions
-- **Return Horizon Definition:** An $N$-bar return reflects percentage price change across $N$ trading intervals:
+- **Return Horizon Definition:** An $N$-interval return reflects percentage price change across $N$ trading intervals:
   $$R_t(N) = \left(\frac{P_t}{P_{t-N}} - 1\right) \times 100\%$$
-- **Observation Requirements ($N$ vs $N+1$):**
-  - Point-to-point comparison over $N$ trading periods requires at least $N + 1$ chronological observations ($P_0, \dots, P_N$) so that index $(t - N) \ge 0$.
-  - When a dataset has length $M > N$, $P_{t-N} = \text{df.iloc}[-1 - N]$.
-  - When $M = N$, the available series spans $N - 1$ return intervals over the full window ($P_{last} / P_0 - 1$).
+- **Standardized Observation Requirements ($N+1$ Rule):**
+  - Point-to-point comparison over $N$ trading intervals strictly requires at least $N + 1$ chronological observations ($P_0, \dots, P_N$) so that index $(t - N) \ge 0$.
+  - With dataset length $M \ge N + 1$, $P_{t-N} = \text{df.iloc}[-1 - N]$.
+  - When $M = N$, the dataset spans only $N - 1$ return intervals ($P_{\text{last}} / P_0 - 1$) and is therefore strictly suppressed from being labeled as a full $N$-interval return.
 - **Supported Return Horizons:**
-  - **1-Month Return (~21 trading bars):** Requires $\ge 21$ bars. Evaluates $(P_t / P_{t-21}) - 1$.
-  - **3-Month Return (~63 trading bars):** Requires $\ge 63$ bars. Evaluates $(P_t / P_{t-63}) - 1$.
-  - **6-Month Return (~126 trading bars):** Requires $\ge 126$ bars. Evaluates $(P_t / P_{t-126}) - 1$.
-  - **1-Year Return (252 trading bars):** Requires **both** $\ge 252$ trading bars **and** verified annual calendar coverage (340 to 395 calendar days with max consecutive gap $\le 14$ days). Suppressed if calendar coverage is inadequate or history $< 252$ bars.
+  - **1-Month Return (21 trading intervals):** Requires $\ge 22$ bars ($N+1$). Evaluates $(P_t / P_{t-21}) - 1$.
+  - **3-Month Return (63 trading intervals):** Requires $\ge 64$ bars ($N+1$). Evaluates $(P_t / P_{t-63}) - 1$.
+  - **6-Month Return (126 trading intervals):** Requires $\ge 127$ bars ($N+1$). Evaluates $(P_t / P_{t-126}) - 1$.
+  - **1-Year Return (252 trading intervals):** Requires **both** $\ge 253$ trading bars ($N+1$) **and** verified annual calendar coverage (340 to 395 calendar days with max consecutive gap $\le 14$ days). Suppressed if calendar coverage is inadequate or history $< 253$ bars.
 
 ### 4.2 52-Week Range & Duration Guard
 Over the most recent trailing window of $\min(252, N)$ bars:
@@ -120,7 +132,7 @@ When an asset price series $A$ is compared against a benchmark series $B$:
 3. **Common-Period Relative Spread:**
    $$\text{Relative Spread}_{\text{period}} = \left( \frac{A_{\text{last}}}{A_{t_0}} - 1 \right) \times 100\% - \left( \frac{B_{\text{last}}}{B_{t_0}} - 1 \right) \times 100\%$$
 4. **1-Year Relative Spread Guard:**
-   1-Year relative return is populated **only** if the common overlapping window spans $\ge 252$ trading bars **and** satisfies calendar coverage (340–395 calendar days, max gap $\le 14$ days). Overlapping windows shorter than 252 bars are strictly reported as common-period returns.
+   1-Year relative return is populated **only** if the common overlapping window spans $\ge 253$ trading bars ($N+1$ observations for 252 intervals) **and** satisfies calendar coverage (340–395 calendar days, max gap $\le 14$ days). Overlapping windows shorter than 253 bars are strictly reported as common-period returns.
 
 ---
 

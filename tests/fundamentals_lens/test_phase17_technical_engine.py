@@ -146,14 +146,24 @@ def test_macd_parameter_validation():
 
 
 def test_bollinger_bands_sample_std_ddof1():
-    """Verify Bollinger Bands uses sample standard deviation (ddof=1)."""
+    """Verify Bollinger Bands uses population standard deviation (ddof=0) by default and supports sample std (ddof=1)."""
     # 5 observations: 10, 12, 14, 16, 18
     # mean = 14.0
     # differences: -4, -2, 0, 2, 4 -> squared: 16, 4, 0, 4, 16 -> sum = 40
+    # population variance (ddof=0) = 40 / 5 = 8.0 -> std = sqrt(8) = 2.828427
     # sample variance (ddof=1) = 40 / (5 - 1) = 10.0 -> sample std = sqrt(10) = 3.162277
     s = pd.Series([10.0, 12.0, 14.0, 16.0, 18.0])
-    upper, mid, lower = calculate_bollinger_bands(s, period=5, num_std=2.0)
+
+    # Default ddof=0 (population std matching John Bollinger & published formula)
+    upper_pop, mid_pop, lower_pop = calculate_bollinger_bands(s, period=5, num_std=2.0)
     expected_mid = 14.0
+    expected_pop_std = math.sqrt(8.0)
+    assert mid_pop.iloc[4] == pytest.approx(expected_mid, rel=1e-4)
+    assert upper_pop.iloc[4] == pytest.approx(round(expected_mid + (2.0 * expected_pop_std), 2), rel=1e-4)
+    assert lower_pop.iloc[4] == pytest.approx(round(expected_mid - (2.0 * expected_pop_std), 2), rel=1e-4)
+
+    # Explicit ddof=1 (sample std)
+    upper, mid, lower = calculate_bollinger_bands(s, period=5, num_std=2.0, ddof=1)
     expected_std = math.sqrt(10.0)
     expected_upper = round(expected_mid + (2.0 * expected_std), 2)
     expected_lower = round(expected_mid - (2.0 * expected_std), 2)
@@ -242,69 +252,86 @@ def test_duration_boundary_20_bars_passes_validation():
     assert summary.change_1m is None
 
 
-def test_duration_boundary_21_bars():
-    """21 trading bars allows 1M return evaluation across the available window."""
-    dates = pd.date_range("2026-01-01", periods=21, freq="B")
-    closes = [100.0 + (i * 1.0) for i in range(21)]
-    df = pd.DataFrame({
-        "Date": dates,
-        "Open": [c - 1.0 for c in closes],
-        "High": [c + 2.0 for c in closes],
-        "Low": [c - 2.0 for c in closes],
-        "Close": closes,
-        "Volume": [100000] * 21
+def test_duration_boundary_21_vs_22_bars():
+    """21 bars has 20 intervals (change_1m is None); 22 bars provides full 21 intervals (change_1m populated)."""
+    # 21 bars: insufficient for 21-interval return
+    dates21 = pd.date_range("2026-01-01", periods=21, freq="B")
+    closes21 = [100.0 + (i * 1.0) for i in range(21)]
+    df21 = pd.DataFrame({
+        "Date": dates21,
+        "Open": [c - 1.0 for c in closes21], "High": [c + 2.0 for c in closes21],
+        "Low": [c - 2.0 for c in closes21], "Close": closes21, "Volume": [100000] * 21
     })
-    valid, err, clean, _ = validate_ohlcv_dataframe_with_report(df)
-    assert valid is True, f"Validation failed: {err}"
-    summary = compute_technical_summary(clean, ticker="BARS_21")
-    assert summary.total_bars == 21
-    assert summary.change_1m is not None
-    # 3M, 6M, 1Y must all be None
-    assert summary.change_3m is None
-    assert summary.change_6m is None
-    assert summary.change_1y is None
+    summary21 = compute_technical_summary(df21, ticker="BARS_21")
+    assert summary21.total_bars == 21
+    assert summary21.change_1m is None
 
-
-def test_duration_boundary_63_bars():
-    """63 bars populates 1M and 3M returns; 6M and 1Y remain None."""
-    dates = pd.date_range("2026-01-01", periods=63, freq="B")
-    closes = [100.0 + (i * 0.1) for i in range(63)]
-    df = pd.DataFrame({
-        "Date": dates,
-        "Open": [c - 0.5 for c in closes],
-        "High": [c + 1.0 for c in closes],
-        "Low": [c - 1.0 for c in closes],
-        "Close": closes,
-        "Volume": [100000] * 63
+    # 22 bars: satisfies N+1 rule for 21 intervals
+    dates22 = pd.date_range("2026-01-01", periods=22, freq="B")
+    closes22 = [100.0 + (i * 1.0) for i in range(22)]
+    df22 = pd.DataFrame({
+        "Date": dates22,
+        "Open": [c - 1.0 for c in closes22], "High": [c + 2.0 for c in closes22],
+        "Low": [c - 2.0 for c in closes22], "Close": closes22, "Volume": [100000] * 22
     })
-    valid, err, clean, _ = validate_ohlcv_dataframe_with_report(df)
-    assert valid is True, f"Validation failed: {err}"
-    summary = compute_technical_summary(clean, ticker="BARS_63")
-    assert summary.change_1m is not None
-    assert summary.change_3m is not None
-    assert summary.change_6m is None
-    assert summary.change_1y is None
+    summary22 = compute_technical_summary(df22, ticker="BARS_22")
+    assert summary22.total_bars == 22
+    assert summary22.change_1m is not None
+    assert summary22.change_3m is None
 
 
-def test_duration_boundary_126_bars():
-    """126 bars populates 1M, 3M, and 6M returns; 1Y remains None."""
-    dates = pd.date_range("2026-01-01", periods=126, freq="B")
-    closes = [100.0 + (i * 0.1) for i in range(126)]
-    df = pd.DataFrame({
-        "Date": dates,
-        "Open": [c - 0.5 for c in closes],
-        "High": [c + 1.0 for c in closes],
-        "Low": [c - 1.0 for c in closes],
-        "Close": closes,
-        "Volume": [100000] * 126
+def test_duration_boundary_63_vs_64_bars():
+    """63 bars has 62 intervals (change_3m is None); 64 bars provides full 63 intervals (change_3m populated)."""
+    dates63 = pd.date_range("2026-01-01", periods=63, freq="B")
+    closes63 = [100.0 + (i * 0.1) for i in range(63)]
+    df63 = pd.DataFrame({
+        "Date": dates63,
+        "Open": [c - 0.5 for c in closes63], "High": [c + 1.0 for c in closes63],
+        "Low": [c - 1.0 for c in closes63], "Close": closes63, "Volume": [100000] * 63
     })
-    valid, err, clean, _ = validate_ohlcv_dataframe_with_report(df)
-    assert valid is True, f"Validation failed: {err}"
-    summary = compute_technical_summary(clean, ticker="BARS_126")
-    assert summary.change_1m is not None
-    assert summary.change_3m is not None
-    assert summary.change_6m is not None
-    assert summary.change_1y is None
+    summary63 = compute_technical_summary(df63, ticker="BARS_63")
+    assert summary63.change_1m is not None
+    assert summary63.change_3m is None
+
+    dates64 = pd.date_range("2026-01-01", periods=64, freq="B")
+    closes64 = [100.0 + (i * 0.1) for i in range(64)]
+    df64 = pd.DataFrame({
+        "Date": dates64,
+        "Open": [c - 0.5 for c in closes64], "High": [c + 1.0 for c in closes64],
+        "Low": [c - 1.0 for c in closes64], "Close": closes64, "Volume": [100000] * 64
+    })
+    summary64 = compute_technical_summary(df64, ticker="BARS_64")
+    assert summary64.change_1m is not None
+    assert summary64.change_3m is not None
+    assert summary64.change_6m is None
+
+
+def test_duration_boundary_126_vs_127_bars():
+    """126 bars has 125 intervals (change_6m is None); 127 bars provides full 126 intervals (change_6m populated)."""
+    dates126 = pd.date_range("2026-01-01", periods=126, freq="B")
+    closes126 = [100.0 + (i * 0.1) for i in range(126)]
+    df126 = pd.DataFrame({
+        "Date": dates126,
+        "Open": [c - 0.5 for c in closes126], "High": [c + 1.0 for c in closes126],
+        "Low": [c - 1.0 for c in closes126], "Close": closes126, "Volume": [100000] * 126
+    })
+    summary126 = compute_technical_summary(df126, ticker="BARS_126")
+    assert summary126.change_1m is not None
+    assert summary126.change_3m is not None
+    assert summary126.change_6m is None
+
+    dates127 = pd.date_range("2026-01-01", periods=127, freq="B")
+    closes127 = [100.0 + (i * 0.1) for i in range(127)]
+    df127 = pd.DataFrame({
+        "Date": dates127,
+        "Open": [c - 0.5 for c in closes127], "High": [c + 1.0 for c in closes127],
+        "Low": [c - 1.0 for c in closes127], "Close": closes127, "Volume": [100000] * 127
+    })
+    summary127 = compute_technical_summary(df127, ticker="BARS_127")
+    assert summary127.change_1m is not None
+    assert summary127.change_3m is not None
+    assert summary127.change_6m is not None
+    assert summary127.change_1y is None
 
 
 def test_duration_boundary_199_vs_200_bars():
@@ -342,22 +369,31 @@ def test_duration_boundary_251_bars_suppresses_1y_and_52w():
     assert summary.is_full_52w is False
 
 
-def test_duration_boundary_252_bars_adequate_coverage():
-    """Exactly 252 bars with business-day spacing (spans ~365 calendar days) populates 1Y return."""
-    dates = pd.date_range("2025-01-01", periods=252, freq="B")
-    cal_span = (dates[-1] - dates[0]).days
-    assert 340 <= cal_span <= 395, f"Span {cal_span} not in 340..395"
-
-    df = pd.DataFrame({
-        "Date": dates,
+def test_duration_boundary_252_vs_253_bars_adequate_coverage():
+    """252 bars has 251 intervals (1Y is None, is_full_52w True); 253 bars provides 252 intervals (1Y populated)."""
+    dates252 = pd.date_range("2025-01-01", periods=252, freq="B")
+    df252 = pd.DataFrame({
+        "Date": dates252,
         "Open": [100.0] * 252, "High": [105.0] * 252, "Low": [95.0] * 252,
         "Close": [100.0 + (i * 0.1) for i in range(252)], "Volume": [100000] * 252
     })
-    summary = compute_technical_summary(df, ticker="BARS_252_ADEQUATE")
-    assert summary.total_bars == 252
-    assert summary.has_adequate_calendar_coverage is True
-    assert summary.change_1y is not None
-    assert summary.is_full_52w is True
+    summary252 = compute_technical_summary(df252, ticker="BARS_252_ADEQUATE")
+    assert summary252.total_bars == 252
+    assert summary252.has_adequate_calendar_coverage is True
+    assert summary252.is_full_52w is True
+    assert summary252.change_1y is None  # 252 bars = 251 intervals; requires 253 bars for 252 intervals
+
+    dates253 = pd.date_range("2025-01-01", periods=253, freq="B")
+    df253 = pd.DataFrame({
+        "Date": dates253,
+        "Open": [100.0] * 253, "High": [105.0] * 253, "Low": [95.0] * 253,
+        "Close": [100.0 + (i * 0.1) for i in range(253)], "Volume": [100000] * 253
+    })
+    summary253 = compute_technical_summary(df253, ticker="BARS_253_ADEQUATE")
+    assert summary253.total_bars == 253
+    assert summary253.has_adequate_calendar_coverage is True
+    assert summary253.is_full_52w is True
+    assert summary253.change_1y is not None
 
 
 def test_duration_boundary_252_bars_insufficient_coverage_suppresses_1y():

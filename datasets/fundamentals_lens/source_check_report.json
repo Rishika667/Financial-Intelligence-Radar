@@ -1,6 +1,6 @@
 {
   "report_date": "2026-10-19",
-  "report_timestamp": "2026-10-19T15:30:00Z",
+  "report_timestamp": "2026-10-19T13:37:07Z",
   "total_sources_audited": 75,
   "sources": [
     {
@@ -19,9 +19,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_AAPL_10K_2022",
@@ -39,9 +39,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_AAPL_10K_2023",
@@ -59,9 +59,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_AAPL_10K_2024",
@@ -79,9 +79,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_AAPL_10K_2025",
@@ -99,9 +99,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_BAJAJ_AR_2022",
@@ -119,9 +119,9 @@
       "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_BAJAJ_AR_2023",
@@ -139,9 +139,9 @@
       "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_BAJAJ_AR_2024",
@@ -159,9 +159,9 @@
       "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_BAJAJ_AR_2025",
@@ -179,9 +179,9 @@
       "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_BAJAJ_AR_2026",
@@ -199,9 +199,9 @@
       "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_BRIT_AR_2022",
@@ -219,9 +219,9 @@
       "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_BRIT_AR_2023",
@@ -239,9 +239,9 @@
       "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_BRIT_AR_2024",
@@ -259,9 +259,9 @@
       "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_BRIT_AR_2025",
@@ -279,9 +279,9 @@
       "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_BRIT_AR_2026",
@@ -299,9 +299,9 @@
       "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_COST_10K_2022",
@@ -319,9 +319,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_COST_10K_2023",
@@ -339,9 +339,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_COST_10K_2024",
@@ -359,9 +359,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_COST_10K_2025",
@@ -379,9 +379,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_COST_10K_2026",
@@ -399,9 +399,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_DABUR_AR_2022",
@@ -419,9 +419,9 @@
       "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_DABUR_AR_2023",
@@ -439,9 +439,9 @@
       "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_DABUR_AR_2024",
@@ -459,9 +459,9 @@
       "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_DABUR_AR_2025",
@@ -479,9 +479,9 @@
       "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_DABUR_AR_2026",
@@ -499,9 +499,9 @@
       "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_GOOGL_10K_2021",
@@ -519,9 +519,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_GOOGL_10K_2022",
@@ -539,9 +539,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_GOOGL_10K_2023",
@@ -559,9 +559,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_GOOGL_10K_2024",
@@ -579,9 +579,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_GOOGL_10K_2025",
@@ -599,9 +599,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HCLTECH_AR_2022",
@@ -619,9 +619,9 @@
       "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HCLTECH_AR_2023",
@@ -639,9 +639,9 @@
       "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HCLTECH_AR_2024",
@@ -659,9 +659,9 @@
       "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HCLTECH_AR_2025",
@@ -679,9 +679,9 @@
       "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HCLTECH_AR_2026",
@@ -699,9 +699,9 @@
       "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HERO_AR_2022",
@@ -719,9 +719,9 @@
       "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HERO_AR_2023",
@@ -739,9 +739,9 @@
       "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HERO_AR_2024",
@@ -759,9 +759,9 @@
       "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HERO_AR_2025",
@@ -779,9 +779,9 @@
       "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HERO_AR_2026",
@@ -799,9 +799,9 @@
       "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HUL_AR_2022",
@@ -819,9 +819,9 @@
       "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HUL_AR_2023",
@@ -839,9 +839,9 @@
       "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HUL_AR_2024",
@@ -859,9 +859,9 @@
       "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HUL_AR_2025",
@@ -879,9 +879,9 @@
       "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_HUL_AR_2026",
@@ -899,9 +899,9 @@
       "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_INFY_AR_2022",
@@ -919,9 +919,9 @@
       "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_INFY_AR_2023",
@@ -939,9 +939,9 @@
       "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_INFY_AR_2024",
@@ -959,9 +959,9 @@
       "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_INFY_AR_2025",
@@ -979,9 +979,9 @@
       "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_INFY_AR_2026",
@@ -999,9 +999,9 @@
       "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_MARUTI_AR_2022",
@@ -1019,9 +1019,9 @@
       "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_MARUTI_AR_2023",
@@ -1039,9 +1039,9 @@
       "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_MARUTI_AR_2024",
@@ -1059,9 +1059,9 @@
       "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_MARUTI_AR_2025",
@@ -1079,9 +1079,9 @@
       "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_MARUTI_AR_2026",
@@ -1099,9 +1099,9 @@
       "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_MSFT_10K_2022",
@@ -1119,9 +1119,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_MSFT_10K_2023",
@@ -1139,9 +1139,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_MSFT_10K_2024",
@@ -1159,9 +1159,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_MSFT_10K_2025",
@@ -1179,9 +1179,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_MSFT_10K_2026",
@@ -1199,9 +1199,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_TCS_AR_2022",
@@ -1219,9 +1219,9 @@
       "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_TCS_AR_2023",
@@ -1239,9 +1239,9 @@
       "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_TCS_AR_2024",
@@ -1259,9 +1259,9 @@
       "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_TCS_AR_2025",
@@ -1279,9 +1279,9 @@
       "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_TCS_AR_2026",
@@ -1299,9 +1299,9 @@
       "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_TGT_10K_2021",
@@ -1319,9 +1319,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_TGT_10K_2022",
@@ -1339,9 +1339,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_TGT_10K_2023",
@@ -1359,9 +1359,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_TGT_10K_2024",
@@ -1379,9 +1379,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_TGT_10K_2025",
@@ -1399,9 +1399,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_WMT_10K_2022",
@@ -1419,9 +1419,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_WMT_10K_2023",
@@ -1439,9 +1439,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_WMT_10K_2024",
@@ -1459,9 +1459,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_WMT_10K_2025",
@@ -1479,9 +1479,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     },
     {
       "source_id": "SRC_WMT_10K_2026",
@@ -1499,9 +1499,9 @@
       "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
       "check_status": "OFFLINE_SOURCE_RECORDED",
       "verification_mode": "OFFLINE",
-      "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+      "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
       "last_checked_date": "2026-10-19",
-      "verification_timestamp": "2026-10-19T15:30:00Z"
+      "verification_timestamp": "2026-10-19T13:37:07Z"
     }
   ]
 }

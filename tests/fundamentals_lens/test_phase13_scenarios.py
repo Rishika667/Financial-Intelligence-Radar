@@ -89,8 +89,12 @@ def test_scenario_02_clean_clone_without_scratch_cache():
     obs = build_observations_offline("2026-10-18T00:00:00Z")
     assert len(obs) == 375
     # All 375 observations extracted purely from tracked source_inputs
-    reconciled = [o for o in obs if o["confidence_tier"] == "INDEPENDENTLY_RECONCILED"]
-    assert len(reconciled) == 375
+    verified = [o for o in obs if o["confidence_tier"] in ("TRACKED_OFFLINE_EXTRACT", "INDEPENDENTLY_RECONCILED")]
+    assert len(verified) == 375
+    tracked = [o for o in obs if o["confidence_tier"] == "TRACKED_OFFLINE_EXTRACT"]
+    assert len(tracked) == 353
+    audited = [o for o in obs if o["confidence_tier"] == "INDEPENDENTLY_RECONCILED"]
+    assert len(audited) == 22
 
 
 def test_scenario_03_upstream_source_prep_prerequisites():
@@ -302,7 +306,9 @@ def test_scenario_15_count_and_tier_agreement_across_exports():
     assert len(csv_rows) == 375
     assert meta["total_company_periods"] == 75
     assert meta["total_metric_observations"] == 375
-    assert meta["reconciled_metric_observations"] == 375
+    assert meta["reconciled_metric_observations"] == 22
+    assert meta["tracked_offline_extract_metrics"] == 353
+    assert meta["verified_and_evidenced_metrics"] == 375
     assert meta["source_linked_metric_observations"] == 0
     assert meta["unverified_metric_observations"] == 0
 

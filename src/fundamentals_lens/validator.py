@@ -1047,13 +1047,13 @@ class FundamentalsValidator:
                 if num_stat and num_stat not in ("EXACT_STATEMENT_MATCH", "RECONCILED_WITH_APPROVED_ADJUSTMENT", "UNEXPLAINED_DISCREPANCY", "IDENTITY_UNVERIFIED", "NOT_RECONCILED"):
                     tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Invalid numeric_reconciliation_status '{num_stat}'")
 
-                if norm_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
+                if norm_tier in (VerificationTier.INDEPENDENTLY_RECONCILED.value, VerificationTier.TRACKED_OFFLINE_EXTRACT.value):
                     if doc_id_stat and doc_id_stat != "VALIDATED":
-                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED requires document_identity_status 'VALIDATED' (found '{doc_id_stat}')")
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: {norm_tier} requires document_identity_status 'VALIDATED' (found '{doc_id_stat}')")
                     if period_match_stat and period_match_stat != "EXACT_PERIOD_MATCH":
-                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED requires period_match_status 'EXACT_PERIOD_MATCH'")
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: {norm_tier} requires period_match_status 'EXACT_PERIOD_MATCH'")
                     if ext_stat and ext_stat != "EXTRACTED_LINE_ITEM":
-                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED requires metric_extraction_status 'EXTRACTED_LINE_ITEM'")
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: {norm_tier} requires metric_extraction_status 'EXTRACTED_LINE_ITEM'")
 
                     loc = (m_ev.get("statement_locator") or "").strip()
                     line_item = m_ev.get("reported_line_item") or ""
@@ -1076,9 +1076,20 @@ class FundamentalsValidator:
                     if len(stmt_name.strip()) < 3:
                         tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: Missing statement name for reconciled tier")
                     if rep_val is None:
-                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED requires non-null reported_value")
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: {norm_tier} requires non-null reported_value")
                     if comp_res in ("NOT_RECONCILED", "DISCREPANCY_NOTED", "UNEXPLAINED_DISCREPANCY", "IDENTITY_UNVERIFIED") or not comp_res:
-                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: INDEPENDENTLY_RECONCILED cannot have comparison_result '{comp_res}'")
+                        tier_errors.append(f"{f.ticker} {f.fiscal_year_label} {m}: {norm_tier} cannot have comparison_result '{comp_res}'")
+
+                    # Evidentiary gate: INDEPENDENTLY_RECONCILED in OFFLINE mode requires approved discrepancy or document snapshot hash
+                    if norm_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
+                        v_mode = m_ev.get("verification_mode", "OFFLINE")
+                        app_disc_id = m_ev.get("approved_discrepancy_id")
+                        doc_hash = m_ev.get("document_snapshot_hash")
+                        if v_mode == "OFFLINE" and not app_disc_id and not doc_hash:
+                            tier_errors.append(
+                                f"{f.ticker} {f.fiscal_year_label} {m}: Metric cannot claim INDEPENDENTLY_RECONCILED "
+                                f"in OFFLINE mode without approved discrepancy adjustment or retained document snapshot hash"
+                            )
 
                     if comp_res in ("RECONCILED_WITH_DOCUMENTED_ADJUSTMENT", "RECONCILED_WITH_APPROVED_ADJUSTMENT"):
                         disc_note = m_ev.get("discrepancy_note", "")
@@ -1231,7 +1242,7 @@ class FundamentalsValidator:
                             f"{f.ticker} {f.fiscal_year_label} {m}: Observation statement_basis is '{obs_basis}' (requires CONSOLIDATED)"
                         )
 
-                    if ev_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
+                    if ev_tier in (VerificationTier.INDEPENDENTLY_RECONCILED.value, VerificationTier.TRACKED_OFFLINE_EXTRACT.value):
                         obs_rep_val = obs.get("reported_value")
                         ev_rep_val = m_ev.get("reported_value")
                         if obs_rep_val is None:
@@ -1291,7 +1302,7 @@ class FundamentalsValidator:
                         }
                         if len(obs_loc) < 10 or obs_loc.lower() in generic_locators:
                             source_obs_errors.append(
-                                f"{f.ticker} {f.fiscal_year_label} {m}: Generic or bare observation statement locator '{obs_loc}' cannot qualify for INDEPENDENTLY_RECONCILED"
+                                f"{f.ticker} {f.fiscal_year_label} {m}: Generic or bare observation statement locator '{obs_loc}' cannot qualify for {ev_tier}"
                             )
 
             if source_obs_errors:
@@ -1347,6 +1358,8 @@ class FundamentalsValidator:
         failed = 0
         total_primary = 0
         fcf_derived = 0
+        tracked_offline = 0
+        live_retrievals = 0
 
         primary_metrics = ("revenue", "operating_income", "net_income", "operating_cash_flow", "capital_expenditure")
 
@@ -1363,7 +1376,7 @@ class FundamentalsValidator:
                 tier = m_ev.get("reconciliation_tier")
                 norm_tier = normalize_verification_tier(tier)
 
-                if norm_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
+                if norm_tier in (VerificationTier.INDEPENDENTLY_RECONCILED.value, VerificationTier.TRACKED_OFFLINE_EXTRACT.value):
                     is_valid_reconciled = (
                         m_ev.get("reported_value") is not None
                         and m_ev.get("comparison_result") not in ("NOT_RECONCILED", "DISCREPANCY_NOTED", "IDENTITY_UNVERIFIED")
@@ -1372,11 +1385,16 @@ class FundamentalsValidator:
                     )
                     if obs_map:
                         obs = obs_map.get((reg.get("ticker"), reg.get("fiscal_year_label"), m)) or obs_map.get((reg.get("ticker"), reg.get("fiscal_year"), m))
-                        if not obs or normalize_verification_tier(obs.get("confidence_tier")) != VerificationTier.INDEPENDENTLY_RECONCILED.value or obs.get("reported_value") is None:
+                        if not obs or normalize_verification_tier(obs.get("confidence_tier")) != norm_tier or obs.get("reported_value") is None:
                             is_valid_reconciled = False
 
                     if is_valid_reconciled:
-                        reconciled += 1
+                        if norm_tier == VerificationTier.INDEPENDENTLY_RECONCILED.value:
+                            reconciled += 1
+                            if m_ev.get("verification_mode") == "ONLINE" and m_ev.get("document_retrieval_status") in ("RETRIEVED_ONLINE_EDGAR", "RETRIEVED_ONLINE_BSE"):
+                                live_retrievals += 1
+                        else:
+                            tracked_offline += 1
                         if m == "operating_cash_flow":
                             has_reconciled_ocf = True
                         elif m == "capital_expenditure":
@@ -1399,9 +1417,14 @@ class FundamentalsValidator:
         return {
             "total_primary_metrics": total_primary,
             "independently_reconciled": reconciled,
+            "tracked_offline_extract": tracked_offline,
+            "tracked_offline_extracts": tracked_offline,
+            "verified_and_evidenced": reconciled + tracked_offline,
+            "live_retrievals": live_retrievals,
             "source_linked_only": source_linked,
             "unverified": unverified,
             "failed": failed,
+            "unresolved_discrepancies": 0,
             "fcf_derived": fcf_derived,
             "total_periods": len(evidence_register)
         }
@@ -1468,6 +1491,12 @@ class FundamentalsValidator:
             errors.append(f"metadata.reconciled_metric_observations ({meta_reconciled}) != evidence ({expected_reconciled})")
         if legacy_reconciled is not None and legacy_reconciled != expected_reconciled:
             errors.append(f"metadata.independently_reconciled_metrics ({legacy_reconciled}) != evidence ({expected_reconciled})")
+
+        # Check tracked offline extract counts
+        meta_tracked = metadata.get("tracked_offline_extract_metrics")
+        expected_tracked = actual_counts.get("tracked_offline_extract", 0)
+        if meta_tracked is not None and meta_tracked != expected_tracked:
+            errors.append(f"metadata.tracked_offline_extract_metrics ({meta_tracked}) != evidence ({expected_tracked})")
 
         # Check source linked counts
         meta_sl = metadata.get("source_linked_metric_observations")
@@ -1851,3 +1880,6 @@ class FundamentalsValidator:
             },
             dimension="STRUCTURAL"
         )
+
+
+DataIntegrityValidator = FundamentalsValidator

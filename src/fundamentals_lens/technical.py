@@ -355,44 +355,51 @@ def calculate_ema(series: pd.Series, period: int) -> pd.Series:
 
 def calculate_rsi(series: pd.Series, period: int = 14) -> pd.Series:
     """
-    Calculates Relative Strength Index using Wilder's smoothed moving average.
+    Calculates Relative Strength Index using Wilder's smoothed moving average:
+    1. First (period) price changes (t = 1..period) are seeded with their simple moving average (SMA).
+    2. First valid RSI is at index (period) corresponding to the (period+1)-th price observation.
+    3. Subsequent periods smoothed with Wilder's recurrence:
+       AvgGain_t = (AvgGain_{t-1} * (period - 1) + Gain_t) / period
+       AvgLoss_t = (AvgLoss_{t-1} * (period - 1) + Loss_t) / period
     Corner cases:
-    - If series is completely flat (all price changes == 0): returns 50.0 (neutral).
-    - If all changes are non-negative and sum > 0 (no loss): returns 100.0.
-    - If all changes are non-positive and sum < 0 (no gain): returns 0.0.
+    - Flat series (AvgGain == 0 and AvgLoss == 0): returns 50.0 (neutral).
+    - Monotonically rising (AvgLoss == 0, AvgGain > 0): returns 100.0.
+    - Monotonically falling (AvgGain == 0, AvgLoss > 0): returns 0.0.
     """
     if period <= 0:
         raise ValueError(f"period must be a positive integer >= 1 (got {period})")
-    if len(series) < 2:
-        return pd.Series([np.nan] * len(series), index=series.index)
+    clean = pd.to_numeric(series, errors="coerce").values
+    n = len(clean)
+    if n < period + 1:
+        return pd.Series([np.nan] * n, index=series.index)
 
-    # Protect against non-finite values in series
-    clean_series = pd.to_numeric(series, errors="coerce")
-    delta = clean_series.diff()
-    gain = delta.clip(lower=0.0)
-    loss = (-delta).clip(lower=0.0)
+    diff = np.diff(clean)
+    gains = np.maximum(diff, 0.0)
+    losses = np.maximum(-diff, 0.0)
 
-    # Wilder's smoothing uses alpha = 1 / period
-    avg_gain = gain.ewm(alpha=1.0 / period, min_periods=period, adjust=False).mean()
-    avg_loss = loss.ewm(alpha=1.0 / period, min_periods=period, adjust=False).mean()
+    rsi = np.full(n, np.nan, dtype=np.float64)
 
-    # Safe division
-    denom = avg_loss.replace(0, np.nan)
-    rs = avg_gain / denom
-    rsi = 100.0 - (100.0 / (1.0 + rs))
+    def _eval_rsi(ag: float, al: float) -> float:
+        if al == 0.0 and ag == 0.0:
+            return 50.0
+        if al == 0.0:
+            return 100.0
+        if ag == 0.0:
+            return 0.0
+        rs = ag / al
+        return 100.0 - (100.0 / (1.0 + rs))
 
-    # Corner cases
-    # 1. No loss but positive gain -> 100.0
-    rsi = rsi.where(~((avg_loss == 0) & (avg_gain > 0)), 100.0)
-    # 2. No gain but positive loss -> 0.0
-    rsi = rsi.where(~((avg_gain == 0) & (avg_loss > 0)), 0.0)
-    # 3. Completely flat series (both avg_gain == 0 and avg_loss == 0) -> 50.0
-    rsi = rsi.where(~((avg_gain == 0) & (avg_loss == 0)), 50.0)
+    # Seed recurrence at index 'period' with the SMA of the first 'period' gains and losses
+    avg_gain = float(np.mean(gains[:period]))
+    avg_loss = float(np.mean(losses[:period]))
+    rsi[period] = _eval_rsi(avg_gain, avg_loss)
 
-    # Ensure strictly bounded in [0.0, 100.0]
-    rsi = rsi.clip(lower=0.0, upper=100.0)
+    for i in range(period, len(diff)):
+        avg_gain = (avg_gain * (period - 1) + gains[i]) / period
+        avg_loss = (avg_loss * (period - 1) + losses[i]) / period
+        rsi[i + 1] = _eval_rsi(avg_gain, avg_loss)
 
-    return rsi.round(2)
+    return pd.Series(rsi, index=series.index).clip(lower=0.0, upper=100.0).round(2)
 
 
 def calculate_macd(
@@ -418,16 +425,24 @@ def calculate_macd(
 def calculate_bollinger_bands(
     series: pd.Series, 
     period: int = 20, 
-    num_std: float = 2.0
+    num_std: float = 2.0,
+    ddof: int = 0
 ) -> Tuple[pd.Series, pd.Series, pd.Series]:
-    """Calculates Bollinger Bands (Upper, Middle, Lower) using sample standard deviation (ddof=1)."""
+    """
+    Calculates Bollinger Bands (Upper, Middle, Lower).
+    Uses population standard deviation (ddof=0) by default per John Bollinger's canonical definition:
+    sigma = sqrt( (1 / N) * sum( (P_i - SMA)^2 ) ).
+    Can optionally compute sample standard deviation with ddof=1.
+    """
     if period <= 0:
         raise ValueError(f"period must be a positive integer >= 1 (got {period})")
     if num_std < 0:
         raise ValueError(f"num_std must be non-negative (got {num_std})")
+    if ddof not in (0, 1):
+        raise ValueError(f"ddof must be 0 (population std) or 1 (sample std), got {ddof}")
     clean_series = pd.to_numeric(series, errors="coerce")
     middle = calculate_sma(clean_series, period)
-    std = clean_series.rolling(window=period, min_periods=period).std(ddof=1)
+    std = clean_series.rolling(window=period, min_periods=period).std(ddof=ddof)
     upper = middle + (std * num_std)
     lower = middle - (std * num_std)
     return upper.round(2), middle.round(2), lower.round(2)
@@ -442,24 +457,36 @@ def calculate_atr(
     """
     Calculates Average True Range using classic Wilder's smoothing:
     TR0 = High0 - Low0
-    TRt = max(High - Low, abs(High - Close_prev), abs(Low - Close_prev))
-    First valid ATR at index (period-1) is the SMA of TR over first period bars.
-    Subsequent ATR values smoothed by Wilder's recurrence.
+    TRt = max(High_t - Low_t, abs(High_t - Close_{t-1}), abs(Low_t - Close_{t-1}))
+    First valid ATR at index (period - 1) is the simple average (SMA) of TR over the first period bars.
+    Subsequent ATR values are smoothed by Wilder's recurrence:
+    ATR_t = (ATR_{t-1} * (period - 1) + TR_t) / period
     """
     if period <= 0:
         raise ValueError(f"period must be a positive integer >= 1 (got {period})")
-    clean_h = pd.to_numeric(high, errors="coerce")
-    clean_l = pd.to_numeric(low, errors="coerce")
-    clean_c = pd.to_numeric(close, errors="coerce")
-    prior_close = clean_c.shift(1)
-    tr1 = clean_h - clean_l
-    tr2 = (clean_h - prior_close).abs()
-    tr3 = (clean_l - prior_close).abs()
-    tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+    clean_h = pd.to_numeric(high, errors="coerce").values
+    clean_l = pd.to_numeric(low, errors="coerce").values
+    clean_c = pd.to_numeric(close, errors="coerce").values
+    n = len(clean_c)
 
-    # Initial period-bar SMA, then Wilder's exponential smoothing
-    atr = tr.ewm(alpha=1.0 / period, min_periods=period, adjust=False).mean()
-    return atr.round(2)
+    if n < period or n == 0:
+        return pd.Series([np.nan] * n, index=close.index)
+
+    tr = np.empty(n, dtype=np.float64)
+    tr[0] = clean_h[0] - clean_l[0]
+    for i in range(1, n):
+        hl = clean_h[i] - clean_l[i]
+        hc = abs(clean_h[i] - clean_c[i - 1])
+        lc = abs(clean_l[i] - clean_c[i - 1])
+        tr[i] = max(hl, hc, lc)
+
+    atr = np.full(n, np.nan, dtype=np.float64)
+    # Seed recurrence with initial SMA of first 'period' true ranges
+    atr[period - 1] = float(np.mean(tr[:period]))
+    for i in range(period, n):
+        atr[i] = (atr[i - 1] * (period - 1) + tr[i]) / period
+
+    return pd.Series(atr, index=close.index).round(2)
 
 
 def compute_technical_indicators(df: pd.DataFrame) -> pd.DataFrame:
@@ -517,7 +544,7 @@ def compute_technical_summary(
         return TechnicalSummary(
             ticker=ticker,
             last_date="N/A",
-            last_close=0.0,
+            last_close=None,
             total_bars=0,
             is_simulated_demo=is_simulated_demo,
             price_adjustment_basis=price_adjustment_basis,
@@ -535,13 +562,14 @@ def compute_technical_summary(
 
     n = len(df)
     last_row = df.iloc[-1]
-    last_close = float(last_row["Close"]) if pd.notna(last_row.get("Close")) else 0.0
+    last_close = float(last_row["Close"]) if pd.notna(last_row.get("Close")) else None
     last_date = str(last_row.get("Date_Str", last_row.get("Date", "N/A")))
 
-    # Multi-period returns
+    # Multi-period returns: Full N-interval return requires >= N+1 observations
+    # R_t(N) = (P_t / P_{t-N} - 1) * 100%
     def get_pct_change(lookback: int) -> Optional[float]:
-        if n >= lookback:
-            idx = -1 - lookback if n > lookback else 0
+        if last_close is not None and n >= lookback + 1:
+            idx = -1 - lookback
             prior_close = float(df.iloc[idx]["Close"])
             if prior_close > 0:
                 return round(((last_close / prior_close) - 1.0) * 100.0, 2)
@@ -550,6 +578,7 @@ def compute_technical_summary(
     ret_1m = get_pct_change(21)
     ret_3m = get_pct_change(63)
     ret_6m = get_pct_change(126)
+
     # Duration and calendar coverage evaluation
     has_adequate_calendar_coverage = False
     cov_start_str = None
@@ -580,9 +609,12 @@ def compute_technical_summary(
         gaps = dates_all.diff().dt.days.dropna()
         max_gap_days = int(gaps.max()) if len(gaps) > 0 else 0
 
-    # 1-Year Return is only populated if BOTH >= 252 bars AND adequate calendar coverage are satisfied
-    if n >= 252 and has_adequate_calendar_coverage:
+    # 1-Year Return is only populated if BOTH >= 253 bars (252 return intervals) AND adequate calendar coverage are satisfied
+    if n >= 253 and has_adequate_calendar_coverage:
         ret_1y = get_pct_change(252)
+        is_full_52w = True
+    elif n >= 252 and has_adequate_calendar_coverage:
+        ret_1y = None
         is_full_52w = True
     else:
         ret_1y = None
@@ -590,10 +622,10 @@ def compute_technical_summary(
 
     # 52-Week High & Low (over available window up to 252 bars)
     w_bars = df.tail(min(252, n))
-    high_52w = float(w_bars["High"].max()) if not w_bars.empty and pd.notna(w_bars["High"].max()) else 0.0
-    low_52w = float(w_bars["Low"].min()) if not w_bars.empty and pd.notna(w_bars["Low"].min()) else 0.0
-    dist_high = round(((last_close / high_52w) - 1.0) * 100.0, 2) if high_52w > 0 else None
-    dist_low = round(((last_close / low_52w) - 1.0) * 100.0, 2) if low_52w > 0 else None
+    high_52w = float(w_bars["High"].max()) if not w_bars.empty and pd.notna(w_bars["High"].max()) else None
+    low_52w = float(w_bars["Low"].min()) if not w_bars.empty and pd.notna(w_bars["Low"].min()) else None
+    dist_high = round(((last_close / high_52w) - 1.0) * 100.0, 2) if (last_close is not None and high_52w is not None and high_52w > 0) else None
+    dist_low = round(((last_close / low_52w) - 1.0) * 100.0, 2) if (last_close is not None and low_52w is not None and low_52w > 0) else None
 
     # Annualized Volatility
     daily_returns = df["Close"].pct_change().dropna()
@@ -621,7 +653,7 @@ def compute_technical_summary(
 
     # SMA Statuses
     def sma_stat(col: str) -> str:
-        if pd.notna(last_row[col]):
+        if last_close is not None and pd.notna(last_row[col]):
             val = float(last_row[col])
             diff = ((last_close / val) - 1.0) * 100.0
             pos = "ABOVE" if diff >= 0 else "BELOW"
@@ -642,9 +674,14 @@ def compute_technical_summary(
     common_end = None
 
     if benchmark_df is not None and not benchmark_df.empty:
-        # Align strictly on common dates with unique date index
-        df_bench_src = df[["Date", "Date_Str", "Close"]].drop_duplicates(subset=["Date"])
-        bm_bench_src = benchmark_df[["Date", "Close"]].drop_duplicates(subset=["Date"])
+        # Align strictly on common dates with normalized timestamps
+        df_bench_src = df[["Date", "Date_Str", "Close"]].copy()
+        df_bench_src["Date"] = pd.to_datetime(df_bench_src["Date"]).dt.normalize()
+        df_bench_src = df_bench_src.drop_duplicates(subset=["Date"])
+
+        bm_bench_src = benchmark_df[["Date", "Close"]].copy()
+        bm_bench_src["Date"] = pd.to_datetime(bm_bench_src["Date"]).dt.normalize()
+        bm_bench_src = bm_bench_src.drop_duplicates(subset=["Date"])
 
         merged = pd.merge(
             df_bench_src.rename(columns={"Close": "Asset_Close"}),
@@ -674,14 +711,14 @@ def compute_technical_summary(
                 asset_period_ret = round(((last_a / first_a) - 1.0) * 100.0, 2)
                 rel_perf_period = round(asset_period_ret - bm_period_ret, 2)
 
-                # Only assign 1-year benchmark change if common overlapping bars >= 252 AND common calendar coverage is adequate
-                if common_bars >= 252:
-                    common_dates_win = pd.to_datetime(merged["Date"].tail(252))
+                # Only assign 1-year benchmark change if common overlapping bars >= 253 AND common calendar coverage is adequate
+                if common_bars >= 253:
+                    common_dates_win = pd.to_datetime(merged["Date"].tail(253))
                     common_cal_days = int((common_dates_win.iloc[-1] - common_dates_win.iloc[0]).days)
                     common_gaps = common_dates_win.diff().dt.days.dropna()
                     common_max_gap = int(common_gaps.max()) if len(common_gaps) > 0 else 0
                     if 340 <= common_cal_days <= 395 and common_max_gap <= 14:
-                        win_idx = -253 if common_bars > 252 else 0
+                        win_idx = -253
                         b_win_first = float(merged.iloc[win_idx]["Bench_Close"])
                         a_win_first = float(merged.iloc[win_idx]["Asset_Close"])
                         if b_win_first > 0 and a_win_first > 0:
@@ -867,8 +904,13 @@ def create_benchmark_comparison_chart(
     if not PLOTLY_AVAILABLE or df is None or benchmark_df is None:
         return None
 
-    df_bench_src = df[["Date", "Close"]].drop_duplicates(subset=["Date"])
-    bm_bench_src = benchmark_df[["Date", "Close"]].drop_duplicates(subset=["Date"])
+    df_bench_src = df[["Date", "Close"]].copy()
+    df_bench_src["Date"] = pd.to_datetime(df_bench_src["Date"]).dt.normalize()
+    df_bench_src = df_bench_src.drop_duplicates(subset=["Date"])
+
+    bm_bench_src = benchmark_df[["Date", "Close"]].copy()
+    bm_bench_src["Date"] = pd.to_datetime(bm_bench_src["Date"]).dt.normalize()
+    bm_bench_src = bm_bench_src.drop_duplicates(subset=["Date"])
 
     merged = pd.merge(
         df_bench_src.rename(columns={"Close": "Asset"}),
@@ -895,13 +937,17 @@ def create_benchmark_comparison_chart(
     merged["Asset_Norm"] = (merged["Asset"] / first_asset) * 100.0
     merged["Bench_Norm"] = (merged["Bench"] / first_bench) * 100.0
 
+    start_d_str = merged["Date"].iloc[0].strftime("%Y-%m-%d")
+    end_d_str = merged["Date"].iloc[-1].strftime("%Y-%m-%d")
+    bars_count = len(merged)
+
     badge = " [SIMULATED DEMO]" if is_simulated_demo else ""
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=merged["Date"], y=merged["Asset_Norm"], name=asset_ticker, line=dict(color="#007AFF", width=2.2)))
     fig.add_trace(go.Scatter(x=merged["Date"], y=merged["Bench_Norm"], name=benchmark_ticker, line=dict(color="#8E8E93", width=1.8, dash="dash")))
 
     fig.update_layout(
-        title=f"Relative Performance vs. {benchmark_ticker} (Base = 100){badge}",
+        title=f"Relative Performance vs. {benchmark_ticker} (Base = 100){badge} | {start_d_str} to {end_d_str} ({bars_count} common bars)",
         yaxis=dict(title="Normalized Performance (Base 100)"),
         xaxis=dict(title="Date"),
         height=340,

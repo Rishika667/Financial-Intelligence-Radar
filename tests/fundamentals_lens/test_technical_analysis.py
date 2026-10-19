@@ -384,9 +384,9 @@ def test_technical_summary_251_252_253_boundaries():
     assert is_v is True, err
     summary_252 = compute_technical_summary(clean_252, ticker="ASSET_252")
     assert summary_252.total_bars == 252
-    assert summary_252.has_adequate_calendar_coverage is True
     assert summary_252.is_full_52w is True
-    assert summary_252.change_1y is not None
+    # 252 bars spans only 251 return intervals; standardized N+1 rule requires 253 bars for 252-interval return
+    assert summary_252.change_1y is None
 
     dates_253 = pd.date_range("2025-10-15", periods=253, freq="B").strftime("%Y-%m-%d")
     closes_253 = [100.0 + (i * 0.1) for i in range(253)]

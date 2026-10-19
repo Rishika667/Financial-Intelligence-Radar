@@ -8,13 +8,16 @@ An evidence-first, zero-cost disclosure intelligence and fundamental equity rese
 
 ---
 
-## 🌟 Featured Product: Fundamentals Lens (Phase 19 — Analytical Integrity, Evidence-State Correction, Financial Comparability & Overview Visualization Redesign)
+## 🌟 Featured Product: Fundamentals Lens (Phase 20 — Final Release & Deployment Acceptance)
 
-**Fundamentals Lens** is the primary financial research workbench in this repository, created by **Rishika Dangayach**. It provides transparent five-year financial performance exploration, a responsive 2x2 multi-year trajectory dashboard, deeper fundamental analytics (CAGR, margin shifts in basis points, operating leverage, cumulative reinvestment), rule-based analytical inquiry ("What changed, why it matters, and what to investigate"), guarded peer comparisons with analytical suppression for proxy metrics and cross-currency comparisons, a mathematically hardened Technical Analysis engine (Wilder RSI/ATR initialization, population std Bollinger Bands, $N+1$ return windows), an 8-state deterministic assurance taxonomy, and cohesive 7-section research exports—all without requiring API keys, live data feeds, or database setup.
+**Fundamentals Lens** is the primary financial research workbench in this repository, created by **Rishika Dangayach**. It provides transparent five-year financial performance exploration, a responsive 2x2 multi-year trajectory dashboard, deeper fundamental analytics (CAGR, margin shifts in basis points, operating leverage, cumulative reinvestment), rule-based analytical inquiry ("What changed, why it matters, and what to investigate"), guarded peer comparisons with analytical suppression for proxy metrics and cross-currency comparisons, a mathematically hardened Technical Analysis engine (Wilder RSI/ATR initialization, population std Bollinger Bands, $N+1$ return windows, parameter guards, and non-contiguous Index safety), an 8-state deterministic assurance taxonomy with closed discrepancy loophole verification, substantive source review inventories, and cohesive 7-section research exports—all without requiring API keys, live data feeds, or database setup.
 
 - **Primary Entry Point:** `fundamentals_lens_app.py`
 - **Creator & Lead Engineer:** **Rishika Dangayach**
 - **Operating Architecture:** Zero-Cost, Pure-Python Static Application (Operating budget: ₹0 / $0, zero external TA libraries, zero paid APIs)
+- **Final Release Milestone:** Phase 20 (Final Phase; No Phase 21)
+- **Deployment Status:** **CERTIFIED READY FOR PRODUCTION DEPLOYMENT (PASS WITH EXPLICIT LIMITATIONS)**
+- **Automated Verification:** 488 / 488 tests passed in pytest (100%); 258 / 258 validation gates passed.
 - **Clean-Clone Offline Reproducibility:** 100% offline rebuild from tracked `datasets/fundamentals_lens/source_inputs/` without requiring network access, API tokens, or git-ignored caches (`test_clean_clone_reproducibility.py`).
 - **Target Universe:** 15 Global & Indian Leaders across 5 Peer Groups (75 Audited Annual Periods, FY 2021–2026)
 - **Primary Statement Basis:** 100% CONSOLIDATED audited regulatory disclosures (SEC EDGAR Form 10-K and Indian BSE/NSE annual reports).
@@ -25,14 +28,15 @@ An evidence-first, zero-cost disclosure intelligence and fundamental equity rese
 | :--- | :--- | :---: | :--- |
 | **Audited Financial Facts** | 15 Universe Companies, 75 Annual Periods | **VERIFIED** | Extracted from primary audited filings without synthetic zero coercion. 100% pass across 258 deterministic validator gates. |
 | **Source Extract Assurance** | 75 Company-Periods (375 Primary Metrics) | **353 TRACKED EXTRACTS / 22 AUDITED RECONCILIATIONS** | Classified under the 8-state `AssuranceState` taxonomy: 353 Tracked Offline Extracts, 22 Independently Reconciled Audited Discrepancies, 0 live retrievals in offline build, 0 unverified. |
-| **Comparability & Accounting Nuance** | 15 Companies across 5 Peer Groups | **AUDITED / DOCUMENTED** | Comprehensive taxonomy report (`docs/FUNDAMENTALS_LENS_PHASE19_DATA_COMPARABILITY_REPORT.md`); Maruti Suzuki DISC-017 like-for-like Net Sales (+20.2%) vs unadjusted nominal (+14.72%) guidance. |
-| **Discrepancy Ledger** | 17 Accounting & Taxonomy Items (DISC-001 to DISC-017) | **VERIFIED** | Every discrepancy validated for mathematical consistency and resolved against canonical facts and source observations. |
+| **Comparability & Accounting Nuance** | 15 Companies across 5 Peer Groups | **AUDITED / RECONCILED** | Maruti Suzuki DISC-017 dual metrics harmonized across Overview and Company tabs (+14.7% reported operations vs +20.2% like-for-like net sales). |
+| **Discrepancy Ledger** | 17 Accounting & Taxonomy Items (DISC-001 to DISC-017) | **VERIFIED** | Strict delta and status enforcement; zero unapproved matching loopholes. |
 | **Analytical Peer Safeguards** | 5 Curated Peer Groups (Tech, IT, FMCG, Auto, Retail) | **VERIFIED** | Incompatible proxies (TCS PBEI, Bajaj Auto EBITDA) and unadjusted cross-currency nominals are analytically suppressed from rankings and charts. |
 | **Overview Dashboard** | 2x2 Responsive Trajectory Grid | **VERIFIED** | Dedicated Revenue trajectory (with Maruti callout), dedicated Operating Income scale, Operating/Net margin trends, and Cash flow generation & capex outflows. |
-| **Technical Analysis Engine** | Mathematical Indicators & Invariants | **HARDENED / AUDITED** | Wilder RSI & ATR initialization (initial SMA seed), population standard deviation Bollinger Bands (`ddof=0`), $N+1$ return windows, benchmark date alignment. |
+| **Technical Analysis Engine** | Mathematical Indicators & Invariants | **HARDENED / CERTIFIED** | Wilder RSI & ATR initialization (initial SMA seed), population standard deviation Bollinger Bands (`ddof=0`), $N+1$ return windows, parameter guards, robust index sampling. |
+| **Visual QA Verification** | 13 Desktop & Mobile Views | **VERIFIED (0px OVERFLOW)** | All 5 application pages and 8 sub-tabs verified with DOM landmarks and zero horizontal overflow. |
 | **Offline Clean-Clone Reproducibility** | Full Pipeline Build | **VERIFIED** | Deterministic rebuilds without scratch caches, API keys, or live network access (`test_clean_clone_reproducibility.py`). |
 
-- **Documentation:** [Phase 19 Closeout](docs/FUNDAMENTALS_LENS_PHASE19_CLOSEOUT.md) | [Phase 19 Data Comparability](docs/FUNDAMENTALS_LENS_PHASE19_DATA_COMPARABILITY_REPORT.md) | [Phase 19 Gap Register](docs/FUNDAMENTALS_LENS_PHASE19_GAP_REGISTER.md) | [Phase 19 Test Evidence](docs/FUNDAMENTALS_LENS_PHASE19_TEST_EVIDENCE.md) | [Phase 18 Closeout](docs/FUNDAMENTALS_LENS_PHASE18_CLOSEOUT.md) | [Phase 17 Closeout](docs/FUNDAMENTALS_LENS_PHASE17_CLOSEOUT.md) | [Technical Analysis Methodology](docs/TECHNICAL_ANALYSIS_METHODOLOGY.md) | [Discrepancy Ledger](docs/FUNDAMENTALS_LENS_DISCREPANCY_LEDGER.md) | [Release Guide](docs/FUNDAMENTALS_LENS_RELEASE_GUIDE.md)
+- **Documentation:** [Phase 20 Closeout](docs/FUNDAMENTALS_LENS_PHASE20_CLOSEOUT.md) | [Phase 20 Deployment Acceptance](docs/FUNDAMENTALS_LENS_PHASE20_DEPLOYMENT_ACCEPTANCE.md) | [Phase 20 Gap Register](docs/FUNDAMENTALS_LENS_PHASE20_GAP_REGISTER.md) | [Phase 20 Test Evidence](docs/FUNDAMENTALS_LENS_PHASE20_TEST_EVIDENCE.md) | [Phase 19 Closeout](docs/FUNDAMENTALS_LENS_PHASE19_CLOSEOUT.md) | [Phase 19 Data Comparability](docs/FUNDAMENTALS_LENS_PHASE19_DATA_COMPARABILITY_REPORT.md) | [Technical Analysis Methodology](docs/TECHNICAL_ANALYSIS_METHODOLOGY.md) | [Discrepancy Ledger](docs/FUNDAMENTALS_LENS_DISCREPANCY_LEDGER.md) | [Release Guide](docs/FUNDAMENTALS_LENS_RELEASE_GUIDE.md)
 
 ### Quick Start (Fundamentals Lens)
 
@@ -41,10 +45,13 @@ An evidence-first, zero-cost disclosure intelligence and fundamental equity rese
 source .venv/bin/activate  # On Linux/macOS
 .venv\Scripts\Activate.ps1 # On Windows
 
-# 2. Run deterministic data integrity validation
+# 2. Run deterministic data integrity validation (258 checks)
 python scripts/validate_fundamentals_data.py
 
-# 3. Launch the application
+# 3. Run full automated test suite (488 tests)
+pytest -q
+
+# 4. Launch the application
 streamlit run fundamentals_lens_app.py
 ```
 *Opens immediately at `http://localhost:8501`. No login, API credentials, or database setup required.*
@@ -54,7 +61,7 @@ streamlit run fundamentals_lens_app.py
 | Overview & Health Snapshot | Company Fundamentals (4-Tab Layout) |
 |:---:|:---:|
 | ![Overview](docs/screenshots/01_overview_desktop.png) | ![Company Analysis](docs/screenshots/02_company_analysis_desktop.png) |
-| **Guarded Peer Comparison** | **Price & Technical Analysis (Pure-Python MVP)** |
+| **Guarded Peer Comparison** | **Price & Technical Analysis (Pure-Python Engine)** |
 | ![Peer Comparison](docs/screenshots/03_peer_comparison_desktop.png) | ![Technical Analysis](docs/screenshots/04_technical_analysis_desktop.png) |
 | **Data Integrity & Methodology Gates** | **Responsive Viewport Verification (Mobile)** |
 | ![Data Integrity](docs/screenshots/05_data_integrity_desktop.png) | ![Mobile Technical Analysis](docs/screenshots/07_technical_analysis_mobile.png) |

@@ -46,8 +46,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -78,8 +80,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -110,8 +114,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -142,8 +148,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -174,8 +182,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -234,8 +244,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -266,8 +278,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -298,8 +312,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -330,8 +346,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -362,8 +380,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -422,8 +442,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -454,8 +476,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -486,8 +510,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -518,8 +544,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -550,8 +578,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -610,8 +640,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -642,8 +674,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -674,8 +708,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -706,8 +742,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -738,8 +776,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -798,8 +838,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -830,8 +872,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -862,8 +906,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -894,8 +940,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -926,8 +974,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -986,8 +1036,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -1018,8 +1070,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -1050,8 +1104,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -1082,8 +1138,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -1114,8 +1172,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -1174,8 +1234,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -1206,8 +1268,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -1238,8 +1302,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -1270,8 +1336,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -1302,8 +1370,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -1362,8 +1432,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-003"
       },
       "operating_income": {
@@ -1394,8 +1466,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -1426,8 +1500,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -1458,8 +1534,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -1490,8 +1568,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -1550,8 +1630,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -1582,8 +1664,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -1614,8 +1698,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -1646,8 +1732,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -1678,8 +1766,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -1738,8 +1828,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -1770,8 +1862,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-008"
       },
       "net_income": {
@@ -1802,8 +1896,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -1834,8 +1930,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -1866,8 +1964,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -1926,8 +2026,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -1958,8 +2060,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -1990,8 +2094,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -2022,8 +2128,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -2054,8 +2162,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -2114,8 +2224,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -2146,8 +2258,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -2178,8 +2292,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -2210,8 +2326,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -2242,8 +2360,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -2302,8 +2422,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -2334,8 +2456,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -2366,8 +2490,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -2398,8 +2524,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -2430,8 +2558,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -2490,8 +2620,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -2522,8 +2654,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -2554,8 +2688,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -2586,8 +2722,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -2618,8 +2756,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -2678,8 +2818,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -2710,8 +2852,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -2742,8 +2886,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -2774,8 +2920,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -2806,8 +2954,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -2866,8 +3016,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -2898,8 +3050,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-010"
       },
       "net_income": {
@@ -2930,8 +3084,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-010"
       },
       "operating_cash_flow": {
@@ -2962,8 +3118,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -2994,8 +3152,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -3054,8 +3214,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -3086,8 +3248,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -3118,8 +3282,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -3150,8 +3316,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -3182,8 +3350,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -3242,8 +3412,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -3274,8 +3446,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -3306,8 +3480,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -3338,8 +3514,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -3370,8 +3548,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -3430,8 +3610,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -3462,8 +3644,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -3494,8 +3678,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -3526,8 +3712,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-012"
       },
       "capital_expenditure": {
@@ -3558,8 +3746,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-012"
       }
     },
@@ -3618,8 +3808,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -3650,8 +3842,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-013"
       },
       "net_income": {
@@ -3682,8 +3876,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -3714,8 +3910,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -3746,8 +3944,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -3806,8 +4006,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -3838,8 +4040,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -3870,8 +4074,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -3902,8 +4108,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -3934,8 +4142,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -3994,8 +4204,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -4026,8 +4238,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -4058,8 +4272,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -4090,8 +4306,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -4122,8 +4340,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -4182,8 +4402,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -4214,8 +4436,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -4246,8 +4470,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -4278,8 +4504,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -4310,8 +4538,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -4370,8 +4600,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -4402,8 +4634,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -4434,8 +4668,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -4466,8 +4702,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -4498,8 +4736,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -4558,8 +4798,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -4590,8 +4832,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -4622,8 +4866,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -4654,8 +4900,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -4686,8 +4934,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -4746,8 +4996,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -4778,8 +5030,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -4810,8 +5064,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -4842,8 +5098,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -4874,8 +5132,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -4934,8 +5194,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -4966,8 +5228,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -4998,8 +5262,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -5030,8 +5296,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -5062,8 +5330,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -5122,8 +5392,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -5154,8 +5426,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -5186,8 +5460,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -5218,8 +5494,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -5250,8 +5528,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -5310,8 +5590,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -5342,8 +5624,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -5374,8 +5658,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -5406,8 +5692,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -5438,8 +5726,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -5498,8 +5788,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -5530,8 +5822,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -5562,8 +5856,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -5594,8 +5890,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -5626,8 +5924,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-001"
       }
     },
@@ -5686,8 +5986,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -5718,8 +6020,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -5750,8 +6054,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -5782,8 +6088,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -5814,8 +6122,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -5874,8 +6184,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -5906,8 +6218,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -5938,8 +6252,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -5970,8 +6286,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -6002,8 +6320,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -6062,8 +6382,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -6094,8 +6416,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -6126,8 +6450,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -6158,8 +6484,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -6190,8 +6518,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -6250,8 +6580,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -6282,8 +6614,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -6314,8 +6648,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -6346,8 +6682,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -6378,8 +6716,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -6438,8 +6778,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -6470,8 +6812,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -6502,8 +6846,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -6534,8 +6880,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -6566,8 +6914,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -6626,8 +6976,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -6658,8 +7010,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -6690,8 +7044,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -6722,8 +7078,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -6754,8 +7112,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -6814,8 +7174,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -6846,8 +7208,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -6878,8 +7242,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -6910,8 +7276,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -6942,8 +7310,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -7002,8 +7372,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -7034,8 +7406,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -7066,8 +7440,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -7098,8 +7474,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -7130,8 +7508,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -7190,8 +7570,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -7222,8 +7604,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -7254,8 +7638,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -7286,8 +7672,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -7318,8 +7706,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -7378,8 +7768,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -7410,8 +7802,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -7442,8 +7836,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -7474,8 +7870,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -7506,8 +7904,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -7566,8 +7966,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -7598,8 +8000,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -7630,8 +8034,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -7662,8 +8068,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -7694,8 +8102,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -7754,8 +8164,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -7786,8 +8198,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -7818,8 +8232,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -7850,8 +8266,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -7882,8 +8300,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -7942,8 +8362,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -7974,8 +8396,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -8006,8 +8430,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -8038,8 +8464,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -8070,8 +8498,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -8130,8 +8560,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -8162,8 +8594,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -8194,8 +8628,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -8226,8 +8662,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -8258,8 +8696,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -8318,8 +8758,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -8350,8 +8792,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -8382,8 +8826,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -8414,8 +8860,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -8446,8 +8894,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -8506,8 +8956,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -8538,8 +8990,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-004"
       },
       "net_income": {
@@ -8570,8 +9024,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -8602,8 +9058,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -8634,8 +9092,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -8694,8 +9154,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -8726,8 +9188,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -8758,8 +9222,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -8790,8 +9256,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -8822,8 +9290,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -8882,8 +9352,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -8914,8 +9386,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -8946,8 +9420,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -8978,8 +9454,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -9010,8 +9488,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -9070,8 +9550,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -9102,8 +9584,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -9134,8 +9618,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -9166,8 +9652,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -9198,8 +9686,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -9258,8 +9748,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -9290,8 +9782,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -9322,8 +9816,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-009"
       },
       "operating_cash_flow": {
@@ -9354,8 +9850,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -9386,8 +9884,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -9446,8 +9946,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -9478,8 +9980,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -9510,8 +10014,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -9542,8 +10048,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -9574,8 +10082,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -9634,8 +10144,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -9666,8 +10178,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -9698,8 +10212,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -9730,8 +10246,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -9762,8 +10280,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -9822,8 +10342,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -9854,8 +10376,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -9886,8 +10410,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -9918,8 +10444,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -9950,8 +10478,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -10010,8 +10540,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-017"
       },
       "operating_income": {
@@ -10042,8 +10574,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -10074,8 +10608,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -10106,8 +10642,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -10138,8 +10676,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -10198,8 +10738,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-017"
       },
       "operating_income": {
@@ -10230,8 +10772,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -10262,8 +10806,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -10294,8 +10840,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -10326,8 +10874,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -10386,8 +10936,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -10418,8 +10970,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -10450,8 +11004,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -10482,8 +11038,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -10514,8 +11072,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -10574,8 +11134,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -10606,8 +11168,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -10638,8 +11202,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -10670,8 +11236,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -10702,8 +11270,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -10762,8 +11332,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -10794,8 +11366,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -10826,8 +11400,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -10858,8 +11434,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -10890,8 +11468,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -10950,8 +11530,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-014"
       },
       "operating_income": {
@@ -10982,8 +11564,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-014"
       },
       "net_income": {
@@ -11014,8 +11598,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -11046,8 +11632,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -11078,8 +11666,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -11138,8 +11728,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -11170,8 +11762,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -11202,8 +11796,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-015"
       },
       "operating_cash_flow": {
@@ -11234,8 +11830,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-015"
       },
       "capital_expenditure": {
@@ -11266,8 +11864,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -11326,8 +11926,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -11358,8 +11960,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -11390,8 +11994,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -11422,8 +12028,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -11454,8 +12062,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -11514,8 +12124,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -11546,8 +12158,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -11578,8 +12192,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -11610,8 +12226,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -11642,8 +12260,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -11702,8 +12322,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -11734,8 +12356,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -11766,8 +12390,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -11798,8 +12424,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -11830,8 +12458,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -11890,8 +12520,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -11922,8 +12554,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -11954,8 +12588,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -11986,8 +12622,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -12018,8 +12656,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -12078,8 +12718,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -12110,8 +12752,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-007"
       },
       "net_income": {
@@ -12142,8 +12786,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -12174,8 +12820,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -12206,8 +12854,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -12266,8 +12916,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -12298,8 +12950,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -12330,8 +12984,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -12362,8 +13018,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -12394,8 +13052,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -12454,8 +13114,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -12486,8 +13148,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -12518,8 +13182,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -12550,8 +13216,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -12582,8 +13250,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -12642,8 +13312,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -12674,8 +13346,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-002"
       },
       "net_income": {
@@ -12706,8 +13380,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -12738,8 +13414,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -12770,8 +13448,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -12830,8 +13510,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -12862,8 +13544,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -12894,8 +13578,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -12926,8 +13612,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -12958,8 +13646,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -13018,8 +13708,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -13050,8 +13742,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -13082,8 +13776,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -13114,8 +13810,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -13146,8 +13844,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -13206,8 +13906,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -13238,8 +13940,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -13270,8 +13974,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -13302,8 +14008,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -13334,8 +14042,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -13394,8 +14104,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -13426,8 +14138,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -13458,8 +14172,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -13490,8 +14206,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -13522,8 +14240,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -13582,8 +14302,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -13614,8 +14336,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -13646,8 +14370,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_cash_flow": {
@@ -13678,8 +14404,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -13710,8 +14438,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -13770,8 +14500,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "operating_income": {
@@ -13802,8 +14534,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-005"
       },
       "net_income": {
@@ -13834,8 +14568,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-016"
       },
       "operating_cash_flow": {
@@ -13866,8 +14602,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -13898,8 +14636,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },
@@ -13958,8 +14698,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-006"
       },
       "operating_income": {
@@ -13990,8 +14732,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "net_income": {
@@ -14022,8 +14766,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "RECONCILED_WITH_APPROVED_ADJUSTMENT",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": true,
+        "is_tracked_offline_extract": false,
         "approved_discrepancy_id": "DISC-016"
       },
       "operating_cash_flow": {
@@ -14054,8 +14800,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       },
       "capital_expenditure": {
@@ -14086,8 +14834,10 @@
         "metric_extraction_status": "EXTRACTED_LINE_ITEM",
         "numeric_reconciliation_status": "EXACT_STATEMENT_MATCH",
         "verification_mode": "OFFLINE",
-        "verification_timestamp": "2026-10-19T13:37:07Z",
+        "verification_timestamp": "2026-10-19T15:09:51Z",
         "is_reconciled": true,
+        "is_independently_reconciled": false,
+        "is_tracked_offline_extract": true,
         "approved_discrepancy_id": null
       }
     },

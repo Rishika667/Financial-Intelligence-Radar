@@ -79,6 +79,8 @@ def build_observations_offline(
         with open(disc_file, "r", encoding="utf-8") as f:
             disc_entries = json.load(f)
             for d in disc_entries:
+                if d.get("status") not in ("RESOLVED", "APPROVED", "AUDITED"):
+                    continue
                 t = d.get("ticker")
                 m = d.get("metric")
                 d_id = d.get("discrepancy_id")
@@ -101,16 +103,31 @@ def build_observations_offline(
         clean_lbl = lbl.replace(" ", "_").replace("–", "_").replace("-", "_")
         obs_id = f"OBS_{ticker}_{clean_lbl}_{metric}"
 
-        disc_ref = disc_lookup.get((ticker, fy, metric)) or item.get("discrepancy_reference")
+        # Only an approved discrepancy in disc_lookup can assign INDEPENDENTLY_RECONCILED
+        matched_disc_id = disc_lookup.get((ticker, fy, metric))
+        disc_ref = matched_disc_id
+        if not disc_ref and item.get("discrepancy_reference"):
+            raw_ref = item.get("discrepancy_reference")
+            for d in disc_entries:
+                if (
+                    d.get("discrepancy_id") == raw_ref
+                    and d.get("status") in ("RESOLVED", "APPROVED", "AUDITED")
+                    and d.get("ticker") == ticker
+                ):
+                    disc_ref = raw_ref
+                    break
+
         if disc_ref:
             conf_tier = "INDEPENDENTLY_RECONCILED"
             ass_state = "APPROVED_ADJUSTMENT_RESOLVED"
         elif item.get("reported_value") is None:
             conf_tier = "SOURCE_LINKED_ONLY"
             ass_state = "SOURCE_REFERENCE_RECORDED"
+            disc_ref = None
         else:
             conf_tier = "TRACKED_OFFLINE_EXTRACT"
             ass_state = "OFFLINE_EXTRACT_RECORDED"
+            disc_ref = None
 
         obs = {
             "observation_id": obs_id,
@@ -158,16 +175,30 @@ def build_observations_offline(
         obs_id = f"OBS_{ticker}_{clean_lbl}_{metric}"
 
         is_pending = (item.get("reported_value") is None)
-        disc_ref = disc_lookup.get((ticker, fy, metric)) or item.get("discrepancy_reference")
+        matched_disc_id = disc_lookup.get((ticker, fy, metric))
+        disc_ref = matched_disc_id
+        if not disc_ref and item.get("discrepancy_reference"):
+            raw_ref = item.get("discrepancy_reference")
+            for d in disc_entries:
+                if (
+                    d.get("discrepancy_id") == raw_ref
+                    and d.get("status") in ("RESOLVED", "APPROVED", "AUDITED")
+                    and d.get("ticker") == ticker
+                ):
+                    disc_ref = raw_ref
+                    break
+
         if disc_ref:
             conf_tier = "INDEPENDENTLY_RECONCILED"
             ass_state = "APPROVED_ADJUSTMENT_RESOLVED"
         elif is_pending:
             conf_tier = "SOURCE_LINKED_ONLY"
             ass_state = "SOURCE_REFERENCE_RECORDED"
+            disc_ref = None
         else:
             conf_tier = "TRACKED_OFFLINE_EXTRACT"
             ass_state = "OFFLINE_EXTRACT_RECORDED"
+            disc_ref = None
 
         obs = {
             "observation_id": obs_id,

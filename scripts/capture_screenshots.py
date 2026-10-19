@@ -113,7 +113,27 @@ async def verify_dom_and_charts(ws, require_chart=False, timeout_sec=15):
     )
 
 
-async def capture_page(ws, url, output_path, width=1280, height=900, is_mobile=False, require_chart=False, wait_sec=4):
+async def select_tab(ws, tab_index: int, wait_sec=2):
+    """Clicks the specified tab index in the DOM and waits for content to re-render."""
+    eval_script = f"""
+    (() => {{
+        const tabs = document.querySelectorAll('button[data-baseweb="tab"], button[role="tab"]');
+        if (tabs && tabs[{tab_index}]) {{
+            tabs[{tab_index}].click();
+            return {{ clicked: true, total_tabs: tabs.length }};
+        }}
+        return {{ clicked: false, total_tabs: tabs ? tabs.length : 0 }};
+    }})()
+    """
+    res = await send_cdp(ws, "Runtime.evaluate", {
+        "expression": eval_script,
+        "returnByValue": True
+    }, msg_id=30)
+    await asyncio.sleep(wait_sec)
+    return res.get("result", {}).get("value", {})
+
+
+async def capture_page(ws, url, output_path, width=1280, height=900, is_mobile=False, require_chart=False, wait_sec=4, tab_index=None):
     # Set viewport
     await send_cdp(ws, "Emulation.setDeviceMetricsOverride", {
         "width": width,
@@ -122,15 +142,21 @@ async def capture_page(ws, url, output_path, width=1280, height=900, is_mobile=F
         "mobile": is_mobile
     }, msg_id=10)
 
-    # Navigate
-    await send_cdp(ws, "Page.navigate", {"url": url}, msg_id=11)
-    await asyncio.sleep(wait_sec)
+    # Navigate if URL provided
+    if url:
+        await send_cdp(ws, "Page.navigate", {"url": url}, msg_id=11)
+        await asyncio.sleep(wait_sec)
+
+    # Click tab if specified
+    if tab_index is not None:
+        await select_tab(ws, tab_index, wait_sec=2)
 
     # DOM landmark and chart verification with hard assertion
     geom = await verify_dom_and_charts(ws, require_chart=require_chart, timeout_sec=15)
 
-    if width >= 1280 and geom.get("has_overflow"):
-        print(f"  [LAYOUT WARNING] Horizontal overflow detected: {geom.get('scroll_width')}px > 1280px")
+    scroll_w = geom.get("scroll_width", width)
+    if width >= 1280 and scroll_w > width + 5:
+        raise AssertionError(f"Layout overflow violation on {output_path.name}: scrollWidth {scroll_w}px > viewport width {width}px!")
 
     # Capture screenshot
     res = await send_cdp(ws, "Page.captureScreenshot", {"format": "png"}, msg_id=12)
@@ -138,6 +164,12 @@ async def capture_page(ws, url, output_path, width=1280, height=900, is_mobile=F
 
     with open(output_path, "wb") as f:
         f.write(img_data)
+
+    # Also mirror to conversation artifacts directory if available
+    artifact_screenshots_dir = Path(r"C:\Users\HP\.gemini\antigravity\brain\d7ec3f7c-e4ad-4364-b22a-b751ed5204d7\screenshots")
+    if artifact_screenshots_dir.exists():
+        with open(artifact_screenshots_dir / output_path.name, "wb") as f_art:
+            f_art.write(img_data)
 
     chart_info = f", chart={geom['chart_width']}x{geom['chart_height']}" if require_chart else ""
     print(f"Captured: {output_path.name} ({width}x{height}, {len(img_data):,} bytes, DOM verified{chart_info})")
@@ -223,38 +255,79 @@ async def run_capture_pipeline():
     try:
         async with websockets.connect(ws_url, max_size=50 * 1024 * 1024) as ws:
             await send_cdp(ws, "Page.enable", msg_id=1)
-
             await asyncio.sleep(2)  # Initial Streamlit websocket connection stabilization
 
-            # 1. Page 1: Overview Desktop (with chart)
+            # 1. Page 1: Overview Desktop (with 2x2 dashboard)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Overview",
                 OUTPUT_DIR / "01_overview_desktop.png",
                 width=1280, height=900, is_mobile=False, require_chart=True, wait_sec=6
             )
 
-            # 2. Page 2: Company Analysis Desktop (with chart)
+            # 2. Page 2: Company Analysis Desktop (Tab 0: Growth & Scale)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Company+Analysis",
                 OUTPUT_DIR / "02_company_analysis_desktop.png",
-                width=1280, height=950, is_mobile=False, require_chart=True, wait_sec=4
+                width=1280, height=950, is_mobile=False, require_chart=True, wait_sec=4, tab_index=0
             )
 
-            # 3. Page 3: Peer Comparison Desktop (with chart)
+            # 2b. Company Analysis Sub-Tab 1: Profitability & Margins
+            await capture_page(
+                ws, None,
+                OUTPUT_DIR / "02b_company_analysis_tab2_margins.png",
+                width=1280, height=950, is_mobile=False, require_chart=True, wait_sec=2, tab_index=1
+            )
+
+            # 2c. Company Analysis Sub-Tab 2: Cash Flow & Reinvestment
+            await capture_page(
+                ws, None,
+                OUTPUT_DIR / "02c_company_analysis_tab3_cashflow.png",
+                width=1280, height=950, is_mobile=False, require_chart=True, wait_sec=2, tab_index=2
+            )
+
+            # 2d. Company Analysis Sub-Tab 3: Statements & Evidence
+            await capture_page(
+                ws, None,
+                OUTPUT_DIR / "02d_company_analysis_tab4_evidence.png",
+                width=1280, height=950, is_mobile=False, require_chart=False, wait_sec=2, tab_index=3
+            )
+
+            # 3. Page 3: Peer Comparison Desktop (with matrix & charts)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Peer+Comparison",
                 OUTPUT_DIR / "03_peer_comparison_desktop.png",
                 width=1280, height=950, is_mobile=False, require_chart=True, wait_sec=4
             )
 
-            # 4. Page 4: Price & Technical Analysis Desktop (with chart)
+            # 4. Page 4: Price & Technical Analysis Desktop (Tab 0: Price & Trend Channels)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Price+%26+Technical+Analysis",
                 OUTPUT_DIR / "04_technical_analysis_desktop.png",
-                width=1280, height=900, is_mobile=False, require_chart=True, wait_sec=4
+                width=1280, height=900, is_mobile=False, require_chart=True, wait_sec=4, tab_index=0
             )
 
-            # 5. Page 5: Data Integrity Desktop (tables and expanders)
+            # 4b. Technical Analysis Sub-Tab 1: Momentum & Oscillators (RSI / MACD)
+            await capture_page(
+                ws, None,
+                OUTPUT_DIR / "04b_technical_analysis_tab2_momentum.png",
+                width=1280, height=900, is_mobile=False, require_chart=True, wait_sec=2, tab_index=1
+            )
+
+            # 4c. Technical Analysis Sub-Tab 2: Benchmark Comparison
+            await capture_page(
+                ws, None,
+                OUTPUT_DIR / "04c_technical_analysis_tab3_benchmark.png",
+                width=1280, height=900, is_mobile=False, require_chart=True, wait_sec=2, tab_index=2
+            )
+
+            # 4d. Technical Analysis Sub-Tab 3: Technical Data & Exports
+            await capture_page(
+                ws, None,
+                OUTPUT_DIR / "04d_technical_analysis_tab4_exports.png",
+                width=1280, height=900, is_mobile=False, require_chart=False, wait_sec=2, tab_index=3
+            )
+
+            # 5. Page 5: Data Integrity Desktop (tables, audit logs, and expanders)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Data+Integrity+%26+Methodology",
                 OUTPUT_DIR / "05_data_integrity_desktop.png",
@@ -265,17 +338,17 @@ async def run_capture_pipeline():
             await capture_page(
                 ws, f"{streamlit_url}/?page=Company+Analysis",
                 OUTPUT_DIR / "06_company_analysis_mobile.png",
-                width=390, height=844, is_mobile=True, require_chart=True, wait_sec=4
+                width=390, height=844, is_mobile=True, require_chart=True, wait_sec=4, tab_index=0
             )
 
             # 7. Page 4: Price & Technical Analysis Mobile View (390x844)
             await capture_page(
                 ws, f"{streamlit_url}/?page=Price+%26+Technical+Analysis",
                 OUTPUT_DIR / "07_technical_analysis_mobile.png",
-                width=390, height=844, is_mobile=True, require_chart=True, wait_sec=4
+                width=390, height=844, is_mobile=True, require_chart=True, wait_sec=4, tab_index=0
             )
 
-        print("\nAll 7 visual QA screenshots successfully captured into docs/screenshots/ with full DOM and chart validation!")
+        print("\nAll application pages and sub-tabs successfully verified and captured with zero horizontal overflow!")
         ret = 0
     except Exception as e:
         print(f"Error during screenshot capture: {e}")

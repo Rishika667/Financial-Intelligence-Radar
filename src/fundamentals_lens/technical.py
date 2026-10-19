@@ -141,6 +141,26 @@ def validate_ohlcv_dataframe_with_report(
     import datetime
     iso_date_pattern = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
+    pos_map = {lbl: pos for pos, lbl in enumerate(df.index)}
+
+    def _extract_sample_row(idx_lbl, err_desc: str):
+        pos = pos_map.get(idx_lbl, 0)
+        try:
+            row_raw = df.loc[idx_lbl]
+            row_dict = row_raw.iloc[0].to_dict() if isinstance(row_raw, pd.DataFrame) else row_raw.to_dict()
+        except Exception:
+            try:
+                row_dict = df.iloc[pos].to_dict()
+            except Exception:
+                row_dict = {"index": str(idx_lbl)}
+        row_idx_val = int(idx_lbl) if isinstance(idx_lbl, (int, np.integer)) else pos
+        return {
+            "row_index": row_idx_val,
+            "position": pos,
+            "error": err_desc,
+            "raw_data": str(row_dict)
+        }
+
     non_iso_samples = []
     for idx, val in raw_date_series.items():
         if pd.isna(val):
@@ -157,7 +177,7 @@ def validate_ohlcv_dataframe_with_report(
             f"(samples: {[s[1] for s in non_iso_samples[:3]]}). Format must conform strictly to YYYY-MM-DD."
         )
         for idx, s_val in non_iso_samples[:3]:
-            sample_offending.append({"row_index": int(idx), "error": "Non-ISO 8601 date format", "raw_data": str(df.iloc[idx].to_dict())})
+            sample_offending.append(_extract_sample_row(idx, "Non-ISO 8601 date format"))
 
     clean_df["Date"] = pd.to_datetime(raw_date_series, errors="coerce")
     bad_date_mask = clean_df["Date"].isna()
@@ -166,7 +186,7 @@ def validate_ohlcv_dataframe_with_report(
         sample_bad = df.loc[bad_date_mask, col_map["date"]].head(3).tolist()
         errors.append(f"{bad_count} row(s) contain unparseable dates (samples: {sample_bad}). Format must conform to YYYY-MM-DD.")
         for idx in df.loc[bad_date_mask].head(3).index:
-            sample_offending.append({"row_index": int(idx), "error": "Unparseable date", "raw_data": str(df.iloc[idx].to_dict())})
+            sample_offending.append(_extract_sample_row(idx, "Unparseable date"))
 
     # 3. Numeric conversions & finite check
     for col in ["open", "high", "low", "close", "volume"]:
@@ -179,7 +199,7 @@ def validate_ohlcv_dataframe_with_report(
         nf_count = int(non_finite_mask.sum())
         errors.append(f"{nf_count} row(s) contain missing (NaN) or infinite values in price/volume columns.")
         for idx in clean_df.loc[non_finite_mask].head(3).index:
-            sample_offending.append({"row_index": int(idx), "error": "Non-finite price or volume", "raw_data": str(df.iloc[idx].to_dict())})
+            sample_offending.append(_extract_sample_row(idx, "Non-finite price or volume"))
             if pd.notna(clean_df.loc[idx, "Date"]):
                 non_finite_dates.append(str(clean_df.loc[idx, "Date"].strftime("%Y-%m-%d")))
 
@@ -190,7 +210,7 @@ def validate_ohlcv_dataframe_with_report(
         np_count = int(non_positive_mask.sum())
         errors.append(f"{np_count} row(s) have non-positive price values (<= 0). Prices must be strictly positive.")
         for idx in clean_df.loc[non_positive_mask].head(3).index:
-            sample_offending.append({"row_index": int(idx), "error": "Non-positive price", "raw_data": str(df.iloc[idx].to_dict())})
+            sample_offending.append(_extract_sample_row(idx, "Non-positive price"))
 
     neg_volume_mask = clean_df["Volume"] < 0
     if neg_volume_mask.any():
@@ -209,11 +229,7 @@ def validate_ohlcv_dataframe_with_report(
         for idx in clean_df.loc[range_invalid_mask].head(3).index:
             r_date = clean_df.loc[idx, "Date"].strftime("%Y-%m-%d") if pd.notna(clean_df.loc[idx, "Date"]) else f"row {idx}"
             inv_dates.append(str(r_date))
-            sample_offending.append({
-                "row_index": int(idx),
-                "error": "Range invariant violation (High must be >= Open/Close/Low, Low must be <= Open/Close/High)",
-                "raw_data": str(df.iloc[idx].to_dict())
-            })
+            sample_offending.append(_extract_sample_row(idx, "Range invariant violation (High must be >= Open/Close/Low, Low must be <= Open/Close/High)"))
         errors.append(f"Price invariant violation detected on {ri_count} row(s) (samples: {inv_dates[:3]}). High must be >= max(Open, Close, Low) and Low <= min(Open, Close, High).")
 
     # 6. Duplicate Dates Check
@@ -341,15 +357,15 @@ def validate_ohlcv_dataframe(
 
 def calculate_sma(series: pd.Series, period: int) -> pd.Series:
     """Calculates Simple Moving Average."""
-    if period <= 0:
-        raise ValueError(f"period must be a positive integer >= 1 (got {period})")
+    if not isinstance(period, int) or isinstance(period, bool) or period <= 0:
+        raise ValueError(f"period must be a positive integer >= 1 (got {period} of type {type(period).__name__})")
     return series.rolling(window=period, min_periods=period).mean()
 
 
 def calculate_ema(series: pd.Series, period: int) -> pd.Series:
     """Calculates Exponential Moving Average."""
-    if period <= 0:
-        raise ValueError(f"period must be a positive integer >= 1 (got {period})")
+    if not isinstance(period, int) or isinstance(period, bool) or period <= 0:
+        raise ValueError(f"period must be a positive integer >= 1 (got {period} of type {type(period).__name__})")
     return series.ewm(span=period, adjust=False).mean()
 
 
@@ -366,8 +382,8 @@ def calculate_rsi(series: pd.Series, period: int = 14) -> pd.Series:
     - Monotonically rising (AvgLoss == 0, AvgGain > 0): returns 100.0.
     - Monotonically falling (AvgGain == 0, AvgLoss > 0): returns 0.0.
     """
-    if period <= 0:
-        raise ValueError(f"period must be a positive integer >= 1 (got {period})")
+    if not isinstance(period, int) or isinstance(period, bool) or period <= 0:
+        raise ValueError(f"period must be a positive integer >= 1 (got {period} of type {type(period).__name__})")
     clean = pd.to_numeric(series, errors="coerce").values
     n = len(clean)
     if n < period + 1:
@@ -409,8 +425,9 @@ def calculate_macd(
     signal: int = 9
 ) -> Tuple[pd.Series, pd.Series, pd.Series]:
     """Calculates MACD Line, Signal Line, and MACD Histogram."""
-    if fast <= 0 or slow <= 0 or signal <= 0:
-        raise ValueError(f"MACD periods must be positive integers >= 1 (got fast={fast}, slow={slow}, signal={signal})")
+    for name, p in (("fast", fast), ("slow", slow), ("signal", signal)):
+        if not isinstance(p, int) or isinstance(p, bool) or p <= 0:
+            raise ValueError(f"MACD periods must be positive integers >= 1 (got {name}={p} of type {type(p).__name__})")
     if fast >= slow:
         raise ValueError(f"fast period must be strictly less than slow period (got fast={fast}, slow={slow})")
     clean_series = pd.to_numeric(series, errors="coerce")
@@ -434,11 +451,11 @@ def calculate_bollinger_bands(
     sigma = sqrt( (1 / N) * sum( (P_i - SMA)^2 ) ).
     Can optionally compute sample standard deviation with ddof=1.
     """
-    if period <= 0:
-        raise ValueError(f"period must be a positive integer >= 1 (got {period})")
-    if num_std < 0:
+    if not isinstance(period, int) or isinstance(period, bool) or period <= 0:
+        raise ValueError(f"period must be a positive integer >= 1 (got {period} of type {type(period).__name__})")
+    if not isinstance(num_std, (int, float)) or isinstance(num_std, bool) or num_std < 0:
         raise ValueError(f"num_std must be non-negative (got {num_std})")
-    if ddof not in (0, 1):
+    if ddof not in (0, 1) or isinstance(ddof, bool):
         raise ValueError(f"ddof must be 0 (population std) or 1 (sample std), got {ddof}")
     clean_series = pd.to_numeric(series, errors="coerce")
     middle = calculate_sma(clean_series, period)
@@ -462,8 +479,8 @@ def calculate_atr(
     Subsequent ATR values are smoothed by Wilder's recurrence:
     ATR_t = (ATR_{t-1} * (period - 1) + TR_t) / period
     """
-    if period <= 0:
-        raise ValueError(f"period must be a positive integer >= 1 (got {period})")
+    if not isinstance(period, int) or isinstance(period, bool) or period <= 0:
+        raise ValueError(f"period must be a positive integer >= 1 (got {period} of type {type(period).__name__})")
     clean_h = pd.to_numeric(high, errors="coerce").values
     clean_l = pd.to_numeric(low, errors="coerce").values
     clean_c = pd.to_numeric(close, errors="coerce").values

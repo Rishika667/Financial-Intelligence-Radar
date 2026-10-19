@@ -1,16 +1,16 @@
 {
   "pipeline_version": "Phase 14 Hardened Release Candidate",
-  "build_timestamp": "2026-10-19T13:35:04Z",
+  "build_timestamp": "2026-10-19T15:09:50Z",
   "mode": "OFFLINE",
   "inputs": {
     "us_tracked_extracts": "datasets\\fundamentals_lens\\source_inputs\\sec_company_facts_extracts.json",
-    "us_input_sha256": "2ab1cf1de2aba0489058155fc0e8b8b85c28daf2bf21e7cff72298928e6e26dd",
+    "us_input_sha256": "614f8e8d4259943033a8357034050980cd6e21aaf9f81b681da52e4574f13244",
     "indian_tracked_extracts": "datasets\\fundamentals_lens\\source_inputs\\indian_statement_extracts.json",
-    "indian_input_sha256": "378c6636a925c509f3a42455d2a1e9fc0c69829d96f202f79bf45d5478b35216"
+    "indian_input_sha256": "f8a0a37fc6202ed3e565bf7685b89dfae2c4887cae837186373dc3e9d6b30e92"
   },
   "output": {
     "source_observations_file": "datasets\\fundamentals_lens\\source_observations.json",
-    "output_sha256": "4408f1dd6f979bf3b012002fab77dbff29f1124a95b06457e41f9902ad29fd11"
+    "output_sha256": "c60eefe6ecf89205d1571152884aeee2a02d76e01802b4418ea1813664b91fe6"
   },
   "statistics": {
     "total_observations": 375,

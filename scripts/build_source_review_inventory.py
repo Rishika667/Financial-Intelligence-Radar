@@ -20,11 +20,19 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 
+import sys
 REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT / "src"))
+
+from fundamentals_lens.reconciliation import derive_document_identity_verified, find_matching_approved_discrepancy
+
 DATASETS_DIR = REPO_ROOT / "datasets" / "fundamentals_lens"
 SOURCE_REGISTER_FILE = DATASETS_DIR / "source_register.json"
 SOURCE_OBSERVATIONS_FILE = DATASETS_DIR / "source_observations.json"
 SOURCE_CHECK_REPORT_FILE = DATASETS_DIR / "source_check_report.json"
+FINANCIAL_FACTS_FILE = DATASETS_DIR / "financial_facts_5yr.json"
+DISCREPANCY_LEDGER_FILE = DATASETS_DIR / "discrepancy_ledger.json"
+COMPANIES_FILE = DATASETS_DIR / "target_companies.json"
 OUTPUT_INVENTORY_FILE = DATASETS_DIR / "source_review_inventory.json"
 
 
@@ -41,6 +49,24 @@ def build_source_review_inventory(
 
     with open(SOURCE_OBSERVATIONS_FILE, "r", encoding="utf-8") as f:
         observations = json.load(f)
+
+    with open(FINANCIAL_FACTS_FILE, "r", encoding="utf-8") as f:
+        facts = json.load(f)
+
+    discrepancies: List[Dict[str, Any]] = []
+    if DISCREPANCY_LEDGER_FILE.exists():
+        with open(DISCREPANCY_LEDGER_FILE, "r", encoding="utf-8") as f:
+            discrepancies = json.load(f)
+
+    companies_map: Dict[str, Dict[str, Any]] = {}
+    if COMPANIES_FILE.exists():
+        with open(COMPANIES_FILE, "r", encoding="utf-8") as f:
+            comps = json.load(f)
+            companies_map = {c["ticker"]: c for c in comps}
+
+    facts_map: Dict[tuple, Dict[str, Any]] = {}
+    for f in facts:
+        facts_map[(f["ticker"], f["fiscal_year"])] = f
 
     check_map: Dict[str, Dict[str, Any]] = {}
     if check_file.exists():
@@ -60,6 +86,8 @@ def build_source_review_inventory(
 
     now_iso = timestamp or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+    primary_metric_keys = ("revenue", "operating_income", "net_income", "operating_cash_flow", "capital_expenditure")
+
     for src in sources:
         ticker = src["ticker"]
         fy = src["fiscal_year"]
@@ -70,25 +98,64 @@ def build_source_review_inventory(
         scr_entry = check_map.get(src_id, {})
         v_mode = scr_entry.get("verification_mode", "OFFLINE").upper()
         c_status = scr_entry.get("check_status", "OFFLINE_SOURCE_RECORDED")
-        doc_id_ok = bool(src.get("document_identity_verified") or scr_entry.get("document_identity_verified"))
+
+        # Substantive document identity & format verification
+        comp_meta = companies_map.get(ticker, {})
+        doc_id_ok, doc_id_reason = derive_document_identity_verified(src, comp_meta)
+        if not doc_id_ok and src.get("document_identity_verified") and not comp_meta:
+            doc_id_ok = True
 
         p_obs = obs_by_period.get(key, [])
-        # Real record-level evidentiary gates:
+        obs_by_metric = {o.get("metric_name"): o for o in p_obs}
+        fact = facts_map.get(key)
+
+        # Substantive metric-by-metric verification:
         # 1. Exactly 5 primary metrics present
         # 2. Document identity verified
         # 3. Non-generic statement locator (>= 10 chars)
         # 4. Valid reported value
-        # 5. Verified confidence tier (INDEPENDENTLY_RECONCILED or TRACKED_OFFLINE_EXTRACT)
-        has_5_metrics = len(p_obs) == 5
-        metrics_valid = has_5_metrics and all(
-            o.get("reported_value") is not None
-            and o.get("statement_locator")
-            and len(str(o.get("statement_locator", "")).strip()) >= 10
-            and o.get("confidence_tier") in ("INDEPENDENTLY_RECONCILED", "TRACKED_OFFLINE_EXTRACT")
-            for o in p_obs
-        )
-        tracked_count = sum(1 for o in p_obs if o.get("confidence_tier") == "TRACKED_OFFLINE_EXTRACT")
-        audited_count = sum(1 for o in p_obs if o.get("confidence_tier") == "INDEPENDENTLY_RECONCILED")
+        # 5. Exact match against canonical fact OR verified approved adjustment in discrepancy ledger
+        has_5_metrics = len(p_obs) == 5 and fact is not None
+        metrics_valid = has_5_metrics
+        tracked_count = 0
+        audited_count = 0
+
+        if has_5_metrics:
+            for m in primary_metric_keys:
+                o = obs_by_metric.get(m)
+                if not o or o.get("reported_value") is None:
+                    metrics_valid = False
+                    break
+                loc = str(o.get("statement_locator", "")).strip()
+                if len(loc) < 10:
+                    metrics_valid = False
+                    break
+                canon_val = fact.get(m)
+                if canon_val is None:
+                    metrics_valid = False
+                    break
+                rep_val = o.get("reported_value")
+                diff = abs(float(rep_val) - float(canon_val))
+                if diff < 0.001:
+                    tracked_count += 1
+                else:
+                    matched = find_matching_approved_discrepancy(
+                        ticker=ticker,
+                        metric_key=m,
+                        fiscal_year=fy,
+                        fiscal_year_label=src.get("fiscal_year_label", ""),
+                        reported_val=float(rep_val),
+                        canonical_val=float(canon_val),
+                        discrepancy_ledger=discrepancies,
+                        expected_discrepancy_id=o.get("discrepancy_reference")
+                    )
+                    if matched is not None:
+                        audited_count += 1
+                    else:
+                        metrics_valid = False
+                        break
+        else:
+            metrics_valid = False
 
         if doc_id_ok and metrics_valid:
             numerical_recon_status = "EXACT_OR_APPROVED_ADJUSTMENT"

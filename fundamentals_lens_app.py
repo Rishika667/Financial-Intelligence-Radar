@@ -572,14 +572,23 @@ if selected_page == "Overview":
     # 4 Quick Snapshot KPIs
     kpi_c1, kpi_c2, kpi_c3, kpi_c4 = st.columns(4)
     with kpi_c1:
-        growth_str = f"{latest_der.revenue_growth_yoy:+.1f}% YoY" if latest_der.revenue_growth_yoy is not None else "Baseline"
-        st.markdown(f"""
-        <div class="kpi-card">
-            <div class="kpi-label">Latest Revenue ({latest_fact.fiscal_year_label})</div>
-            <div class="kpi-val">{latest_fact.revenue:,.1f} <span style="font-size:1rem;font-weight:400;">{unit}</span></div>
-            <div class="kpi-delta {'pos' if (latest_der.revenue_growth_yoy or 0) >= 0 else 'neg'}">{growth_str}</div>
-        </div>
-        """, unsafe_allow_html=True)
+        if selected_ticker == "MARUTI":
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">Latest Revenue ({latest_fact.fiscal_year_label})</div>
+                <div class="kpi-val">{latest_fact.revenue:,.1f} <span style="font-size:1rem;font-weight:400;">{unit}</span></div>
+                <div class="kpi-delta pos">+14.7% Reported | +20.2% Like-for-Like (DISC-017)</div>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            growth_str = f"{latest_der.revenue_growth_yoy:+.1f}% YoY" if latest_der.revenue_growth_yoy is not None else "Baseline"
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">Latest Revenue ({latest_fact.fiscal_year_label})</div>
+                <div class="kpi-val">{latest_fact.revenue:,.1f} <span style="font-size:1rem;font-weight:400;">{unit}</span></div>
+                <div class="kpi-delta {'pos' if (latest_der.revenue_growth_yoy or 0) >= 0 else 'neg'}">{growth_str}</div>
+            </div>
+            """, unsafe_allow_html=True)
         
     with kpi_c2:
         op_margin_str = f"{latest_der.operating_margin:.1f}%" if latest_der.operating_margin is not None else "N/A"
@@ -730,22 +739,34 @@ elif selected_page == "Company Analysis":
 
         g_col1, g_col2, g_col3, g_col4 = st.columns(4)
         with g_col1:
+            cagr_delta = f"{len(c_facts) - 1} Annual Intervals"
+            if selected_ticker == "MARUTI":
+                cagr_delta = "⚠ Definition Scope Nuance (DISC-017)"
             st.markdown(f"""
             <div class="kpi-card">
                 <div class="kpi-label">5-Year Revenue CAGR</div>
                 <div class="kpi-val">{cagr_str}</div>
-                <div class="kpi-delta neu">{len(c_facts) - 1} Annual Intervals</div>
+                <div class="kpi-delta neu">{cagr_delta}</div>
             </div>
             """, unsafe_allow_html=True)
         with g_col2:
             latest_growth = latest_der.revenue_growth_yoy
-            st.markdown(f"""
-            <div class="kpi-card">
-                <div class="kpi-label">Latest YoY Growth</div>
-                <div class="kpi-val">{f"{latest_growth:+.2f}%" if latest_growth is not None else "N/A"}</div>
-                <div class="kpi-delta {'pos' if (latest_growth or 0) >= 0 else 'neg'}">{latest_fact.fiscal_year_label} vs {c_facts[-2].fiscal_year_label}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            if selected_ticker == "MARUTI":
+                st.markdown(f"""
+                <div class="kpi-card">
+                    <div class="kpi-label">Latest YoY Growth (Reported / Like-for-Like)</div>
+                    <div class="kpi-val">+14.72% / +20.16%</div>
+                    <div class="kpi-delta pos">Reported Operations (+14.7%) vs Net Sales (+20.2%)</div>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                <div class="kpi-card">
+                    <div class="kpi-label">Latest YoY Growth</div>
+                    <div class="kpi-val">{f"{latest_growth:+.2f}%" if latest_growth is not None else "N/A"}</div>
+                    <div class="kpi-delta {'pos' if (latest_growth or 0) >= 0 else 'neg'}">{latest_fact.fiscal_year_label} vs {c_facts[-2].fiscal_year_label}</div>
+                </div>
+                """, unsafe_allow_html=True)
         with g_col3:
             st.markdown(f"""
             <div class="kpi-card">
@@ -763,6 +784,14 @@ elif selected_page == "Company Analysis":
             </div>
             """, unsafe_allow_html=True)
 
+        if selected_ticker == "MARUTI":
+            st.info(
+                "📌 **Maruti Suzuki Comparability Guidance (DISC-017):**  \n"
+                "• **Reported Ind AS Operations YoY (+14.72%):** FY 2025–26 Net Sales of ₹174,370 Cr compared nominally to FY 2024–25 Total Revenue from Operations of ₹152,000 Cr.  \n"
+                "• **Like-for-Like Automotive Net Sales YoY (+20.16% / +20.2%):** FY 2025–26 Net Sales of ₹174,370 Cr compared directly to FY 2024–25 Net Sales of ₹145,115.2 Cr (excluding ₹6,884.8 Cr of other operating revenue).  \n"
+                "• **5-Year Continuous CAGR Qualification:** FY 2021–22 baseline reflects Total Revenue from Operations (₹88,296 Cr) while FY 2025–26 reflects Net Sales (₹174,370 Cr). Continuous CAGR (+14.58%) spans mixed definitions."
+            )
+
         st.markdown("")
         st.plotly_chart(plot_revenue_and_operating_profit(c_facts, c_derived, unit), use_container_width=True)
 
@@ -772,13 +801,21 @@ elif selected_page == "Company Analysis":
             d = c_derived[i]
             prior_rev = c_facts[i-1].revenue if i > 0 else None
             abs_delta = f.revenue - prior_rev if prior_rev is not None else None
-            rev_table.append({
+            row_dict = {
                 "Fiscal Period": f.fiscal_year_label,
                 "Period End": f.period_end,
                 f"Revenue ({unit})": f"{f.revenue:,.1f}",
                 f"Absolute Change ({unit})": f"{abs_delta:+,.1f}" if abs_delta is not None else "— (Baseline)",
                 "YoY Growth Rate": f"{d.revenue_growth_yoy:+.2f}%" if d.revenue_growth_yoy is not None else "— (Baseline)",
-            })
+            }
+            if selected_ticker == "MARUTI":
+                if f.fiscal_year == 2025:
+                    row_dict["Accounting Note (DISC-017)"] = "Total Revenue ₹152,000 Cr (Net Sales ₹145,115.2 Cr + Other ₹6,884.8 Cr)"
+                elif f.fiscal_year == 2026:
+                    row_dict["Accounting Note (DISC-017)"] = "Net Sales ₹174,370 Cr (+20.16% Like-for-Like Net Sales YoY)"
+                else:
+                    row_dict["Accounting Note (DISC-017)"] = "Ind AS Total Revenue from Operations"
+            rev_table.append(row_dict)
         st.dataframe(pd.DataFrame(rev_table), hide_index=True, use_container_width=True)
 
         # Analytical Insight Card

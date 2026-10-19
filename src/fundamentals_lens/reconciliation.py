@@ -202,17 +202,24 @@ def find_matching_approved_discrepancy(
     fiscal_year_label: str,
     reported_val: float,
     canonical_val: float,
-    discrepancy_ledger: List[Dict[str, Any]]
+    discrepancy_ledger: List[Dict[str, Any]],
+    expected_discrepancy_id: Optional[str] = None
 ) -> Optional[Dict[str, Any]]:
     """
     Validates whether a numerical mismatch matches an EXACT approved entry in the discrepancy ledger.
-    Requires exact ticker, metric, fiscal year, and exact matching of the approved reported value.
+    Requires exact ticker, metric, fiscal year, and exact matching of the approved reported value
+    and approved canonical value.
+    Rejects unapproved, pending, or classification-only discrepancies that lack numerical adjustment.
     Supports top-level single metric entries, multi-metric detail entries (affected_metrics_detail),
     and multi-period entries.
     Arbitrary mismatches without matching numerical amounts are strictly rejected.
     """
     for d in discrepancy_ledger:
         if d.get("ticker") != ticker:
+            continue
+
+        # If a specific discrepancy ID is expected, enforce exact match
+        if expected_discrepancy_id and d.get("discrepancy_id") != expected_discrepancy_id:
             continue
 
         # Check status is approved/resolved
@@ -236,7 +243,16 @@ def find_matching_approved_discrepancy(
             approved_rep = d.get("primary_reported_value")
             if approved_rep is None:
                 approved_rep = d.get("reported_value")
+            approved_canon = d.get("final_canonical_value")
+            if approved_canon is None:
+                approved_canon = d.get("canonical_value")
+
             if approved_rep is not None and abs(float(reported_val) - float(approved_rep)) < 0.001:
+                if approved_canon is not None and abs(float(canonical_val) - float(approved_canon)) >= 0.001:
+                    continue
+                finding = d.get("investigation_finding") or d.get("resolution_rationale") or d.get("resolution")
+                if not finding or len(str(finding).strip()) < 5:
+                    continue
                 return d
 
         # Check 2: Sub-metric or multi-period detail match in affected_metrics_detail
@@ -253,13 +269,22 @@ def find_matching_approved_discrepancy(
             approved_rep = det.get("primary_reported_value")
             if approved_rep is None:
                 approved_rep = det.get("reported_value")
+            approved_canon = det.get("final_canonical_value")
+            if approved_canon is None:
+                approved_canon = det.get("canonical_value") or d.get("final_canonical_value") or d.get("canonical_value")
+
             if approved_rep is not None and abs(float(reported_val) - float(approved_rep)) < 0.001:
+                if approved_canon is not None and abs(float(canonical_val) - float(approved_canon)) >= 0.001:
+                    continue
+                finding = det.get("investigation_finding") or d.get("investigation_finding") or d.get("resolution_rationale")
+                if not finding or len(str(finding).strip()) < 5:
+                    continue
                 return {
                     **d,
                     "matched_sub_metric": metric_key,
                     "primary_reported_value": approved_rep,
                     "final_canonical_value": det.get("final_canonical_value"),
-                    "investigation_finding": det.get("investigation_finding") or d.get("investigation_finding")
+                    "investigation_finding": finding
                 }
 
     return None
@@ -441,7 +466,8 @@ def reconcile_metric_observation(
         disc_note = f"Period chronology mismatch: {period_mismatch_reason or f'period_start={obs_pstart}, period_end={obs_pend} does not span valid fiscal year {fiscal_year}.'}"
         conv_formula = "None (Period duration or fiscal calendar mismatch)"
     else:
-        # First check for exact approved discrepancy adjustment in ledger
+        # Check for exact approved discrepancy adjustment in ledger
+        disc_ref = obs_entry.get("discrepancy_reference")
         matched_disc = find_matching_approved_discrepancy(
             ticker=ticker,
             metric_key=metric_key,
@@ -449,14 +475,9 @@ def reconcile_metric_observation(
             fiscal_year_label=fiscal_year_label,
             reported_val=float(reported_val),
             canonical_val=float(canonical_val),
-            discrepancy_ledger=discrepancy_ledger
+            discrepancy_ledger=discrepancy_ledger,
+            expected_discrepancy_id=disc_ref
         )
-        if not matched_disc and obs_entry.get("discrepancy_reference"):
-            disc_ref = obs_entry.get("discrepancy_reference")
-            for d in discrepancy_ledger:
-                if d.get("discrepancy_id") == disc_ref:
-                    matched_disc = d
-                    break
 
         if matched_disc is not None:
             numeric_status = NumericReconciliationStatus.RECONCILED_WITH_APPROVED_ADJUSTMENT.value
@@ -474,6 +495,15 @@ def reconcile_metric_observation(
                     disc_note = f"Reconciled to Form 10-K {stmt_name} under accession {acc_id}."
                 else:
                     disc_note = f"Reconciled to Ind AS Consolidated {stmt_name} ({acc_id}).."
+
+                # Annotate informational / classification discrepancy note if referenced
+                if disc_ref:
+                    for d in discrepancy_ledger:
+                        if d.get("discrepancy_id") == disc_ref and d.get("ticker") == ticker:
+                            finding = d.get("investigation_finding") or d.get("resolution_rationale")
+                            if finding:
+                                disc_note += f" [Classification/Trend Note ({disc_ref}): {finding}]"
+                            break
 
                 # Evidentiary gate: Live retrieval or hashed artifact earns INDEPENDENTLY_RECONCILED;
                 # Tracked extract matching canonical fact earns TRACKED_OFFLINE_EXTRACT.
@@ -533,6 +563,8 @@ def reconcile_metric_observation(
         "verification_mode": verification_mode,
         "verification_timestamp": verification_timestamp,
         "is_reconciled": is_reconciled,
+        "is_independently_reconciled": tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value,
+        "is_tracked_offline_extract": tier == ReconciliationTier.TRACKED_OFFLINE_EXTRACT.value,
         "approved_discrepancy_id": matched_disc["discrepancy_id"] if matched_disc else None
     }
 

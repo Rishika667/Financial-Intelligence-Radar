@@ -28,7 +28,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-21-000105",
     "internal_document_key": null
@@ -62,7 +62,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-22-000108",
     "internal_document_key": null
@@ -96,7 +96,7 @@
     "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-23-000106",
     "internal_document_key": null
@@ -130,7 +130,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-24-000123",
     "internal_document_key": null
@@ -164,7 +164,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000320193-25-000079",
     "internal_document_key": null
@@ -198,7 +198,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-22-000019",
     "internal_document_key": null
@@ -232,7 +232,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-23-000016",
     "internal_document_key": null
@@ -266,7 +266,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-24-000022",
     "internal_document_key": null
@@ -300,7 +300,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001652044-25-000014",
     "internal_document_key": null
@@ -334,7 +334,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "official_filing_id": "0001652044-26-000018",
     "reference_type": "SEC_ACCESSION",
     "internal_document_key": null
@@ -368,7 +368,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001564590-22-026876",
     "internal_document_key": null
@@ -402,7 +402,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000950170-23-035122",
     "internal_document_key": null
@@ -436,7 +436,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000950170-24-087843",
     "internal_document_key": null
@@ -470,7 +470,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000950170-25-100235",
     "internal_document_key": null
@@ -504,7 +504,7 @@
     "notes": "Audited primary 10-K consolidated financial statements; substantial AI datacenter capex.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0001193125-26-323660",
     "internal_document_key": null
@@ -538,7 +538,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2021-22"
@@ -572,7 +572,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2022-23"
@@ -606,7 +606,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2023-24"
@@ -640,7 +640,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2024-25"
@@ -674,7 +674,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532281-AR-2025-26"
@@ -708,7 +708,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2021-22"
@@ -742,7 +742,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2022-23"
@@ -776,7 +776,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2023-24"
@@ -810,7 +810,7 @@
     "notes": "Audited consolidated financial statements in INR crores.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2024-25"
@@ -844,7 +844,7 @@
     "notes": "Audited consolidated financial statements in INR crores.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Net income reflects Net profit attributable to owners of Rs 29,440 Cr. Total consolidated profit for period is Rs 29,474 Cr (DISC-009).",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500209-AR-2025-26"
@@ -878,7 +878,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2021-22"
@@ -912,7 +912,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2022-23"
@@ -946,7 +946,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2023-24"
@@ -980,7 +980,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Capex reflects PPE AND INTANGIBLES (includes CWIP or intangibles), which may be broader than standard US GAAP PPE-only additions.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2024-25"
@@ -1014,7 +1014,7 @@
     "notes": "Audited consolidated Ind AS financial statements; 25.0% operating margin.",
     "comparability_flag": "LIMITED",
     "accounting_notes": "Operating income reflects Operating profit before exceptional items and other income (PBEI Proxy). 5-year trend reports EBIT of Rs 66,838 Cr (DISC-007).",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532540-AR-2025-26"
@@ -1048,7 +1048,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2021-22"
@@ -1082,7 +1082,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2022-23"
@@ -1116,7 +1116,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2023-24"
@@ -1150,7 +1150,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2024-25"
@@ -1184,7 +1184,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500825-AR-2025-26"
@@ -1218,7 +1218,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2021-22"
@@ -1252,7 +1252,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2022-23"
@@ -1286,7 +1286,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2023-24"
@@ -1320,7 +1320,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2024-25"
@@ -1354,7 +1354,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500096-AR-2025-26"
@@ -1388,7 +1388,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2021-22"
@@ -1422,7 +1422,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2022-23"
@@ -1456,7 +1456,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2023-24"
@@ -1490,7 +1490,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2024-25"
@@ -1524,7 +1524,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500696-AR-2025-26"
@@ -1558,7 +1558,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2021-22"
@@ -1592,7 +1592,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2022-23"
@@ -1626,7 +1626,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2023-24"
@@ -1660,7 +1660,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2024-25"
@@ -1694,7 +1694,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income reflects EBITDA of Rs 12,019 Cr (EBITDA Proxy). Depreciation is Rs 448.2 Cr, EBIT ~Rs 11,570.8 Cr (DISC-008).",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532977-AR-2025-26"
@@ -1728,7 +1728,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2021-22"
@@ -1762,7 +1762,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2022-23"
@@ -1796,7 +1796,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2023-24"
@@ -1830,7 +1830,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2024-25"
@@ -1864,7 +1864,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-500182-AR-2025-26"
@@ -1898,7 +1898,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2021-22"
@@ -1932,7 +1932,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2022-23"
@@ -1966,7 +1966,7 @@
     "notes": "Audited Ind AS consolidated financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2023-24"
@@ -2000,7 +2000,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "SOURCE_LINKED_ONLY",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2024-25"
@@ -2034,7 +2034,7 @@
     "notes": "Audited consolidated Ind AS financial statements.",
     "comparability_flag": "PROXY",
     "accounting_notes": "Operating income is estimated using Profit Before Exceptional Items and Tax (PBEI) proxy under Ind AS because separate operating EBIT is not disclosed. Excludes other income.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "INTERNAL_DOCUMENT_KEY",
     "official_filing_id": null,
     "internal_document_key": "BSE-SCRIP-532500-AR-2025-26"
@@ -2068,7 +2068,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-22-000021",
     "internal_document_key": null
@@ -2102,7 +2102,7 @@
     "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-23-000042",
     "internal_document_key": null
@@ -2136,7 +2136,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-24-000049",
     "internal_document_key": null
@@ -2170,7 +2170,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-25-000101",
     "internal_document_key": null
@@ -2204,7 +2204,7 @@
     "notes": "Audited primary 10-K consolidated financial statements; 52-week period.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000909832-26-000093",
     "internal_document_key": null
@@ -2238,7 +2238,7 @@
     "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 29, 2022.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-22-000007",
     "internal_document_key": null
@@ -2272,7 +2272,7 @@
     "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 28, 2023.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-23-000015",
     "internal_document_key": null
@@ -2306,7 +2306,7 @@
     "notes": "Audited primary 10-K consolidated financial statements; 53-week fiscal year ended February 3, 2024.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-24-000032",
     "internal_document_key": null
@@ -2340,7 +2340,7 @@
     "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended February 1, 2025.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-25-000018",
     "internal_document_key": null
@@ -2374,7 +2374,7 @@
     "notes": "Audited primary 10-K consolidated financial statements; 52-week fiscal year ended January 31, 2026.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000027419-26-000016",
     "internal_document_key": null
@@ -2408,7 +2408,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-22-000012",
     "internal_document_key": null
@@ -2442,7 +2442,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-23-000020",
     "internal_document_key": null
@@ -2476,7 +2476,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-24-000056",
     "internal_document_key": null
@@ -2510,7 +2510,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-25-000021",
     "internal_document_key": null
@@ -2544,7 +2544,7 @@
     "notes": "Audited primary 10-K consolidated financial statements.",
     "comparability_flag": "DIRECT",
     "accounting_notes": "Direct primary statement disclosure; directly comparable within peer group.",
-    "reconciliation_tier": "INDEPENDENTLY_RECONCILED",
+    "reconciliation_tier": "TRACKED_OFFLINE_EXTRACT",
     "reference_type": "SEC_ACCESSION",
     "official_filing_id": "0000104169-26-000055",
     "internal_document_key": null

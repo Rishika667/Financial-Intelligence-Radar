@@ -167,10 +167,14 @@ def test_isolated_clean_clone_offline_rebuild():
         )
         assert res.returncode == 0, f"Git clone failed: {res.stderr}"
 
-        # Assert commit SHA equality between clone HEAD and source repo HEAD
+        # Assert commit SHA equality between clone HEAD and source repo HEAD, and verify against explicit EXPECTED_COMMIT_SHA if provided
+        import os
+        expected_sha = os.environ.get("EXPECTED_COMMIT_SHA") or os.environ.get("EXPECTED_RELEASE_SHA")
         src_sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=str(REPO_ROOT), capture_output=True, text=True).stdout.strip()
         clone_sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=str(tmp_clone), capture_output=True, text=True).stdout.strip()
         assert clone_sha == src_sha, f"Clean clone HEAD SHA ({clone_sha}) does not match repo HEAD SHA ({src_sha})"
+        if expected_sha:
+            assert clone_sha == expected_sha, f"Clean clone HEAD SHA ({clone_sha}) does not match explicitly expected release SHA ({expected_sha})"
 
         # Verify scratch/sec_cache is NOT present in fresh clone
         assert not (tmp_clone / "scratch" / "sec_cache").exists()

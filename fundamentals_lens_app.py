@@ -1321,8 +1321,11 @@ elif selected_page == "Price & Technical Analysis":
             currency=active_currency
         )
 
-        badge_html = " <span class='badge-limited' style='background:#FEF3C7; color:#92400E; padding:2px 8px; border-radius:4px; font-size:0.8rem; font-weight:600;'>SIMULATED DEMO</span>" if is_sim else ""
-        st.markdown(f"#### **Quantitative Snapshot — `{active_ticker}`** ({summary.total_bars} bars, `{clean_df['Date_Str'].iloc[0]}` to `{summary.last_date}`){badge_html}", unsafe_allow_html=True)
+        if is_sim:
+            badge_html = " <span class='badge-limited' style='background:#FEF3C7; color:#92400E; padding:3px 10px; border-radius:4px; font-size:0.8rem; font-weight:600; border:1px solid #FCD34D;'>⚠️ SIMULATED DEMO DATA</span>"
+        else:
+            badge_html = " <span style='background:#DCFCE7; color:#166534; padding:3px 10px; border-radius:4px; font-size:0.8rem; font-weight:600; border:1px solid #86EFAC;'>🛡️ USER / RECORDED MARKET DATA</span>"
+        st.markdown(f"#### **Quantitative Snapshot — `{active_ticker}`** ({summary.total_bars} bars, `{clean_df['Date_Str'].iloc[0]}` to `{summary.last_date}` | Currency: `{summary.currency}` | Basis: `{summary.price_adjustment_basis}`){badge_html}", unsafe_allow_html=True)
 
         # 4 Core KPI Cards with integrated indicator telemetry
         tkpi1, tkpi2, tkpi3, tkpi4 = st.columns(4)
@@ -1488,6 +1491,11 @@ elif selected_page == "Data Integrity & Methodology":
     2. **Zero Synthetic Coercion:** Missing data points are never converted into synthetic zeroes (`0.0`). Missing data is preserved as `None` with transparent explanations.
     3. **Consolidated Financial Basis:** Primary reported figures reflect the consolidated operations of the parent company and its subsidiaries.
     4. **Zero Operational Cost:** The product runs without paid APIs, runtime scraping, external cloud databases, or mandatory configuration.
+
+    ### **Verification Status Definitions & Retrieval Transparency**
+    - **Offline Audited (`OFFLINE_AUDITED` / `RETRIEVED_OFFLINE_EXTRACT`):** Financial metrics verified against tracked, version-controlled audited statement extracts and official filing documents stored in the repository. Offline execution guarantees 100% deterministic reproducibility without active network calls or token dependencies.
+    - **Fresh Online Retrieval (`RETRIEVED_ONLINE_EDGAR` / `RETRIEVED_ONLINE_BSE`):** Strictly emitted ONLY when a live HTTP retrieval to official SEC EDGAR archives or BSE/NSE exchanges succeeded with HTTP 200 during the current execution run. An offline reproducibility run is NEVER counted as fresh online retrieval.
+    - **Reconciliation Tiers (`INDEPENDENTLY_RECONCILED` vs `SOURCE_LINKED_ONLY`):** A metric is marked `INDEPENDENTLY_RECONCILED` only when document identity, filing form (Form 10-K), official domain, valid 300–400 day annual duration, specific audited statement locator, and exact numerical alignment (or approved discrepancy entry) are ALL simultaneously proven. If retrieval failed or locators are pending, it is categorized as `SOURCE_LINKED_ONLY`.
     """)
 
     st.markdown("---")

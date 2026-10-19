@@ -24,6 +24,34 @@ INDIAN_OFFICIAL_DOMAINS = {
     "HEROMOTOCO": "heromotocorp.com"
 }
 
+# Standard fiscal calendar ending months for target universe companies
+COMPANY_FISCAL_END_MONTHS = {
+    "AAPL": 9,      # September
+    "MSFT": 6,      # June
+    "GOOGL": 12,    # December
+    "AMZN": 12,     # December
+    "NVDA": 1,      # January
+    "COST": 8,      # August/September
+    "WMT": 1,       # January
+    "TGT": 1,       # January/February
+    "TCS": 3,       # March
+    "INFY": 3,      # March
+    "HCLTECH": 3,   # March
+    "RELIANCE": 3,  # March
+    "HDFCBANK": 3,  # March
+    "BRITANNIA": 3, # March
+    "DABUR": 3,     # March
+    "MARUTI": 3,    # March
+    "BAJAJ-AUTO": 3,# March
+    "HEROMOTOCO": 3,# March
+    "BAJAJFINSV": 3 # March
+}
+
+MONTH_NAME_TO_NUM = {
+    "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
+    "july": 7, "august": 8, "september": 9, "october": 10, "november": 11, "december": 12
+}
+
 
 class DocumentIdentityStatus(str, Enum):
     VALIDATED = "VALIDATED"
@@ -79,6 +107,10 @@ def derive_document_identity_verified(
     Never unconditionally returns True.
     """
     ticker = source_entry.get("ticker", "")
+    meta_ticker = company_meta.get("ticker", "")
+    if ticker and meta_ticker and ticker != meta_ticker:
+        return False, f"Document ticker mismatch: source '{ticker}' does not match company '{meta_ticker}'"
+
     country = company_meta.get("country", "")
     is_us = (country == "US" or source_entry.get("reference_type") == "SEC_ACCESSION")
     url = source_entry.get("source_url", "")
@@ -232,7 +264,9 @@ def reconcile_metric_observation(
     discrepancy_ledger: List[Dict[str, Any]],
     obs_entry: Dict[str, Any],
     verification_mode: str = "OFFLINE",
-    verification_timestamp: str = ""
+    verification_timestamp: str = "",
+    company_meta: Optional[Dict[str, Any]] = None,
+    retrieval_outcome: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     """
     Single explicit record-level reconciliation function.
@@ -251,31 +285,74 @@ def reconcile_metric_observation(
     )
 
     is_us = (src_entry.get("reference_type") == "SEC_ACCESSION" or src_entry.get("country") == "US")
-    if verification_mode == "ONLINE":
-        doc_retrieval_status = (
-            DocumentRetrievalStatus.RETRIEVED_ONLINE_EDGAR.value
-            if is_us
-            else DocumentRetrievalStatus.RETRIEVED_ONLINE_BSE.value
-        )
-    else:
-        doc_retrieval_status = DocumentRetrievalStatus.RETRIEVED_OFFLINE_EXTRACT.value
 
-    # Substantive period match check: verify fiscal year, period dates exist, start < end, and duration is 300..400 days
+    # Explicit per-document retrieval outcome handling
+    outcome = retrieval_outcome or src_entry.get("retrieval_outcome") or obs_entry.get("retrieval_outcome")
+    if outcome is not None:
+        outcome_status = str(outcome.get("outcome") or outcome.get("status") or "").upper()
+        http_code = outcome.get("http_status")
+        if outcome_status == "SUCCESS" or http_code == 200:
+            doc_retrieval_status = (
+                DocumentRetrievalStatus.RETRIEVED_ONLINE_EDGAR.value
+                if is_us
+                else DocumentRetrievalStatus.RETRIEVED_ONLINE_BSE.value
+            )
+        elif outcome_status in ("TIMEOUT", "INCONCLUSIVE"):
+            doc_retrieval_status = DocumentRetrievalStatus.INCONCLUSIVE.value
+        elif outcome_status == "NOT_ATTEMPTED":
+            doc_retrieval_status = DocumentRetrievalStatus.NOT_CHECKED.value
+        else:
+            doc_retrieval_status = DocumentRetrievalStatus.FAILED.value
+    else:
+        if verification_mode == "ONLINE":
+            # In online mode without recorded successful retrieval outcome, status is NOT_CHECKED
+            doc_retrieval_status = DocumentRetrievalStatus.NOT_CHECKED.value
+        else:
+            doc_retrieval_status = (
+                src_entry.get("check_status")
+                or obs_entry.get("source_document_status")
+                or DocumentRetrievalStatus.RETRIEVED_OFFLINE_EXTRACT.value
+            )
+
+    # Substantive period match check: verify fiscal year, period dates exist, start < end, duration is 300..400 days,
+    # and period_end month aligns with company fiscal calendar
     obs_fy = obs_entry.get("fiscal_year")
     obs_pstart = obs_entry.get("period_start")
     obs_pend = obs_entry.get("period_end")
     period_match_status = PeriodMatchStatus.PERIOD_MISMATCH.value
+    period_mismatch_reason = ""
     if obs_fy == fiscal_year and obs_pstart and obs_pend:
         try:
             p_start_d = date.fromisoformat(str(obs_pstart)[:10])
             p_end_d = date.fromisoformat(str(obs_pend)[:10])
             duration_days = (p_end_d - p_start_d).days
             if p_start_d < p_end_d and 300 <= duration_days <= 400:
-                period_match_status = PeriodMatchStatus.EXACT_PERIOD_MATCH.value
+                # Check company fiscal calendar alignment
+                meta_end_month = None
+                if company_meta and company_meta.get("fiscal_year_end_month"):
+                    m_name = str(company_meta.get("fiscal_year_end_month")).strip().lower()
+                    meta_end_month = MONTH_NAME_TO_NUM.get(m_name)
+                elif ticker in COMPANY_FISCAL_END_MONTHS:
+                    meta_end_month = COMPANY_FISCAL_END_MONTHS[ticker]
+
+                if meta_end_month is not None:
+                    allowed_months = {meta_end_month, (meta_end_month % 12) + 1}
+                    if p_end_d.month in allowed_months:
+                        period_match_status = PeriodMatchStatus.EXACT_PERIOD_MATCH.value
+                    else:
+                        period_match_status = PeriodMatchStatus.PERIOD_MISMATCH.value
+                        period_mismatch_reason = (
+                            f"Fiscal calendar mismatch: ticker '{ticker}' fiscal year ends around month {meta_end_month}, "
+                            f"but observation period_end '{obs_pend}' is month {p_end_d.month}."
+                        )
+                else:
+                    period_match_status = PeriodMatchStatus.EXACT_PERIOD_MATCH.value
             else:
                 period_match_status = PeriodMatchStatus.PERIOD_MISMATCH.value
-        except (ValueError, TypeError):
+                period_mismatch_reason = f"Duration outside 300..400 days ({duration_days} days) or invalid chronological bounds."
+        except (ValueError, TypeError) as e:
             period_match_status = PeriodMatchStatus.PERIOD_MISMATCH.value
+            period_mismatch_reason = f"Invalid date formatting: {e}"
 
     # Substantive metric extraction status check
     loc = (obs_entry.get("statement_locator") or "").strip()
@@ -324,6 +401,16 @@ def reconcile_metric_observation(
         is_reconciled = False
         disc_note = "Filing document identity check failed (malformed accession, CIK path mismatch, or invalid filing key)."
         conv_formula = "None (Filing document identity could not be validated)"
+    elif verification_mode == "ONLINE" and doc_retrieval_status in (
+        DocumentRetrievalStatus.FAILED.value,
+        DocumentRetrievalStatus.INCONCLUSIVE.value,
+        DocumentRetrievalStatus.NOT_CHECKED.value
+    ):
+        numeric_status = NumericReconciliationStatus.NOT_RECONCILED.value
+        tier = ReconciliationTier.SOURCE_LINKED_ONLY.value
+        is_reconciled = False
+        disc_note = f"Online document retrieval outcome was '{doc_retrieval_status}'; fresh online independent reconciliation unconfirmed; cannot earn INDEPENDENTLY_RECONCILED tier without verified live retrieval."
+        conv_formula = "None (Online retrieval outcome unconfirmed)"
     elif reported_val is None or metric_extraction_status == MetricExtractionStatus.VALUE_NOT_LOCATED.value:
         numeric_status = NumericReconciliationStatus.NOT_RECONCILED.value
         tier = ReconciliationTier.SOURCE_LINKED_ONLY.value
@@ -334,8 +421,8 @@ def reconcile_metric_observation(
         numeric_status = NumericReconciliationStatus.UNEXPLAINED_DISCREPANCY.value
         tier = ReconciliationTier.DISCREPANT.value
         is_reconciled = False
-        disc_note = f"Period chronology mismatch: period_start={obs_pstart}, period_end={obs_pend} does not span valid fiscal year {fiscal_year}."
-        conv_formula = "None (Period duration mismatch)"
+        disc_note = f"Period chronology mismatch: {period_mismatch_reason or f'period_start={obs_pstart}, period_end={obs_pend} does not span valid fiscal year {fiscal_year}.'}"
+        conv_formula = "None (Period duration or fiscal calendar mismatch)"
     else:
         diff = abs(float(reported_val) - float(canonical_val))
         if diff < 0.001:
@@ -442,3 +529,64 @@ def derive_source_reconciliation_status(
         return ReconciliationTier.INDEPENDENTLY_RECONCILED.value
 
     return ReconciliationTier.SOURCE_LINKED_ONLY.value
+
+
+def validate_reconciliation_telemetry(record: Dict[str, Any]) -> Tuple[bool, List[str]]:
+    """
+    Validates that a reconciled metric record does not contain contradictory combinations of:
+    - verification_mode
+    - document_retrieval_status
+    - document_identity_status
+    - period_match_status
+    - metric_extraction_status
+    - reconciliation_tier
+    - verification_timestamp
+    """
+    errors: List[str] = []
+    mode = record.get("verification_mode")
+    ret_status = record.get("document_retrieval_status")
+    id_status = record.get("document_identity_status")
+    period_status = record.get("period_match_status")
+    ext_status = record.get("metric_extraction_status")
+    tier = record.get("reconciliation_tier")
+    timestamp = record.get("verification_timestamp")
+
+    # 1. Offline build claiming online retrieval
+    if mode == "OFFLINE" and ret_status in (
+        DocumentRetrievalStatus.RETRIEVED_ONLINE_EDGAR.value,
+        DocumentRetrievalStatus.RETRIEVED_ONLINE_BSE.value
+    ):
+        errors.append(f"Contradictory telemetry: verification_mode is OFFLINE but document_retrieval_status is '{ret_status}'.")
+
+    # 2. Failed, Inconclusive, or Unchecked online retrieval earning INDEPENDENTLY_RECONCILED in online mode
+    if mode == "ONLINE" and ret_status in (
+        DocumentRetrievalStatus.FAILED.value,
+        DocumentRetrievalStatus.INCONCLUSIVE.value,
+        DocumentRetrievalStatus.NOT_CHECKED.value
+    ) and tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value:
+        errors.append(f"Contradictory telemetry: reconciliation_tier is INDEPENDENTLY_RECONCILED in ONLINE mode despite retrieval status '{ret_status}'.")
+
+    # 3. Unverified identity earning INDEPENDENTLY_RECONCILED
+    if id_status == DocumentIdentityStatus.UNVERIFIED.value and tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value:
+        errors.append("Contradictory telemetry: reconciliation_tier is INDEPENDENTLY_RECONCILED but document_identity_status is UNVERIFIED.")
+
+    # 4. Period mismatch earning INDEPENDENTLY_RECONCILED
+    if period_status == PeriodMatchStatus.PERIOD_MISMATCH.value and tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value:
+        errors.append("Contradictory telemetry: reconciliation_tier is INDEPENDENTLY_RECONCILED but period_match_status is PERIOD_MISMATCH.")
+
+    # 5. Missing line item extraction earning INDEPENDENTLY_RECONCILED
+    if ext_status == MetricExtractionStatus.VALUE_NOT_LOCATED.value and tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value:
+        errors.append("Contradictory telemetry: reconciliation_tier is INDEPENDENTLY_RECONCILED but metric_extraction_status is VALUE_NOT_LOCATED.")
+
+    # 6. Reconciled tier without verification timestamp
+    if tier == ReconciliationTier.INDEPENDENTLY_RECONCILED.value and not timestamp:
+        errors.append("Contradictory telemetry: reconciliation_tier is INDEPENDENTLY_RECONCILED but verification_timestamp is empty.")
+
+    # 7. Online retrieved status without verification timestamp
+    if ret_status in (
+        DocumentRetrievalStatus.RETRIEVED_ONLINE_EDGAR.value,
+        DocumentRetrievalStatus.RETRIEVED_ONLINE_BSE.value
+    ) and not timestamp:
+        errors.append(f"Contradictory telemetry: document_retrieval_status is '{ret_status}' but verification_timestamp is empty.")
+
+    return len(errors) == 0, errors

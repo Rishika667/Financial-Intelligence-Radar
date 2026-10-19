@@ -73,7 +73,9 @@ def validate_discrepancy_ledger(
     resolved_count = 0
     unresolved_count = 0
 
-    # Index facts and observations if provided
+    seen_ledger_keys: Set[Tuple[str, int, str]] = set()
+
+    # Index facts and observations if provided with collision detection
     facts_map: Dict[Tuple[str, int], Dict[str, Any]] = {}
     if financial_facts:
         for f in financial_facts:
@@ -81,7 +83,11 @@ def validate_discrepancy_ledger(
             t = f.get("ticker") if isinstance(f, dict) else getattr(f, "ticker", None)
             fy = f.get("fiscal_year") if isinstance(f, dict) else getattr(f, "fiscal_year", None)
             if t and fy:
-                facts_map[(t, int(fy))] = f if isinstance(f, dict) else f.__dict__
+                f_key = (t, int(fy))
+                if f_key in facts_map:
+                    errors.append(f"Duplicate financial fact encountered for ticker='{t}', fiscal_year={fy} in input facts population.")
+                else:
+                    facts_map[f_key] = f if isinstance(f, dict) else f.__dict__
 
     obs_map: Dict[Tuple[str, int, str], Dict[str, Any]] = {}
     if source_observations:
@@ -90,7 +96,11 @@ def validate_discrepancy_ledger(
             fy = o.get("fiscal_year")
             m = o.get("metric_name")
             if t and fy and m:
-                obs_map[(t, int(fy), m)] = o
+                o_key = (t, int(fy), m)
+                if o_key in obs_map:
+                    errors.append(f"Duplicate source observation encountered for ticker='{t}', fiscal_year={fy}, metric='{m}' in input observations population.")
+                else:
+                    obs_map[o_key] = o
 
     for idx, d in enumerate(ledger):
         did = d.get("discrepancy_id")
@@ -117,6 +127,13 @@ def validate_discrepancy_ledger(
         metric = d.get("metric")
         if not metric or metric not in ALL_ALLOWED_METRICS:
             errors.append(f"{entry_prefix}: Invalid metric '{metric}' (allowed: {sorted(ALL_ALLOWED_METRICS)})")
+
+        if ticker and fy and metric:
+            l_key = (ticker, fy, metric)
+            if l_key in seen_ledger_keys:
+                errors.append(f"{entry_prefix}: Duplicate ledger composite key for ticker='{ticker}', fiscal_year={fy}, metric='{metric}'")
+            else:
+                seen_ledger_keys.add(l_key)
 
         # 4. Category and classification
         category = d.get("discrepancy_category")

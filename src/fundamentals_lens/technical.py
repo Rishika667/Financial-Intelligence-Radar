@@ -418,7 +418,11 @@ def calculate_atr(
 
 def compute_technical_indicators(df: pd.DataFrame) -> pd.DataFrame:
     """Computes all technical indicators and appends them to dataframe."""
+    if df is None or df.empty:
+        return df.copy() if df is not None else pd.DataFrame()
     out = df.copy()
+    if "Date_Str" not in out.columns and "Date" in out.columns:
+        out["Date_Str"] = pd.to_datetime(out["Date"]).dt.strftime("%Y-%m-%d")
     close = out["Close"]
     high = out["High"]
     low = out["Low"]
@@ -463,13 +467,30 @@ def compute_technical_summary(
     - 52-Week High/Low is flagged as full 52-week only if >= 252 bars are available.
     - Benchmark return is only populated as 1-year if common overlapping history is >= 252 bars.
     """
+    if df is None or len(df) == 0:
+        return TechnicalSummary(
+            ticker=ticker,
+            last_date="N/A",
+            last_close=0.0,
+            total_bars=0,
+            is_simulated_demo=is_simulated_demo,
+            price_adjustment_basis=price_adjustment_basis,
+            currency=currency,
+            is_full_52w=False,
+            has_adequate_calendar_coverage=False
+        )
+
     if "RSI_14" not in df.columns:
         df = compute_technical_indicators(df)
 
+    if "Date_Str" not in df.columns and "Date" in df.columns:
+        df = df.copy()
+        df["Date_Str"] = pd.to_datetime(df["Date"]).dt.strftime("%Y-%m-%d")
+
     n = len(df)
     last_row = df.iloc[-1]
-    last_close = float(last_row["Close"])
-    last_date = str(last_row["Date_Str"])
+    last_close = float(last_row["Close"]) if pd.notna(last_row.get("Close")) else 0.0
+    last_date = str(last_row.get("Date_Str", last_row.get("Date", "N/A")))
 
     # Multi-period returns
     def get_pct_change(lookback: int) -> Optional[float]:
@@ -495,8 +516,8 @@ def compute_technical_summary(
         dates_window = pd.to_datetime(recent_window["Date"])
         cov_start_dt = dates_window.iloc[0]
         cov_end_dt = dates_window.iloc[-1]
-        cov_start_str = str(recent_window.iloc[0]["Date_Str"])
-        cov_end_str = str(recent_window.iloc[-1]["Date_Str"])
+        cov_start_str = str(recent_window.iloc[0].get("Date_Str", recent_window.iloc[0].get("Date", "N/A")))
+        cov_end_str = str(recent_window.iloc[-1].get("Date_Str", recent_window.iloc[-1].get("Date", "N/A")))
         cov_calendar_days = int((cov_end_dt - cov_start_dt).days)
 
         gaps = dates_window.diff().dt.days.dropna()
@@ -507,8 +528,8 @@ def compute_technical_summary(
             has_adequate_calendar_coverage = True
     elif n > 1:
         dates_all = pd.to_datetime(df["Date"])
-        cov_start_str = str(df.iloc[0]["Date_Str"])
-        cov_end_str = str(df.iloc[-1]["Date_Str"])
+        cov_start_str = str(df.iloc[0].get("Date_Str", df.iloc[0].get("Date", "N/A")))
+        cov_end_str = str(df.iloc[-1].get("Date_Str", df.iloc[-1].get("Date", "N/A")))
         cov_calendar_days = int((dates_all.iloc[-1] - dates_all.iloc[0]).days)
         gaps = dates_all.diff().dt.days.dropna()
         max_gap_days = int(gaps.max()) if len(gaps) > 0 else 0
@@ -523,8 +544,8 @@ def compute_technical_summary(
 
     # 52-Week High & Low (over available window up to 252 bars)
     w_bars = df.tail(min(252, n))
-    high_52w = float(w_bars["High"].max())
-    low_52w = float(w_bars["Low"].min())
+    high_52w = float(w_bars["High"].max()) if not w_bars.empty and pd.notna(w_bars["High"].max()) else 0.0
+    low_52w = float(w_bars["Low"].min()) if not w_bars.empty and pd.notna(w_bars["Low"].min()) else 0.0
     dist_high = round(((last_close / high_52w) - 1.0) * 100.0, 2) if high_52w > 0 else None
     dist_low = round(((last_close / low_52w) - 1.0) * 100.0, 2) if low_52w > 0 else None
 

@@ -85,10 +85,20 @@ class NarrativeEngine:
         if conv_insight:
             insights.append(conv_insight)
 
-        # 5. Capital Intensity & Reinvestment
+        # 5. Earnings Quality Divergence Insight (Accrual vs Cash Divergence / Cash Resilience)
+        eq_insight = cls._analyze_earnings_quality_divergence(sorted_facts, sorted_derived)
+        if eq_insight:
+            insights.append(eq_insight)
+
+        # 6. Capital Intensity & Reinvestment
         capex_insight = cls._analyze_capital_reinvestment(sorted_facts, sorted_derived)
         if capex_insight:
             insights.append(capex_insight)
+
+        # 7. Capex Harvesting / Moderation Insight
+        harvest_insight = cls._analyze_capex_harvesting(sorted_facts, sorted_derived)
+        if harvest_insight:
+            insights.append(harvest_insight)
 
         return insights
 
@@ -188,7 +198,15 @@ class NarrativeEngine:
                 what_to_investigate = "Investigate whether gross margins expanded or whether operating expenses (SG&A/R&D) grew at a slower rate than revenue."
             elif margin_delta <= -1.0:
                 headline = f"Operating Margin Compression ({margin_delta:.2f} percentage points)"
-                what_changed = f"Operating margin declined from {prior_op_margin:.1f}% in {prior_der.fiscal_year_label} to {curr_op_margin:.1f}% in {latest_der.fiscal_year_label}."
+                latest_growth = latest_der.revenue_growth_yoy
+                if latest_growth is not None and latest_growth > 0:
+                    what_changed = (
+                        f"Operating margin declined from {prior_op_margin:.1f}% in {prior_der.fiscal_year_label} to "
+                        f"{curr_op_margin:.1f}% in {latest_der.fiscal_year_label} ({margin_delta:.2f} percentage points) "
+                        f"despite top-line revenue expanding by {latest_growth:+.1f}% YoY, indicating margin dilution or rising operational cost absorption."
+                    )
+                else:
+                    what_changed = f"Operating margin declined from {prior_op_margin:.1f}% in {prior_der.fiscal_year_label} to {curr_op_margin:.1f}% in {latest_der.fiscal_year_label}."
                 why_it_matters = "Margin compression may indicate increased production costs, competitive pricing pressure, or planned overhead investments ahead of revenue."
                 what_to_investigate = "Check gross margin vs. SG&A breakdown in the notes to the financial statements to isolate the cost driver."
             else:
@@ -383,3 +401,144 @@ class NarrativeEngine:
             what_to_investigate=what_to_investigate,
             limitations=limitations
         )
+
+    @staticmethod
+    def _analyze_earnings_quality_divergence(
+        facts: List[FinancialFact],
+        derived: List[DerivedMetrics]
+    ) -> Optional[FinancialInsight]:
+        if len(facts) < 2 or len(derived) < 2:
+            return None
+
+        curr_fact = facts[-1]
+        prior_fact = facts[-2]
+        curr_der = derived[-1]
+        prior_der = derived[-2]
+        unit = curr_fact.unit
+
+        # Check divergence 1: Net income or Operating Income up, but Operating Cash Flow down
+        ni_delta = curr_fact.net_income - prior_fact.net_income
+        op_delta = curr_fact.operating_income - prior_fact.operating_income
+        ocf_delta = curr_fact.operating_cash_flow - prior_fact.operating_cash_flow
+
+        # Condition: Profits up + cash flow down
+        if (ni_delta > 0 or op_delta > 0) and ocf_delta < 0:
+            headline = "Earnings Quality Alert: Cash Flow Lags Accounting Profit Growth"
+            what_changed = (
+                f"Accounting earnings expanded in {curr_fact.fiscal_year_label} (Net Income: {prior_fact.net_income:,.0f} -> {curr_fact.net_income:,.0f} {unit}, "
+                f"Operating Income: {prior_fact.operating_income:,.0f} -> {curr_fact.operating_income:,.0f} {unit}), "
+                f"while Operating Cash Flow contracted by {abs(ocf_delta):,.0f} {unit} ({prior_fact.operating_cash_flow:,.0f} -> {curr_fact.operating_cash_flow:,.0f} {unit})."
+            )
+            evidence = (
+                f"Delta Net Income: {ni_delta:+,.0f} {unit} | Delta Operating Income: {op_delta:+,.0f} {unit} | "
+                f"Delta Operating Cash Flow: {ocf_delta:+,.0f} {unit} | Cash Conversion Ratio: {curr_der.cash_conversion_ratio:.2f}x (Prior: {prior_der.cash_conversion_ratio:.2f}x)."
+                if (curr_der.cash_conversion_ratio is not None and prior_der.cash_conversion_ratio is not None)
+                else f"Delta Net Income: {ni_delta:+,.0f} {unit} | Delta OCF: {ocf_delta:+,.0f} {unit}."
+            )
+            why_it_matters = (
+                "When reported accounting profit increases while cash generation declines, earnings quality weakens. "
+                "The divergence indicates that accounting accruals (e.g. uncollected trade receivables, deferred costs, or inventory absorption) "
+                "outpaced cash collections."
+            )
+            what_to_investigate = (
+                "Review the statement of cash flows reconciliation for increases in trade receivables (DSO expansion), "
+                "inventory buildup, or contract assets that may explain the cash realization lag."
+            )
+            limitations = "Short-term timing differences in working capital settlements near fiscal year-end do not necessarily indicate structural earnings manipulation."
+            return FinancialInsight(
+                category="EARNINGS_QUALITY_DIVERGENCE",
+                headline=headline,
+                what_changed=what_changed,
+                evidence=evidence,
+                why_it_matters=why_it_matters,
+                what_to_investigate=what_to_investigate,
+                limitations=limitations
+            )
+
+        # Condition: Revenue contraction + improving cash flow
+        rev_delta = curr_fact.revenue - prior_fact.revenue
+        if rev_delta < 0 and ocf_delta > 0:
+            headline = "Cash Flow Resilience Amid Top-Line Contraction"
+            what_changed = (
+                f"Consolidated revenue contracted by {abs(rev_delta):,.0f} {unit} ({prior_fact.revenue:,.0f} -> {curr_fact.revenue:,.0f} {unit}), "
+                f"yet Operating Cash Flow expanded by {ocf_delta:+,.0f} {unit} ({prior_fact.operating_cash_flow:,.0f} -> {curr_fact.operating_cash_flow:,.0f} {unit})."
+            )
+            ocf_prior_base = abs(prior_fact.operating_cash_flow) if prior_fact.operating_cash_flow != 0 else 1.0
+            ocf_growth = ((curr_fact.operating_cash_flow - prior_fact.operating_cash_flow) / ocf_prior_base) * 100.0
+            rev_growth_str = f"{curr_der.revenue_growth_yoy:.1f}%" if curr_der.revenue_growth_yoy is not None else "N/A"
+            evidence = f"Revenue Growth YoY: {rev_growth_str} | OCF Growth: {ocf_growth:+.1f}%."
+            why_it_matters = (
+                "Expanding cash generation during a top-line contraction suggests counter-cyclical cash conversion, "
+                "disciplined working capital release (such as receivables collections or inventory destocking), or operating cost reduction."
+            )
+            what_to_investigate = "Check whether cash inflow was driven by sustainable cost reduction or non-recurring working capital liquidation."
+            limitations = "Working capital liquidation provides a temporary cash boost during revenue slowdowns that may reverse as growth resumes."
+            return FinancialInsight(
+                category="CASH_FLOW_RESILIENCE",
+                headline=headline,
+                what_changed=what_changed,
+                evidence=evidence,
+                why_it_matters=why_it_matters,
+                what_to_investigate=what_to_investigate,
+                limitations=limitations
+            )
+
+        return None
+
+    @staticmethod
+    def _analyze_capex_harvesting(
+        facts: List[FinancialFact],
+        derived: List[DerivedMetrics]
+    ) -> Optional[FinancialInsight]:
+        if len(facts) < 2 or len(derived) < 2:
+            return None
+
+        curr_fact = facts[-1]
+        prior_fact = facts[-2]
+        curr_der = derived[-1]
+        prior_der = derived[-2]
+        unit = curr_fact.unit
+
+        if curr_der.free_cash_flow is None or prior_der.free_cash_flow is None:
+            return None
+
+        capex_delta = curr_fact.capital_expenditure - prior_fact.capital_expenditure
+        fcf_delta = curr_der.free_cash_flow - prior_der.free_cash_flow
+
+        # Condition: Strong FCF + capex decline (harvesting vs reinvestment)
+        prior_capex = prior_fact.capital_expenditure
+        if prior_capex > 0 and capex_delta < -0.10 * prior_capex and curr_der.free_cash_flow > 0:
+            capex_pct_drop = abs((capex_delta / prior_capex) * 100.0)
+            headline = f"Free Cash Flow Expansion Aided by Capex Moderation (-{capex_pct_drop:.1f}% Capex)"
+            what_changed = (
+                f"Free cash flow expanded to {curr_der.free_cash_flow:,.0f} {unit} (+{fcf_delta:,.0f} {unit} YoY) "
+                f"as capital expenditure declined by {abs(capex_delta):,.0f} {unit} (-{capex_pct_drop:.1f}%) "
+                f"from {prior_capex:,.0f} {unit} in {prior_fact.fiscal_year_label} to {curr_fact.capital_expenditure:,.0f} {unit} in {curr_fact.fiscal_year_label}."
+            )
+            evidence = (
+                f"Capex: {prior_capex:,.0f} -> {curr_fact.capital_expenditure:,.0f} {unit} (-{capex_pct_drop:.1f}%) | "
+                f"Free Cash Flow: {prior_der.free_cash_flow:,.0f} -> {curr_der.free_cash_flow:,.0f} {unit} (+{fcf_delta:+,.0f} {unit}). "
+                f"Capex Intensity: {curr_der.capex_intensity:.1f}% (Prior: {prior_der.capex_intensity:.1f}%)."
+                if (curr_der.capex_intensity is not None and prior_der.capex_intensity is not None)
+                else f"Capex: {prior_capex:,.0f} -> {curr_fact.capital_expenditure:,.0f} {unit}."
+            )
+            why_it_matters = (
+                "A significant reduction in capital expenditure boosts current-period free cash flow. "
+                "However, analysts must distinguish between post-investment cycle cash harvesting and structural under-reinvestment in future productive capacity."
+            )
+            what_to_investigate = (
+                "Review management guidance on multi-year capex programs to determine whether the decline reflects project completion "
+                "or intentional capital expenditure deferral."
+            )
+            limitations = "Free cash flow excludes lease additions and capitalized software not booked directly through cash PPE additions."
+            return FinancialInsight(
+                category="CAPITAL_HARVESTING",
+                headline=headline,
+                what_changed=what_changed,
+                evidence=evidence,
+                why_it_matters=why_it_matters,
+                what_to_investigate=what_to_investigate,
+                limitations=limitations
+            )
+
+        return None

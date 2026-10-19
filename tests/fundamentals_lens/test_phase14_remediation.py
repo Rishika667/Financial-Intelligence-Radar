@@ -50,9 +50,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def test_phase14_discrepancy_ledger_schema_completeness():
-    """Verify that all 16 discrepancy entries have normalized, explicit schema fields."""
+    """Verify that all discrepancy entries have normalized, explicit schema fields."""
     ledger = load_discrepancy_ledger()
-    assert len(ledger) == 16, f"Expected 16 discrepancy records, found {len(ledger)}"
+    assert len(ledger) >= 16, f"Expected at least 16 discrepancy records, found {len(ledger)}"
 
     valid_categories = {
         "NUMERICAL_REVISION",

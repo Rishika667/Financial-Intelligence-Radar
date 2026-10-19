@@ -42,13 +42,13 @@ def committed_obs():
 
 
 def test_committed_ledger_passes_validation(committed_ledger, committed_facts, committed_obs):
-    """Verify that the 16 committed discrepancy ledger entries pass all validation rules."""
+    """Verify that all committed discrepancy ledger entries pass all validation rules."""
     res = validate_discrepancy_ledger(committed_ledger, committed_facts, committed_obs)
     assert res["is_valid"] is True, f"Committed ledger validation failed: {res['errors']}"
-    assert res["total_entries"] == 16
-    assert res["numerical_count"] == 15
+    assert res["total_entries"] == 17
+    assert res["numerical_count"] == 16
     assert res["identity_count"] == 1
-    assert res["resolved_count"] == 16
+    assert res["resolved_count"] == 17
     assert res["unresolved_count"] == 0
     assert len(res["errors"]) == 0
 

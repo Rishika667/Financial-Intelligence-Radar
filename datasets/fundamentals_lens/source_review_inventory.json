@@ -12,14 +12,28 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_AAPL_10K_2022",
@@ -34,14 +48,28 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_AAPL_10K_2023",
@@ -56,14 +84,28 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_AAPL_10K_2024",
@@ -78,14 +120,28 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_AAPL_10K_2025",
@@ -100,14 +156,28 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_BAJAJ_AR_2022",
@@ -122,13 +192,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash flow from operating activities (Statement of Cash Flows)",
+      "Operating profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and intangible assets",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -144,13 +228,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash flow from operating activities (Statement of Cash Flows)",
+      "Operating profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and intangible assets",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -166,13 +264,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash flow from operating activities (Statement of Cash Flows)",
+      "Operating profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and intangible assets",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -188,13 +300,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash flow from operating activities (Statement of Cash Flows)",
+      "Operating profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and intangible assets",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -210,13 +336,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532977) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash flow from operating activities (Statement of Cash Flows)",
+      "Operating profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and intangible assets",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -232,13 +372,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before tax and exceptional items",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -254,13 +408,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before tax and exceptional items",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -276,13 +444,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before tax and exceptional items",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -298,13 +480,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before tax and exceptional items",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -320,13 +516,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500825) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before tax and exceptional items",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -342,13 +552,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -364,13 +588,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -386,13 +624,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -408,13 +660,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -430,13 +696,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -452,13 +732,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash flow from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment (Investing Activities)",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -474,13 +768,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash flow from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment (Investing Activities)",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -496,13 +804,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash flow from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment (Investing Activities)",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -518,13 +840,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash flow from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment (Investing Activities)",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -540,13 +876,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500096) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash flow from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment (Investing Activities)",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -562,13 +912,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenues (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -584,13 +948,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -606,13 +984,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -628,13 +1020,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -650,13 +1056,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenues (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -672,13 +1092,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Earnings before interest and tax (EBIT / Operating Profit)",
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Payment for property, plant and equipment and intangibles",
+      "Profit for the year attributable to shareholders of the Company",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -694,13 +1128,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Earnings before interest and tax (EBIT / Operating Profit)",
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Payment for property, plant and equipment and intangibles",
+      "Profit for the year attributable to shareholders of the Company",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -716,13 +1164,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Earnings before interest and tax (EBIT / Operating Profit)",
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Payment for property, plant and equipment and intangibles",
+      "Profit for the year attributable to shareholders of the Company",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -738,13 +1200,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Earnings before interest and tax (EBIT / Operating Profit)",
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Payment for property, plant and equipment and intangibles",
+      "Profit for the year attributable to shareholders of the Company",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -760,13 +1236,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532281) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Earnings before interest and tax (EBIT / Operating Profit)",
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Payment for property, plant and equipment and intangibles",
+      "Profit for the year attributable to shareholders of the Company",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -782,13 +1272,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -804,13 +1308,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -826,13 +1344,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -848,13 +1380,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -870,13 +1416,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500182) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -892,13 +1452,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Profit before exceptional items and tax (PBEI)",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment (Investing Activities)",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -914,13 +1488,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Profit before exceptional items and tax (PBEI)",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment (Investing Activities)",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -936,13 +1524,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Profit before exceptional items and tax (PBEI)",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment (Investing Activities)",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -958,13 +1560,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Profit before exceptional items and tax (PBEI)",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment (Investing Activities)",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -980,13 +1596,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500696) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Profit before exceptional items and tax (PBEI)",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment (Investing Activities)",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1002,14 +1632,28 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Capital expenditures / Purchase of property, plant and equipment",
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit (Revenues less operating expenses)",
+      "Profit for the year attributable to owners of the Company",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_INFY_AR_2023",
@@ -1024,14 +1668,28 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Capital expenditures / Purchase of property, plant and equipment",
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit (Revenues less operating expenses)",
+      "Profit for the year attributable to owners of the Company",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_INFY_AR_2024",
@@ -1046,14 +1704,28 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Capital expenditures / Purchase of property, plant and equipment",
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit (Revenues less operating expenses)",
+      "Profit for the year attributable to owners of the Company",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_INFY_AR_2025",
@@ -1068,14 +1740,28 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Capital expenditures / Purchase of property, plant and equipment",
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit (Revenues less operating expenses)",
+      "Profit for the year attributable to owners of the Company",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_INFY_AR_2026",
@@ -1090,14 +1776,28 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (500209) document key format and official corporate URL verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Capital expenditures / Purchase of property, plant and equipment",
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit (Revenues less operating expenses)",
+      "Profit for the year attributable to owners of the Company",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_MARUTI_AR_2022",
@@ -1112,13 +1812,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations / Net Sales (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1134,13 +1848,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations / Net Sales (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1156,13 +1884,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations / Net Sales (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1178,13 +1920,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1200,13 +1956,27 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532500) document key format and official corporate URL verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to owners of the Company",
+      "Purchase of property, plant and equipment and capital work-in-progress",
+      "Revenue from operations / Net Sales (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1222,14 +1992,28 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_MSFT_10K_2023",
@@ -1244,14 +2028,28 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_MSFT_10K_2024",
@@ -1266,14 +2064,28 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_MSFT_10K_2025",
@@ -1288,14 +2100,28 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_MSFT_10K_2026",
@@ -1310,14 +2136,28 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_TCS_AR_2022",
@@ -1332,14 +2172,28 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to shareholders of the Company",
+      "Purchase of property, plant and equipment and intangible assets",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_TCS_AR_2023",
@@ -1354,14 +2208,28 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to shareholders of the Company",
+      "Purchase of property, plant and equipment and intangible assets",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_TCS_AR_2024",
@@ -1376,14 +2244,28 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to shareholders of the Company",
+      "Purchase of property, plant and equipment and intangible assets",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_TCS_AR_2025",
@@ -1398,14 +2280,28 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to shareholders of the Company",
+      "Purchase of property, plant and equipment and intangible assets",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_TCS_AR_2026",
@@ -1420,14 +2316,28 @@
     "extraction_pathway": "MANUAL_AUDITED_STATEMENT_EXTRACT",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
-    "retrieval_check_status": "LIVE_SAMPLED_CONFIRMED",
+    "document_identity_verified": true,
+    "document_identity_reason": "BSE scrip (532540) document key format and official corporate URL verified",
+    "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
-    "verification_depth": "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED",
+    "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
-    "is_live_sampled": true,
-    "review_timestamp": "2026-10-19T12:00:00Z",
-    "remaining_source_limitations": "Live document URL and audited statement line items verified against official regulatory repository."
+    "is_live_sampled": false,
+    "examined_statements": [
+      "Consolidated Statement of Cash Flows",
+      "Consolidated Statement of Profit and Loss"
+    ],
+    "examined_line_items": [
+      "Net cash generated from operating activities (Statement of Cash Flows)",
+      "Operating profit / Profit before exceptional items and tax",
+      "Profit for the year attributable to shareholders of the Company",
+      "Purchase of property, plant and equipment and intangible assets",
+      "Revenue from operations (Consolidated Statement of Profit and Loss)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
+    "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
     "source_id": "SRC_TGT_10K_2021",
@@ -1442,13 +2352,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Available to Common Stockholders, Basic (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1464,13 +2388,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1486,13 +2424,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1508,13 +2460,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1530,13 +2496,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenue from Contract with Customer, Excluding Assessed Tax (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1552,13 +2532,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenues (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1574,13 +2568,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenues (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1596,13 +2604,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenues (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1618,13 +2640,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenues (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   },
   {
@@ -1640,13 +2676,27 @@
     "extraction_pathway": "SEC_XBRL_FACTS_PRIMARY",
     "statement_basis": "CONSOLIDATED",
     "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH",
+    "document_identity_verified": true,
+    "document_identity_reason": "US SEC EDGAR 20-digit accession, CIK path, and sec.gov domain verified",
     "retrieval_check_status": "OFFLINE_RECORDED_EXTRACT",
+    "retrieval_mode": "OFFLINE",
     "statement_extraction_status": "EXTRACTED_LINE_ITEM",
     "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT",
     "verification_depth": "TRACKED_EXTRACT_STATEMENT_AUDITED",
     "metrics_covered_count": 5,
     "is_live_sampled": false,
-    "review_timestamp": "2026-10-19T12:00:00Z",
+    "examined_statements": [
+      "Consolidated Statements of Cash Flows",
+      "Consolidated Statements of Operations"
+    ],
+    "examined_line_items": [
+      "Net Cash Provided by (Used in) Operating Activities (Consolidated Statements of Cash Flows)",
+      "Net Income (Loss) Attributable to Parent (Consolidated Statements of Operations)",
+      "Operating Income (Loss) (Consolidated Statements of Operations)",
+      "Payments to Acquire Property, Plant, and Equipment (Consolidated Statements of Cash Flows)",
+      "Revenues (Consolidated Statements of Operations)"
+    ],
+    "review_timestamp": "2026-10-19T15:30:00Z",
     "remaining_source_limitations": "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
   }
 ]

@@ -8,7 +8,7 @@ An evidence-first, zero-cost disclosure intelligence and fundamental equity rese
 
 ---
 
-## 🌟 Featured Product: Fundamentals Lens (Phase 16 — Evidence Integrity, Grounded Analytical Quality & Release Validation)
+## 🌟 Featured Product: Fundamentals Lens (Phase 18 — Data Authenticity, Primary-Source Reconciliation & Evidence Integrity)
 
 **Fundamentals Lens** is the primary financial research workbench in this repository, created by **Rishika Dangayach**. It provides transparent five-year financial performance exploration, deeper fundamental analytics (CAGR, margin shifts in basis points, operating leverage, cumulative reinvestment), rule-based analytical inquiry ("What changed, why it matters, and what to investigate"), guarded peer comparisons with analytical suppression for proxy metrics and cross-currency comparisons, an in-memory pure-Python Technical Analysis engine with full range invariants and duration guards, and cohesive 7-section research exports—all without requiring API keys, live data feeds, or database setup.
 
@@ -24,14 +24,14 @@ An evidence-first, zero-cost disclosure intelligence and fundamental equity rese
 | Analytical Domain | Scope | Status | Verification Criteria & Provenance |
 | :--- | :--- | :---: | :--- |
 | **Audited Financial Facts** | 15 Universe Companies, 75 Annual Periods | **VERIFIED** | Extracted from primary audited filings without synthetic zero coercion. 100% pass across 258 deterministic validator gates. |
-| **Source Extract Assurance** | 75 Company-Periods (375 Primary Metrics) | **VERIFIED / MONITORED** | 20 periods live-sampled against official regulatory portals (SEC EDGAR / BSE); 55 periods tracked from audited local extracts with statement locators and accession numbers (`datasets/fundamentals_lens/source_review_inventory.json`). |
-| **Discrepancy Ledger** | 16 Accounting & Taxonomy Items (DISC-001 to DISC-016) | **VERIFIED** | Every discrepancy validated for mathematical consistency; protected by pre-map collision detection and adversarial mutation tests. |
+| **Source Extract Assurance** | 75 Company-Periods (375 Primary Metrics) | **OFFLINE AUDITED / RECONCILED** | 75 periods tracked from audited primary statements with exact line items, locators, and accession keys (`datasets/fundamentals_lens/source_review_inventory.json`). Zero manufactured live sampling claims. |
+| **Discrepancy Ledger** | 17 Accounting & Taxonomy Items (DISC-001 to DISC-017) | **VERIFIED** | Every discrepancy validated for mathematical consistency; includes DISC-017 for Maruti Suzuki Ind AS Revenue from Operations vs Net Sales. |
 | **Analytical Peer Safeguards** | 5 Curated Peer Groups (Tech, IT, FMCG, Auto, Retail) | **VERIFIED** | Incompatible proxies (TCS PBEI, Bajaj Auto EBITDA) and unadjusted cross-currency nominals are analytically suppressed from rankings and charts. |
 | **Company Research Brief** | 7 Cohesive Analytical Sections | **VERIFIED** | Comprehensive brief covering Executive Snapshot, Trajectory, Cash & Earnings Quality, Capital Allocation, Peer Nuance, Evidence-Grounded Risks, and Provenance. |
-| **Technical Analysis MVP** | Memory-Only Indicators & Range Invariants | **SEGREGATED / LABELED** | Mathematical indicators (SMA, RSI, MACD, BB, ATR) with bounding invariants. Pre-packaged demo data is explicitly flagged as synthetic; user-uploaded data is validated in-memory only. |
+| **Technical Analysis Engine** | Memory-Only Indicators & Range Invariants | **SEGREGATED / LABELED** | Pure-Python mathematical indicators (SMA, RSI, MACD, BB, ATR) with duration and parameter bounds. Demo data is synthetic and explicitly labeled. |
 | **Offline Clean-Clone Reproducibility** | Full Pipeline Build | **VERIFIED** | Deterministic rebuilds without scratch caches, API keys, or live network access (`test_clean_clone_reproducibility.py`). |
 
-- **Documentation:** [Phase 16 Closeout](docs/FUNDAMENTALS_LENS_PHASE16_CLOSEOUT.md) | [Phase 16 Gap Register](docs/FUNDAMENTALS_LENS_PHASE16_GAP_REGISTER.md) | [Phase 16 Test Evidence](docs/FUNDAMENTALS_LENS_PHASE16_TEST_EVIDENCE.md) | [Phase 13 Closeout](docs/FUNDAMENTALS_LENS_PHASE13_CLOSEOUT.md) | [Deployment Readiness](docs/FUNDAMENTALS_LENS_DEPLOYMENT_READINESS.md) | [Evidence & Sourcing Audit](docs/FUNDAMENTALS_LENS_EVIDENCE_AUDIT.md) | [Price Data Audit](docs/FUNDAMENTALS_LENS_PRICE_DATA_AUDIT.md) | [Technical Analysis Methodology](docs/TECHNICAL_ANALYSIS_METHODOLOGY.md) | [Discrepancy Ledger](docs/FUNDAMENTALS_LENS_DISCREPANCY_LEDGER.md) | [Release Guide](docs/FUNDAMENTALS_LENS_RELEASE_GUIDE.md)
+- **Documentation:** [Phase 18 Closeout](docs/FUNDAMENTALS_LENS_PHASE18_CLOSEOUT.md) | [Phase 18 Source Reconciliation](docs/FUNDAMENTALS_LENS_PHASE18_SOURCE_RECONCILIATION.md) | [Phase 18 Gap Register](docs/FUNDAMENTALS_LENS_PHASE18_GAP_REGISTER.md) | [Phase 18 Test Evidence](docs/FUNDAMENTALS_LENS_PHASE18_TEST_EVIDENCE.md) | [Phase 17 Closeout](docs/FUNDAMENTALS_LENS_PHASE17_CLOSEOUT.md) | [Phase 16 Closeout](docs/FUNDAMENTALS_LENS_PHASE16_CLOSEOUT.md) | [Deployment Readiness](docs/FUNDAMENTALS_LENS_DEPLOYMENT_READINESS.md) | [Evidence & Sourcing Audit](docs/FUNDAMENTALS_LENS_EVIDENCE_AUDIT.md) | [Price Data Audit](docs/FUNDAMENTALS_LENS_PRICE_DATA_AUDIT.md) | [Technical Analysis Methodology](docs/TECHNICAL_ANALYSIS_METHODOLOGY.md) | [Discrepancy Ledger](docs/FUNDAMENTALS_LENS_DISCREPANCY_LEDGER.md) | [Release Guide](docs/FUNDAMENTALS_LENS_RELEASE_GUIDE.md)
 
 ### Quick Start (Fundamentals Lens)
 

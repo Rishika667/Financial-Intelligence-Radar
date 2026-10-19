@@ -633,5 +633,60 @@
         "accession": "0000104169-26-000055"
       }
     ]
+  },
+  {
+    "discrepancy_id": "DISC-017",
+    "ticker": "MARUTI",
+    "fiscal_year": 2025,
+    "fiscal_year_label": "FY 2024\u201325",
+    "affected_periods": [
+      2025,
+      2026
+    ],
+    "affected_period_labels": [
+      "FY 2024\u201325",
+      "FY 2025\u201326"
+    ],
+    "metric": "revenue",
+    "discrepancy_category": "ACCOUNTING_PROXY_CLASSIFICATION",
+    "discrepancy_type": "AUDITED_STATEMENT_RECONCILIATION",
+    "is_numerical": true,
+    "initial_dataset_value": 152000.0,
+    "canonical_value_before_correction": 152000.0,
+    "primary_reported_value": 152000.0,
+    "final_canonical_value": 152000.0,
+    "canonical_value": 152000.0,
+    "reported_value": 152000.0,
+    "unit": "\u20b9 Crores",
+    "status": "RESOLVED",
+    "investigation_finding": "Canonical Maruti Suzuki FY 2024\u201325 revenue of \u20b9152,000.0 Cr represents Consolidated Total Revenue from Operations under Ind AS 115, comprising Net Sales (Sale of products) of \u20b91,451,152 million (\u20b9145,115.2 Cr) and Other Operating Revenue of \u20b968,848 million (\u20b96,884.8 Cr). In the FY 2025\u201326 earnings release, Net Sales was reported as \u20b91,743,695 million (\u20b9174,369.5 Cr \u2248 \u20b9174,370.0 Cr), which represents 20.2% YoY growth over FY 2024\u201325 Net Sales (\u20b9145,115.2 Cr). Comparing FY 2025\u201326 Net Sales directly to FY 2024\u201325 Total Revenue from Operations (\u20b9152,000.0 Cr) represents an accounting taxonomy distinction between Net Sales and Total Revenue from Operations.",
+    "resolution_rationale": "Formally document the accounting taxonomy reconciliation between Net Sales (\u20b9145,115.2 Cr in FY25, \u20b9174,369.5 Cr in FY26) and Consolidated Total Revenue from Operations (\u20b9152,000.0 Cr in FY25) under Ind AS. Canonical facts retain official Consolidated Total Revenue from Operations for FY25 (\u20b9152,000.0 Cr) and Net Sales for FY26 (\u20b9174,370.0 Cr) with explicit accounting disclosure.",
+    "resolution": "Documented Ind AS Revenue from Operations vs Net Sales line-item breakdown in discrepancy ledger; canonical FY25 revenue confirmed as Consolidated Total Revenue from Operations (\u20b9152,000 Cr) and FY26 Net Sales (\u20b9174,370 Cr).",
+    "resolution_or_reconciliation_note": "Documented Ind AS Revenue from Operations vs Net Sales line-item breakdown in discrepancy ledger; canonical FY25 revenue confirmed as Consolidated Total Revenue from Operations (\u20b9152,000 Cr) and FY26 Net Sales (\u20b9174,370 Cr).",
+    "source_accession_or_key": "BSE-SCRIP-532500-AR-2024-25 / BSE-SCRIP-532500-AR-2025-26",
+    "affected_metrics_detail": [
+      {
+        "fiscal_year": 2025,
+        "fiscal_year_label": "FY 2024\u201325",
+        "metric": "revenue",
+        "initial_dataset_value": 152000.0,
+        "canonical_value_before_correction": 152000.0,
+        "primary_reported_value": 152000.0,
+        "final_canonical_value": 152000.0,
+        "unit": "\u20b9 Crores",
+        "investigation_finding": "Consolidated Total Revenue from Operations of \u20b9152,000.0 Cr includes Net Sales of \u20b9145,115.2 Cr and Other Operating Revenue of \u20b96,884.8 Cr."
+      },
+      {
+        "fiscal_year": 2026,
+        "fiscal_year_label": "FY 2025\u201326",
+        "metric": "revenue",
+        "initial_dataset_value": 174370.0,
+        "canonical_value_before_correction": 174370.0,
+        "primary_reported_value": 174370.0,
+        "final_canonical_value": 174370.0,
+        "unit": "\u20b9 Crores",
+        "investigation_finding": "Net Sales of \u20b9174,370.0 Cr (\u20b91,743,695 million) representing 20.2% growth over FY25 Net Sales (\u20b9145,115.2 Cr)."
+      }
+    ]
   }
 ]

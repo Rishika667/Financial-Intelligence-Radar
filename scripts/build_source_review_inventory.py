@@ -1,40 +1,53 @@
 #!/usr/bin/env python3
 """
-Phase 16 Source Review Inventory Generator.
-Generates `datasets/fundamentals_lens/source_review_inventory.json` with explicit
-per-source verification depth, distinguishing:
-1. URL and accession syntax/host format check
-2. Content extraction from tracked audited statement extract
-3. Documented live-source verification sample
-4. Remaining source-level limitations
+Phase 18 Source Review Inventory Generator.
+Generates `datasets/fundamentals_lens/source_review_inventory.json` with truthful,
+evidence-derived verification depth:
+1. Derives retrieval status directly from recorded verification outcomes in source_check_report.json
+   and source observations, eliminating any hardcoded allowlist or arbitrary sampling claims.
+2. Orthogonally reports:
+   - URL & accession format / official host validation
+   - Document identity verification
+   - Actual retrieval mode & status (OFFLINE_RECORDED_EXTRACT vs LIVE_SAMPLED_CONFIRMED)
+   - Statement line item extraction status
+   - Numerical reconciliation status
+   - Specific statements and line items examined
+   - Remaining source-level limitations
 """
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATASETS_DIR = REPO_ROOT / "datasets" / "fundamentals_lens"
 SOURCE_REGISTER_FILE = DATASETS_DIR / "source_register.json"
 SOURCE_OBSERVATIONS_FILE = DATASETS_DIR / "source_observations.json"
-EVIDENCE_REGISTER_FILE = DATASETS_DIR / "evidence_register.json"
+SOURCE_CHECK_REPORT_FILE = DATASETS_DIR / "source_check_report.json"
 OUTPUT_INVENTORY_FILE = DATASETS_DIR / "source_review_inventory.json"
 
-# Documented live-source verification sample (independently re-reviewed against live SEC EDGAR and corporate IR)
-LIVE_VERIFIED_SAMPLE = {
-    ("AAPL", 2021), ("AAPL", 2022), ("AAPL", 2023), ("AAPL", 2024), ("AAPL", 2025),
-    ("MSFT", 2022), ("MSFT", 2023), ("MSFT", 2024), ("MSFT", 2025), ("MSFT", 2026),
-    ("TCS", 2022), ("TCS", 2023), ("TCS", 2024), ("TCS", 2025), ("TCS", 2026),
-    ("INFY", 2022), ("INFY", 2023), ("INFY", 2024), ("INFY", 2025), ("INFY", 2026)
-}
 
+def build_source_review_inventory(
+    timestamp: Optional[str] = None,
+    source_check_file: Optional[Path] = None,
+    output_file: Optional[Path] = None
+) -> List[Dict[str, Any]]:
+    check_file = source_check_file or SOURCE_CHECK_REPORT_FILE
+    out_file = output_file or OUTPUT_INVENTORY_FILE
 
-def build_source_review_inventory(timestamp: str = "2026-10-19T12:00:00Z") -> List[Dict[str, Any]]:
     with open(SOURCE_REGISTER_FILE, "r", encoding="utf-8") as f:
         sources = json.load(f)
 
     with open(SOURCE_OBSERVATIONS_FILE, "r", encoding="utf-8") as f:
         observations = json.load(f)
+
+    check_map: Dict[str, Dict[str, Any]] = {}
+    if check_file.exists():
+        with open(check_file, "r", encoding="utf-8") as f:
+            check_data = json.load(f)
+            for sc in check_data.get("sources", []):
+                check_map[sc["source_id"]] = sc
 
     obs_by_period: Dict[tuple, List[Dict[str, Any]]] = {}
     for o in observations:
@@ -42,29 +55,56 @@ def build_source_review_inventory(timestamp: str = "2026-10-19T12:00:00Z") -> Li
         obs_by_period.setdefault(key, []).append(o)
 
     inventory: List[Dict[str, Any]] = []
+    live_count = 0
+    offline_count = 0
+
+    now_iso = timestamp or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     for src in sources:
         ticker = src["ticker"]
         fy = src["fiscal_year"]
         key = (ticker, fy)
+        src_id = src["source_id"]
         is_us = (src.get("country") == "US" or src.get("reference_type") == "SEC_ACCESSION")
-        is_live_sampled = key in LIVE_VERIFIED_SAMPLE
+
+        scr_entry = check_map.get(src_id, {})
+        v_mode = scr_entry.get("verification_mode", "OFFLINE").upper()
+        c_status = scr_entry.get("check_status", "OFFLINE_SOURCE_RECORDED")
+        doc_id_ok = bool(src.get("document_identity_verified") or scr_entry.get("document_identity_verified"))
 
         p_obs = obs_by_period.get(key, [])
         all_reconciled = len(p_obs) == 5 and all(o.get("confidence_tier") == "INDEPENDENTLY_RECONCILED" for o in p_obs)
         ext_pathway = "SEC_XBRL_FACTS_PRIMARY" if is_us else "MANUAL_AUDITED_STATEMENT_EXTRACT"
 
+        # Truthful derivation from actual recorded verification event:
+        # A source can ONLY be marked LIVE_SAMPLED_CONFIRMED if genuine online retrieval
+        # was executed and recorded with HTTP 200 / verified online status.
+        # No hardcoded ticker/year set is ever used.
+        is_live_sampled = (
+            v_mode in ("ONLINE", "LIVE")
+            and c_status in ("ONLINE_VERIFIED", "RETRIEVED_ONLINE_EDGAR", "RETRIEVED_ONLINE_BSE")
+        )
+
         if is_live_sampled:
             retrieval_status = "LIVE_SAMPLED_CONFIRMED"
             review_depth = "FULL_DOCUMENT_AND_STATEMENT_LIVE_VERIFIED"
             limitations = "Live document URL and audited statement line items verified against official regulatory repository."
-        else:
+            live_count += 1
+        elif v_mode == "OFFLINE" or c_status in ("OFFLINE_SOURCE_RECORDED", "OFFLINE_AUDITED", "RETRIEVED_OFFLINE_EXTRACT"):
             retrieval_status = "OFFLINE_RECORDED_EXTRACT"
             review_depth = "TRACKED_EXTRACT_STATEMENT_AUDITED"
             limitations = "Validated against repository-tracked audited extract; live remote network re-fetch not executed during offline build."
+            offline_count += 1
+        else:
+            retrieval_status = "PENDING_OR_INCONCLUSIVE"
+            review_depth = "INCONCLUSIVE_VERIFICATION"
+            limitations = f"Retrieval verification unconfirmed or failed (status: {c_status})."
+
+        stmts_examined = sorted(list({o.get("statement_name", "") for o in p_obs if o.get("statement_name")}))
+        line_items_examined = sorted(list({o.get("reported_line_item", "") for o in p_obs if o.get("reported_line_item")}))
 
         entry = {
-            "source_id": src["source_id"],
+            "source_id": src_id,
             "ticker": ticker,
             "fiscal_year": fy,
             "fiscal_year_label": src["fiscal_year_label"],
@@ -76,22 +116,30 @@ def build_source_review_inventory(timestamp: str = "2026-10-19T12:00:00Z") -> Li
             "extraction_pathway": ext_pathway,
             "statement_basis": src.get("statement_basis", "CONSOLIDATED"),
             # Verification dimensions
-            "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH" if src.get("document_identity_verified") else "FAILED",
+            "url_and_accession_format_check": "PASSED_PARSED_HOST_AND_PATH" if doc_id_ok else "FAILED",
+            "document_identity_verified": doc_id_ok,
+            "document_identity_reason": src.get("document_identity_reason") or scr_entry.get("document_identity_reason"),
             "retrieval_check_status": retrieval_status,
+            "retrieval_mode": v_mode,
             "statement_extraction_status": "EXTRACTED_LINE_ITEM" if len(p_obs) == 5 else "INCOMPLETE",
             "numerical_reconciliation_status": "EXACT_OR_APPROVED_ADJUSTMENT" if all_reconciled else "PENDING_OR_DISCREPANT",
             "verification_depth": review_depth,
             "metrics_covered_count": len(p_obs),
             "is_live_sampled": is_live_sampled,
-            "review_timestamp": timestamp,
+            "examined_statements": stmts_examined,
+            "examined_line_items": line_items_examined,
+            "review_timestamp": scr_entry.get("verification_timestamp") or now_iso,
             "remaining_source_limitations": limitations
         }
         inventory.append(entry)
 
-    with open(OUTPUT_INVENTORY_FILE, "w", encoding="utf-8") as f:
+    with open(out_file, "w", encoding="utf-8") as f:
         json.dump(inventory, f, indent=2)
 
-    print(f"Generated source review inventory: {len(inventory)} sources ({len(LIVE_VERIFIED_SAMPLE)} live-sampled) -> {OUTPUT_INVENTORY_FILE}")
+    print(
+        f"Generated source review inventory: {len(inventory)} sources "
+        f"({live_count} live-sampled, {offline_count} offline-recorded) -> {out_file}"
+    )
     return inventory
 
 
